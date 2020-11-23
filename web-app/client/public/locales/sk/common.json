@@ -1,0 +1,20 @@
+{
+  "close": "Zavrieť",
+  "invoice": "Faktúra",
+  "format": "Formát",
+  "cancel": "Zrušiť",
+  "save": "Uložiť",
+  "edit": "Upraviť",
+  "email": "E-mail",
+  "serviceAccountPublicKey": "Verejny kľúč k technickemu účtu",
+  "confirm": "Potvrdiť",
+  "submit": "Odovzdaj",
+  "filters": "Filtre",
+  "search": "Hľadaj",
+  "uploadInvoice": "Nahraj faktúru",
+  "userId": "Identifikačné číslo používateľa",
+  "substituteIds": "Identifikačné čísla zastupujúcich používateľov",
+  "invoiceType": "Typ faktúry",
+  "received": "Prijaté",
+  "supplied": "Odoslané"
+}

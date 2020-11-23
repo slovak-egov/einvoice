@@ -1,0 +1,13 @@
+{
+  "auth": {
+    "title": "Nepovolený prístup",
+    "description": "Nemáte povolenie na prezeranie tejto stránky"
+  },
+  "notfound": {
+    "title": "Nenájdené",
+    "description": "Stránka nebola nájdená"
+  },
+  "loading": {
+    "title": "Procesujem žiadosť"
+  }
+}

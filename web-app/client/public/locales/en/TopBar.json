@@ -1,0 +1,11 @@
+{
+  "title": "E-invoice",
+  "tabs": {
+    "allInvoices": "All invoices",
+    "createInvoice": "Create invoice",
+    "accountSettings": "Account settings",
+    "myInvoices": "My invoices"
+  },
+  "logout": "Logout",
+  "login": "Login"
+}

@@ -1,0 +1,65 @@
+# https://help.github.com/en/articles/workflow-syntax-for-github-actions
+name: CI
+on:
+  push:
+    branches-ignore: [main]
+jobs:
+  lint:
+    name: Lint Code Base
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Download eslint config
+        run: cd web-app/client && npm i eslint-config-vacuumlabs
+      - name: Lint Code Base
+        uses: docker://github/super-linter:v3
+        env:
+          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_GO: false
+          VALIDATE_JAVASCRIPT_STANDARD: false
+          JAVASCRIPT_ES_CONFIG_FILE: ../../../github/workspace/web-app/client/.eslintrc
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  apiserver_tests:
+    name: Apiserver tests
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: github_actions
+      redis:
+        image: redis
+        # Set health checks to wait until redis has started
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+    env:
+      DB_PASSWORD: postgres
+      DB_NAME: github_actions
+      D16B_XSD_PATH: /home/runner/work/einvoice/einvoice/xml/d16b/xsd
+      UBL21_XSD_PATH: /home/runner/work/einvoice/einvoice/xml/ubl21/xsd
+      LOCAL_STORAGE_BASE_PATH: /home/runner/work/einvoice/einvoice/storage
+      APISERVER_ENV: test
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Download dependencies
+        run: cd apiserver && go get -v -t -d ./...
+      - name: Run migrations
+        run: |
+          go run ./migrations init
+          go run ./migrations up
+      - name: Create local storage
+        run: mkdir storage
+      - name: Run tests
+        run: cd apiserver && go test -v ./...

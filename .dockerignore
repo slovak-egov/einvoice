@@ -1,0 +1,11 @@
+.git
+
+/log/*
+/tmp/*
+
+/security/*
+/scripts/*
+
+/.github/*
+
+Dockerfile*

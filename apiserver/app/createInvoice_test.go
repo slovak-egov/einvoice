@@ -1,0 +1,72 @@
+package app
+
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"mime/multipart"
+	"net/http"
+	"reflect"
+	"testing"
+
+	"github.com/slovak-egov/einvoice/apiserver/entity"
+)
+
+func TestCreateInvoice(t *testing.T) {
+	t.Cleanup(cleanDb(t))
+	user, sessionToken := createTestUser(t)
+
+	var requestBody bytes.Buffer
+	multipartWriter := multipart.NewWriter(&requestBody)
+	formatWriter, _ := multipartWriter.CreateFormField("format")
+	formatWriter.Write([]byte(entity.UblFormat))
+
+	invoiceWriter, _ := multipartWriter.CreateFormFile("invoice", "ubl21_invoice.xml")
+	invoice, _ := ioutil.ReadFile("../../xml/ubl21/example/ubl21_invoice.xml")
+	invoiceWriter.Write(invoice)
+	multipartWriter.Close()
+
+	req, _ := http.NewRequest("POST", "/invoices", &requestBody)
+	req.Header.Set("Content-Type", multipartWriter.FormDataContentType())
+
+	response := executeAuthRequest(req, sessionToken)
+	checkResponseCode(t, http.StatusCreated, response.Code)
+
+	var createdResponse entity.Invoice
+	json.Unmarshal(response.Body.Bytes(), &createdResponse)
+	expectedResponse := entity.Invoice{
+		Id:          createdResponse.Id,        // No need to assert this param,
+		CreatedAt:   createdResponse.CreatedAt, // No need to assert this param
+		Sender:      "Custom Cotter Pins",
+		Receiver:    "North American Veeblefetzer",
+		Price:       100,
+		SupplierICO: "11190993",
+		CustomerICO: "22222222",
+		Format:      entity.UblFormat,
+		CreatedBy:   user.Id,
+	}
+	if !reflect.DeepEqual(createdResponse, expectedResponse) {
+		t.Errorf("Expected created response was %v. Got %v", expectedResponse, createdResponse)
+	}
+
+	// Try to get invoice metadata through API
+	req, _ = http.NewRequest("GET", fmt.Sprintf("/invoices/%d", createdResponse.Id), nil)
+	response = executeRequest(req)
+
+	checkResponseCode(t, http.StatusOK, response.Code)
+	var getResponse entity.Invoice
+	json.Unmarshal(response.Body.Bytes(), &getResponse)
+	if !reflect.DeepEqual(createdResponse, getResponse) {
+		t.Errorf("Created response was %v. While GET request returned %v", createdResponse, getResponse)
+	}
+
+	// Try to get actual invoice through API
+	req, _ = http.NewRequest("GET", fmt.Sprintf("/invoices/%d/detail", createdResponse.Id), nil)
+	response = executeRequest(req)
+
+	checkResponseCode(t, http.StatusOK, response.Code)
+	if !bytes.Equal(invoice, response.Body.Bytes()) {
+		t.Errorf("Response was incorrect. We expected %s", invoice)
+	}
+}

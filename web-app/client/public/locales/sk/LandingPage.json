@@ -1,0 +1,13 @@
+{
+  "title": "Vitajte v slovenskom elektronickom systéme na fakturáciu EINVOICE",
+  "introduction1": "Tento systém bude podporovať 5 rôznych prípadov použitia",
+  "introduction2": "Tieto prípady použitia budú podporované postupne, v súčastnosti sú všetky vo vývoji",
+  "version1": "Faktúry od slovenských podnikateľov (alebo od vlády) pre slovenských podnikateľov (vládu)",
+  "version2": "Faktúry od slovenských podnikateľov (alebo od vlády) pre zahraničných podnikateľov",
+  "version3": "Faktúry od zahraničných podnikateľov (alebo vlády) pre vládu",
+  "version4": "Faktúry od zahraničných podnikateľov (alebo vlády) pre slovenských podnikateľov",
+  "version5": "Faktúry od podnikateľov pre zákazníkov",
+  "forForeignIssuers": "pre zahraničných vydávateľov",
+  "forForeignReceivers": "pre zahraničných prijímateľov",
+  "faq": "Najčastejšie otázky a odpovede"
+}

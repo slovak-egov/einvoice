@@ -1,0 +1,20 @@
+{
+  "close": "Close",
+  "invoice": "Invoice",
+  "format": "Format",
+  "cancel": "Cancel",
+  "save": "Save",
+  "edit": "Edit",
+  "email": "E-mail",
+  "serviceAccountPublicKey": "Service account public key",
+  "confirm": "Confirm",
+  "submit": "Submit",
+  "filters": "Filters",
+  "search": "Search",
+  "uploadInvoice": "Upload an invoice",
+  "userId": "User ID",
+  "substituteIds": "Substitute user ids",
+  "invoiceType": "Invoice type",
+  "received": "Received",
+  "supplied": "Supplied"
+}

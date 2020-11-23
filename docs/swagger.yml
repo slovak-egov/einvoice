@@ -1,0 +1,419 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  description: This is REST endpoints API documentation for E-invoice project.
+  title: E-invoice API
+servers:
+  - description: Dev
+    url: https://einvoice-authproxy.mypaas.vnet.sk
+paths:
+  /login:
+    get:
+      tags:
+        - Auth
+      summary: Authenticate user with slovensko.sk token
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: User is sucessfully logged in.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+  /logout:
+    get:
+      tags:
+        - Auth
+      summary: Logout user
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: User is successfully logged out.
+        401:
+          description: Unauthorized
+
+  /users/{user_id}:
+    get:
+      tags:
+        - Users
+      summary: Get info about user
+      parameters:
+        - name: user_id
+          in: path
+          description: User ID
+          required: true
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+        - apiKeyAuth: []
+      responses:
+        200:
+          description: User data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfo'
+        401:
+          description: Unauthorized
+    patch:
+      tags:
+        - Users
+      summary: Update user info
+      parameters:
+        - name: user_id
+          in: path
+          description: User ID
+          required: true
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+        - apiKeyAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchUserRequest'
+      responses:
+        200:
+          description: Updated user info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfo'
+        401:
+          description: Unauthorized
+        400:
+          description: Empty body
+  /users/{user_id}/substitutes:
+    post:
+      tags:
+        - Users
+      summary: Add substitute users
+      parameters:
+        - name: user_id
+          in: path
+          description: User ID
+          required: true
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+        - apiKeyAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubstituteIds'
+      responses:
+        200:
+          description: List of substitute Ids that were successfully added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubstituteIds'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - Users
+      summary: Remove substitute users
+      parameters:
+        - name: user_id
+          in: path
+          description: User ID
+          required: true
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+        - apiKeyAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubstituteIds'
+      responses:
+        200:
+          description: List of substitute Ids that were successfully removed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubstituteIds'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    get:
+      tags:
+        - Users
+      summary: Get substitute users
+      parameters:
+        - name: user_id
+          in: path
+          description: User ID
+          required: true
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+        - apiKeyAuth: []
+      responses:
+        200:
+          description: List of substitute user Ids of requested user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubstituteIds'
+  /users/{user_id}/invoices:
+    get:
+      tags:
+        - Users
+      summary: Get user invoices
+      parameters:
+        - name: user_id
+          in: path
+          description: User ID
+          required: true
+          schema:
+            type: integer
+        - name: supplied
+          in: query
+          description: Request invoices issued by you
+          schema:
+            type: boolean
+        - name: received
+          in: query
+          description: Request invoices issued to you
+          schema:
+            type: boolean
+        - name: ico
+          in: query
+          description: Request invoices related to particular IČO. If not provided, all will be considered
+          schema:
+            type: array
+            items:
+              type: string
+        - name: format
+          in: query
+          description: Filter invoices by format
+          schema:
+            type: array
+            items:
+              type: string
+      security:
+        - bearerAuth: []
+        - apiKeyAuth: []
+      responses:
+        200:
+          description: List of user invoices
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoices'
+
+  /invoices:
+    get:
+      tags:
+        - Invoices
+      summary: Get list of metadata of all public invoices
+      parameters:
+        - name: format
+          in: query
+          description: Filter invoices by format
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        200:
+          description: Successfull response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoices'
+    post:
+      security:
+        - bearerAuth: []
+        - apiKeyAuth: []
+      tags:
+        - Invoices
+      summary: Create invoice
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateInvoiceRequest'
+      responses:
+        201:
+          description: Invoice created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        400:
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /invoices/{invoice_id}:
+    get:
+      tags:
+        - Invoices
+      summary: Get invoice meta data
+      parameters:
+        - name: invoice_id
+          in: path
+          description: Invoice ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Successfull response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        404:
+          description: Invoice not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /invoices/{invoice_id}/detail:
+    get:
+      tags:
+        - Invoices
+      summary: Get invoice content
+      parameters:
+        - name: invoice_id
+          in: path
+          description: Invoice ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        404:
+          description: Invoice not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+  schemas:
+    UserInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 8498081
+        slovenskoSkUri:
+          type: string
+          example: rc://sk/8314451298_tisici_janko
+        email:
+          type: string
+          example: test@test.example.com
+        name:
+          type: string
+        serviceAccountPublicKey:
+          type: string
+        taxId:
+          type: string
+        vatNumber:
+          type: string
+    Invoices:
+      type: array
+      items:
+        $ref: '#/components/schemas/Invoice'
+    Invoice:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        sender:
+          type: string
+          example: SubjectA
+        receiver:
+          type: string
+          example: SubjectB
+        format:
+          type: string
+          enum:
+            - ubl2.1
+            - d16b
+        price:
+          type: integer
+          example: 100
+    CreateInvoiceRequest:
+      type: object
+      properties:
+        format:
+          type: string
+          enum:
+            - ubl2.1
+            - d16b
+        data:
+          type: string
+    PatchUserRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          example: test@test.com
+        serviceAccountPublicKey:
+          type: string
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          example: 80f2baac-43c2-497b-b78e-e6680f5b809b
+        id:
+          type: integer
+          example: 8498081
+        slovenskoSkUri:
+          type: string
+          example: rc://sk/8314451298_tisici_janko
+        email:
+          type: string
+          example: test@test.example.com
+        name:
+          type: string
+        serviceAccountPublicKey:
+          type: string
+    SubstituteIds:
+      type: array
+      items:
+        type: integer
+        description: Substitute ID
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
