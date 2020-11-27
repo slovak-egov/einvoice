@@ -45,7 +45,7 @@
         </ram:IncludedSupplyChainTradeLineItem>
         <ram:ApplicableHeaderTradeAgreement>
             <ram:SellerTradeParty>
-                <ram:ID schemeID="0158">33333333</ram:ID>
+                <ram:ID schemeID="0158">11190993</ram:ID>
                 <ram:GlobalID schemeID="0088">5790000436101</ram:GlobalID>
                 <ram:Name>SellerCompany</ram:Name>
                 <ram:SpecifiedLegalOrganization>

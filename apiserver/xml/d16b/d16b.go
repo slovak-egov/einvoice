@@ -1,40 +1,66 @@
 package d16b
 
 type CrossIndustryInvoice struct {
-	SupplyChainTradeTransaction SupplyChainTradeTransaction
+	ExchangedDocument struct {
+		IssueDateTime DateTimeType
+	}
+	SupplyChainTradeTransaction struct {
+		ApplicableHeaderTradeAgreement struct {
+			SellerTradeParty *TradePartyType
+			BuyerTradeParty  *TradePartyType
+		}
+		ApplicableHeaderTradeSettlement struct {
+			SpecifiedTradeSettlementHeaderMonetarySummation *struct {
+				LineTotalAmount []AmountType
+			}
+		}
+	}
 }
 
-type SupplyChainTradeTransaction struct {
-	ApplicableHeaderTradeAgreement  HeaderTradeAgreementType
-	ApplicableHeaderTradeSettlement HeaderTradeSettlementType
-}
-
-type HeaderTradeAgreementType struct {
-	SellerTradeParty *TradePartyType
-	BuyerTradeParty  *TradePartyType
+type DateTimeType struct {
+	DateTimeString *struct {
+		Format *string `xml:"format,attr"`
+		Value  string  `xml:",innerxml"`
+	}
+	DateTime *struct {
+		Value string `xml:",innerxml"`
+	}
 }
 
 type TradePartyType struct {
 	ID                       []ID
 	Name                     *string
-	SpecifiedTaxRegistration []SpecifiedTaxRegistration
+	PostalTradeAddress       *TradeAddressType
+	SpecifiedTaxRegistration []struct {
+		ID *ID
+	}
 }
 
-type SpecifiedTaxRegistration struct {
-	ID *ID
+type TradeAddressType struct {
+	PostcodeCode           *string
+	PostOfficeBox          *string
+	BuildingName           *string
+	LineOne                *string
+	LineTwo                *string
+	LineThree              *string
+	LineFour               *string
+	LineFive               *string
+	StreetName             *string
+	CityName               *string
+	CountryID              *string
+	CountryName            []string
+	CountrySubDivisionID   *string
+	CountrySubDivisionName []string
+	AttentionOf            *string
+	CareOf                 *string
+	BuildingNumber         *string
+	DepartmentName         *string
+	AdditionalStreetName   *string
 }
 
 type ID struct {
 	SchemeID *string `xml:"schemeID,attr"`
 	Value    string  `xml:",innerxml"`
-}
-
-type HeaderTradeSettlementType struct {
-	SpecifiedTradeSettlementHeaderMonetarySummation *TradeSettlementHeaderMonetarySummationType
-}
-
-type TradeSettlementHeaderMonetarySummationType struct {
-	LineTotalAmount []AmountType
 }
 
 type AmountType struct {

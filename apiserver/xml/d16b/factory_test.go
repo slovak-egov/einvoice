@@ -25,7 +25,7 @@ func TestFactory(t *testing.T) {
 		Sender:      "SellerCompany",
 		Receiver:    "Buyercompany ltd",
 		Format:      "d16b",
-		SupplierICO: "33333333",
+		SupplierICO: "11190993",
 		CustomerICO: "44444444",
 		Price:       4000,
 	}
