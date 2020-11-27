@@ -16,45 +16,79 @@ func Create(value []byte) (*entity.Invoice, error) {
 		return nil, err
 	}
 
-	if inv.AccountingCustomerParty.Party == nil {
-		return nil, errors.New("Missing customer")
+	var errs []string
+
+	customer, validationErrs := parseParty("customer", inv.AccountingCustomerParty.Party)
+	if len(validationErrs) != 0 {
+		errs = append(errs, validationErrs...)
 	}
 
-	if inv.AccountingSupplierParty.Party == nil {
-		return nil, errors.New("Missing supplier")
+	supplier, validationErrs := parseParty("supplier", inv.AccountingSupplierParty.Party)
+	if len(validationErrs) != 0 {
+		errs = append(errs, validationErrs...)
 	}
 
 	price, err := strconv.ParseFloat(inv.LegalMonetaryTotal.PayableAmount.Value, 64)
 	if err != nil {
-		return nil, err
+		errs = append(errs, "price.value.parsingError")
 	}
 
-	customerICO, err := getICO(inv.AccountingCustomerParty.Party)
-	if err != nil {
-		return nil, err
-	}
-
-	supplierICO, err := getICO(inv.AccountingSupplierParty.Party)
-	if err != nil {
-		return nil, err
+	if len(errs) > 0 {
+		return nil, errors.New(strings.Join(errs, ", "))
 	}
 
 	return &entity.Invoice{
-		Sender:      getSenderName(inv),
-		Receiver:    getReceiverName(inv),
+		Sender:      supplier.name,
+		Receiver:    customer.name,
 		Format:      entity.UblFormat,
-		CustomerICO: customerICO,
-		SupplierICO: supplierICO,
+		CustomerICO: customer.ico,
+		SupplierICO: supplier.ico,
 		Price:       price,
 	}, nil
 }
 
-func getSenderName(inv *Invoice) string {
-	return getPartyName(inv.AccountingSupplierParty.Party)
+type partyInfo struct {
+	ico, name string
 }
 
-func getReceiverName(inv *Invoice) string {
-	return getPartyName(inv.AccountingCustomerParty.Party)
+func parseParty(partyName string, party *Party) (res partyInfo, errs []string) {
+	if party == nil {
+		errs = []string{partyName + ".undefined"}
+		return
+	}
+
+	if name := getPartyName(party); name == "" {
+		errs = append(errs, "name.undefined")
+	} else {
+		res.name = name
+	}
+
+	if ico, icoErr := getICO(party); icoErr != "" {
+		errs = append(errs, icoErr)
+	} else {
+		res.ico = ico
+	}
+
+	if address := party.PostalAddress; address == nil {
+		errs = append(errs, "address.undefined")
+	} else {
+		if address.Country == nil {
+			errs = append(errs, "address.country.undefined")
+		}
+
+		if address.CityName == nil {
+			errs = append(errs, "address.city.undefined")
+		}
+
+		if address.BuildingNumber == nil {
+			errs = append(errs, "address.building.number.undefined")
+		}
+	}
+
+	for i := range errs {
+		errs[i] = partyName + "." + errs[i]
+	}
+	return
 }
 
 func getPartyName(party *Party) string {
@@ -73,21 +107,22 @@ func getPartyName(party *Party) string {
 	return builder.String()
 }
 
-func getICO(party *Party) (string, error) {
-	var ico string
+func getICO(party *Party) (ico string, err string) {
 	for _, identification := range party.PartyIdentification {
 		if identification.ID.SchemeID == nil || *identification.ID.SchemeID != "0158" {
 			continue
 		}
 		if ico != "" {
-			return "", errors.New("Multiple ICO")
+			err = "ico.multiple"
+			return
 		}
 		ico = identification.ID.Value
 	}
 
 	if ico == "" {
-		return "", errors.New("Missing IČO")
+		err = "ico.undefined"
+		return
 	}
 
-	return ico, nil
+	return ico, ""
 }

@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"errors"
 	"strconv"
+	"strings"
 
 	"github.com/slovak-egov/einvoice/apiserver/entity"
 )
@@ -15,80 +16,120 @@ func Create(value []byte) (*entity.Invoice, error) {
 		return nil, err
 	}
 
-	if inv.SupplyChainTradeTransaction.ApplicableHeaderTradeAgreement.BuyerTradeParty == nil {
-		return nil, errors.New("Missing customer")
+	var errs []string
+
+	customer, validationErrs := parseParty("customer", inv.SupplyChainTradeTransaction.ApplicableHeaderTradeAgreement.BuyerTradeParty)
+	if len(validationErrs) != 0 {
+		errs = append(errs, validationErrs...)
 	}
 
-	if inv.SupplyChainTradeTransaction.ApplicableHeaderTradeAgreement.SellerTradeParty == nil {
-		return nil, errors.New("Missing supplier")
+	supplier, validationErrs := parseParty("supplier", inv.SupplyChainTradeTransaction.ApplicableHeaderTradeAgreement.SellerTradeParty)
+	if len(validationErrs) != 0 {
+		errs = append(errs, validationErrs...)
 	}
 
-	customerICO, err := getICO(inv.SupplyChainTradeTransaction.ApplicableHeaderTradeAgreement.BuyerTradeParty)
-	if err != nil {
-		return nil, err
+	price, validationErr := getPrice(inv)
+	if validationErr != "" {
+		errs = append(errs, validationErr)
 	}
-	supplierICO, err := getICO(inv.SupplyChainTradeTransaction.ApplicableHeaderTradeAgreement.SellerTradeParty)
-	if err != nil {
-		return nil, err
+
+	if len(errs) > 0 {
+		return nil, errors.New(strings.Join(errs, ", "))
 	}
 
 	return &entity.Invoice{
-		Sender:      getSenderName(inv),
-		Receiver:    getReceiverName(inv),
+		Sender:      supplier.name,
+		Receiver:    customer.name,
 		Format:      entity.D16bFormat,
-		Price:       getPrice(inv),
-		CustomerICO: customerICO,
-		SupplierICO: supplierICO,
+		Price:       price,
+		CustomerICO: customer.ico,
+		SupplierICO: supplier.ico,
 	}, nil
 }
 
-func getSenderName(inv *CrossIndustryInvoice) string {
-	return getPartyName(inv.SupplyChainTradeTransaction.ApplicableHeaderTradeAgreement.SellerTradeParty)
+type partyInfo struct {
+	ico, name string
 }
 
-func getReceiverName(inv *CrossIndustryInvoice) string {
-	return getPartyName(inv.SupplyChainTradeTransaction.ApplicableHeaderTradeAgreement.BuyerTradeParty)
-}
-
-func getPartyName(party *TradePartyType) string {
+func parseParty(partyName string, party *TradePartyType) (res partyInfo, errs []string) {
 	if party == nil {
-		return ""
+		errs = []string{partyName + ".undefined"}
+		return
 	}
+
 	if party.Name == nil {
-		return ""
+		errs = append(errs, "name.undefined")
+	} else {
+		res.name = *party.Name
 	}
-	return *party.Name
+
+	if address := party.PostalTradeAddress; address == nil {
+		errs = append(errs, "address.undefined")
+	} else {
+		if address.CountryID == nil && len(address.CountryName) == 0 {
+			errs = append(errs, "address.country.undefined")
+		}
+
+		if address.CityName == nil {
+			errs = append(errs, "address.city.undefined")
+		}
+
+		if address.BuildingNumber == nil {
+			errs = append(errs, "address.building.number.undefined")
+		}
+	}
+
+	ico, icoErr := getICO(party)
+	if icoErr != "" {
+		errs = append(errs, icoErr)
+	} else {
+		res.ico = ico
+	}
+
+	for i := range errs {
+		errs[i] = partyName + "." + errs[i]
+	}
+	return
 }
 
-func getPrice(inv *CrossIndustryInvoice) float64 {
+func getPrice(inv *CrossIndustryInvoice) (sum float64, err string) {
+	if inv == nil {
+		return
+	}
+
 	summation := inv.SupplyChainTradeTransaction.ApplicableHeaderTradeSettlement.SpecifiedTradeSettlementHeaderMonetarySummation
 	if summation == nil {
-		return 0
+		err = "price.undefined"
+		return
 	}
-	sum := .0
+
 	for _, l := range summation.LineTotalAmount {
-		price, _ := strconv.ParseFloat(l.Value, 64)
+		price, parsingErr := strconv.ParseFloat(l.Value, 64)
+		if parsingErr != nil {
+			err = "price.value.parsingError"
+			return
+		}
 		sum += price
 	}
-	return sum
+
+	return
 }
 
-func getICO(party *TradePartyType) (string, error) {
-	var ico string
+func getICO(party *TradePartyType) (ico string, err string) {
 	for _, id := range party.ID {
 
 		if id.SchemeID == nil || *id.SchemeID != "0158" {
 			continue
 		}
 		if ico != "" {
-			return "", errors.New("Multiple IČO")
+			return "", "ico.multiple"
 		}
 		ico = id.Value
 	}
 
 	if ico == "" {
-		return "", errors.New("Missing IČO")
+		return "", "ico.undefined"
 	}
 
-	return ico, nil
+	return ico, ""
 }

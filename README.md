@@ -6,6 +6,8 @@
 
 You can view it on this [website](https://generator.swagger.io/?url=https://raw.githubusercontent.com/slovak-egov/einvoice/main/docs/swagger.yml).
 
+[Invoice validations](docs/validations.md)
+
 ## Try it out
 
 [https://web-app.dev.filipsladek.com](https://web-app.dev.filipsladek.com)
@@ -50,6 +52,10 @@ APISERVER_ENV=dev
 [VNet](dev-scripts/vnet/README.md)
 
 ## XML
+
+Useful resources:
+ 
+https://github.com/ConnectingEurope/eInvoicing-EN16931
 
 ### [UBL2.1](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32017D1870#ntc2-L_2017266EN.01002101-E0002)
 
