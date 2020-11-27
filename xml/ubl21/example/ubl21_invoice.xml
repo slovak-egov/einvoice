@@ -17,6 +17,7 @@
             </cac:PartyName>
             <cac:PostalAddress>
                 <cbc:StreetName>Main street 2, Building 4</cbc:StreetName>
+                <cbc:BuildingNumber>4</cbc:BuildingNumber>
                 <cbc:CityName>Big city</cbc:CityName>
                 <cbc:PostalZone>54321</cbc:PostalZone>
                 <cac:Country>
@@ -34,7 +35,8 @@
                 <cbc:Name>North American Veeblefetzer</cbc:Name>
             </cac:PartyName>
             <cac:PostalAddress>
-                <cbc:StreetName>Main street 2, Building 4</cbc:StreetName>
+                <cbc:StreetName>Main street 2, Building 1</cbc:StreetName>
+                <cbc:BuildingNumber>1</cbc:BuildingNumber>
                 <cbc:CityName>Big city</cbc:CityName>
                 <cbc:PostalZone>54321</cbc:PostalZone>
                 <cac:Country>

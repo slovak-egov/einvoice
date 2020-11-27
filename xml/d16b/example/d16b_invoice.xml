@@ -65,6 +65,7 @@
                     <ram:LineOne>Main street 2, Building 4</ram:LineOne>
                     <ram:CityName>Big city</ram:CityName>
                     <ram:CountryID>SK</ram:CountryID>
+                    <ram:BuildingNumber>4</ram:BuildingNumber>
                 </ram:PostalTradeAddress>
             </ram:SellerTradeParty>
             <ram:BuyerTradeParty>
@@ -79,6 +80,7 @@
                     <ram:LineOne>Anystreet, Building 1</ram:LineOne>
                     <ram:CityName>Anytown</ram:CityName>
                     <ram:CountryID>DK</ram:CountryID>
+                    <ram:BuildingNumber>1</ram:BuildingNumber>
                 </ram:PostalTradeAddress>
             </ram:BuyerTradeParty>
             <ram:BuyerOrderReferencedDocument>

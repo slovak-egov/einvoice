@@ -66,14 +66,16 @@ func parseParty(partyName string, party *TradePartyType) (res partyInfo, errs []
 	if address := party.PostalTradeAddress; address == nil {
 		errs = append(errs, "address.undefined")
 	} else {
-		// TODO: define required fields, everything can be unstructured in LineOne-LineFive
-
 		if address.CountryID == nil && len(address.CountryName) == 0 {
 			errs = append(errs, "address.country.undefined")
 		}
 
 		if address.CityName == nil {
 			errs = append(errs, "address.city.undefined")
+		}
+
+		if address.BuildingNumber == nil {
+			errs = append(errs, "address.building.number.undefined")
 		}
 	}
 
@@ -104,7 +106,7 @@ func getPrice(inv *CrossIndustryInvoice) (sum float64, err string) {
 	for _, l := range summation.LineTotalAmount {
 		price, parsingErr := strconv.ParseFloat(l.Value, 64)
 		if parsingErr != nil {
-			err = "price.parsingError"
+			err = "price.value.parsingError"
 			return
 		}
 		sum += price

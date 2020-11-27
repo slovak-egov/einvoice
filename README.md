@@ -6,6 +6,8 @@
 
 You can view it on this [website](https://generator.swagger.io/?url=https://raw.githubusercontent.com/slovak-egov/einvoice/main/docs/swagger.yml).
 
+[Invoice validations](validations.md)
+
 ## Try it out
 
 [https://web-app.dev.filipsladek.com](https://web-app.dev.filipsladek.com)

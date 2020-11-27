@@ -30,7 +30,7 @@ func Create(value []byte) (*entity.Invoice, error) {
 
 	price, err := strconv.ParseFloat(inv.LegalMonetaryTotal.PayableAmount.Value, 64)
 	if err != nil {
-		errs = append(errs, "price.parsingError")
+		errs = append(errs, "price.value.parsingError")
 	}
 
 	if len(errs) > 0 {
@@ -72,14 +72,16 @@ func parseParty(partyName string, party *Party) (res partyInfo, errs []string) {
 	if address := party.PostalAddress; address == nil {
 		errs = append(errs, "address.undefined")
 	} else {
-		// TODO: define required fields, everything can be unstructured in array of AddressLines
-
 		if address.Country == nil {
 			errs = append(errs, "address.country.undefined")
 		}
 
 		if address.CityName == nil {
 			errs = append(errs, "address.city.undefined")
+		}
+
+		if address.BuildingNumber == nil {
+			errs = append(errs, "address.building.number.undefined")
 		}
 	}
 
