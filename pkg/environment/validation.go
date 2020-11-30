@@ -44,3 +44,18 @@ func ParseDuration(varName string, defaultValue time.Duration) time.Duration {
 		return defaultValue
 	}
 }
+
+func ParseBool(varName string, defaultValue bool) bool {
+	parsedVar, parseError := strconv.ParseBool(
+		Getenv(varName, strconv.FormatBool(defaultValue)),
+	)
+
+	if parseError != nil {
+		log.WithFields(log.Fields{
+			"env": varName,
+			"error": parseError,
+		}).Fatal("environment.parseBool.error")
+	}
+
+	return parsedVar
+}

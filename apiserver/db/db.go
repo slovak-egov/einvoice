@@ -28,6 +28,10 @@ func NewConnector(dbConfig config.DbConfiguration) *Connector {
 		log.Info("db.connection.successful")
 	}
 
+	if dbConfig.LogQueries {
+		db.AddQueryHook(dbLogger{})
+	}
+
 	return &Connector{db}
 }
 
