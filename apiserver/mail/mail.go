@@ -1,12 +1,13 @@
 package mail
 
 import (
+	goContext "context"
 	b64 "encoding/base64"
 
 	mailjet "github.com/mailjet/mailjet-apiv3-go"
-	log "github.com/sirupsen/logrus"
 
 	"github.com/slovak-egov/einvoice/apiserver/config"
+	"github.com/slovak-egov/einvoice/pkg/context"
 )
 
 type Sender struct {
@@ -36,7 +37,7 @@ func getMailjetRecipients(receiverEmails []string) *mailjet.RecipientsV31{
 	return &recipients
 }
 
-func (s *Sender) SendInvoice(receiverEmails []string, invoice []byte) {
+func (s *Sender) SendInvoice(ctx goContext.Context, receiverEmails []string, invoice []byte) {
 	messagesInfo := []mailjet.InfoMessagesV31 {
 		mailjet.InfoMessagesV31{
 			From: &mailjet.RecipientV31{
@@ -58,6 +59,6 @@ func (s *Sender) SendInvoice(receiverEmails []string, invoice []byte) {
 	messages := mailjet.MessagesV31{Info: messagesInfo}
 	_, err := s.mailjetClient.SendMailV31(&messages)
 	if err != nil {
-		log.WithField("error", err.Error()).Warn("mail.send.failed")
+		context.GetLogger(ctx).WithField("error", err.Error()).Warn("mail.send.failed")
 	}
 }

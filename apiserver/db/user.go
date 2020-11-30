@@ -1,10 +1,12 @@
 package db
 
 import (
+	goContext "context"
+
 	"github.com/go-pg/pg/v10"
-	log "github.com/sirupsen/logrus"
 
 	"github.com/slovak-egov/einvoice/apiserver/entity"
+	"github.com/slovak-egov/einvoice/pkg/context"
 )
 
 func icoToUri(ico string) string {
@@ -19,54 +21,54 @@ func icosToUris(icos []string) []string {
 	return uris
 }
 
-func (connector *Connector) GetUser(id int) (*entity.User, error) {
+func (c *Connector) GetUser(ctx goContext.Context, id int) (*entity.User, error) {
 	user := &entity.User{}
-	err := connector.Db.Model(user).Where("id = ?", id).Select(user)
+	err := c.Db.Model(user).Where("id = ?", id).Select(user)
 	if err != nil {
-		log.WithField("error", err.Error()).Warn("db.getUser")
+		context.GetLogger(ctx).WithField("error", err.Error()).Warn("db.getUser")
 		return nil, err
 	}
 	return user, nil
 }
 
-func (connector *Connector) GetSlovenskoSkUser(uri string) (*entity.User, error) {
+func (c *Connector) GetSlovenskoSkUser(uri string) (*entity.User, error) {
 	user := &entity.User{}
-	err := connector.Db.Model(user).Where("slovensko_sk_uri = ?", uri).Select(user)
+	err := c.Db.Model(user).Where("slovensko_sk_uri = ?", uri).Select(user)
 	if err != nil {
 		return nil, err
 	}
 	return user, nil
 }
 
-func (connector *Connector) UpdateUser(updatedData *entity.User) *entity.User {
-	_, err := connector.Db.Model(updatedData).WherePK().Returning("*").UpdateNotZero()
+func (c *Connector) UpdateUser(ctx goContext.Context, updatedData *entity.User) *entity.User {
+	_, err := c.Db.Model(updatedData).WherePK().Returning("*").UpdateNotZero()
 
 	if err != nil {
-		log.WithField("error", err.Error()).Panic("db.updateUser.failed")
+		context.GetLogger(ctx).WithField("error", err.Error()).Panic("db.updateUser.failed")
 	}
 
 	return updatedData
 }
 
-func (connector *Connector) CreateUser(slovenskoSkUri, name string) (*entity.User, error) {
+func (c *Connector) CreateUser(ctx goContext.Context, slovenskoSkUri, name string) (*entity.User, error) {
 	user := &entity.User{SlovenskoSkUri: slovenskoSkUri, Name: name}
-	_, err := connector.Db.Model(user).Insert(user)
+	_, err := c.Db.Model(user).Insert(user)
 
 	if err != nil {
-		log.WithField("error", err.Error()).Warn("db.createUser")
+		context.GetLogger(ctx).WithField("error", err.Error()).Warn("db.createUser")
 	}
 
 	return user, err
 }
 
-func (connector *Connector) GetUserEmails(icos []string) ([]string, error) {
+func (c *Connector) GetUserEmails(ctx goContext.Context, icos []string) ([]string, error) {
 	var uris []string
 	for _, ico := range icos {
 		uris = append(uris, icoToUri(ico))
 	}
 
 	emails := []string{}
-	err := connector.Db.Model((*entity.User)(nil)).
+	err := c.Db.Model((*entity.User)(nil)).
 		Column("email").
 		Where("email <> ''").
 		Distinct().
@@ -74,7 +76,7 @@ func (connector *Connector) GetUserEmails(icos []string) ([]string, error) {
 		Select(&emails)
 
 	if err != nil {
-		log.WithField("error", err.Error()).Error("db.getUserEmails.failed")
+		context.GetLogger(ctx).WithField("error", err.Error()).Error("db.getUserEmails.failed")
 		return nil, err
 	}
 	return emails, nil

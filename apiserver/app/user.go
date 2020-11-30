@@ -9,19 +9,16 @@ import (
 	"github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/go-ozzo/ozzo-validation/v4/is"
 	"github.com/gorilla/mux"
-	log "github.com/sirupsen/logrus"
 
 	"github.com/slovak-egov/einvoice/apiserver/entity"
+	"github.com/slovak-egov/einvoice/pkg/context"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
 func getRequestedUserId(req *http.Request) (int, int, string) {
 	vars := mux.Vars(req)
-	requesterUserId, err := strconv.Atoi(req.Header.Get("User-Id"))
-	if err != nil {
-		log.WithField("error", err.Error()).Error("app.requesterUserId.invalid")
-		return 0, http.StatusInternalServerError, "Something went wrong"
-	}
+	requesterUserId := context.GetUserId(req.Context())
+
 	requestedUserId, err := strconv.Atoi(vars["id"])
 	if err != nil {
 		return 0, http.StatusBadRequest, "User id should be int"
@@ -42,7 +39,7 @@ func (a *App) getUser(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	user, err := a.db.GetUser(requestedUserId)
+	user, err := a.db.GetUser(req.Context(), requestedUserId)
 	if err != nil {
 		handlerutil.RespondWithError(res, http.StatusInternalServerError, "Something went wrong")
 		return
@@ -91,7 +88,7 @@ func (a *App) updateUser(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	user := a.db.UpdateUser(&entity.User{
+	user := a.db.UpdateUser(req.Context(), &entity.User{
 		Id:                      requestedUserId,
 		ServiceAccountPublicKey: requestBody.ServiceAccountPublicKey,
 		Email:                   requestBody.Email,

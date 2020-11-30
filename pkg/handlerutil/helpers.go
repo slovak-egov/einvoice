@@ -5,26 +5,26 @@ import (
 	"net/http"
 )
 
-func RespondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
+func RespondWithJSON(res http.ResponseWriter, code int, payload interface{}) {
 	response, _ := json.Marshal(payload)
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(code)
-	w.Write(response)
+	res.Header().Set("Content-Type", "application/json")
+	res.WriteHeader(code)
+	res.Write(response)
 }
 
-func RespondWithError(w http.ResponseWriter, code int, message string) {
-	RespondWithJSON(w, code, map[string]string{"error": message})
+func RespondWithError(res http.ResponseWriter, code int, message string) {
+	RespondWithJSON(res, code, map[string]string{"error": message})
 }
 
 func ErrorRecovery(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 		defer func() {
 			if err := recover(); err != nil {
-				RespondWithError(w, http.StatusInternalServerError, "Something went wrong")
+				RespondWithError(res, http.StatusInternalServerError, "Something went wrong")
 			}
 		}()
-		next.ServeHTTP(w, r)
+		next.ServeHTTP(res, req)
 	})
 }
 

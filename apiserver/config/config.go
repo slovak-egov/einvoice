@@ -106,6 +106,7 @@ func New() *Configuration {
 	if err != nil {
 		log.WithField("logLevel", logLevel).Fatal("config.logLevel.unknown")
 	}
+	log.SetLevel(config.LogLevel)
 
 	config.initDb()
 	config.initMail()

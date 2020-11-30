@@ -1,13 +1,14 @@
 package db
 
 import (
+	goContext "context"
 	"errors"
 
 	"github.com/go-pg/pg/v10"
 	"github.com/go-pg/pg/v10/orm"
-	log "github.com/sirupsen/logrus"
 
 	"github.com/slovak-egov/einvoice/apiserver/entity"
+	"github.com/slovak-egov/einvoice/pkg/context"
 )
 
 type UserInvoicesOptions struct {
@@ -24,9 +25,9 @@ func (r *UserInvoicesOptions) Validate() error {
 	return nil
 }
 
-func (connector *Connector) GetInvoices(formats []string) []entity.Invoice {
+func (c *Connector) GetInvoices(ctx goContext.Context, formats []string) []entity.Invoice {
 	invoices := []entity.Invoice{}
-	query := connector.Db.Model(&invoices)
+	query := c.Db.Model(&invoices)
 
 	if len(formats) > 0 {
 		query = query.Where("format IN (?)", pg.In(formats))
@@ -34,38 +35,38 @@ func (connector *Connector) GetInvoices(formats []string) []entity.Invoice {
 
 
 	if err := query.Select(); err != nil {
-		log.WithField("error", err.Error()).Panic("db.getInvoices.failed")
+		context.GetLogger(ctx).WithField("error", err.Error()).Panic("db.getInvoices.failed")
 	}
 
 	return invoices
 }
 
-func (connector *Connector) GetInvoice(id int) *entity.Invoice {
+func (c *Connector) GetInvoice(ctx goContext.Context, id int) *entity.Invoice {
 	inv := &entity.Invoice{}
-	err := connector.Db.Model(inv).Where("id = ?", id).Select(inv)
+	err := c.Db.Model(inv).Where("id = ?", id).Select(inv)
 	if err == pg.ErrNoRows {
 		return nil
 	} else if err != nil {
-		log.WithField("error", err.Error()).Panic("db.getInvoice.failed")
+		context.GetLogger(ctx).WithField("error", err.Error()).Panic("db.getInvoice.failed")
 	}
 
 	return inv
 }
 
-func (connector *Connector) CreateInvoice(invoice *entity.Invoice) error {
-	_, err := connector.Db.Model(invoice).Insert(invoice)
+func (c *Connector) CreateInvoice(ctx goContext.Context, invoice *entity.Invoice) error {
+	_, err := c.Db.Model(invoice).Insert(invoice)
 
 	if err != nil {
-		log.WithField("error", err.Error()).Error("db.createInvoice.failed")
+		context.GetLogger(ctx).WithField("error", err.Error()).Error("db.createInvoice.failed")
 	}
 
 	return err
 }
 
-func (connector *Connector) GetUserInvoices(userId int, options *UserInvoicesOptions) []entity.Invoice {
+func (c *Connector) GetUserInvoices(ctx goContext.Context, userId int, options *UserInvoicesOptions) []entity.Invoice {
 	requestedUris := icosToUris(options.Icos)
 	invoices := []entity.Invoice{}
-	accessibleUris := connector.Db.Model(&entity.User{}).
+	accessibleUris := c.Db.Model(&entity.User{}).
 		Join("LEFT JOIN substitutes ON owner_id = id").
 		ColumnExpr("slovensko_sk_uri").
 		WhereGroup(func(q *orm.Query) (*orm.Query, error) {
@@ -76,15 +77,15 @@ func (connector *Connector) GetUserInvoices(userId int, options *UserInvoicesOpt
 		accessibleUris = accessibleUris.Where("slovensko_sk_uri IN (?)", pg.In(requestedUris))
 	}
 
-	query := connector.Db.Model(&invoices).
+	query := c.Db.Model(&invoices).
 		With("accessible_uris", accessibleUris).
 		WhereGroup(func(q *orm.Query) (*orm.Query, error) {
 			subquery := q
 			if options.Received {
-				subquery = subquery.WhereOr("'ico://sk/' || customer_ico IN (?)", connector.Db.Model().Table("accessible_uris"))
+				subquery = subquery.WhereOr("'ico://sk/' || customer_ico IN (?)", c.Db.Model().Table("accessible_uris"))
 			}
 			if options.Supplied {
-				subquery = subquery.WhereOr("'ico://sk/' || supplier_ico IN (?)", connector.Db.Model().Table("accessible_uris"))
+				subquery = subquery.WhereOr("'ico://sk/' || supplier_ico IN (?)", c.Db.Model().Table("accessible_uris"))
 			}
 			return subquery, nil
 		})
@@ -96,7 +97,7 @@ func (connector *Connector) GetUserInvoices(userId int, options *UserInvoicesOpt
 	err := query.Select()
 
 	if err != nil {
-		log.WithField("error", err.Error()).Panic("db.getUserInvoices.failed")
+		context.GetLogger(ctx).WithField("error", err.Error()).Panic("db.getUserInvoices.failed")
 	}
 
 	return invoices

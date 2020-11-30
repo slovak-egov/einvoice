@@ -15,7 +15,7 @@ func (a *App) getUserSubstitutes(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	substituteIds, err := a.db.GetUserSubstitutes(requestedUserId)
+	substituteIds, err := a.db.GetUserSubstitutes(req.Context(), requestedUserId)
 	if err != nil {
 		handlerutil.RespondWithError(res, http.StatusInternalServerError, "Something went wrong")
 		return
@@ -47,7 +47,7 @@ func (a *App) addUserSubstitutes(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	substituteIds, err := a.db.AddUserSubstitutes(requestedUserId, requestBody)
+	substituteIds, err := a.db.AddUserSubstitutes(req.Context(), requestedUserId, requestBody)
 	if err != nil {
 		handlerutil.RespondWithError(res, http.StatusInternalServerError, "Something went wrong")
 		return
@@ -82,7 +82,7 @@ func (a *App) removeUserSubstitutes(res http.ResponseWriter, req *http.Request) 
 		return
 	}
 
-	substituteIds, err := a.db.RemoveUserSubstitutes(requestedUserId, requestBody)
+	substituteIds, err := a.db.RemoveUserSubstitutes(req.Context(), requestedUserId, requestBody)
 	if err != nil {
 		handlerutil.RespondWithError(res, http.StatusInternalServerError, "Something went wrong")
 		return
