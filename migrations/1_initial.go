@@ -12,7 +12,7 @@ func init() {
 			CREATE TABLE users (
 				id SERIAL PRIMARY KEY,
 				created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-				slovensko_sk_uri VARCHAR (100) NOT NULL,
+				slovensko_sk_uri VARCHAR (100) NOT NULL UNIQUE,
 				name VARCHAR (100) NOT NULL,
 				service_account_public_key TEXT NOT NULL DEFAULT '',
 				email VARCHAR (100) NOT NULL DEFAULT ''
