@@ -20,13 +20,7 @@ func (a *App) handleLogin(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	uri := slovenskoSkUser.Uri
-
-	// TODO: SELECT or INSERT query
-	user, err := a.db.GetSlovenskoSkUser(uri)
-	if user == nil {
-		user, err = a.db.CreateUser(req.Context(), uri, slovenskoSkUser.Name)
-	}
+	user, err := a.db.GetOrCreateUser(req.Context(), slovenskoSkUser.Uri, slovenskoSkUser.Name)
 
 	if err != nil {
 		handlerutil.RespondWithError(res, http.StatusInternalServerError, "Something went wrong")

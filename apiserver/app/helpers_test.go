@@ -53,7 +53,7 @@ func createTestInvoice(t *testing.T) int {
 func createTestUser(t *testing.T) (*entity.User, string) {
 	t.Helper()
 
-	user, err := a.db.CreateUser(ctx, "ico://sk/11190993", "Frantisek")
+	user, err := a.db.GetOrCreateUser(ctx, "ico://sk/11190993", "Frantisek")
 	if err != nil {
 		t.Error(err)
 	}

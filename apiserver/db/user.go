@@ -50,22 +50,21 @@ func (c *Connector) UpdateUser(ctx goContext.Context, updatedData *entity.User) 
 	return updatedData
 }
 
-func (c *Connector) CreateUser(ctx goContext.Context, slovenskoSkUri, name string) (*entity.User, error) {
+func (c *Connector) GetOrCreateUser(ctx goContext.Context, slovenskoSkUri, name string) (*entity.User, error) {
 	user := &entity.User{SlovenskoSkUri: slovenskoSkUri, Name: name}
-	_, err := c.Db.Model(user).Insert(user)
+	_, err := c.Db.Model(user).
+		Where("slovensko_sk_uri = ?", slovenskoSkUri).
+		SelectOrInsert()
 
 	if err != nil {
-		context.GetLogger(ctx).WithField("error", err.Error()).Warn("db.createUser")
+		context.GetLogger(ctx).WithField("error", err.Error()).Error("db.createUser")
 	}
 
 	return user, err
 }
 
 func (c *Connector) GetUserEmails(ctx goContext.Context, icos []string) ([]string, error) {
-	var uris []string
-	for _, ico := range icos {
-		uris = append(uris, icoToUri(ico))
-	}
+	uris := icosToUris(icos)
 
 	emails := []string{}
 	err := c.Db.Model((*entity.User)(nil)).
