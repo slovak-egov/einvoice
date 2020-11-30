@@ -1,12 +1,13 @@
 package storage
 
 import (
+	goContext "context"
 	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
 
-	log "github.com/sirupsen/logrus"
+	"github.com/slovak-egov/einvoice/pkg/context"
 )
 
 type LocalStorage struct {
@@ -21,26 +22,26 @@ func (storage *LocalStorage) invoiceFilename(id int) string {
 	return fmt.Sprintf("%s/invoice-%d.xml", storage.basePath, id)
 }
 
-func (storage *LocalStorage) GetInvoice(id int) []byte {
+func (storage *LocalStorage) GetInvoice(ctx goContext.Context, id int) []byte {
 	bytes, err := storage.readObject(storage.invoiceFilename(id))
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
 			return nil
 		} else {
-			log.WithField("error", err.Error()).Panic("localStorage.getInvoice.failed")
+			context.GetLogger(ctx).WithField("error", err.Error()).Panic("localStorage.getInvoice.failed")
 		}
 	}
 	return bytes
 }
 
-func (storage *LocalStorage) SaveInvoice(id int, value []byte) error {
-	return storage.saveObject(storage.invoiceFilename(id), value)
+func (storage *LocalStorage) SaveInvoice(ctx goContext.Context, id int, value []byte) error {
+	return storage.saveObject(ctx, storage.invoiceFilename(id), value)
 }
 
-func (storage *LocalStorage) saveObject(path string, value []byte) error {
+func (storage *LocalStorage) saveObject(ctx goContext.Context, path string, value []byte) error {
 	err := ioutil.WriteFile(path, value, 0644)
 	if err != nil {
-		log.WithField("error", err.Error()).Error("localStorage.saveObject.failed")
+		context.GetLogger(ctx).WithField("error", err.Error()).Error("localStorage.saveObject.failed")
 	}
 	return err
 }

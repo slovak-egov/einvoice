@@ -5,6 +5,8 @@ import (
 	"time"
 
 	log "github.com/sirupsen/logrus"
+
+	"github.com/slovak-egov/einvoice/pkg/context"
 )
 
 // Save response data for logging
@@ -23,34 +25,39 @@ func (r *responseRecorder) WriteHeader(status int) {
 	r.ResponseWriter.WriteHeader(status)
 }
 
-type LoggingHandler struct {
-	Handler   http.Handler
+func LoggingMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+		recorder := &responseRecorder{
+			ResponseWriter: res,
+			status:         http.StatusOK,
+		}
+
+		startTime := time.Now()
+		next.ServeHTTP(recorder, req)
+
+		level := log.InfoLevel
+		if recorder.status >= 500 {
+			level = log.ErrorLevel
+		} else if recorder.status >= 400 {
+			level = log.WarnLevel
+		}
+
+		context.GetLogger(req.Context()).WithFields(
+			log.Fields{
+				"requestDuration": time.Since(startTime).String(),
+				"host": req.Host,
+				"method": req.Method,
+				"url": req.URL.RequestURI(),
+				"remoteAddress": req.RemoteAddr,
+				"status": recorder.status,
+			},
+		).Log(level, "handler.request.finished")
+	})
 }
 
-func (h LoggingHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	// TODO: add requestId to every request to easily pair logs
-	recorder := &responseRecorder{
-		ResponseWriter: w,
-		status:         http.StatusOK,
-	}
-
-	startTime := time.Now()
-	h.Handler.ServeHTTP(recorder, req)
-
-	level := log.InfoLevel
-	if recorder.status >= 500 {
-		level = log.ErrorLevel
-	} else if recorder.status >= 400 {
-		level = log.WarnLevel
-	}
-
-	log.WithFields(log.Fields{
-		"requestDuration": time.Since(startTime).String(),
-		"host": req.Host,
-		"method": req.Method,
-		"url": req.URL.RequestURI(),
-		"remoteAddress": req.RemoteAddr,
-		"status": recorder.status,
-	}).Log(level, "handler.request.finished")
+func RequestIdMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+		req = req.WithContext(context.AddRequestId(req.Context()))
+		next.ServeHTTP(res, req)
+	})
 }
-

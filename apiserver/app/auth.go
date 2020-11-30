@@ -14,7 +14,7 @@ func (a *App) handleLogin(res http.ResponseWriter, req *http.Request) {
 		handlerutil.RespondWithError(res, http.StatusUnauthorized, err.Error())
 		return
 	}
-	slovenskoSkUser, err := a.slovenskoSk.GetUser(oboToken.Value)
+	slovenskoSkUser, err := a.slovenskoSk.GetUser(req.Context(), oboToken.Value)
 	if err != nil {
 		handlerutil.RespondWithError(res, http.StatusUnauthorized, "Unauthorized")
 		return
@@ -25,7 +25,7 @@ func (a *App) handleLogin(res http.ResponseWriter, req *http.Request) {
 	// TODO: SELECT or INSERT query
 	user, err := a.db.GetSlovenskoSkUser(uri)
 	if user == nil {
-		user, err = a.db.CreateUser(uri, slovenskoSkUser.Name)
+		user, err = a.db.CreateUser(req.Context(), uri, slovenskoSkUser.Name)
 	}
 
 	if err != nil {
@@ -34,7 +34,7 @@ func (a *App) handleLogin(res http.ResponseWriter, req *http.Request) {
 	}
 
 	sessionToken := random.String(50)
-	a.cache.SaveUserToken(sessionToken, user.Id)
+	a.cache.SaveUserToken(req.Context(), sessionToken, user.Id)
 
 	handlerutil.RespondWithJSON(res, http.StatusOK, struct {
 		Token string `json:"token"`
@@ -49,7 +49,7 @@ func (a *App) handleLogout(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	err = a.cache.RemoveUserToken(token.Value)
+	err = a.cache.RemoveUserToken(req.Context(), token.Value)
 	if err != nil {
 		handlerutil.RespondWithError(res, http.StatusUnauthorized, "Unauthorized")
 		return

@@ -56,7 +56,7 @@ var testConfig = Configuration{
 	Db: DbConfiguration{
 		Host: "localhost",
 		Port: 5432,
-		Name: "einvoice",
+		Name: "test",
 		User: "postgres",
 	},
 	D16bXsdPath:        "xml/d16b/xsd",

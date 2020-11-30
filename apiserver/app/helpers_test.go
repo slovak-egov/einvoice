@@ -1,12 +1,15 @@
 package app
 
 import (
+	"context"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
 	"github.com/slovak-egov/einvoice/apiserver/entity"
 )
+
+var ctx = context.Background()
 
 func executeRequest(req *http.Request) *httptest.ResponseRecorder {
 	rr := httptest.NewRecorder()
@@ -40,7 +43,7 @@ func createTestInvoice(t *testing.T) int {
 		CreatedBy:   user.Id,
 	}
 
-	if err := a.db.CreateInvoice(invoice); err != nil {
+	if err := a.db.CreateInvoice(ctx, invoice); err != nil {
 		t.Fatal(err)
 	}
 
@@ -50,13 +53,13 @@ func createTestInvoice(t *testing.T) int {
 func createTestUser(t *testing.T) (*entity.User, string) {
 	t.Helper()
 
-	user, err := a.db.CreateUser("ico://sk/11190993", "Frantisek")
+	user, err := a.db.CreateUser(ctx, "ico://sk/11190993", "Frantisek")
 	if err != nil {
 		t.Error(err)
 	}
 
 	sessionToken := "123"
-	a.cache.SaveUserToken(sessionToken, user.Id)
+	a.cache.SaveUserToken(ctx, sessionToken, user.Id)
 
 	return user, sessionToken
 }
@@ -64,6 +67,10 @@ func createTestUser(t *testing.T) (*entity.User, string) {
 func cleanDb(t *testing.T) func() {
 	return func() {
 		if _, err := a.db.Db.Model(&entity.Invoice{}).Where("TRUE").Delete(); err != nil {
+			t.Error(err)
+		}
+
+		if _, err := a.db.Db.Model(&entity.Substitute{}).Where("TRUE").Delete(); err != nil {
 			t.Error(err)
 		}
 

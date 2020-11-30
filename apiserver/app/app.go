@@ -55,6 +55,8 @@ func NewApp() *App {
 }
 
 func (a *App) initializeHandlers() {
+	a.router.Use(handlerutil.RequestIdMiddleware)
+	a.router.Use(handlerutil.LoggingMiddleware)
 	a.router.Use(handlerutil.ErrorRecovery)
 	authRouter := a.router.PathPrefix("/").Subrouter()
 	authRouter.Use(a.authMiddleware)
@@ -76,7 +78,7 @@ func (a *App) initializeHandlers() {
 
 func (a *App) Run() {
 	srv := &http.Server{
-		Handler:      handlerutil.LoggingHandler{muxHandlers.CORS(corsOptions...)(a.router)},
+		Handler:      muxHandlers.CORS(corsOptions...)(a.router),
 		Addr:         fmt.Sprintf("%s:%d", "0.0.0.0", a.config.Port),
 		WriteTimeout: a.config.ServerWriteTimeout,
 		ReadTimeout:  a.config.ServerReadTimeout,
