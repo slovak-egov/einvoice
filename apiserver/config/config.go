@@ -15,11 +15,12 @@ type MailConfiguration struct {
 }
 
 type DbConfiguration struct {
-	Host     string
-	Port     int
-	Name     string
-	User     string
-	Password string
+	Host       string
+	Port       int
+	Name       string
+	User       string
+	Password   string
+	LogQueries bool
 }
 
 type CacheConfiguration struct {
@@ -52,11 +53,12 @@ type Configuration struct {
 
 func (c *Configuration) initDb() {
 	c.Db = DbConfiguration{
-		Host:     environment.Getenv("DB_HOST", c.Db.Host),
-		Port:     environment.ParseInt("DB_PORT", c.Db.Port),
-		Name:     environment.Getenv("DB_NAME", c.Db.Name),
-		User:     environment.Getenv("DB_USER", c.Db.User),
-		Password: environment.Getenv("DB_PASSWORD", c.Db.Password),
+		Host:       environment.Getenv("DB_HOST", c.Db.Host),
+		Port:       environment.ParseInt("DB_PORT", c.Db.Port),
+		Name:       environment.Getenv("DB_NAME", c.Db.Name),
+		User:       environment.Getenv("DB_USER", c.Db.User),
+		Password:   environment.Getenv("DB_PASSWORD", c.Db.Password),
+		LogQueries: environment.ParseBool("DB_LOG_QUERIES", c.Db.LogQueries),
 	}
 }
 
@@ -91,6 +93,8 @@ func New() *Configuration {
 	switch apiserverEnv {
 	case "prod":
 		config = prodConfig
+		// Use different formatting in production, which can be easily processed by elasticsearch
+		log.SetFormatter(&log.JSONFormatter{})
 	case "dev":
 		config = devConfig
 	case "test":
@@ -99,7 +103,6 @@ func New() *Configuration {
 		log.WithField("environment", apiserverEnv).Fatal("config.environment.unknown")
 	}
 
-	log.SetFormatter(&log.JSONFormatter{})
 	var err error
 	logLevel := environment.Getenv("LOG_LEVEL", config.LogLevel.String())
 	config.LogLevel, err = log.ParseLevel(logLevel)
