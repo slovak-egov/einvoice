@@ -88,11 +88,15 @@ func (a *App) updateUser(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	user := a.db.UpdateUser(req.Context(), &entity.User{
+	user, err := a.db.UpdateUser(req.Context(), &entity.User{
 		Id:                      requestedUserId,
 		ServiceAccountPublicKey: requestBody.ServiceAccountPublicKey,
 		Email:                   requestBody.Email,
 	})
+	if err != nil {
+		handlerutil.RespondWithError(res, http.StatusInternalServerError, "Something went wrong")
+		return
+	}
 
 	handlerutil.RespondWithJSON(res, http.StatusOK, user)
 }

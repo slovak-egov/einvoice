@@ -2,8 +2,10 @@ package app
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 
+	"github.com/slovak-egov/einvoice/apiserver/db"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
@@ -48,11 +50,11 @@ func (a *App) addUserSubstitutes(res http.ResponseWriter, req *http.Request) {
 	}
 
 	substituteIds, err := a.db.AddUserSubstitutes(req.Context(), requestedUserId, requestBody)
-	if err != nil {
-		handlerutil.RespondWithError(res, http.StatusInternalServerError, "Something went wrong")
+	if errors.As(err, &db.IntegrityViolationError{}) {
+		handlerutil.RespondWithError(res, http.StatusBadRequest, err.Error())
 		return
-	} else if substituteIds == nil {
-		handlerutil.RespondWithError(res, http.StatusBadRequest, "Some of substitutes do not exist")
+	} else if err != nil {
+		handlerutil.RespondWithError(res, http.StatusInternalServerError, "Something went wrong")
 		return
 	}
 

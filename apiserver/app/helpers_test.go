@@ -59,7 +59,10 @@ func createTestUser(t *testing.T) (*entity.User, string) {
 	}
 
 	sessionToken := "123"
-	a.cache.SaveUserToken(ctx, sessionToken, user.Id)
+	err = a.cache.SaveUserToken(ctx, sessionToken, user.Id)
+	if err != nil {
+		t.Error(err)
+	}
 
 	return user, sessionToken
 }

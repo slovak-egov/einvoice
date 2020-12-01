@@ -2,6 +2,7 @@ package slovenskoSk
 
 import (
 	"crypto/rsa"
+	"net/http"
 	"strings"
 
 	"github.com/dgrijalva/jwt-go"
@@ -14,6 +15,7 @@ type Connector struct {
 	baseUrl         string
 	apiTokenPrivate *rsa.PrivateKey
 	oboTokenPublic  *rsa.PublicKey
+	client          *http.Client
 }
 
 func New(config config.SlovenskoSkConfiguration) *Connector {
@@ -21,9 +23,10 @@ func New(config config.SlovenskoSkConfiguration) *Connector {
 		return nil
 	}
 	return &Connector{
-		baseUrl: config.Url,
+		baseUrl:         config.Url,
 		apiTokenPrivate: getPrivateKey(config.ApiTokenPrivateKey),
-		oboTokenPublic: getPublicKey(config.OboTokenPublicKey),
+		oboTokenPublic:  getPublicKey(config.OboTokenPublicKey),
+		client:          &http.Client{},
 	}
 }
 

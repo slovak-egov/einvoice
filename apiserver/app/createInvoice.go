@@ -2,6 +2,7 @@ package app
 
 import (
 	goContext "context"
+	"errors"
 	"io/ioutil"
 	"net/http"
 
@@ -12,6 +13,20 @@ import (
 	"github.com/slovak-egov/einvoice/pkg/context"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
+
+var formatToParsers = map[string]struct{
+	GetValidator func(*App) func([]byte) error
+	MetadataExtractor func([]byte) (*entity.Invoice, error)
+}{
+	entity.UblFormat: {
+		func(a *App) func([]byte) error {return a.validator.ValidateUBL21},
+		ubl21.Create,
+	},
+	entity.D16bFormat: {
+		func(a *App) func([]byte) error {return a.validator.ValidateD16B},
+		d16b.Create,
+	},
+}
 
 func parseInvoice(req *http.Request) ([]byte, error) {
 	file, _, err := req.FormFile("invoice")
@@ -58,37 +73,31 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) {
 	// Validate invoice format
 	var metadata *entity.Invoice
 
-	switch format {
-	case entity.UblFormat:
-		if err = a.validator.ValidateUBL21(invoice); err != nil {
-			handlerutil.RespondWithError(res, http.StatusBadRequest, err.Error())
-			return
-		}
-		metadata, err = ubl21.Create(invoice)
-		if err != nil {
-			handlerutil.RespondWithError(res, http.StatusBadRequest, err.Error())
-			return
-		}
-	case entity.D16bFormat:
-		if err = a.validator.ValidateD16B(invoice); err != nil {
-			handlerutil.RespondWithError(res, http.StatusBadRequest, err.Error())
-			return
-		}
-		metadata, err = d16b.Create(invoice)
-		if err != nil {
-			handlerutil.RespondWithError(res, http.StatusBadRequest, err.Error())
-			return
-		}
-	default:
-		handlerutil.RespondWithError(res, http.StatusBadRequest, "Invalid invoice format")
+	parsers, ok := formatToParsers[format]
+	if !ok {
+		handlerutil.RespondWithError(res, http.StatusBadRequest, "Unknown invoice format")
+		return
+	}
+
+	if err = parsers.GetValidator(a)(invoice); err != nil {
+		handlerutil.RespondWithError(res, http.StatusBadRequest, err.Error())
+		return
+	}
+	metadata, err = parsers.MetadataExtractor(invoice)
+	if err != nil {
+		handlerutil.RespondWithError(res, http.StatusBadRequest, err.Error())
 		return
 	}
 
 	// Add creator Id
 	metadata.CreatedBy = context.GetUserId(req.Context())
 
-	if err = validateInvoice(req.Context(), a.db, metadata); err != nil {
-		handlerutil.RespondWithError(res, http.StatusForbidden, err.Error())
+	err = validateInvoice(req.Context(), a.db, metadata)
+	if errors.As(err, &db.NoSubstituteError{}) {
+		handlerutil.RespondWithError(res, http.StatusForbidden, "You have no permission to create invoices with such IČO")
+		return
+	} else if err != nil {
+		handlerutil.RespondWithError(res, http.StatusInternalServerError, "Something went wrong")
 		return
 	}
 

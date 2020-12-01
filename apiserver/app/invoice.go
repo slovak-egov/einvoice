@@ -1,6 +1,7 @@
 package app
 
 import (
+	"errors"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -8,13 +9,18 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/slovak-egov/einvoice/apiserver/db"
+	myErrors "github.com/slovak-egov/einvoice/apiserver/errors"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
 func (a *App) getInvoices(res http.ResponseWriter, req *http.Request) {
 	formats := req.URL.Query()["format"]
 
-	invoices := a.db.GetInvoices(req.Context(), formats)
+	invoices, err := a.db.GetInvoices(req.Context(), formats)
+	if err != nil {
+		handlerutil.RespondWithError(res, http.StatusInternalServerError, "Something went wrong")
+		return
+	}
 
 	handlerutil.RespondWithJSON(res, http.StatusOK, invoices)
 }
@@ -27,9 +33,12 @@ func (a *App) getInvoice(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	invoice := a.db.GetInvoice(req.Context(), id)
-	if invoice == nil {
+	invoice, err := a.db.GetInvoice(req.Context(), id)
+	if errors.As(err, &myErrors.NotFound{}) {
 		handlerutil.RespondWithError(res, http.StatusNotFound, "Invoice was not found")
+		return
+	} else if err != nil {
+		handlerutil.RespondWithError(res, http.StatusInternalServerError, "Something went wrong")
 		return
 	}
 
@@ -44,9 +53,12 @@ func (a *App) getInvoiceDetail(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	invoice := a.storage.GetInvoice(req.Context(), id)
-	if invoice == nil {
+	invoice, err := a.storage.GetInvoice(req.Context(), id)
+	if errors.As(err, &myErrors.NotFound{}) {
 		handlerutil.RespondWithError(res, http.StatusNotFound, "Invoice was not found")
+		return
+	} else if err != nil {
+		handlerutil.RespondWithError(res, http.StatusInternalServerError, "Something went wrong")
 		return
 	}
 
@@ -79,7 +91,11 @@ func (a *App) getUserInvoices(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	invoices := a.db.GetUserInvoices(req.Context(), requestedUserId, requestOptions)
+	invoices, err := a.db.GetUserInvoices(req.Context(), requestedUserId, requestOptions)
+	if err != nil {
+		handlerutil.RespondWithError(res, http.StatusInternalServerError, "Something went wrong")
+		return
+	}
 
 	handlerutil.RespondWithJSON(res, http.StatusOK, invoices)
 }

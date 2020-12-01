@@ -3,7 +3,6 @@ package slovenskoSk
 import (
 	goContext "context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -19,22 +18,22 @@ type User struct {
 	Uri  string `json:"uri"`
 }
 
-func (connector *Connector) GetUser(ctx goContext.Context, oboToken string) (*User, error) {
+func (c *Connector) GetUser(ctx goContext.Context, oboToken string) (*User, error) {
 	token, err := jwt.Parse(oboToken, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodRSA); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
 
-		return connector.oboTokenPublic, nil
+		return c.oboTokenPublic, nil
 	})
 
 	if !token.Valid {
-		return nil, errors.New("Invalid token")
+		return nil, InvalidTokenError{"Invalid token"}
 	}
 
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
-		return nil, errors.New("Cannot parse claims")
+		return nil, InvalidTokenError{"Cannot parse claims"}
 	}
 
 	slovenskoSkToken := jwt.NewWithClaims(jwt.SigningMethodRS256, jwt.MapClaims{
@@ -46,39 +45,69 @@ func (connector *Connector) GetUser(ctx goContext.Context, oboToken string) (*Us
 	slovenskoSkToken.Header["cty"] = "JWT"
 	delete(slovenskoSkToken.Header, "typ")
 
-	slovenskoSkTokenString, err := slovenskoSkToken.SignedString(connector.apiTokenPrivate)
+	slovenskoSkTokenString, err := slovenskoSkToken.SignedString(c.apiTokenPrivate)
 	if err != nil {
 		return nil, err
 	}
 
-	client := &http.Client{}
-	slovenskoSkReq, err := http.NewRequest("GET", connector.baseUrl + "/api/upvs/user/info", nil)
+	response, err := c.sendRequest(
+		ctx,
+		&Request{
+			"GET",
+			"/api/upvs/user/info",
+			map[string]string{"Authorization": "Bearer "+slovenskoSkTokenString},
+		},
+	)
 	if err != nil {
-		context.GetLogger(ctx).WithField("error", err.Error()).Error("slovenskosk.getUser.requestPreparation.failed")
-		return nil, err
-	}
-	slovenskoSkReq.Header.Add("Authorization", "Bearer "+slovenskoSkTokenString)
-	slovenskoSkRes, err := client.Do(slovenskoSkReq)
-	if err != nil {
-		context.GetLogger(ctx).WithField("error", err.Error()).Error("slovenskosk.getUser.request.failed")
-		return nil, err
-	}
-
-	defer slovenskoSkRes.Body.Close()
-	body, err := ioutil.ReadAll(slovenskoSkRes.Body)
-	if err != nil {
-		context.GetLogger(ctx).WithField("error", err.Error()).Error("slovenskosk.getUser.requestBodyRead.failed")
 		return nil, err
 	}
 
 	user := &User{}
-	if err = json.Unmarshal(body, user); err != nil {
+	if err = json.Unmarshal(response, user); err != nil {
 		return nil, err
 	}
 
-	if user.Uri == "" {
-		return nil, errors.New("Unauthorized")
+	return user, nil
+}
+
+type Request struct {
+	method  string
+	url     string
+	headers map[string]string
+}
+
+func (c *Connector) sendRequest(ctx goContext.Context, request *Request) ([]byte, error) {
+	slovenskoSkReq, err := http.NewRequest(request.method, c.baseUrl + request.url, nil)
+	if err != nil {
+		context.GetLogger(ctx).WithField("error", err.Error()).Error("slovenskosk.sendRequest.preparation.failed")
+		return nil, err
 	}
 
-	return user, nil
+	for headerName, headerValue := range request.headers {
+		slovenskoSkReq.Header.Add(headerName, headerValue)
+	}
+
+	slovenskoSkRes, err := c.client.Do(slovenskoSkReq)
+	if err != nil {
+		context.GetLogger(ctx).WithField("error", err.Error()).Error("slovenskosk.sendRequest.failed")
+		return nil, UpvsError{err.Error()}
+	}
+
+	if slovenskoSkRes.StatusCode != http.StatusOK {
+		context.GetLogger(ctx).
+			WithField("status", slovenskoSkRes.StatusCode).
+			Error("slovenskosk.sendRequest.errorStatusCode")
+
+		return nil, UpvsError{"UPVS responded with: " + slovenskoSkRes.Status}
+	}
+
+	defer slovenskoSkRes.Body.Close()
+
+	body, err := ioutil.ReadAll(slovenskoSkRes.Body)
+	if err != nil {
+		context.GetLogger(ctx).WithField("error", err.Error()).Error("slovenskosk.sendRequest.readResponse.failed")
+		return nil, err
+	}
+
+	return body, nil
 }
