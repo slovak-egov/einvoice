@@ -9,8 +9,8 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	"github.com/slovak-egov/einvoice/apiserver/entity"
-	myErrors "github.com/slovak-egov/einvoice/apiserver/errors"
 	"github.com/slovak-egov/einvoice/pkg/context"
+	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
 type UserInvoicesOptions struct {
@@ -50,7 +50,7 @@ func (c *Connector) GetInvoice(ctx goContext.Context, id int) (*entity.Invoice, 
 	inv := &entity.Invoice{}
 	err := c.Db.Model(inv).Where("id = ?", id).Select(inv)
 	if errors.Is(err, pg.ErrNoRows) {
-		return nil, myErrors.NotFound{"Invoice not found"}
+		return nil, handlerutil.NewNotFoundError("Invoice not found")
 	} else if err != nil {
 		context.GetLogger(ctx).WithField("error", err.Error()).Error("db.getInvoice.failed")
 		return nil, err

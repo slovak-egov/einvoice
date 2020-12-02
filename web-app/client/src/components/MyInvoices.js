@@ -4,6 +4,7 @@ import {connect} from 'react-redux'
 import {FormCheck} from 'react-bootstrap'
 import {useTranslation, withTranslation} from 'react-i18next'
 import InvoiceList from './invoiceList'
+import Auth from './helpers/Auth'
 import {getMyInvoices} from '../actions/invoices'
 import {toggleField} from '../actions/common'
 
@@ -41,15 +42,17 @@ const Filter = connect(
   })
 )(FilterView)
 
-export default compose(
-  withTranslation(['TopBar']),
-  connect(
-    (state, {t}) => ({
-      title: t('TopBar:tabs.myInvoices'),
-      path: ['myInvoicesScreen'],
-      CustomFilter: Filter,
-      areCustomFilterFieldsValid: (filters) => filters.supplied || filters.received,
-    }),
-    {getInvoices: getMyInvoices}
-  ),
-)(InvoiceList)
+export default Auth(
+  compose(
+    withTranslation(['TopBar']),
+    connect(
+      (state, {t}) => ({
+        title: t('TopBar:tabs.myInvoices'),
+        path: ['myInvoicesScreen'],
+        CustomFilter: Filter,
+        areCustomFilterFieldsValid: (filters) => filters.supplied || filters.received,
+      }),
+      {getInvoices: getMyInvoices}
+    ),
+  )(InvoiceList)
+)

@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strings"
 
-	myErrors "github.com/slovak-egov/einvoice/apiserver/errors"
+	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
 const (
@@ -20,10 +20,10 @@ type Token struct {
 func getBearerToken(header string) (*Token, error) {
 	parts := strings.Split(header, " ")
 	if len(parts) != 2 {
-		return nil, myErrors.Authorization{"Invalid token format"}
+		return nil, handlerutil.NewAuthorizationError("Invalid token format")
 	}
 	if parts[0] != "Bearer" {
-		return nil, myErrors.Authorization{"Invalid authorization type"}
+		return nil, handlerutil.NewAuthorizationError("Invalid authorization type")
 	}
 	return &Token{parts[1], BearerToken}, nil
 }
@@ -43,5 +43,5 @@ func GetAuthToken(req *http.Request) (*Token, error) {
 		return getApiToken(apiKey)
 	}
 
-	return nil, myErrors.Authorization{"Missing authorization"}
+	return nil, handlerutil.NewAuthorizationError("Missing authorization")
 }

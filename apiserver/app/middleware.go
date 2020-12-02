@@ -1,62 +1,60 @@
 package app
 
 import (
-	 goContext "context"
-	"errors"
+	goContext "context"
 	"net/http"
 
 	"github.com/dgrijalva/jwt-go"
 
 	"github.com/slovak-egov/einvoice/apiserver/entity"
-	myErrors "github.com/slovak-egov/einvoice/apiserver/errors"
 	"github.com/slovak-egov/einvoice/pkg/context"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
 func (a *App) authMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-		token, err := GetAuthToken(req)
-		if err != nil {
-			handlerutil.RespondWithError(res, http.StatusUnauthorized, err.Error())
-			return
-		}
+	return http.HandlerFunc(
+		handlerutil.ErrorHandler(func(res http.ResponseWriter, req *http.Request) error {
+			token, err := GetAuthToken(req)
+			if err != nil {
+				return handlerutil.NewAuthorizationError(err.Error())
+			}
 
-		var userId int
+			var userId int
 
-		switch token.Type {
-		case BearerToken:
-			userId, err = a.cache.GetUserId(req.Context(), token.Value)
-		case ServiceAccountToken:
-			userId, err = a.getUserByServiceAccount(req.Context(), token.Value)
-		default:
-			err = myErrors.Authorization{"Wrong authorization type"}
-		}
+			switch token.Type {
+			case BearerToken:
+				userId, err = a.cache.GetUserId(req.Context(), token.Value)
+			case ServiceAccountToken:
+				userId, err = a.getUserByServiceAccount(req.Context(), token.Value)
+			default:
+				err = handlerutil.NewAuthorizationError("Wrong authorization type")
+			}
 
-		if errors.As(err, &myErrors.NotFound{}) || errors.As(err, &myErrors.Authorization{}) {
-			handlerutil.RespondWithError(res, http.StatusUnauthorized, err.Error())
-			return
-		} else if err != nil {
-			handlerutil.RespondWithError(res, http.StatusInternalServerError, "Something went wrong")
-			return
-		}
+			if _, ok := err.(*handlerutil.HttpError); ok {
+				return handlerutil.NewAuthorizationError(err.Error())
+			} else if err != nil {
+				return err
+			}
 
-		req = req.WithContext(context.AddUserId(req.Context(), userId))
+			req = req.WithContext(context.AddUserId(req.Context(), userId))
 
-		// Call the next handler
-		next.ServeHTTP(res, req)
-	})
+			// Call the next handler
+			next.ServeHTTP(res, req)
+			return nil
+		}),
+	)
 }
 
 func (a *App) getUserByServiceAccount(ctx goContext.Context, tokenString string) (int, error) {
 	var user *entity.User
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodRSA); !ok {
-			return nil, myErrors.Authorization{"Unexpected signing method"}
+			return nil, handlerutil.NewAuthorizationError("Unexpected signing method")
 		}
 
 		claims, ok := token.Claims.(jwt.MapClaims)
 		if !ok {
-			return nil, myErrors.Authorization{"Cannot parse claims"}
+			return nil, handlerutil.NewAuthorizationError("Cannot parse claims")
 		}
 
 		user, err := a.db.GetSlovenskoSkUser(claims["sub"].(string))
@@ -66,7 +64,7 @@ func (a *App) getUserByServiceAccount(ctx goContext.Context, tokenString string)
 
 		verifyKey, err := jwt.ParseRSAPublicKeyFromPEM([]byte(*user.ServiceAccountPublicKey))
 		if err != nil {
-			return nil, myErrors.Authorization{"Invalid key"}
+			return nil, handlerutil.NewAuthorizationError("Invalid key")
 		}
 
 		return verifyKey, nil
@@ -85,7 +83,7 @@ func (a *App) getUserByServiceAccount(ctx goContext.Context, tokenString string)
 			WithField("token", tokenString).
 			Debug("app.authMiddleware.parseToken.invalid")
 
-		return 0, myErrors.Authorization{"Invalid key"}
+		return 0, handlerutil.NewAuthorizationError("Invalid key")
 	}
 
 	return user.Id, nil

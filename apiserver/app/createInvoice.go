@@ -2,7 +2,6 @@ package app
 
 import (
 	goContext "context"
-	"errors"
 	"io/ioutil"
 	"net/http"
 
@@ -55,19 +54,17 @@ func validateInvoice(ctx goContext.Context, db *db.Connector, inv *entity.Invoic
 	return db.IsValidSubstitute(ctx, inv.CreatedBy, inv.SupplierICO)
 }
 
-func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) {
+func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 	// TODO: return 413 if request is too large
 	err := req.ParseMultipartForm(10 << 20)
 	if err != nil {
-		handlerutil.RespondWithError(res, http.StatusBadRequest, "Invalid payload")
-		return
+		return handlerutil.NewBadRequestError("Invalid payload")
 	}
 
 	format := req.PostFormValue("format")
 	invoice, err := parseInvoice(req)
 	if err != nil {
-		handlerutil.RespondWithError(res, http.StatusBadRequest, err.Error())
-		return
+		return handlerutil.NewBadRequestError(err.Error())
 	}
 
 	// Validate invoice format
@@ -75,40 +72,33 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) {
 
 	parsers, ok := formatToParsers[format]
 	if !ok {
-		handlerutil.RespondWithError(res, http.StatusBadRequest, "Unknown invoice format")
-		return
+		return handlerutil.NewBadRequestError("Unknown invoice format")
 	}
 
 	if err = parsers.GetValidator(a)(invoice); err != nil {
-		handlerutil.RespondWithError(res, http.StatusBadRequest, err.Error())
-		return
+		return handlerutil.NewBadRequestError(err.Error())
 	}
 	metadata, err = parsers.MetadataExtractor(invoice)
 	if err != nil {
-		handlerutil.RespondWithError(res, http.StatusBadRequest, err.Error())
-		return
+		return handlerutil.NewBadRequestError(err.Error())
 	}
 
 	// Add creator Id
 	metadata.CreatedBy = context.GetUserId(req.Context())
 
 	err = validateInvoice(req.Context(), a.db, metadata)
-	if errors.As(err, &db.NoSubstituteError{}) {
-		handlerutil.RespondWithError(res, http.StatusForbidden, "You have no permission to create invoices with such IČO")
-		return
+	if _, ok := err.(*db.NoSubstituteError); ok {
+		return handlerutil.NewForbiddenError("You have no permission to create invoices with such IČO")
 	} else if err != nil {
-		handlerutil.RespondWithError(res, http.StatusInternalServerError, "Something went wrong")
-		return
+		return err
 	}
 
 	// TODO: make DB+storage saving atomic
 	if err := a.db.CreateInvoice(req.Context(), metadata); err != nil {
-		handlerutil.RespondWithError(res, http.StatusInternalServerError, "Something went wrong")
-		return
+		return err
 	}
 	if err := a.storage.SaveInvoice(req.Context(), metadata.Id, invoice); err != nil {
-		handlerutil.RespondWithError(res, http.StatusInternalServerError, "Something went wrong")
-		return
+		return err
 	}
 
 	// Send mail notifications
@@ -121,4 +111,5 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) {
 	}
 
 	handlerutil.RespondWithJSON(res, http.StatusCreated, metadata)
+	return nil
 }

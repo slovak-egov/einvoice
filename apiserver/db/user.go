@@ -8,8 +8,8 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	"github.com/slovak-egov/einvoice/apiserver/entity"
-	myErrors "github.com/slovak-egov/einvoice/apiserver/errors"
 	"github.com/slovak-egov/einvoice/pkg/context"
+	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
 func icoToUri(ico string) string {
@@ -41,7 +41,7 @@ func (c *Connector) GetSlovenskoSkUser(uri string) (*entity.User, error) {
 	err := c.Db.Model(user).Where("slovensko_sk_uri = ?", uri).Select(user)
 
 	if errors.Is(err, pg.ErrNoRows) {
-		return nil, myErrors.NotFound{"User not found"}
+		return nil, handlerutil.NewNotFoundError("User not found")
 	} else if err != nil {
 		return nil, err
 	}

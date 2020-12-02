@@ -9,8 +9,8 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	"github.com/slovak-egov/einvoice/apiserver/config"
-	"github.com/slovak-egov/einvoice/apiserver/errors"
 	"github.com/slovak-egov/einvoice/pkg/context"
+	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
 type Cache struct {
@@ -61,7 +61,7 @@ func (r *Cache) GetUserId(ctx goContext.Context, token string) (int, error) {
 	id, err := r.client.Get(ctx, userIdKey(token)).Int()
 	if err == redis.Nil {
 		context.GetLogger(ctx).WithField("token", token).Debug("redis.getUserId.token.notFound")
-		return 0, errors.NotFound{"Token not found"}
+		return 0, handlerutil.NewNotFoundError("Token not found")
 	} else if err != nil {
 		context.GetLogger(ctx).WithField("token", token).Error("redis.getUserId.failed")
 		return 0, err
@@ -83,7 +83,7 @@ func (r *Cache) RemoveUserToken(ctx goContext.Context, token string) error {
 		return err
 	} else if res != 1 {
 		context.GetLogger(ctx).WithField("token", token).Debug("redis.removeUserToken.notFound")
-		return errors.NotFound{"Token not found"}
+		return handlerutil.NewNotFoundError("Token not found")
 	}
 
 	return nil
