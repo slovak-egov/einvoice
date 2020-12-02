@@ -11,48 +11,50 @@ import (
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
-func (a *App) getInvoices(res http.ResponseWriter, req *http.Request) {
+func (a *App) getInvoices(res http.ResponseWriter, req *http.Request) error {
 	formats := req.URL.Query()["format"]
 
-	invoices := a.db.GetInvoices(req.Context(), formats)
+	invoices, err := a.db.GetInvoices(req.Context(), formats)
+	if err != nil {
+		return err
+	}
 
 	handlerutil.RespondWithJSON(res, http.StatusOK, invoices)
+	return nil
 }
 
-func (a *App) getInvoice(res http.ResponseWriter, req *http.Request) {
+func (a *App) getInvoice(res http.ResponseWriter, req *http.Request) error {
 	vars := mux.Vars(req)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		handlerutil.RespondWithError(res, http.StatusBadRequest, "ID should be integer")
-		return
+		return handlerutil.NewBadRequestError("ID should be an integer")
 	}
 
-	invoice := a.db.GetInvoice(req.Context(), id)
-	if invoice == nil {
-		handlerutil.RespondWithError(res, http.StatusNotFound, "Invoice was not found")
-		return
+	invoice, err := a.db.GetInvoice(req.Context(), id)
+	if err != nil {
+		return err
 	}
 
 	handlerutil.RespondWithJSON(res, http.StatusOK, invoice)
+	return nil
 }
 
-func (a *App) getInvoiceDetail(res http.ResponseWriter, req *http.Request) {
+func (a *App) getInvoiceDetail(res http.ResponseWriter, req *http.Request) error {
 	vars := mux.Vars(req)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		handlerutil.RespondWithError(res, http.StatusBadRequest, "ID should be an integer")
-		return
+		return handlerutil.NewBadRequestError("ID should be an integer")
 	}
 
-	invoice := a.storage.GetInvoice(req.Context(), id)
-	if invoice == nil {
-		handlerutil.RespondWithError(res, http.StatusNotFound, "Invoice was not found")
-		return
+	invoice, err := a.storage.GetInvoice(req.Context(), id)
+	if err != nil {
+		return err
 	}
 
 	res.Header().Set("Content-Type", "application/xml")
 	res.WriteHeader(http.StatusOK)
 	res.Write(invoice)
+	return nil
 }
 
 func NewUserInvoicesOptions(params url.Values) *db.UserInvoicesOptions {
@@ -64,22 +66,23 @@ func NewUserInvoicesOptions(params url.Values) *db.UserInvoicesOptions {
 	}
 }
 
-func (a *App) getUserInvoices(res http.ResponseWriter, req *http.Request) {
-	requestedUserId, status, errorMessage := getRequestedUserId(req)
-
-	if errorMessage != "" {
-		handlerutil.RespondWithError(res, status, errorMessage)
-		return
+func (a *App) getUserInvoices(res http.ResponseWriter, req *http.Request) error {
+	requestedUserId, err := getRequestedUserId(req)
+	if err != nil {
+		return err
 	}
 
 	requestOptions := NewUserInvoicesOptions(req.URL.Query())
 
 	if err := requestOptions.Validate(); err != nil {
-		handlerutil.RespondWithError(res, http.StatusBadRequest, err.Error())
-		return
+		return handlerutil.NewBadRequestError(err.Error())
 	}
 
-	invoices := a.db.GetUserInvoices(req.Context(), requestedUserId, requestOptions)
+	invoices, err := a.db.GetUserInvoices(req.Context(), requestedUserId, requestOptions)
+	if err != nil {
+		return err
+	}
 
 	handlerutil.RespondWithJSON(res, http.StatusOK, invoices)
+	return nil
 }

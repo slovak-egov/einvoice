@@ -6,9 +6,11 @@ import (
 
 	"github.com/go-pg/pg/v10"
 	"github.com/go-pg/pg/v10/orm"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/slovak-egov/einvoice/apiserver/entity"
 	"github.com/slovak-egov/einvoice/pkg/context"
+	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
 type UserInvoicesOptions struct {
@@ -25,7 +27,7 @@ func (r *UserInvoicesOptions) Validate() error {
 	return nil
 }
 
-func (c *Connector) GetInvoices(ctx goContext.Context, formats []string) []entity.Invoice {
+func (c *Connector) GetInvoices(ctx goContext.Context, formats []string) ([]entity.Invoice, error) {
 	invoices := []entity.Invoice{}
 	query := c.Db.Model(&invoices)
 
@@ -33,24 +35,28 @@ func (c *Connector) GetInvoices(ctx goContext.Context, formats []string) []entit
 		query = query.Where("format IN (?)", pg.In(formats))
 	}
 
-
 	if err := query.Select(); err != nil {
-		context.GetLogger(ctx).WithField("error", err.Error()).Panic("db.getInvoices.failed")
+		context.GetLogger(ctx).WithFields(log.Fields{
+			"error":   err.Error(),
+			"formats": formats,
+		}).Error("db.getInvoices.failed")
+		return nil, err
 	}
 
-	return invoices
+	return invoices, nil
 }
 
-func (c *Connector) GetInvoice(ctx goContext.Context, id int) *entity.Invoice {
+func (c *Connector) GetInvoice(ctx goContext.Context, id int) (*entity.Invoice, error) {
 	inv := &entity.Invoice{}
 	err := c.Db.Model(inv).Where("id = ?", id).Select(inv)
-	if err == pg.ErrNoRows {
-		return nil
+	if errors.Is(err, pg.ErrNoRows) {
+		return nil, handlerutil.NewNotFoundError("Invoice not found")
 	} else if err != nil {
-		context.GetLogger(ctx).WithField("error", err.Error()).Panic("db.getInvoice.failed")
+		context.GetLogger(ctx).WithField("error", err.Error()).Error("db.getInvoice.failed")
+		return nil, err
 	}
 
-	return inv
+	return inv, nil
 }
 
 func (c *Connector) CreateInvoice(ctx goContext.Context, invoice *entity.Invoice) error {
@@ -63,7 +69,11 @@ func (c *Connector) CreateInvoice(ctx goContext.Context, invoice *entity.Invoice
 	return err
 }
 
-func (c *Connector) GetUserInvoices(ctx goContext.Context, userId int, options *UserInvoicesOptions) []entity.Invoice {
+func (c *Connector) GetUserInvoices(
+	ctx goContext.Context,
+	userId int,
+	options *UserInvoicesOptions,
+) ([]entity.Invoice, error) {
 	requestedUris := icosToUris(options.Icos)
 	invoices := []entity.Invoice{}
 	accessibleUris := c.Db.Model(&entity.User{}).
@@ -97,8 +107,9 @@ func (c *Connector) GetUserInvoices(ctx goContext.Context, userId int, options *
 	err := query.Select()
 
 	if err != nil {
-		context.GetLogger(ctx).WithField("error", err.Error()).Panic("db.getUserInvoices.failed")
+		context.GetLogger(ctx).WithField("error", err.Error()).Error("db.getUserInvoices.failed")
+		return nil, err
 	}
 
-	return invoices
+	return invoices, nil
 }

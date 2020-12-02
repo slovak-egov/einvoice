@@ -2,9 +2,7 @@ package cache
 
 import (
 	goContext "context"
-	"errors"
 	"fmt"
-	"strconv"
 	"time"
 
 	"github.com/go-redis/redis/v8"
@@ -12,11 +10,12 @@ import (
 
 	"github.com/slovak-egov/einvoice/apiserver/config"
 	"github.com/slovak-egov/einvoice/pkg/context"
+	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
 type Cache struct {
 	userTokenExpiration time.Duration
-	client *redis.Client
+	client              *redis.Client
 }
 
 func NewRedis(cacheConfig config.CacheConfiguration) *Cache {
@@ -26,9 +25,12 @@ func NewRedis(cacheConfig config.CacheConfiguration) *Cache {
 		DB:       0,  // use default db
 	})
 
-	pong := rdb.Ping(goContext.Background()).Val()
-	if pong == "" {
-		log.WithField("redisConfig", cacheConfig).Fatal("redis.connection.failed")
+	err := rdb.Ping(goContext.Background()).Err()
+	if err != nil {
+		log.WithFields(log.Fields{
+			"redisConfig": cacheConfig,
+			"error": err,
+		}).Fatal("redis.connection.failed")
 	} else {
 		log.Info("redis.connection.successful")
 	}
@@ -43,36 +45,50 @@ func userIdKey(token string) string {
 	return "token-" + token
 }
 
-// TODO: Return error if not successful
-func (redis *Cache) SaveUserToken(ctx goContext.Context, token string, id int) {
-	redis.client.Set(ctx, userIdKey(token), id, redis.userTokenExpiration).Val()
+func (r *Cache) SaveUserToken(ctx goContext.Context, token string, userId int) error {
+	err := r.client.Set(ctx, userIdKey(token), userId, r.userTokenExpiration).Err()
+	if err != nil {
+		context.GetLogger(ctx).WithFields(log.Fields{
+			"token":  token,
+			"userId": userId,
+		}).Error("redis.saveUserToken.failed")
+		return err
+	}
+	return nil
 }
 
-func (redis *Cache) GetUserId(ctx goContext.Context, token string) (int, error) {
-	id := redis.client.Get(ctx, userIdKey(token)).Val()
-	if id == "" {
-		context.GetLogger(ctx).WithField("token", token).Debug("redis.getUser.token.notFound")
-		return 0, errors.New("Token not found")
-	}
-	redis.client.Expire(ctx, userIdKey(token), redis.userTokenExpiration)
-	parsedId, err := strconv.Atoi(id)
-	if err != nil {
-		context.GetLogger(ctx).WithField("id", id).Debug("redis.getUser.parseId.failed")
+func (r *Cache) GetUserId(ctx goContext.Context, token string) (int, error) {
+	id, err := r.client.Get(ctx, userIdKey(token)).Int()
+	if err == redis.Nil {
+		context.GetLogger(ctx).WithField("token", token).Debug("redis.getUserId.token.notFound")
+		return 0, handlerutil.NewNotFoundError("Token not found")
+	} else if err != nil {
+		context.GetLogger(ctx).WithField("token", token).Error("redis.getUserId.failed")
 		return 0, err
 	}
-	return parsedId, nil
-}
 
-func (redis *Cache) RemoveUserToken(ctx goContext.Context, token string) error {
-	deletedRecords := redis.client.Del(ctx, userIdKey(token)).Val()
-	if deletedRecords == 1 {
-		return nil
-	} else {
-		context.GetLogger(ctx).WithField("token", token).Debug("redis.removeUser.token.notFound")
-		return errors.New("Tried to delete non-existent token")
+	err = r.client.Expire(ctx, userIdKey(token), r.userTokenExpiration).Err()
+	if err != nil {
+		context.GetLogger(ctx).WithField("token", token).Error("redis.getUserId.prolongExpiration.failed")
+		return 0, err
 	}
+
+	return id, nil
 }
 
-func (redis *Cache) FlushAll(ctx goContext.Context) {
-	redis.client.FlushAll(ctx)
+func (r *Cache) RemoveUserToken(ctx goContext.Context, token string) error {
+	res, err := r.client.Del(ctx, userIdKey(token)).Result()
+	if err != nil {
+		context.GetLogger(ctx).WithField("token", token).Error("redis.removeUserToken.failed")
+		return err
+	} else if res != 1 {
+		context.GetLogger(ctx).WithField("token", token).Debug("redis.removeUserToken.notFound")
+		return handlerutil.NewNotFoundError("Token not found")
+	}
+
+	return nil
+}
+
+func (r *Cache) FlushAll(ctx goContext.Context) error {
+	return r.client.FlushAll(ctx).Err()
 }

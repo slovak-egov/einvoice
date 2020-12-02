@@ -1,9 +1,10 @@
 package app
 
 import (
-	"errors"
 	"net/http"
 	"strings"
+
+	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
 const (
@@ -16,28 +17,31 @@ type Token struct {
 	Type  string
 }
 
-func GetAuthToken(req *http.Request) (*Token, error) {
-	bearerTokenHeader := req.Header.Get("Authorization")
-	if bearerTokenHeader != "" {
-		parts := strings.Split(bearerTokenHeader, " ")
-		if len(parts) != 2 {
-			return nil, errors.New("Invalid token format")
-		}
-		if parts[0] != "Bearer" {
-			return nil, errors.New("Invalid authorization type")
-		}
-		return &Token{parts[1], BearerToken}, nil
+func getBearerToken(header string) (*Token, error) {
+	parts := strings.Split(header, " ")
+	if len(parts) != 2 {
+		return nil, handlerutil.NewAuthorizationError("Invalid token format")
 	}
-
-	serviceAccountTokenHeader := req.Header.Get("X-API-Key")
-	if serviceAccountTokenHeader != "" {
-		return &Token{serviceAccountTokenHeader, ServiceAccountToken}, nil
+	if parts[0] != "Bearer" {
+		return nil, handlerutil.NewAuthorizationError("Invalid authorization type")
 	}
-
-	return nil, errors.New("Missing authorization")
+	return &Token{parts[1], BearerToken}, nil
 }
 
-func RemoveTokenHeader(req *http.Request) {
-	req.Header.Del("Authorization")
-	req.Header.Del("X-API-Key")
+func getApiToken(apiKey string) (*Token, error) {
+	return &Token{apiKey, ServiceAccountToken}, nil
+}
+
+func GetAuthToken(req *http.Request) (*Token, error) {
+	authorizationHeader := req.Header.Get("Authorization")
+	if authorizationHeader != "" {
+		return getBearerToken(authorizationHeader)
+	}
+
+	apiKey := req.Header.Get("X-API-Key")
+	if apiKey != "" {
+		return getApiToken(apiKey)
+	}
+
+	return nil, handlerutil.NewAuthorizationError("Missing authorization")
 }

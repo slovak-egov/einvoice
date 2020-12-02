@@ -1,9 +1,7 @@
 package app
 
 import (
-	 goContext "context"
-	"errors"
-	"fmt"
+	goContext "context"
 	"net/http"
 
 	"github.com/dgrijalva/jwt-go"
@@ -14,64 +12,59 @@ import (
 )
 
 func (a *App) authMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-		token, err := GetAuthToken(req)
-		if err != nil {
-			handlerutil.RespondWithError(res, http.StatusUnauthorized, err.Error())
-			return
-		}
+	return http.HandlerFunc(
+		handlerutil.ErrorHandler(func(res http.ResponseWriter, req *http.Request) error {
+			token, err := GetAuthToken(req)
+			if err != nil {
+				return handlerutil.NewAuthorizationError(err.Error())
+			}
 
-		var userId int
+			var userId int
 
-		switch token.Type {
-		case BearerToken:
-			userId, err = a.cache.GetUserId(req.Context(), token.Value)
-		case ServiceAccountToken:
-			userId, err = a.getUserByServiceAccount(req.Context(), token.Value)
-		default:
-			err = errors.New("Missing authorization")
-		}
+			switch token.Type {
+			case BearerToken:
+				userId, err = a.cache.GetUserId(req.Context(), token.Value)
+			case ServiceAccountToken:
+				userId, err = a.getUserByServiceAccount(req.Context(), token.Value)
+			default:
+				err = handlerutil.NewAuthorizationError("Wrong authorization type")
+			}
 
-		if err != nil {
-			context.GetLogger(req.Context()).
-				WithField("token", token).
-				Debug("app.authMiddleware.getUser.failed")
+			if _, ok := err.(*handlerutil.HttpError); ok {
+				return handlerutil.NewAuthorizationError(err.Error())
+			} else if err != nil {
+				return err
+			}
 
-			handlerutil.RespondWithError(res, http.StatusUnauthorized, "Invalid token")
-			return
-		}
+			req = req.WithContext(context.AddUserId(req.Context(), userId))
 
-		RemoveTokenHeader(req)
-		req = req.WithContext(context.AddUserId(req.Context(), userId))
-
-		// Call the next handler
-		next.ServeHTTP(res, req)
-	})
+			// Call the next handler
+			next.ServeHTTP(res, req)
+			return nil
+		}),
+	)
 }
 
 func (a *App) getUserByServiceAccount(ctx goContext.Context, tokenString string) (int, error) {
 	var user *entity.User
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodRSA); !ok {
-			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+			return nil, handlerutil.NewAuthorizationError("Unexpected signing method")
 		}
 
 		claims, ok := token.Claims.(jwt.MapClaims)
 		if !ok {
-			return nil, errors.New("Cannot parse claims")
+			return nil, handlerutil.NewAuthorizationError("Cannot parse claims")
 		}
 
 		user, err := a.db.GetSlovenskoSkUser(claims["sub"].(string))
 		if err != nil {
 			return nil, err
 		}
-		if user == nil {
-			return nil, errors.New("User not found")
-		}
 
 		verifyKey, err := jwt.ParseRSAPublicKeyFromPEM([]byte(*user.ServiceAccountPublicKey))
 		if err != nil {
-			return nil, errors.New("Invalid key")
+			return nil, handlerutil.NewAuthorizationError("Invalid key")
 		}
 
 		return verifyKey, nil
@@ -90,7 +83,7 @@ func (a *App) getUserByServiceAccount(ctx goContext.Context, tokenString string)
 			WithField("token", tokenString).
 			Debug("app.authMiddleware.parseToken.invalid")
 
-		return 0, errors.New("Invalid token")
+		return 0, handlerutil.NewAuthorizationError("Invalid key")
 	}
 
 	return user.Id, nil

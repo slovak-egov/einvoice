@@ -15,36 +15,34 @@ import (
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
-func getRequestedUserId(req *http.Request) (int, int, string) {
+func getRequestedUserId(req *http.Request) (int, error) {
 	vars := mux.Vars(req)
 	requesterUserId := context.GetUserId(req.Context())
 
 	requestedUserId, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		return 0, http.StatusBadRequest, "User id should be int"
+		return 0, handlerutil.NewBadRequestError("User id should be int")
 	}
 	// Currently everyone can request only own data
 	if requestedUserId != requesterUserId {
-		return 0, http.StatusUnauthorized, "Unauthorized"
+		return 0, handlerutil.NewAuthorizationError("Unauthorized")
 	}
 
-	return requestedUserId, 0, ""
+	return requestedUserId, nil
 }
 
-func (a *App) getUser(res http.ResponseWriter, req *http.Request) {
-	requestedUserId, status, errorMessage := getRequestedUserId(req)
-
-	if errorMessage != "" {
-		handlerutil.RespondWithError(res, status, errorMessage)
-		return
+func (a *App) getUser(res http.ResponseWriter, req *http.Request) error {
+	requestedUserId, err := getRequestedUserId(req)
+	if err != nil {
+		return err
 	}
 
 	user, err := a.db.GetUser(req.Context(), requestedUserId)
 	if err != nil {
-		handlerutil.RespondWithError(res, http.StatusInternalServerError, "Something went wrong")
-		return
+		return err
 	}
 	handlerutil.RespondWithJSON(res, http.StatusOK, user)
+	return nil
 }
 
 type PatchUserRequest struct {
@@ -65,12 +63,10 @@ func (u *PatchUserRequest) Validate() error {
 	return nil
 }
 
-func (a *App) updateUser(res http.ResponseWriter, req *http.Request) {
-	requestedUserId, status, errorMessage := getRequestedUserId(req)
-
-	if errorMessage != "" {
-		handlerutil.RespondWithError(res, status, errorMessage)
-		return
+func (a *App) updateUser(res http.ResponseWriter, req *http.Request) error {
+	requestedUserId, err := getRequestedUserId(req)
+	if err != nil {
+		return err
 	}
 
 	var requestBody PatchUserRequest
@@ -79,20 +75,22 @@ func (a *App) updateUser(res http.ResponseWriter, req *http.Request) {
 	decoder.DisallowUnknownFields()
 
 	if err := decoder.Decode(&requestBody); err != nil {
-		handlerutil.RespondWithError(res, http.StatusBadRequest, err.Error())
-		return
+		return handlerutil.NewBadRequestError(err.Error())
 	}
 
 	if err := requestBody.Validate(); err != nil {
-		handlerutil.RespondWithError(res, http.StatusBadRequest, err.Error())
-		return
+		return handlerutil.NewBadRequestError(err.Error())
 	}
 
-	user := a.db.UpdateUser(req.Context(), &entity.User{
+	user, err := a.db.UpdateUser(req.Context(), &entity.User{
 		Id:                      requestedUserId,
 		ServiceAccountPublicKey: requestBody.ServiceAccountPublicKey,
 		Email:                   requestBody.Email,
 	})
+	if err != nil {
+		return err
+	}
 
 	handlerutil.RespondWithJSON(res, http.StatusOK, user)
+	return nil
 }

@@ -4,32 +4,29 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/slovak-egov/einvoice/apiserver/db"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
-func (a *App) getUserSubstitutes(res http.ResponseWriter, req *http.Request) {
-	requestedUserId, status, errorMessage := getRequestedUserId(req)
-
-	if errorMessage != "" {
-		handlerutil.RespondWithError(res, status, errorMessage)
-		return
+func (a *App) getUserSubstitutes(res http.ResponseWriter, req *http.Request) error {
+	requestedUserId, err := getRequestedUserId(req)
+	if err != nil {
+		return err
 	}
 
 	substituteIds, err := a.db.GetUserSubstitutes(req.Context(), requestedUserId)
 	if err != nil {
-		handlerutil.RespondWithError(res, http.StatusInternalServerError, "Something went wrong")
-		return
+		return err
 	}
 
 	handlerutil.RespondWithJSON(res, http.StatusOK, substituteIds)
+	return nil
 }
 
-func (a *App) addUserSubstitutes(res http.ResponseWriter, req *http.Request) {
-	requestedUserId, status, errorMessage := getRequestedUserId(req)
-
-	if errorMessage != "" {
-		handlerutil.RespondWithError(res, status, errorMessage)
-		return
+func (a *App) addUserSubstitutes(res http.ResponseWriter, req *http.Request) error {
+	requestedUserId, err := getRequestedUserId(req)
+	if err != nil {
+		return err
 	}
 
 	var requestBody []int
@@ -38,33 +35,28 @@ func (a *App) addUserSubstitutes(res http.ResponseWriter, req *http.Request) {
 	decoder.DisallowUnknownFields()
 
 	if err := decoder.Decode(&requestBody); err != nil {
-		handlerutil.RespondWithError(res, http.StatusBadRequest, err.Error())
-		return
+		return handlerutil.NewBadRequestError(err.Error())
 	}
 
 	if len(requestBody) == 0 {
-		handlerutil.RespondWithError(res, http.StatusBadRequest, "You should add at least 1 substitute")
-		return
+		return handlerutil.NewBadRequestError("You should add at least 1 substitute")
 	}
 
 	substituteIds, err := a.db.AddUserSubstitutes(req.Context(), requestedUserId, requestBody)
-	if err != nil {
-		handlerutil.RespondWithError(res, http.StatusInternalServerError, "Something went wrong")
-		return
-	} else if substituteIds == nil {
-		handlerutil.RespondWithError(res, http.StatusBadRequest, "Some of substitutes do not exist")
-		return
+	if _, ok := err.(*db.IntegrityViolationError); ok {
+		return handlerutil.NewBadRequestError(err.Error())
+	} else if err != nil {
+		return err
 	}
 
 	handlerutil.RespondWithJSON(res, http.StatusOK, substituteIds)
+	return nil
 }
 
-func (a *App) removeUserSubstitutes(res http.ResponseWriter, req *http.Request) {
-	requestedUserId, status, errorMessage := getRequestedUserId(req)
-
-	if errorMessage != "" {
-		handlerutil.RespondWithError(res, status, errorMessage)
-		return
+func (a *App) removeUserSubstitutes(res http.ResponseWriter, req *http.Request) error {
+	requestedUserId, err := getRequestedUserId(req)
+	if err != nil {
+		return err
 	}
 
 	var requestBody []int
@@ -73,21 +65,19 @@ func (a *App) removeUserSubstitutes(res http.ResponseWriter, req *http.Request) 
 	decoder.DisallowUnknownFields()
 
 	if err := decoder.Decode(&requestBody); err != nil {
-		handlerutil.RespondWithError(res, http.StatusBadRequest, err.Error())
-		return
+		return handlerutil.NewBadRequestError(err.Error())
 	}
 
 	if len(requestBody) == 0 {
-		handlerutil.RespondWithError(res, http.StatusBadRequest, "You should remove at least 1 substitute")
-		return
+		return handlerutil.NewBadRequestError("You should remove at least 1 substitute")
 	}
 
 	substituteIds, err := a.db.RemoveUserSubstitutes(req.Context(), requestedUserId, requestBody)
 	if err != nil {
-		handlerutil.RespondWithError(res, http.StatusInternalServerError, "Something went wrong")
-		return
+		return err
 	}
 
 	handlerutil.RespondWithJSON(res, http.StatusOK, substituteIds)
+	return nil
 }
 

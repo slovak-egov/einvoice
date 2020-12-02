@@ -54,6 +54,10 @@ func NewApp() *App {
 	return a
 }
 
+func registerHandler(router *mux.Router, method, path string, handler func(http.ResponseWriter, *http.Request) error) {
+	router.HandleFunc(path, handlerutil.ErrorHandler(handler)).Methods(method)
+}
+
 func (a *App) initializeHandlers() {
 	a.router.Use(handlerutil.RequestIdMiddleware)
 	a.router.Use(handlerutil.LoggingMiddleware)
@@ -61,19 +65,19 @@ func (a *App) initializeHandlers() {
 	authRouter := a.router.PathPrefix("/").Subrouter()
 	authRouter.Use(a.authMiddleware)
 
-	a.router.HandleFunc("/invoices", a.getInvoices).Methods("GET")
-	a.router.HandleFunc("/invoices/{id:[0-9]+}", a.getInvoice).Methods("GET")
-	a.router.HandleFunc("/invoices/{id:[0-9]+}/detail", a.getInvoiceDetail).Methods("GET")
-	authRouter.HandleFunc("/invoices", a.createInvoice).Methods("POST")
+	registerHandler(a.router, "GET", "/invoices",  a.getInvoices)
+	registerHandler(a.router, "GET", "/invoices/{id:[0-9]+}",  a.getInvoice)
+	registerHandler(a.router, "GET", "/invoices/{id:[0-9]+}/detail",  a.getInvoiceDetail)
+	registerHandler(authRouter, "POST", "/invoices",  a.createInvoice)
 
-	a.router.HandleFunc("/login", a.handleLogin).Methods("GET")
-	a.router.HandleFunc("/logout", a.handleLogout).Methods("GET")
-	authRouter.HandleFunc("/users/{id:[0-9]+}", a.getUser).Methods("GET")
-	authRouter.HandleFunc("/users/{id:[0-9]+}", a.updateUser).Methods("PATCH")
-	authRouter.HandleFunc("/users/{id:[0-9]+}/substitutes", a.getUserSubstitutes).Methods("GET")
-	authRouter.HandleFunc("/users/{id:[0-9]+}/substitutes", a.addUserSubstitutes).Methods("POST")
-	authRouter.HandleFunc("/users/{id:[0-9]+}/substitutes", a.removeUserSubstitutes).Methods("DELETE")
-	authRouter.HandleFunc("/users/{id:[0-9]+}/invoices", a.getUserInvoices).Methods("GET")
+	registerHandler(a.router, "GET", "/login",  a.handleLogin)
+	registerHandler(a.router, "GET", "/logout",  a.handleLogout)
+	registerHandler(authRouter, "GET", "/users/{id:[0-9]+}",  a.getUser)
+	registerHandler(authRouter, "PATCH", "/users/{id:[0-9]+}",  a.updateUser)
+	registerHandler(authRouter, "GET", "/users/{id:[0-9]+}/substitutes",  a.getUserSubstitutes)
+	registerHandler(authRouter, "POST", "/users/{id:[0-9]+}/substitutes",  a.addUserSubstitutes)
+	registerHandler(authRouter, "DELETE", "/users/{id:[0-9]+}/substitutes",  a.removeUserSubstitutes)
+	registerHandler(authRouter, "GET", "/users/{id:[0-9]+}/invoices",  a.getUserInvoices)
 }
 
 func (a *App) Run() {

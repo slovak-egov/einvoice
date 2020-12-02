@@ -51,12 +51,7 @@ func (validator *validator) ValidateD16B(src []byte) error {
 	}
 
 	if err = validator.d16bSchema.Validate(xml); err != nil {
-		switch v := err.(type) {
-		case xsd.SchemaValidationError:
-			return ValidationError{v.Errors()}
-		default:
-			return ValidationError{[]error{err}}
-		}
+		return ValidationError{err.(xsd.SchemaValidationError).Errors()}
 	}
 
 	return nil
@@ -69,12 +64,7 @@ func (validator *validator) ValidateUBL21(src []byte) error {
 	}
 
 	if err = validator.ubl21Schema.Validate(xml); err != nil {
-		switch v := err.(type) {
-		case xsd.SchemaValidationError:
-			return ValidationError{v.Errors()}
-		default:
-			return ValidationError{[]error{err}}
-		}
+		return ValidationError{err.(xsd.SchemaValidationError).Errors()}
 	}
 
 	return nil

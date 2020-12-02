@@ -38,9 +38,9 @@ func (c *Connector) AddUserSubstitutes(ctx goContext.Context, ownerId int, subst
 			"substituteIds": substituteIds,
 		}).Warn("db.addSubstitutes")
 
-		pgErr, ok := err.(pg.Error)
-		if ok && pgErr.IntegrityViolation() {
-			return nil, nil
+		var e pg.Error
+		if errors.As(err, &e) && e.IntegrityViolation() {
+			return nil, IntegrityViolationError{"Some of substitutes do not exist"}
 		} else {
 			return nil, err
 		}
@@ -73,6 +73,7 @@ func (c *Connector) GetUserSubstitutes(ctx goContext.Context, ownerId int) ([]in
 		Column("substitute_id").
 		Where("owner_id = ?", ownerId).
 		Select(&substituteIds)
+
 	if err != nil {
 		context.GetLogger(ctx).WithFields(log.Fields{
 			"error": err.Error(),
@@ -98,11 +99,13 @@ func (c *Connector) IsValidSubstitute(ctx goContext.Context, userId int, ico str
 			"error":  err.Error(),
 			"ico":    ico,
 			"userId": userId,
-		}).Panic("db.isValidSubstitute.failed")
+		}).Error("db.isValidSubstitute.failed")
+
+		return err
 	}
 
 	if count == 0 {
-		return errors.New("You are not permitted to create invoice with this supplier IČO")
+		return NoSubstituteError{"No valid substitutes found"}
 	}
 
 	return nil
