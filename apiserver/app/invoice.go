@@ -11,7 +11,7 @@ import (
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
-func (a *App) getInvoices(res http.ResponseWriter, req *http.Request) error {
+func (a *App) getPublicInvoices(res http.ResponseWriter, req *http.Request) error {
 	formats := req.URL.Query()["format"]
 
 	invoices, err := a.db.GetInvoices(req.Context(), formats)

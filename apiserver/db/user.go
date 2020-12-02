@@ -26,7 +26,7 @@ func icosToUris(icos []string) []string {
 
 func (c *Connector) GetUser(ctx goContext.Context, id int) (*entity.User, error) {
 	user := &entity.User{}
-	err := c.Db.Model(user).Where("id = ?", id).Select(user)
+	err := c.GetDb(ctx).Model(user).Where("id = ?", id).Select(user)
 
 	if err != nil {
 		context.GetLogger(ctx).WithField("error", err.Error()).Error("db.getUser")
@@ -36,9 +36,9 @@ func (c *Connector) GetUser(ctx goContext.Context, id int) (*entity.User, error)
 	return user, nil
 }
 
-func (c *Connector) GetSlovenskoSkUser(uri string) (*entity.User, error) {
+func (c *Connector) GetSlovenskoSkUser(ctx goContext.Context, uri string) (*entity.User, error) {
 	user := &entity.User{}
-	err := c.Db.Model(user).Where("slovensko_sk_uri = ?", uri).Select(user)
+	err := c.GetDb(ctx).Model(user).Where("slovensko_sk_uri = ?", uri).Select(user)
 
 	if errors.Is(err, pg.ErrNoRows) {
 		return nil, handlerutil.NewNotFoundError("User not found")
@@ -50,7 +50,7 @@ func (c *Connector) GetSlovenskoSkUser(uri string) (*entity.User, error) {
 }
 
 func (c *Connector) UpdateUser(ctx goContext.Context, updatedData *entity.User) (*entity.User, error) {
-	_, err := c.Db.Model(updatedData).WherePK().Returning("*").UpdateNotZero()
+	_, err := c.GetDb(ctx).Model(updatedData).WherePK().Returning("*").UpdateNotZero()
 
 	if err != nil {
 		context.GetLogger(ctx).WithField("error", err.Error()).Error("db.updateUser.failed")
@@ -62,7 +62,7 @@ func (c *Connector) UpdateUser(ctx goContext.Context, updatedData *entity.User) 
 
 func (c *Connector) GetOrCreateUser(ctx goContext.Context, slovenskoSkUri, name string) (*entity.User, error) {
 	user := &entity.User{SlovenskoSkUri: slovenskoSkUri, Name: name}
-	_, err := c.Db.Model(user).
+	_, err := c.GetDb(ctx).Model(user).
 		Where("slovensko_sk_uri = ?", slovenskoSkUri).
 		SelectOrInsert()
 
@@ -83,7 +83,7 @@ func (c *Connector) GetUserEmails(ctx goContext.Context, icos []string) ([]strin
 	uris := icosToUris(icos)
 
 	emails := []string{}
-	err := c.Db.Model((*entity.User)(nil)).
+	err := c.GetDb(ctx).Model((*entity.User)(nil)).
 		Column("email").
 		Where("email <> ''").
 		Distinct().

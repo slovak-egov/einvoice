@@ -69,15 +69,15 @@ func createTestUser(t *testing.T) (*entity.User, string) {
 
 func cleanDb(t *testing.T) func() {
 	return func() {
-		if _, err := a.db.Db.Model(&entity.Invoice{}).Where("TRUE").Delete(); err != nil {
+		if _, err := a.db.GetDb(ctx).Model(&entity.Invoice{}).Where("TRUE").Delete(); err != nil {
 			t.Error(err)
 		}
 
-		if _, err := a.db.Db.Model(&entity.Substitute{}).Where("TRUE").Delete(); err != nil {
+		if _, err := a.db.GetDb(ctx).Model(&entity.Substitute{}).Where("TRUE").Delete(); err != nil {
 			t.Error(err)
 		}
 
-		if _, err := a.db.Db.Model(&entity.User{}).Where("TRUE").Delete(); err != nil {
+		if _, err := a.db.GetDb(ctx).Model(&entity.User{}).Where("TRUE").Delete(); err != nil {
 			t.Error(err)
 		}
 	}

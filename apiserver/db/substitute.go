@@ -26,7 +26,7 @@ func NewSubstitutes(ownerId int, substituteIds []int) *[]entity.Substitute {
 func (c *Connector) AddUserSubstitutes(ctx goContext.Context, ownerId int, substituteIds []int) ([]int, error) {
 	substitutes := NewSubstitutes(ownerId, substituteIds)
 	addedSubstituteIds := []int{}
-	_, err := c.Db.Model(substitutes).
+	_, err := c.GetDb(ctx).Model(substitutes).
 		OnConflict("DO NOTHING").
 		Returning("substitute_id").
 		Insert(&addedSubstituteIds)
@@ -50,7 +50,7 @@ func (c *Connector) AddUserSubstitutes(ctx goContext.Context, ownerId int, subst
 
 func (c *Connector) RemoveUserSubstitutes(ctx goContext.Context, ownerId int, substituteIds []int) ([]int, error) {
 	deletedSubstituteIds := []int{}
-	_, err := c.Db.Model(&entity.Substitute{}).
+	_, err := c.GetDb(ctx).Model(&entity.Substitute{}).
 		Where("owner_id = ?", ownerId).
 		Where("substitute_id IN (?)", pg.In(substituteIds)).
 		Returning("substitute_id").
@@ -69,7 +69,7 @@ func (c *Connector) RemoveUserSubstitutes(ctx goContext.Context, ownerId int, su
 
 func (c *Connector) GetUserSubstitutes(ctx goContext.Context, ownerId int) ([]int, error) {
 	substituteIds := []int{}
-	err := c.Db.Model(&entity.Substitute{}).
+	err := c.GetDb(ctx).Model(&entity.Substitute{}).
 		Column("substitute_id").
 		Where("owner_id = ?", ownerId).
 		Select(&substituteIds)
@@ -86,7 +86,7 @@ func (c *Connector) GetUserSubstitutes(ctx goContext.Context, ownerId int) ([]in
 }
 
 func (c *Connector) IsValidSubstitute(ctx goContext.Context, userId int, ico string) error {
-	count, err := c.Db.Model(&entity.User{}).
+	count, err := c.GetDb(ctx).Model(&entity.User{}).
 		Join("LEFT JOIN substitutes ON owner_id = id").
 		Where("slovensko_sk_uri = ?", icoToUri(ico)).
 		WhereGroup(func(q *orm.Query) (*orm.Query, error) {

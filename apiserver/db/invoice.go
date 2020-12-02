@@ -29,7 +29,7 @@ func (r *UserInvoicesOptions) Validate() error {
 
 func (c *Connector) GetInvoices(ctx goContext.Context, formats []string) ([]entity.Invoice, error) {
 	invoices := []entity.Invoice{}
-	query := c.Db.Model(&invoices)
+	query := c.GetDb(ctx).Model(&invoices)
 
 	if len(formats) > 0 {
 		query = query.Where("format IN (?)", pg.In(formats))
@@ -48,7 +48,7 @@ func (c *Connector) GetInvoices(ctx goContext.Context, formats []string) ([]enti
 
 func (c *Connector) GetInvoice(ctx goContext.Context, id int) (*entity.Invoice, error) {
 	inv := &entity.Invoice{}
-	err := c.Db.Model(inv).Where("id = ?", id).Select(inv)
+	err := c.GetDb(ctx).Model(inv).Where("id = ?", id).Select(inv)
 	if errors.Is(err, pg.ErrNoRows) {
 		return nil, handlerutil.NewNotFoundError("Invoice not found")
 	} else if err != nil {
@@ -60,7 +60,7 @@ func (c *Connector) GetInvoice(ctx goContext.Context, id int) (*entity.Invoice, 
 }
 
 func (c *Connector) CreateInvoice(ctx goContext.Context, invoice *entity.Invoice) error {
-	_, err := c.Db.Model(invoice).Insert(invoice)
+	_, err := c.GetDb(ctx).Model(invoice).Insert(invoice)
 
 	if err != nil {
 		context.GetLogger(ctx).WithField("error", err.Error()).Error("db.createInvoice.failed")
@@ -76,7 +76,7 @@ func (c *Connector) GetUserInvoices(
 ) ([]entity.Invoice, error) {
 	requestedUris := icosToUris(options.Icos)
 	invoices := []entity.Invoice{}
-	accessibleUris := c.Db.Model(&entity.User{}).
+	accessibleUris := c.GetDb(ctx).Model(&entity.User{}).
 		Join("LEFT JOIN substitutes ON owner_id = id").
 		ColumnExpr("slovensko_sk_uri").
 		WhereGroup(func(q *orm.Query) (*orm.Query, error) {
@@ -87,15 +87,15 @@ func (c *Connector) GetUserInvoices(
 		accessibleUris = accessibleUris.Where("slovensko_sk_uri IN (?)", pg.In(requestedUris))
 	}
 
-	query := c.Db.Model(&invoices).
+	query := c.GetDb(ctx).Model(&invoices).
 		With("accessible_uris", accessibleUris).
 		WhereGroup(func(q *orm.Query) (*orm.Query, error) {
 			subquery := q
 			if options.Received {
-				subquery = subquery.WhereOr("'ico://sk/' || customer_ico IN (?)", c.Db.Model().Table("accessible_uris"))
+				subquery = subquery.WhereOr("'ico://sk/' || customer_ico IN (?)", c.GetDb(ctx).Model().Table("accessible_uris"))
 			}
 			if options.Supplied {
-				subquery = subquery.WhereOr("'ico://sk/' || supplier_ico IN (?)", c.Db.Model().Table("accessible_uris"))
+				subquery = subquery.WhereOr("'ico://sk/' || supplier_ico IN (?)", c.GetDb(ctx).Model().Table("accessible_uris"))
 			}
 			return subquery, nil
 		})
