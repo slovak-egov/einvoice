@@ -57,7 +57,7 @@ func (a *App) getUserByServiceAccount(ctx goContext.Context, tokenString string)
 			return nil, handlerutil.NewAuthorizationError("Cannot parse claims")
 		}
 
-		user, err := a.db.GetSlovenskoSkUser(claims["sub"].(string))
+		user, err := a.db.GetSlovenskoSkUser(ctx, claims["sub"].(string))
 		if err != nil {
 			return nil, err
 		}

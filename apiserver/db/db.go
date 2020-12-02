@@ -5,13 +5,15 @@ import (
 	"fmt"
 
 	"github.com/go-pg/pg/v10"
+	"github.com/go-pg/pg/v10/orm"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/slovak-egov/einvoice/apiserver/config"
+	"github.com/slovak-egov/einvoice/pkg/context"
 )
 
 type Connector struct {
-	Db *pg.DB
+	db *pg.DB
 }
 
 func NewConnector(dbConfig config.DbConfiguration) *Connector {
@@ -35,6 +37,21 @@ func NewConnector(dbConfig config.DbConfiguration) *Connector {
 	return &Connector{db}
 }
 
+func (c *Connector) GetDb(ctx goContext.Context) orm.DB {
+	tx := context.GetTransaction(ctx)
+	if tx != nil {
+		return tx
+	}
+
+	return c.db
+}
+
+func (c *Connector) RunInTransaction(ctx goContext.Context, fn func(goContext.Context) error) error {
+	return c.db.RunInTransaction(ctx, func(tx *pg.Tx) error {
+		return fn(context.AddTransaction(ctx, tx))
+	})
+}
+
 func (c *Connector) Close() {
-	c.Db.Close()
+	c.db.Close()
 }

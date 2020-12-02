@@ -65,19 +65,19 @@ func (a *App) initializeHandlers() {
 	authRouter := a.router.PathPrefix("/").Subrouter()
 	authRouter.Use(a.authMiddleware)
 
-	registerHandler(a.router, "GET", "/invoices",  a.getInvoices)
-	registerHandler(a.router, "GET", "/invoices/{id:[0-9]+}",  a.getInvoice)
-	registerHandler(a.router, "GET", "/invoices/{id:[0-9]+}/detail",  a.getInvoiceDetail)
-	registerHandler(authRouter, "POST", "/invoices",  a.createInvoice)
+	registerHandler(a.router, "GET", "/invoices", a.getPublicInvoices)
+	registerHandler(a.router, "GET", "/invoices/{id:[0-9]+}",a.getInvoice)
+	registerHandler(a.router, "GET", "/invoices/{id:[0-9]+}/detail", a.getInvoiceDetail)
+	registerHandler(authRouter, "POST", "/invoices", a.createInvoice)
 
-	registerHandler(a.router, "GET", "/login",  a.handleLogin)
-	registerHandler(a.router, "GET", "/logout",  a.handleLogout)
-	registerHandler(authRouter, "GET", "/users/{id:[0-9]+}",  a.getUser)
-	registerHandler(authRouter, "PATCH", "/users/{id:[0-9]+}",  a.updateUser)
-	registerHandler(authRouter, "GET", "/users/{id:[0-9]+}/substitutes",  a.getUserSubstitutes)
-	registerHandler(authRouter, "POST", "/users/{id:[0-9]+}/substitutes",  a.addUserSubstitutes)
-	registerHandler(authRouter, "DELETE", "/users/{id:[0-9]+}/substitutes",  a.removeUserSubstitutes)
-	registerHandler(authRouter, "GET", "/users/{id:[0-9]+}/invoices",  a.getUserInvoices)
+	registerHandler(a.router, "GET", "/login", a.handleLogin)
+	registerHandler(a.router, "GET", "/logout", a.handleLogout)
+	registerHandler(authRouter, "GET", "/users/{id:[0-9]+}", a.getUser)
+	registerHandler(authRouter, "PATCH", "/users/{id:[0-9]+}", a.updateUser)
+	registerHandler(authRouter, "GET", "/users/{id:[0-9]+}/substitutes", a.getUserSubstitutes)
+	registerHandler(authRouter, "POST", "/users/{id:[0-9]+}/substitutes", a.addUserSubstitutes)
+	registerHandler(authRouter, "DELETE", "/users/{id:[0-9]+}/substitutes", a.removeUserSubstitutes)
+	registerHandler(authRouter, "GET", "/users/{id:[0-9]+}/invoices", a.getUserInvoices)
 }
 
 func (a *App) Run() {

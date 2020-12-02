@@ -93,11 +93,15 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 		return err
 	}
 
-	// TODO: make DB+storage saving atomic
-	if err := a.db.CreateInvoice(req.Context(), metadata); err != nil {
-		return err
-	}
-	if err := a.storage.SaveInvoice(req.Context(), metadata.Id, invoice); err != nil {
+	if err := a.db.RunInTransaction(req.Context(), func(ctx goContext.Context) error {
+		if e := a.db.CreateInvoice(ctx, metadata); e != nil {
+			return e
+		}
+		if e := a.storage.SaveInvoice(ctx, metadata.Id, invoice); e != nil {
+			return e
+		}
+		return nil
+	}); err != nil {
 		return err
 	}
 
