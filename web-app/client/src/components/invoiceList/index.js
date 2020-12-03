@@ -36,7 +36,7 @@ const InvoiceList = ({areCustomFilterFieldsValid, CustomFilter, getInvoices, inv
               <td>{invoiceId}</td>
               <td>{invoices[invoiceId].sender}</td>
               <td>{invoices[invoiceId].receiver}</td>
-              <td>{new Date(invoices[invoiceId].issueDate).toISOString().slice(0,10)}</td>
+              <td>{invoices[invoiceId].issueDate}</td>
               <td>{invoices[invoiceId].price}</td>
               <td>{invoices[invoiceId].format}</td>
               <td>

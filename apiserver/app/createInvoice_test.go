@@ -35,7 +35,10 @@ func TestCreateInvoice(t *testing.T) {
 	checkResponseCode(t, http.StatusCreated, response.Code)
 
 	var createdResponse entity.Invoice
-	json.Unmarshal(response.Body.Bytes(), &createdResponse)
+	err := json.Unmarshal(response.Body.Bytes(), &createdResponse)
+	if err != nil {
+		t.Error(err.Error())
+	}
 	expectedResponse := entity.Invoice{
 		Id:          createdResponse.Id,        // No need to assert this param,
 		CreatedAt:   createdResponse.CreatedAt, // No need to assert this param

@@ -11,6 +11,7 @@ require (
 	github.com/google/uuid v1.1.2
 	github.com/gorilla/handlers v1.4.2
 	github.com/gorilla/mux v1.7.2
+	github.com/jinzhu/copier v0.1.0
 	github.com/lestrrat-go/libxml2 v0.0.0-20200828014403-a52d2c78ffc6
 	github.com/mailjet/mailjet-apiv3-go v0.0.0-20201009050126-c24bc15a9394
 	github.com/pkg/errors v0.9.1 // indirect
