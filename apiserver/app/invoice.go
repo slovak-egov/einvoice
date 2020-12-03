@@ -42,7 +42,7 @@ func (a *App) getInvoice(res http.ResponseWriter, req *http.Request) error {
 }
 
 func getInvoiceFileName(inv *entity.Invoice) string {
-	return fmt.Sprintf("%v_%v_%v_%v.xml", inv.SupplierICO, inv.CustomerICO, inv.IssueDate.Format("2006-01-02"), inv.Id)
+	return fmt.Sprintf("%v.xml", inv.Id)
 }
 
 func (a *App) getInvoiceDetail(res http.ResponseWriter, req *http.Request) error {
