@@ -24,6 +24,7 @@ const InvoiceList = ({areCustomFilterFieldsValid, CustomFilter, getInvoices, inv
             <th>ID</th>
             <th>{t('invoices:sender')}</th>
             <th>{t('invoices:receiver')}</th>
+            <th>{t('invoices:date')}</th>
             <th>{t('invoices:price')}</th>
             <th>{t('format')}</th>
             <th />
@@ -35,6 +36,7 @@ const InvoiceList = ({areCustomFilterFieldsValid, CustomFilter, getInvoices, inv
               <td>{invoiceId}</td>
               <td>{invoices[invoiceId].sender}</td>
               <td>{invoices[invoiceId].receiver}</td>
+              <td>{new Date(invoices[invoiceId].issueDate).toISOString().slice(0,10)}</td>
               <td>{invoices[invoiceId].price}</td>
               <td>{invoices[invoiceId].format}</td>
               <td>

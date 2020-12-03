@@ -16,6 +16,7 @@ type Invoice struct {
 	SupplierICO string    `json:"supplierICO"`
 	CustomerICO string    `json:"customerICO"`
 	CreatedAt   time.Time `json:"createdAt"`
+	IssueDate   time.Time `json:"issueDate"`
 	// User id of invoice creator
 	CreatedBy int `json:"createdBy"`
 }

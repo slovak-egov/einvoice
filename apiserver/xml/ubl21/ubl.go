@@ -2,6 +2,7 @@ package ubl21
 
 type Invoice struct {
 	ID                      string
+	IssueDate               string
 	AccountingSupplierParty struct {
 		Party *Party
 	}

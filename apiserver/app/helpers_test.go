@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
 
 	"github.com/slovak-egov/einvoice/apiserver/entity"
 )
@@ -19,7 +20,7 @@ func executeRequest(req *http.Request) *httptest.ResponseRecorder {
 }
 
 func executeAuthRequest(req *http.Request, authToken string) *httptest.ResponseRecorder {
-	req.Header.Set("Authorization", "Bearer " + authToken)
+	req.Header.Set("Authorization", "Bearer "+authToken)
 	return executeRequest(req)
 }
 
@@ -32,7 +33,7 @@ func checkResponseCode(t *testing.T, expected, actual int) {
 
 func createTestInvoice(t *testing.T) int {
 	t.Helper()
-	user, _:= createTestUser(t)
+	user, _ := createTestUser(t)
 	invoice := &entity.Invoice{
 		Sender:      "sender",
 		Receiver:    "receiver",
@@ -41,6 +42,7 @@ func createTestInvoice(t *testing.T) int {
 		CustomerICO: "11111111",
 		SupplierICO: "22222222",
 		CreatedBy:   user.Id,
+		IssueDate:   time.Date(2011, 9, 22, 0, 0, 0, 0, time.UTC),
 	}
 
 	if err := a.db.CreateInvoice(ctx, invoice); err != nil {

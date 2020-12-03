@@ -18,6 +18,7 @@ type CrossIndustryInvoice struct {
 }
 
 type DateTimeType struct {
+	// choice
 	DateTimeString *struct {
 		Format *string `xml:"format,attr"`
 		Value  string  `xml:",innerxml"`

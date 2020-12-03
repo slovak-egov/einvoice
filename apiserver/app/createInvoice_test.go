@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"reflect"
 	"testing"
+	"time"
 
 	"github.com/slovak-egov/einvoice/apiserver/entity"
 )
@@ -45,6 +46,7 @@ func TestCreateInvoice(t *testing.T) {
 		CustomerICO: "22222222",
 		Format:      entity.UblFormat,
 		CreatedBy:   user.Id,
+		IssueDate:   time.Date(2011, 9, 22, 0, 0, 0, 0, time.UTC),
 	}
 	if !reflect.DeepEqual(createdResponse, expectedResponse) {
 		t.Errorf("Expected created response was %v. Got %v", expectedResponse, createdResponse)

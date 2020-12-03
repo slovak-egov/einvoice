@@ -5,6 +5,7 @@ import (
 	"errors"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/slovak-egov/einvoice/apiserver/entity"
 )
@@ -33,6 +34,11 @@ func Create(value []byte) (*entity.Invoice, error) {
 		errs = append(errs, validationErr)
 	}
 
+	issueDate, validationErr := getIssueDate(inv.ExchangedDocument.IssueDateTime)
+	if validationErr != "" {
+		errs = append(errs, validationErr)
+	}
+
 	if len(errs) > 0 {
 		return nil, errors.New(strings.Join(errs, ", "))
 	}
@@ -44,6 +50,7 @@ func Create(value []byte) (*entity.Invoice, error) {
 		Price:       price,
 		CustomerICO: customer.ico,
 		SupplierICO: supplier.ico,
+		IssueDate:   *issueDate,
 	}, nil
 }
 
@@ -132,4 +139,25 @@ func getICO(party *TradePartyType) (ico string, err string) {
 	}
 
 	return ico, ""
+}
+
+func getIssueDate(date DateTimeType) (*time.Time, string) {
+	// TODO: parse other formats
+	if date.DateTime != nil {
+		return nil, "issueDate.format.unsupported"
+	}
+	if d := date.DateTimeString; d != nil {
+		if d.Format == nil {
+			return nil, "issueDate.format.undefined"
+		}
+		if *d.Format == "102" {
+			t, err := time.Parse("20060102", d.Value)
+			if err != nil {
+				return nil, "issueDate.parsingError"
+			}
+			return &t, ""
+		}
+		return nil, "issueDate.format.unsupported"
+	}
+	return nil, "issueDate.undefined"
 }

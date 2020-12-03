@@ -2,5 +2,6 @@
   "confirmationQuestion": "Do you really want to create this invoice?",
   "sender": "Sender",
   "receiver": "Receiver",
+  "date": "Date",
   "price": "Price"
 }

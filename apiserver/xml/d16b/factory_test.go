@@ -3,6 +3,7 @@ package d16b_test
 import (
 	"io/ioutil"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 
@@ -28,6 +29,7 @@ func TestFactory(t *testing.T) {
 		SupplierICO: "11190993",
 		CustomerICO: "44444444",
 		Price:       4000,
+		IssueDate:   time.Date(2013, 4, 10, 0, 0, 0, 0, time.UTC),
 	}
 
 	assert.Equal(t, exp, invoice)

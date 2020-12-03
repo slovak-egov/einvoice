@@ -28,6 +28,7 @@ func init() {
 			CREATE TABLE invoices (
 				id SERIAL PRIMARY KEY,
 				created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+				issue_date DATE NOT NULL,
 				sender VARCHAR (100) NOT NULL,
 				receiver VARCHAR (100) NOT NULL,
 				format VARCHAR (10) NOT NULL,
