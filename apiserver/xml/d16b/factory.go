@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/slovak-egov/einvoice/apiserver/entity"
+	"github.com/slovak-egov/einvoice/pkg/timeutil"
 )
 
 func Create(value []byte) (*entity.Invoice, error) {
@@ -143,21 +144,19 @@ func getICO(party *TradePartyType) (ico string, err string) {
 
 func getIssueDate(date DateTimeType) (*time.Time, string) {
 	// TODO: parse other formats
-	if date.DateTime != nil {
-		return nil, "issueDate.format.unsupported"
+	if d := date.DateTime; d != nil {
+		t, err := time.Parse(timeutil.DateLayoutISO, d.Value)
+		if err != nil {
+			return nil, "issueDate.parsingError"
+		}
+		return &t, ""
 	}
 	if d := date.DateTimeString; d != nil {
-		if d.Format == nil {
-			return nil, "issueDate.format.undefined"
+		t, err := time.Parse(timeutil.DateLayoutISO, d.Value)
+		if err != nil {
+			return nil, "issueDate.parsingError"
 		}
-		if *d.Format == "102" {
-			t, err := time.Parse("20060102", d.Value)
-			if err != nil {
-				return nil, "issueDate.parsingError"
-			}
-			return &t, ""
-		}
-		return nil, "issueDate.format.unsupported"
+		return &t, ""
 	}
 	return nil, "issueDate.undefined"
 }

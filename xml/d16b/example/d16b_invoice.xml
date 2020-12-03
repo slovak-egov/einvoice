@@ -12,7 +12,7 @@
         <ram:ID>TOSL110</ram:ID>
         <ram:TypeCode>380</ram:TypeCode>
         <ram:IssueDateTime>
-            <udt:DateTimeString format="102">20130410</udt:DateTimeString>
+            <udt:DateTimeString>2013-04-10</udt:DateTimeString>
         </ram:IssueDateTime>
     </rsm:ExchangedDocument>
     <rsm:SupplyChainTradeTransaction>

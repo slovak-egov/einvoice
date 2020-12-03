@@ -2,6 +2,6 @@
   "confirmationQuestion": "Naozaj chcete odovzdať túto faktúru?",
   "sender": "Odosielateľ",
   "receiver": "Prijímateľ",
-  "date": "Dátum",
+  "issueDate": "Dátum vydania",
   "price": "Cena"
 }

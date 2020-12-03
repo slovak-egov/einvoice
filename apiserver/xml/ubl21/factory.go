@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/slovak-egov/einvoice/apiserver/entity"
+	"github.com/slovak-egov/einvoice/pkg/timeutil"
 )
 
 func Create(value []byte) (*entity.Invoice, error) {
@@ -135,7 +136,7 @@ func getICO(party *Party) (ico string, err string) {
 }
 
 func parseDate(s string) (time.Time, string) {
-	t, err := time.Parse("2006-01-02", s)
+	t, err := time.Parse(timeutil.DateLayoutISO, s)
 	if err != nil {
 		return time.Time{}, "parsingError"
 	}

@@ -27,6 +27,4 @@ Invoice in xml file must follow one of UBL2.1 or D16B XSD schema.
 | price.undefined | Total price must be defined |
 | price.value.parsingError | Price must be number |
 | issueDate.undefined | Issue date must be defined |
-| issueDate.parsingError | Issue date must be in correct format |
-| issueDate.format.unsupported | Issue date must be in supported formats |
-| issueDate.format.undefined | Issue date format must be defined |
+| issueDate.parsingError | Issue date must be in format 2020-12-24 |
