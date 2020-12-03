@@ -7,6 +7,7 @@ import {Card, Table} from 'react-bootstrap'
 import {withTranslation} from 'react-i18next'
 import Filters from './Filters'
 import {get} from 'lodash'
+import {CONFIG} from '../../appSettings'
 
 const InvoiceList = ({areCustomFilterFieldsValid, CustomFilter, getInvoices, invoices, invoiceIds, path, t, title}) => (
   <Card style={{margin: '5px'}}>
@@ -39,6 +40,9 @@ const InvoiceList = ({areCustomFilterFieldsValid, CustomFilter, getInvoices, inv
               <td>{invoices[invoiceId].format}</td>
               <td>
                 <NavLink to={`/invoices/${invoiceId}`}>detail</NavLink>
+              </td>
+              <td>
+                  <a href={`${CONFIG.apiServerUrl}/invoices/${invoiceId}/detail`}>{t('download')}</a>
               </td>
             </tr>
           ))}

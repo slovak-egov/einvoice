@@ -16,5 +16,6 @@
   "substituteIds": "Identifikačné čísla zastupujúcich používateľov",
   "invoiceType": "Typ faktúry",
   "received": "Prijaté",
-  "supplied": "Odoslané"
+  "supplied": "Odoslané",
+  "download": "Stiahnuť"
 }

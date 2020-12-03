@@ -1,6 +1,7 @@
 package app
 
 import (
+	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -8,6 +9,7 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/slovak-egov/einvoice/apiserver/db"
+	"github.com/slovak-egov/einvoice/apiserver/entity"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
@@ -39,6 +41,10 @@ func (a *App) getInvoice(res http.ResponseWriter, req *http.Request) error {
 	return nil
 }
 
+func getInvoiceFileName(inv *entity.Invoice) string {
+	return fmt.Sprintf("%v_%v_%v_%v.xml", inv.SupplierICO, inv.CustomerICO, inv.IssueDate.Format("2006-01-02"), inv.Id)
+}
+
 func (a *App) getInvoiceDetail(res http.ResponseWriter, req *http.Request) error {
 	vars := mux.Vars(req)
 	id, err := strconv.Atoi(vars["id"])
@@ -51,7 +57,13 @@ func (a *App) getInvoiceDetail(res http.ResponseWriter, req *http.Request) error
 		return err
 	}
 
+	invoiceMeta, err := a.db.GetInvoice(req.Context(), id)
+	if err != nil {
+		return err
+	}
+
 	res.Header().Set("Content-Type", "application/xml")
+	res.Header().Set("Content-Disposition", "attachment; filename="+getInvoiceFileName(invoiceMeta))
 	res.WriteHeader(http.StatusOK)
 	res.Write(invoice)
 	return nil
