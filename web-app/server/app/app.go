@@ -23,10 +23,12 @@ func NewApp() *App {
 		router: mux.NewRouter(),
 	}
 
+	a.router.Use(handlerutil.LoggingMiddleware)
+
 	a.router.PathPrefix("/").Handler(
 		UiHandler{
-			StaticPath: a.config.ClientBuildDir,
-			IndexPath: "index.html",
+			StaticPath:     a.config.ClientBuildDir,
+			IndexPath:      "index.html",
 			reactAppConfig: a.config.Urls,
 		},
 	)
@@ -36,7 +38,7 @@ func NewApp() *App {
 
 func (a *App) Run() {
 	srv := &http.Server{
-		Handler:      handlerutil.LoggingHandler{a.router},
+		Handler:      a.router,
 		Addr:         fmt.Sprintf("%s:%d", "0.0.0.0", a.config.Port),
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
