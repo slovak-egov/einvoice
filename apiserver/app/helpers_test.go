@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"github.com/slovak-egov/einvoice/pkg/timeutil"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -42,7 +43,7 @@ func createTestInvoice(t *testing.T) int {
 		CustomerICO: "11111111",
 		SupplierICO: "22222222",
 		CreatedBy:   user.Id,
-		IssueDate:   time.Date(2011, 9, 22, 0, 0, 0, 0, time.UTC),
+		IssueDate:   timeutil.Date{Time: time.Date(2011, 9, 22, 0, 0, 0, 0, time.UTC)},
 	}
 
 	if err := a.db.CreateInvoice(ctx, invoice); err != nil {

@@ -1,6 +1,7 @@
 package ubl21_test
 
 import (
+	"github.com/slovak-egov/einvoice/pkg/timeutil"
 	"io/ioutil"
 	"testing"
 	"time"
@@ -29,7 +30,7 @@ func TestFactory(t *testing.T) {
 		SupplierICO: "11190993",
 		CustomerICO: "22222222",
 		Price:       100,
-		IssueDate:   time.Date(2011, 9, 22, 0, 0, 0, 0, time.UTC),
+		IssueDate:   timeutil.Date{Time: time.Date(2011, 9, 22, 0, 0, 0, 0, time.UTC)},
 	}
 
 	assert.Equal(t, exp, invoice)
