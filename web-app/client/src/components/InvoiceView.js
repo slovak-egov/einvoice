@@ -8,7 +8,7 @@ import {useTranslation} from 'react-i18next'
 import {get} from 'lodash'
 import NotFound from './helpers/NotFound'
 import {getInvoiceDetail, getInvoiceMeta} from '../actions/invoices'
-import {CONFIG} from "../appSettings";
+import {invoiceDownloadUrl} from "../utils/constants";
 
 const InvoiceView = ({invoice}) => {
   const {id} = useParams()
@@ -24,7 +24,7 @@ const InvoiceView = ({invoice}) => {
       </Card.Header>
       <Card.Body>
         <div className="row justify-content-center">
-          <a href={`${CONFIG.apiServerUrl}/invoices/${id}/detail`}>{t('download')}</a>
+          <a href={invoiceDownloadUrl(id)}>{t('download')}</a>
         </div>
         <div className="row justify-content-center">
           <textarea
