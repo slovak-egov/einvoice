@@ -113,7 +113,7 @@ const getInvoices = ({getAdditionalFilters, path, setIds, fetchInvoices}) => () 
     const formats = Object.keys(filters.formats).filter((k) => filters.formats[k])
 
     try {
-      const invoices = await fetchInvoices(api)({formats, ...getAdditionalFilters(filters)})
+      const {invoices} = await fetchInvoices(api)({formats, ...getAdditionalFilters(filters)})
       dispatch(setInvoices(
         invoices.reduce((acc, val) => ({
           ...acc,

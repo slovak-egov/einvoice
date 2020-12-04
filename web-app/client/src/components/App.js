@@ -4,7 +4,7 @@ import {compose} from 'redux'
 import {connect} from 'react-redux'
 import {branch, lifecycle, renderComponent} from 'recompose'
 import {Route, Switch} from 'react-router-dom'
-import AllInvoices from './AllInvoices'
+import PublicInvoices from './PublicInvoices'
 import MyInvoices from './MyInvoices'
 import LandingPage from './landingPage'
 import TopBar from './TopBar'
@@ -25,7 +25,7 @@ const App = ({isLoading}) => (
         <Route exact path="/account" component={AccountSettings} />
         <Route exact path="/my-invoices" component={MyInvoices} />
         <Route exact path="/create-invoice" component={CreateInvoice} />
-        <Route exact path="/invoices" component={AllInvoices} />
+        <Route exact path="/invoices" component={PublicInvoices} />
         <Route exact path="/invoices/:id([0-9]+)" component={InvoiceView} />
         <Route component={NotFound} />
       </Switch>
