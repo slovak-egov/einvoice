@@ -18,6 +18,20 @@ func (d *Date) ScanValue(rd types.Reader, n int) (err error) {
 	return
 }
 
+func (d *Date) AppendValue(b []byte, flags int) ([]byte, error) {
+	return types.AppendTime(b, d.Time, flags), nil
+}
+
 func (d *Date) MarshalJSON() ([]byte, error) {
 	return json.Marshal(d.Format(DateLayoutISO))
+}
+
+func (d *Date) UnmarshalJSON(data []byte) error {
+	var dateString = new(string)
+	err := json.Unmarshal(data, &dateString)
+	if err != nil {
+		return err
+	}
+	d.Time, err = time.Parse(DateLayoutISO, *dateString)
+	return err
 }
