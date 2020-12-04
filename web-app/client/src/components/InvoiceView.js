@@ -24,9 +24,6 @@ const InvoiceView = ({invoice}) => {
       </Card.Header>
       <Card.Body>
         <div className="row justify-content-center">
-          <a href={invoiceDownloadUrl(id)}>{t('download')}</a>
-        </div>
-        <div className="row justify-content-center">
           <textarea
             style={{borderStyle: 'solid'}}
             rows="20"
@@ -34,6 +31,11 @@ const InvoiceView = ({invoice}) => {
             readOnly
             value={invoice}
           />
+        </div>
+        <div className="row justify-content-center">
+          <a href={invoiceDownloadUrl(id)}>
+            <Button variant="success">{t('download')}</Button>
+          </a>
         </div>
       </Card.Body>
     </Card>
