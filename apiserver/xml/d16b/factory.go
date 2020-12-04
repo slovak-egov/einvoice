@@ -51,7 +51,7 @@ func Create(value []byte) (*entity.Invoice, error) {
 		Price:       price,
 		CustomerICO: customer.ico,
 		SupplierICO: supplier.ico,
-		IssueDate:   timeutil.Date{Time: *issueDate},
+		IssueDate:   timeutil.Date{*issueDate},
 	}, nil
 }
 

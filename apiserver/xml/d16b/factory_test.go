@@ -30,7 +30,7 @@ func TestFactory(t *testing.T) {
 		SupplierICO: "11190993",
 		CustomerICO: "44444444",
 		Price:       4000,
-		IssueDate:   timeutil.Date{Time: time.Date(2013, 4, 10, 0, 0, 0, 0, time.UTC)},
+		IssueDate:   timeutil.Date{time.Date(2013, 4, 10, 0, 0, 0, 0, time.UTC)},
 	}
 
 	assert.Equal(t, exp, invoice)
