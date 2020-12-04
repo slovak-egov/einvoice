@@ -52,6 +52,7 @@ func (a *App) getInvoiceDetail(res http.ResponseWriter, req *http.Request) error
 	}
 
 	res.Header().Set("Content-Type", "application/xml")
+	res.Header().Set("Content-Disposition", "attachment; filename=invoice-"+vars["id"]+".xml")
 	res.WriteHeader(http.StatusOK)
 	res.Write(invoice)
 	return nil

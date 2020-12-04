@@ -16,5 +16,6 @@
   "substituteIds": "Substitute user ids",
   "invoiceType": "Invoice type",
   "received": "Received",
-  "supplied": "Supplied"
+  "supplied": "Supplied",
+  "download": "Download"
 }
