@@ -13,6 +13,14 @@ type Date struct {
 	time.Time
 }
 
+func ParseDate(s string) (*Date, error) {
+	t, err := time.Parse(DateLayoutISO, s)
+	if err != nil {
+		return nil, err
+	}
+	return &Date{t}, err
+}
+
 func (d *Date) ScanValue(rd types.Reader, n int) (err error) {
 	d.Time, err = types.ScanTime(rd, n)
 	return

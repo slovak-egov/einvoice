@@ -1,8 +1,9 @@
 package entity
 
 import (
-	"github.com/slovak-egov/einvoice/pkg/timeutil"
 	"time"
+
+	"github.com/slovak-egov/einvoice/pkg/timeutil"
 )
 
 const (

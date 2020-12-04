@@ -1,7 +1,6 @@
 package d16b_test
 
 import (
-	"github.com/slovak-egov/einvoice/pkg/timeutil"
 	"io/ioutil"
 	"testing"
 	"time"
@@ -10,6 +9,7 @@ import (
 
 	"github.com/slovak-egov/einvoice/apiserver/entity"
 	"github.com/slovak-egov/einvoice/apiserver/xml/d16b"
+	"github.com/slovak-egov/einvoice/pkg/timeutil"
 )
 
 func TestFactory(t *testing.T) {

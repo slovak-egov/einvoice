@@ -5,7 +5,6 @@ import (
 	"errors"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/slovak-egov/einvoice/apiserver/entity"
 	"github.com/slovak-egov/einvoice/pkg/timeutil"
@@ -35,9 +34,9 @@ func Create(value []byte) (*entity.Invoice, error) {
 		errs = append(errs, "price.value.parsingError")
 	}
 
-	issueDate, validationErr := parseDate(inv.IssueDate)
-	if validationErr != "" {
-		errs = append(errs, "issueDate."+validationErr)
+	issueDate, err := timeutil.ParseDate(inv.IssueDate)
+	if err != nil {
+		errs = append(errs, "issueDate.parsingError")
 	}
 
 	if len(errs) > 0 {
@@ -51,7 +50,7 @@ func Create(value []byte) (*entity.Invoice, error) {
 		CustomerICO: customer.ico,
 		SupplierICO: supplier.ico,
 		Price:       price,
-		IssueDate:   timeutil.Date{issueDate},
+		IssueDate:   *issueDate,
 	}, nil
 }
 
@@ -133,12 +132,4 @@ func getICO(party *Party) (ico string, err string) {
 	}
 
 	return ico, ""
-}
-
-func parseDate(s string) (time.Time, string) {
-	t, err := time.Parse(timeutil.DateLayoutISO, s)
-	if err != nil {
-		return time.Time{}, "parsingError"
-	}
-	return t, ""
 }

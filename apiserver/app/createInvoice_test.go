@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/slovak-egov/einvoice/pkg/timeutil"
 	"io/ioutil"
 	"mime/multipart"
 	"net/http"
@@ -13,6 +12,7 @@ import (
 	"time"
 
 	"github.com/slovak-egov/einvoice/apiserver/entity"
+	"github.com/slovak-egov/einvoice/pkg/timeutil"
 )
 
 func TestCreateInvoice(t *testing.T) {
