@@ -40,12 +40,12 @@ func (c *Connector) AddUserSubstitutes(ctx goContext.Context, ownerId int, subst
 
 		var e pg.Error
 		if errors.As(err, &e) && e.IntegrityViolation() {
-			return nil, IntegrityViolationError{"Some of substitutes do not exist"}
+			return nil, &IntegrityViolationError{"Some of substitutes do not exist"}
 		} else {
 			return nil, err
 		}
 	}
-	return addedSubstituteIds, err
+	return addedSubstituteIds, nil
 }
 
 func (c *Connector) RemoveUserSubstitutes(ctx goContext.Context, ownerId int, substituteIds []int) ([]int, error) {
@@ -64,7 +64,7 @@ func (c *Connector) RemoveUserSubstitutes(ctx goContext.Context, ownerId int, su
 
 		return nil, err
 	}
-	return deletedSubstituteIds, err
+	return deletedSubstituteIds, nil
 }
 
 func (c *Connector) GetUserSubstitutes(ctx goContext.Context, ownerId int) ([]int, error) {
@@ -82,7 +82,7 @@ func (c *Connector) GetUserSubstitutes(ctx goContext.Context, ownerId int) ([]in
 
 		return nil, err
 	}
-	return substituteIds, err
+	return substituteIds, nil
 }
 
 func (c *Connector) IsValidSubstitute(ctx goContext.Context, userId int, ico string) error {
@@ -105,7 +105,7 @@ func (c *Connector) IsValidSubstitute(ctx goContext.Context, userId int, ico str
 	}
 
 	if count == 0 {
-		return NoSubstituteError{"No valid substitutes found"}
+		return &NoSubstituteError{"No valid substitutes found"}
 	}
 
 	return nil
