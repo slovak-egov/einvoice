@@ -3,11 +3,12 @@ import {compose} from 'redux'
 import {connect} from 'react-redux'
 import {useHistory, useParams} from 'react-router-dom'
 import {branch, lifecycle, renderComponent, renderNothing} from 'recompose'
-import {Card, Button} from 'react-bootstrap'
+import {Button, Card} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import {get} from 'lodash'
 import NotFound from './helpers/NotFound'
 import {getInvoiceDetail, getInvoiceMeta} from '../actions/invoices'
+import {CONFIG} from "../appSettings";
 
 const InvoiceView = ({invoice}) => {
   const {id} = useParams()
@@ -23,13 +24,16 @@ const InvoiceView = ({invoice}) => {
       </Card.Header>
       <Card.Body>
         <div className="row justify-content-center">
-        <textarea
-          style={{borderStyle: 'solid'}}
-          rows="20"
-          cols="100"
-          readOnly
-          value={invoice}
-        />
+          <a href={`${CONFIG.apiServerUrl}/invoices/${id}/detail`}>{t('download')}</a>
+        </div>
+        <div className="row justify-content-center">
+          <textarea
+            style={{borderStyle: 'solid'}}
+            rows="20"
+            cols="100"
+            readOnly
+            value={invoice}
+          />
         </div>
       </Card.Body>
     </Card>
