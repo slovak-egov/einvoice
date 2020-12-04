@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/slovak-egov/einvoice/apiserver/entity"
+	"github.com/slovak-egov/einvoice/pkg/timeutil"
 )
 
 func Create(value []byte) (*entity.Invoice, error) {
@@ -33,6 +34,11 @@ func Create(value []byte) (*entity.Invoice, error) {
 		errs = append(errs, validationErr)
 	}
 
+	issueDate, validationErr := getIssueDate(inv.ExchangedDocument.IssueDateTime)
+	if validationErr != "" {
+		errs = append(errs, validationErr)
+	}
+
 	if len(errs) > 0 {
 		return nil, errors.New(strings.Join(errs, ", "))
 	}
@@ -44,6 +50,7 @@ func Create(value []byte) (*entity.Invoice, error) {
 		Price:       price,
 		CustomerICO: customer.ico,
 		SupplierICO: supplier.ico,
+		IssueDate:   *issueDate,
 	}, nil
 }
 
@@ -132,4 +139,23 @@ func getICO(party *TradePartyType) (ico string, err string) {
 	}
 
 	return ico, ""
+}
+
+func getIssueDate(date DateTimeType) (*timeutil.Date, string) {
+	// TODO: parse other formats
+	if d := date.DateTime; d != nil {
+		t, err := timeutil.ParseDate(d.Value)
+		if err != nil {
+			return nil, "issueDate.parsingError"
+		}
+		return t, ""
+	}
+	if d := date.DateTimeString; d != nil {
+		t, err := timeutil.ParseDate(d.Value)
+		if err != nil {
+			return nil, "issueDate.parsingError"
+		}
+		return t, ""
+	}
+	return nil, "issueDate.undefined"
 }

@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/slovak-egov/einvoice/apiserver/entity"
+	"github.com/slovak-egov/einvoice/pkg/timeutil"
 )
 
 func Create(value []byte) (*entity.Invoice, error) {
@@ -33,6 +34,11 @@ func Create(value []byte) (*entity.Invoice, error) {
 		errs = append(errs, "price.value.parsingError")
 	}
 
+	issueDate, err := timeutil.ParseDate(inv.IssueDate)
+	if err != nil {
+		errs = append(errs, "issueDate.parsingError")
+	}
+
 	if len(errs) > 0 {
 		return nil, errors.New(strings.Join(errs, ", "))
 	}
@@ -44,6 +50,7 @@ func Create(value []byte) (*entity.Invoice, error) {
 		CustomerICO: customer.ico,
 		SupplierICO: supplier.ico,
 		Price:       price,
+		IssueDate:   *issueDate,
 	}, nil
 }
 

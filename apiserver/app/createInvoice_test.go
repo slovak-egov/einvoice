@@ -9,8 +9,10 @@ import (
 	"net/http"
 	"reflect"
 	"testing"
+	"time"
 
 	"github.com/slovak-egov/einvoice/apiserver/entity"
+	"github.com/slovak-egov/einvoice/pkg/timeutil"
 )
 
 func TestCreateInvoice(t *testing.T) {
@@ -34,7 +36,10 @@ func TestCreateInvoice(t *testing.T) {
 	checkResponseCode(t, http.StatusCreated, response.Code)
 
 	var createdResponse entity.Invoice
-	json.Unmarshal(response.Body.Bytes(), &createdResponse)
+	err := json.Unmarshal(response.Body.Bytes(), &createdResponse)
+	if err != nil {
+		t.Error(err.Error())
+	}
 	expectedResponse := entity.Invoice{
 		Id:          createdResponse.Id,        // No need to assert this param,
 		CreatedAt:   createdResponse.CreatedAt, // No need to assert this param
@@ -45,6 +50,7 @@ func TestCreateInvoice(t *testing.T) {
 		CustomerICO: "22222222",
 		Format:      entity.UblFormat,
 		CreatedBy:   user.Id,
+		IssueDate:   timeutil.Date{time.Date(2011, 9, 22, 0, 0, 0, 0, time.UTC)},
 	}
 	if !reflect.DeepEqual(createdResponse, expectedResponse) {
 		t.Errorf("Expected created response was %v. Got %v", expectedResponse, createdResponse)

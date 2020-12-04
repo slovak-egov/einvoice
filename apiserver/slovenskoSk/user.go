@@ -28,12 +28,12 @@ func (c *Connector) GetUser(ctx goContext.Context, oboToken string) (*User, erro
 	})
 
 	if !token.Valid {
-		return nil, InvalidTokenError{"Invalid token"}
+		return nil, &InvalidTokenError{"Invalid token"}
 	}
 
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
-		return nil, InvalidTokenError{"Cannot parse claims"}
+		return nil, &InvalidTokenError{"Cannot parse claims"}
 	}
 
 	slovenskoSkToken := jwt.NewWithClaims(jwt.SigningMethodRS256, jwt.MapClaims{
@@ -90,7 +90,7 @@ func (c *Connector) sendRequest(ctx goContext.Context, request *Request) ([]byte
 	slovenskoSkRes, err := c.client.Do(slovenskoSkReq)
 	if err != nil {
 		context.GetLogger(ctx).WithField("error", err.Error()).Error("slovenskosk.sendRequest.failed")
-		return nil, UpvsError{err.Error()}
+		return nil, &UpvsError{err.Error()}
 	}
 
 	if slovenskoSkRes.StatusCode != http.StatusOK {
@@ -98,7 +98,7 @@ func (c *Connector) sendRequest(ctx goContext.Context, request *Request) ([]byte
 			WithField("status", slovenskoSkRes.StatusCode).
 			Error("slovenskosk.sendRequest.errorStatusCode")
 
-		return nil, UpvsError{"UPVS responded with: " + slovenskoSkRes.Status}
+		return nil, &UpvsError{"UPVS responded with: " + slovenskoSkRes.Status}
 	}
 
 	defer slovenskoSkRes.Body.Close()
