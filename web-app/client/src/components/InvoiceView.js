@@ -8,7 +8,7 @@ import {useTranslation} from 'react-i18next'
 import {get} from 'lodash'
 import NotFound from './helpers/NotFound'
 import {getInvoiceDetail, getInvoiceMeta} from '../actions/invoices'
-import {invoiceDownloadUrl} from "../utils/constants";
+import {invoiceDownloadUrl} from '../utils/constants'
 
 const InvoiceView = ({invoice}) => {
   const {id} = useParams()

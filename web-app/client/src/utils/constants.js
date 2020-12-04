@@ -1,4 +1,4 @@
-import {CONFIG} from "../appSettings";
+import {CONFIG} from '../appSettings'
 
 export const invoiceFormats = {
   UBL: 'ubl2.1',
