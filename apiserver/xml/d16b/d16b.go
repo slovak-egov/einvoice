@@ -18,6 +18,7 @@ type CrossIndustryInvoice struct {
 }
 
 type DateTimeType struct {
+	// Date will be provided either in DateTimeString or DateTime field
 	DateTimeString *struct {
 		Format *string `xml:"format,attr"`
 		Value  string  `xml:",innerxml"`
