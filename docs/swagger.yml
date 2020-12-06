@@ -13,7 +13,7 @@ paths:
         - Auth
       summary: Authenticate user with slovensko.sk token
       security:
-        - bearerAuth: []
+        - slovenskoSkOboTokenAuth: []
       responses:
         200:
           description: User is sucessfully logged in.
@@ -21,18 +21,32 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LoginResponse'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /logout:
     get:
       tags:
         - Auth
       summary: Logout user
       security:
-        - bearerAuth: []
+        - sessionAuth: []
       responses:
         200:
           description: User is successfully logged out.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogoutResponse'
         401:
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
   /users/{user_id}:
     get:
@@ -47,7 +61,7 @@ paths:
           schema:
             type: integer
       security:
-        - bearerAuth: []
+        - sessionAuth: []
         - apiKeyAuth: []
       responses:
         200:
@@ -58,6 +72,10 @@ paths:
                 $ref: '#/components/schemas/UserInfo'
         401:
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     patch:
       tags:
         - Users
@@ -70,7 +88,7 @@ paths:
           schema:
             type: integer
       security:
-        - bearerAuth: []
+        - sessionAuth: []
         - apiKeyAuth: []
       requestBody:
         content:
@@ -84,15 +102,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserInfo'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         401:
           description: Unauthorized
-        400:
-          description: Empty body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /users/{user_id}/substitutes:
     post:
       tags:
         - Users
       summary: Add substitute users
+      description: Add rights for particular users to create invoices on your behalf
       parameters:
         - name: user_id
           in: path
@@ -101,7 +128,7 @@ paths:
           schema:
             type: integer
       security:
-        - bearerAuth: []
+        - sessionAuth: []
         - apiKeyAuth: []
       requestBody:
         content:
@@ -125,6 +152,7 @@ paths:
       tags:
         - Users
       summary: Remove substitute users
+      description: Revoke rights for particular users to create invoices on your behalf
       parameters:
         - name: user_id
           in: path
@@ -133,7 +161,7 @@ paths:
           schema:
             type: integer
       security:
-        - bearerAuth: []
+        - sessionAuth: []
         - apiKeyAuth: []
       requestBody:
         content:
@@ -157,6 +185,7 @@ paths:
       tags:
         - Users
       summary: Get substitute users
+      description: Get list of users that can create invoices on your behalf
       parameters:
         - name: user_id
           in: path
@@ -165,7 +194,7 @@ paths:
           schema:
             type: integer
       security:
-        - bearerAuth: []
+        - sessionAuth: []
         - apiKeyAuth: []
       responses:
         200:
@@ -221,7 +250,7 @@ paths:
           schema:
             type: integer
       security:
-        - bearerAuth: []
+        - sessionAuth: []
         - apiKeyAuth: []
       responses:
         200:
@@ -263,7 +292,7 @@ paths:
                 $ref: '#/components/schemas/Invoices'
     post:
       security:
-        - bearerAuth: []
+        - sessionAuth: []
         - apiKeyAuth: []
       tags:
         - Invoices
@@ -338,10 +367,34 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   securitySchemes:
-    bearerAuth:
+    slovenskoSkOboTokenAuth:
+      description: OBO token received from slovensko.sk
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    sessionAuth:
+      description: Token received in response of login request
       type: http
       scheme: bearer
     apiKeyAuth:
+      description: |
+        JWT token satisfying:
+        - encoded by RS256 algorithm
+        - signed by your private key (paired with public key you set in your account)
+        - `sub` claim set to your user Id as a string
+
+        Example of `header` segment:
+
+            {
+              "alg": "RS256",
+              "type": "JWT"
+            }
+
+        Example of `payload` segment:
+
+            {
+              "sub": "1"
+            }
       type: apiKey
       in: header
       name: X-API-Key
@@ -444,6 +497,12 @@ components:
       items:
         type: integer
         description: Substitute ID
+    LogoutResponse:
+      type: object
+      properties:
+        logout:
+          type: string
+          example: successful
     ErrorResponse:
       type: object
       properties:
