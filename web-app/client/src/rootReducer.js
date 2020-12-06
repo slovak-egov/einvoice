@@ -32,7 +32,7 @@ const getInitialState = () => ({
     },
   },
   logging: true, // Always start with login attempt
-  loggedUserId: null
+  loggedUserId: null,
 })
 
 const rootReducer = (state = getInitialState(), action) => {

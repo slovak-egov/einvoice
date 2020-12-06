@@ -17,7 +17,7 @@ import NotFound from './helpers/NotFound'
 import {isLogged} from '../state/users'
 
 const App = ({isLoading}) => (
-  <div>
+  <React.Fragment>
     <TopBar />
     <div className="container">
       <Switch>
@@ -31,7 +31,7 @@ const App = ({isLoading}) => (
       </Switch>
     </div>
     {isLoading && <LoadingModal />}
-  </div>
+  </React.Fragment>
 )
 
 export default compose(
