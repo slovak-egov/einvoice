@@ -24,7 +24,7 @@ export default class Api {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
-      data: [id]
+      data: [id],
     })
 
   addUserSubstitute = async (id) =>
@@ -34,7 +34,7 @@ export default class Api {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
-      data: [id]
+      data: [id],
     })
 
   getUserInfo = async () =>

@@ -38,7 +38,7 @@ const Filter = connect(
     filters: state.myInvoicesScreen.filters,
   }),
   (dispatch) => ({
-    toggleField: (field) => dispatch(toggleField(['myInvoicesScreen', 'filters', field]))
+    toggleField: (field) => dispatch(toggleField(['myInvoicesScreen', 'filters', field])),
   })
 )(FilterView)
 

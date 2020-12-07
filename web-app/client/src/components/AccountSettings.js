@@ -51,7 +51,8 @@ const EditableField = ({actualValue, label, save, ...props}) => {
 }
 
 const AccountSettings = ({
-  addUserSubstitute, changeNewSubstituteId, loggedUser, newSubstituteId, removeUserSubstitute, substituteIds, updateUser
+  addUserSubstitute, changeNewSubstituteId, loggedUser, newSubstituteId, removeUserSubstitute,
+  substituteIds, updateUser,
 }) => {
   const {t} = useTranslation(['common', 'TopBar'])
   return (

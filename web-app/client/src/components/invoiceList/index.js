@@ -8,7 +8,9 @@ import {withTranslation} from 'react-i18next'
 import Filters from './Filters'
 import {get} from 'lodash'
 
-const InvoiceList = ({areCustomFilterFieldsValid, CustomFilter, getInvoices, invoices, invoiceIds, path, t, title}) => (
+const InvoiceList = ({
+  areCustomFilterFieldsValid, CustomFilter, getInvoices, invoices, invoiceIds, path, t, title,
+}) => (
   <Card style={{margin: '5px'}}>
     <Card.Header className="bg-primary text-white text-center" as="h3">{title}</Card.Header>
     <Card.Body>

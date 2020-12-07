@@ -63,7 +63,7 @@ export default compose(
       }
     },
     (dispatch, {path}) => ({
-      toggleFormatFilter: (format) => dispatch(toggleField([...path, 'formats', format]))
+      toggleFormatFilter: (format) => dispatch(toggleField([...path, 'formats', format])),
     })
   ),
   withTranslation('common')

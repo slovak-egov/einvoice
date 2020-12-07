@@ -13,7 +13,7 @@ const updateUserData = (userId, data) => ({
 })
 
 const removeLoggedUser = () =>
-  async (dispatch) => {
+  (dispatch) => {
     dispatch(setLoggedUserId(null))
     dispatch(setLogging(false))
   }
@@ -51,6 +51,7 @@ export const updateUser = (data) => loadingWrapper(
         text: error.message,
         icon: 'error',
       })
+      return false
     }
   }
 )

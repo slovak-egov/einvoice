@@ -10,7 +10,9 @@ import Auth from './helpers/Auth'
 import {createInvoice, setCreateInvoiceData, setCreateInvoiceFormat} from '../actions/invoices'
 import {invoiceFormats} from '../utils/constants'
 
-const CreateInvoice = ({clearInvoiceData, format, invoice, submitInvoice, t, updateFormat, updateInvoiceData}) => (
+const CreateInvoice = ({
+  clearInvoiceData, format, invoice, submitInvoice, t, updateFormat, updateInvoiceData,
+}) => (
   <Card style={{margin: '5px'}}>
     <Card.Header className="bg-primary text-white text-center" as="h3">
       {t('TopBar:tabs.createInvoice')}
@@ -83,7 +85,9 @@ export default Auth(
       {createInvoice, setCreateInvoiceData, setCreateInvoiceFormat}
     ),
     withHandlers({
-      submitInvoice: ({createInvoice, format, history, invoice, setCreateInvoiceData, setCreateInvoiceFormat}) =>
+      submitInvoice: ({
+        createInvoice, format, history, invoice, setCreateInvoiceData, setCreateInvoiceFormat,
+      }) =>
         async () => {
           const formData = new FormData()
           formData.append('format', format)

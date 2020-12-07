@@ -144,7 +144,7 @@ export const getMyInvoices = getInvoices({
   getAdditionalFilters: (filters) => ({
     supplied: filters.supplied,
     received: filters.received,
-  })
+  }),
 })
 
 export const getPublicInvoices = getInvoices({

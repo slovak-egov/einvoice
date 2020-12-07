@@ -32,7 +32,8 @@ const VersionSection = ({children, ...props}) => (
 const Version1 = ({eventKey}) => (
   <VersionSection title="Version 1 - (B/G)2(B/G) between Slovak invoicing Parties" eventKey={eventKey}>
     <Section title="How does it work?" eventKey="0">
-      All invoices between B/G parties in Slovakia have to be submitted through the EINVOICE system in UBL 2.1 format.
+      All invoices between B/G parties in Slovakia have to be submitted through the EINVOICE system
+      in UBL 2.1 format.
     </Section>
     <Section title="I am a business and want to see invoices addressed to me and issued by me." eventKey="1">
       Four ways:
@@ -44,8 +45,8 @@ const Version1 = ({eventKey}) => (
           <a href={swaggerUrl} target="_blank" rel="noreferrer noopener">API</a>
         </li>
         <li>
-          If you set the email address in your account settings, all invoices issued by you or sent to you
-          will be sent to your email.
+          If you set the email address in your account settings, all invoices issued by you or
+          sent to you will be sent to your email.
         </li>
         <li>
           All of these may be done by accounts of your accountants as explained later.
@@ -70,16 +71,18 @@ const Version1 = ({eventKey}) => (
       </ol>
     </Section>
     <Section title="I want to use an API, how do I do that?" eventKey="3">
-      It requires three one-off steps (needed only at the beginning and always when you want to revoke your API keys):
+      It requires three one-off steps (needed only at the beginning and always
+      when you want to revoke your API keys):
       <ol>
         <li>
           Login on this webpage with your company UPVS account
         </li>
         <li>
-          Generate your ssh key pair. You can use any tool, but for example command like command does that:
+          Generate your ssh key pair. You can use any tool, but for example this command:
           <br />
           <code>
-            openssl genrsa -out api-token.private.pem 2048 && openssl rsa -in api-token.private.pem -pubout -out api-token.public.pem
+            openssl genrsa -out api-token.private.pem 2048 &&
+            openssl rsa -in api-token.private.pem -pubout -out api-token.public.pem
           </code>
         </li>
         <li>
@@ -99,48 +102,59 @@ const Version1 = ({eventKey}) => (
         </li>
         <li>
           <code>
-            / ubl:Invoice / cac:AccountingSupplierParty / cac:Party / cac:PartyIdentification / cbc:ID / @schemeID == 0158
+            / ubl:Invoice / cac:AccountingSupplierParty / cac:Party
+            / cac:PartyIdentification / cbc:ID / @schemeID == 0158
           </code>
         </li>
         <li>
           <code>
-            / ubl:Invoice / cac:AccountingCustomerParty / cac:Party / cac:PartyIdentification / cbc:ID / @schemeID == 0158
+            / ubl:Invoice / cac:AccountingCustomerParty / cac:Party
+            / cac:PartyIdentification / cbc:ID / @schemeID == 0158
           </code>
         </li>
         <li>
           <code>
-            / ubl:Invoice / cac:AccountingSupplierParty / cac:Party / cac:PartyIdentification / cbc:ID == account which issues the invoice
+            / ubl:Invoice / cac:AccountingSupplierParty / cac:Party
+            / cac:PartyIdentification / cbc:ID == account which issues the invoice
           </code>
         </li>
         <li>
-          Other semantic checks like the existence of ICDPH, DIC, Party name, address,... To be specified later
+          Other semantic checks like the existence of ICDPH, DIC, Party name, address,...
+          To be specified later
         </li>
       </ol>
       Otherwise it returns the invoice as invalid.
     </Section>
-    <Section title="I have an accountant (internal or external) who I want to delegate to do all this for me." eventKey="5">
+    <Section
+      title="I have an accountant (internal or external) who I want to delegate to do all this for me."
+      eventKey="5"
+    >
       No Problem. It is going to be actually the most common use case.
-      The very first step is still on you as a responsible person for a company, who can delegate responsibilities.
+      The very first step is still on you as a responsible person for a company,
+      who can delegate responsibilities.
       Tutorial:
       <ol>
         <li>You as a responsible person will log into the WebUI with your eID.</li>
         <li>
-          Everybody, who you want to be able to issue or receive invoices on your behalf has to log into WebUI as well
-          and gets unique EINVOICE ENTITY ID.
+          Everybody, who you want to be able to issue or receive invoices on your behalf
+          has to log into WebUI as well and gets unique EINVOICE ENTITY ID.
         </li>
         <li>
-          You, as a responsible person, go to the account settings and set those numbers as trusted entities
-          to manipulate with your invoices. You can remove anybody anytime later.
+          You, as a responsible person, go to the account settings and set those numbers
+          as trusted entities to manipulate with your invoices.
+          You can remove anybody anytime later.
         </li>
         <li>
-          Now everybody on your list may issue and receive invoices on your behalf through WebUI or API.
+          Now everybody on your list may issue and receive invoices on your behalf
+          through WebUI or API.
         </li>
       </ol>
     </Section>
     <Section title="Who is responsible for the invoice in the system?" eventKey="6">
-      Issuer, since whoever inserted invoices to the system (you, your accountant) was allowed in the allowed list
-      by the entity itself.
-      Moreover you have non-stop control over all invoices issued by you through WebUI, APi and email.
+      Issuer, since whoever inserted invoices to the system (you, your accountant)
+      was allowed in the allowed list by the entity itself.
+      Moreover you have non-stop control over all invoices issued by you through WebUI,
+      API and email.
       If the invoice is found to be incorrect but already inserted to the system,
       a new corrected invoice has to be inserted to the system.
     </Section>
@@ -155,14 +169,20 @@ const Version1 = ({eventKey}) => (
     <Section title="I am a software engineer and I would love to use your API." eventKey="8">
       No worries, go ahead. No need to fill the forms, register or anything else. Just enjoy.
     </Section>
-    <Section title="I am a software engineer and I would love to test your API before I do something serious." eventKey="9">
+    <Section
+      title="I am a software engineer and I would love to test your API before I do something serious."
+      eventKey="9"
+    >
       You can call some APIs without hesitation - those without authorization,
       but also GET endpoints of course.
-      To test out POST endpoints, you can always use the request parameter test: true for limited number of test invoices.
-      This will do exactly the same thing as it would be a real request, but the invoice will be marked as a test invoice.
+      To test out POST endpoints, you can always use the request parameter `test: true`
+      for limited number of test invoices.
+      This will do exactly the same thing as it would be a real request,
+      but the invoice will be marked as a test invoice.
       We may delete any test invoices after some time (at least one day lifetime though).
       You will also see them on GET output so you can test the full flow.
-      You are responsible to agree with the party you use as counterparty in advance though, to not spam random businesses.
+      You are responsible to agree with the party you use as counterparty in advance though,
+      to not spam random businesses.
     </Section>
     <Section title="Something went/goes terribly wrong!" eventKey="10">
       No worries! We are here to help you.
@@ -175,7 +195,8 @@ const Version1 = ({eventKey}) => (
       you have a chance to improve the system and even be rewarded for it.
       It does not matter if you found a typo or managed to find out our private keys.
       Just write an email to <a href="mailto:bug@einvoice.mfsr.sk">bug@einvoice.mfsr.sk</a>.
-      If you are the first to report the particular issue, after our engineers assess the value of your contribution
+      If you are the first to report the particular issue, after our engineers
+      assess the value of your contribution
       you will be rewarded from 10 to <strong>5000&euro;</strong>.
     </Section>
     <Section title="How to add attachments to invoices?" eventKey="12">
@@ -191,26 +212,33 @@ const Version1 = ({eventKey}) => (
     <Section title="I do not like the UI, I miss many features, can I make my own?" eventKey="14">
       <p>Of course! It is fine to be replaced by better UI.</p>
       <p>
-        We believe that the state should not supply the roles which may be equally or better provided by the private sector.
+        We believe that the state should not supply the roles which may be equally
+        or better provided by the private sector.
         Therefore we keep focusing on things, which only the government can guarantee and process.
       </p>
       <p>
-        All the tools for creating, converting, visualizing, filtering, sorting, analyzing,... invoices may be provided
-        by the private sector which will do it far faster, nicer, cheaper and better than any government.
+        All the tools for creating, converting, visualizing, filtering, sorting, analyzing,...
+        invoices may be provided by the private sector which will do it far faster, nicer,
+        cheaper and better than any government.
         Our API is so simple that even any junior programmer can create such tools.
       </p>
       <p>
-        A little bit more effort but still doable is to replace the whole WebUI also for setting up user info.
+        A little bit more effort but still doable is to replace the whole WebUI also
+        for setting up user info.
         The reason is that this depends on cumbersome UPVS integration.
       </p>
     </Section>
     <Section title="Does the system keep logs?" eventKey="15">
-      Yes, the system keeps track of all requests and responses at least to be able to reconstruct the communication.
+      Yes, the system keeps track of all requests and responses at least to be able to reconstruct
+      the communication.
     </Section>
     <Section title="What formats do you process and deliver invoices?" eventKey="16">
-      Basic formats given by the EU are XMLs. Those we also accept when you insert an invoice through API or WebUI as a file.
-      When we send you invoices or let you inspect it in WebUI, we have a PDF visualization for you as a separate file.
-      It is informative only and when it comes to legal consequences, XML is a single source of truth.
+      Basic formats given by the EU are XMLs. Those we also accept when you insert
+      an invoice through API or WebUI as a file.
+      When we send you invoices or let you inspect it in WebUI, we have a PDF visualization
+      for you as a separate file.
+      It is informative only and when it comes to legal consequences,
+      XML is a single source of truth.
       So in case of any doubts, look into and rely solely on XML version.
     </Section>
     <Section title="I do not like your PDF visualization. What can I do?" eventKey="17">
@@ -221,7 +249,8 @@ const Version1 = ({eventKey}) => (
       Yes. Multiple things.
       <ol>
         <li>
-          In addition to the UBL2.1 format, the government is per EU directive forced to receive  D16B (SCRDM — CII) format.
+          In addition to the UBL2.1 format, the government is per EU directive forced to receive
+          D16B (SCRDM — CII) format.
           Government will always issue UBL2.1, though.
         </li>
         <li>
@@ -231,8 +260,8 @@ const Version1 = ({eventKey}) => (
     </Section>
     <Section title="I am a citizen/journalist/analyst, what can I do?" eventKey="19">
       Through <a href={swaggerUrl} target="_blank" rel="noreferrer noopener">API</a> or WebUI you can access
-      all public invoices received by the government, where you can search for all invoices by receiver,
-      issuer, amount, date,...
+      all public invoices received by the government, where you can search for all invoices
+      by receiver, issuer, amount, date,...
       B2B invoices are unfortunately or luckily not publicly visible.
     </Section>
   </VersionSection>
@@ -241,10 +270,11 @@ const Version1 = ({eventKey}) => (
 const Version2 = ({eventKey}) => (
   <VersionSection title="Version 2 - (B/G)2(B/G) for foreign receivers" eventKey={eventKey}>
     <Section title="How does it work?" eventKey="0">
-      Slovak issuers issuing invoices to the foreign country have to firstly send invoice to EINVOICE system,
-      but you as the issuer are responsible for the delivery of the invoice as well.
-      If the receiver cannot accept UBL2.1 and needs a PDF, you can see your invoice in "invoices issued by me"
-      in PDF version and send that one to the receiver.
+      Slovak issuers issuing invoices to the foreign country have to firstly
+      send invoice to EINVOICE system, but you as the issuer are responsible
+      for the delivery of the invoice as well.
+      If the receiver cannot accept UBL2.1 and needs a PDF, you can see your invoice
+      in "My invoices" tab in PDF version and send that one to the receiver.
     </Section>
   </VersionSection>
 )
@@ -256,9 +286,11 @@ const Version3 = ({eventKey}) => (
       For issuer, you have to send invoices electronically via email
       to <a href="mailto:foreign-invoice@einvoice@mfsr.sk">foreign-invoice@einvoice@mfsr.sk</a>.
       <br />
-      Title and body of an email will be ignored, just one attachment allowed, which is supposed to be your invoice.
+      Title and body of an email will be ignored, just one attachment allowed,
+      which is supposed to be your invoice.
       Everything else should apply from above.
-      These invoices will be checked and added to the system manually and you get confirmation/rejection via email back.
+      These invoices will be checked and added to the system manually and
+      you get confirmation/rejection via email back.
     </Section>
   </VersionSection>
 )
