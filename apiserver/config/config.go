@@ -49,6 +49,7 @@ type Configuration struct {
 	ServerWriteTimeout   time.Duration
 	Cache                CacheConfiguration
 	SlovenskoSk          SlovenskoSkConfiguration
+	InvoicesLimit        int
 }
 
 func (c *Configuration) initDb() {
@@ -125,6 +126,8 @@ func New() *Configuration {
 
 	config.ServerReadTimeout = environment.ParseDuration("SERVER_READ_TIMEOUT", config.ServerReadTimeout)
 	config.ServerWriteTimeout = environment.ParseDuration("SERVER_WRITE_TIMEOUT", config.ServerWriteTimeout)
+
+	config.InvoicesLimit = environment.ParseInt("INVOICES_LIMIT", config.InvoicesLimit)
 
 	log.Info("config.loaded")
 
