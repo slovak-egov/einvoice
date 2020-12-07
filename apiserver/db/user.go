@@ -28,21 +28,10 @@ func (c *Connector) GetUser(ctx goContext.Context, id int) (*entity.User, error)
 	user := &entity.User{}
 	err := c.GetDb(ctx).Model(user).Where("id = ?", id).Select(user)
 
-	if err != nil {
-		context.GetLogger(ctx).WithField("error", err.Error()).Error("db.getUser")
-		return nil, err
-	}
-
-	return user, nil
-}
-
-func (c *Connector) GetSlovenskoSkUser(ctx goContext.Context, uri string) (*entity.User, error) {
-	user := &entity.User{}
-	err := c.GetDb(ctx).Model(user).Where("slovensko_sk_uri = ?", uri).Select(user)
-
 	if errors.Is(err, pg.ErrNoRows) {
 		return nil, handlerutil.NewNotFoundError("User not found")
 	} else if err != nil {
+		context.GetLogger(ctx).WithField("error", err.Error()).Error("db.getUser")
 		return nil, err
 	}
 
