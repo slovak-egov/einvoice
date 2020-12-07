@@ -5,7 +5,7 @@ import "github.com/slovak-egov/einvoice/apiserver/app"
 func main() {
 	a := app.NewApp()
 
-	defer a.Close()
+	defer a.CloseResources()
 
 	a.Run()
 }

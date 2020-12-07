@@ -1,6 +1,10 @@
 package config
 
-import "github.com/sirupsen/logrus"
+import (
+	"time"
+
+	"github.com/sirupsen/logrus"
+)
 
 var devConfig = Configuration{
 	Port: 8080,
@@ -8,15 +12,21 @@ var devConfig = Configuration{
 		ApiServer: "http://localhost:8081",
 		SlovenskoSkLogin: "https://upvs.dev.filipsladek.com/login?callback=http://localhost:3000/login-callback",
 	},
-	ClientBuildDir: "web-app/client/build",
-	LogLevel: logrus.DebugLevel,
+	ClientBuildDir:     "web-app/client/build",
+	LogLevel:           logrus.DebugLevel,
+	ServerReadTimeout:  15 * time.Second,
+	ServerWriteTimeout: 15 * time.Second,
+	GracefulTimeout:    15 * time.Second,
 }
 
 var prodConfig = Configuration{
 	Port: 80,
-	ClientBuildDir: "/client/build",
 	Urls: Urls{
 		SlovenskoSkLogin: "https://upvs.dev.filipsladek.com/login?callback=https://web-app.dev.filipsladek.com/login-callback",
 	},
-	LogLevel: logrus.InfoLevel,
+	ClientBuildDir:     "/client/build",
+	LogLevel:           logrus.InfoLevel,
+	ServerReadTimeout:  15 * time.Second,
+	ServerWriteTimeout: 15 * time.Second,
+	GracefulTimeout:    15 * time.Second,
 }

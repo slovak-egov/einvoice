@@ -1,6 +1,8 @@
 package config
 
 import (
+	"time"
+
 	log "github.com/sirupsen/logrus"
 
 	"github.com/slovak-egov/einvoice/pkg/environment"
@@ -16,6 +18,9 @@ type Configuration struct {
 	Urls                Urls
 	ClientBuildDir      string
 	LogLevel            log.Level
+	ServerReadTimeout   time.Duration
+	ServerWriteTimeout  time.Duration
+	GracefulTimeout     time.Duration
 }
 
 func New() *Configuration {
@@ -24,13 +29,14 @@ func New() *Configuration {
 	switch webserverEnv {
 	case "prod":
 		config = prodConfig
+		// Use different formatting in production, which can be easily processed by elasticsearch
+		log.SetFormatter(&log.JSONFormatter{})
 	case "dev":
 		config = devConfig
 	default:
 		log.WithField("environment", webserverEnv).Fatal("config.environment.unknown")
 	}
 
-	log.SetFormatter(&log.JSONFormatter{})
 	var err error
 	logLevel := environment.Getenv("LOG_LEVEL", config.LogLevel.String())
 	config.LogLevel, err = log.ParseLevel(logLevel)
@@ -44,6 +50,10 @@ func New() *Configuration {
 		ApiServer: environment.Getenv("API_SERVER_URL", config.Urls.ApiServer),
 		SlovenskoSkLogin: environment.Getenv("SLOVENSKO_SK_LOGIN_URL", config.Urls.SlovenskoSkLogin),
 	}
+
+	config.ServerReadTimeout = environment.ParseDuration("SERVER_READ_TIMEOUT", config.ServerReadTimeout)
+	config.ServerWriteTimeout = environment.ParseDuration("SERVER_WRITE_TIMEOUT", config.ServerWriteTimeout)
+	config.GracefulTimeout = environment.ParseDuration("GRACEFUL_TIMEOUT", config.GracefulTimeout)
 
 	log.Info("config.loaded")
 	return &config
