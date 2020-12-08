@@ -29,5 +29,6 @@
   "invoiceType": "Invoice type",
   "received": "Received",
   "supplied": "Supplied",
-  "download": "Download"
+  "download": "Download",
+  "loadMore": "Load more"
 }

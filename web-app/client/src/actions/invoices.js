@@ -2,15 +2,25 @@ import swal from 'sweetalert'
 import {get} from 'lodash'
 import {loadingWrapper, setData} from './common'
 
-const setPublicInvoiceIds = setData(['publicInvoicesScreen', 'ids'])
-const setMyInvoiceIds = setData(['myInvoicesScreen', 'ids'])
-
 export const setCreateInvoiceFormat = setData(['createInvoiceScreen', 'format'])
 export const setCreateInvoiceData = setData(['createInvoiceScreen', 'invoice'])
 export const setCreateInvoiceTest = setData(['createInvoiceScreen', 'test'])
 
+const setInvoiceIds = (path, data) => ({
+  type: 'SET INVOICE IDS',
+  path,
+  payload: data,
+  reducer: (state, {setOrUpdate, ids}) => setOrUpdate ? ids : [...state, ...ids],
+})
+
+const savePagedIds = ({path, ids, nextId, setOrUpdate}) =>
+  (dispatch) => {
+    dispatch(setData([...path, 'nextId'])(nextId))
+    dispatch(setInvoiceIds([...path, 'ids'], {ids, setOrUpdate}))
+  }
+
 const setInvoice = (id, data) => ({
-  type: 'SET INVOICES',
+  type: 'SET INVOICE',
   path: ['invoices', id],
   payload: data,
   reducer: (state, data) => ({
@@ -108,14 +118,15 @@ export const createInvoice = (data) => loadingWrapper(
   }
 )
 
-const getInvoices = ({getAdditionalFilters, path, setIds, fetchInvoices}) => () => loadingWrapper(
+const getInvoices = ({getAdditionalFilters, path, fetchInvoices}) => (nextId) => loadingWrapper(
   async (dispatch, getState, {api}) => {
     const filters = get(getState(), [...path, 'filters'])
     const formats = Object.keys(filters.formats).filter((k) => filters.formats[k])
 
     try {
-      const {invoices} = await fetchInvoices(api)({
+      const {invoices, nextId: newNextId} = await fetchInvoices(api)({
         formats,
+        nextId,
         test: filters.test,
         ...getAdditionalFilters(filters),
       })
@@ -127,12 +138,15 @@ const getInvoices = ({getAdditionalFilters, path, setIds, fetchInvoices}) => () 
         }), {})
       ))
 
-      dispatch(setIds(
-        invoices.reduce((acc, val) => ([
+      dispatch(savePagedIds({
+        path,
+        ids: invoices.reduce((acc, val) => ([
           ...acc,
           val.id,
-        ]), []))
-      )
+        ]), []),
+        nextId: newNextId,
+        setOrUpdate: nextId == null,
+      }))
     } catch (error) {
       await swal({
         title: 'Invoices could not be fetched',
@@ -145,7 +159,6 @@ const getInvoices = ({getAdditionalFilters, path, setIds, fetchInvoices}) => () 
 
 export const getMyInvoices = getInvoices({
   path: ['myInvoicesScreen'],
-  setIds: setMyInvoiceIds,
   fetchInvoices: (api) => api.getMyInvoices,
   getAdditionalFilters: (filters) => ({
     supplied: filters.supplied,
@@ -155,7 +168,6 @@ export const getMyInvoices = getInvoices({
 
 export const getPublicInvoices = getInvoices({
   path: ['publicInvoicesScreen'],
-  setIds: setPublicInvoiceIds,
   fetchInvoices: (api) => api.getPublicInvoices,
   getAdditionalFilters: () => null,
 })

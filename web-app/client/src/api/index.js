@@ -72,12 +72,13 @@ export default class Api {
       jsonResponse: false,
     })
 
-  getMyInvoices = async ({formats, supplied, received, test}) => {
+  getMyInvoices = async ({formats, nextId, supplied, received, test}) => {
     const userId = localStorage.getItem('userId')
     const queryParams = formats.map((f) => ['format', f])
     queryParams.push(['received', received])
     queryParams.push(['supplied', supplied])
     queryParams.push(['test', test])
+    if (nextId) queryParams.push(['nextId', nextId])
     return await this.apiRequest({
       route: `/users/${userId}/invoices?${new URLSearchParams(queryParams)}`,
       headers: {
@@ -86,9 +87,10 @@ export default class Api {
     })
   }
 
-  getPublicInvoices = async ({formats, test}) => {
+  getPublicInvoices = async ({formats, nextId, test}) => {
     const queryParams = formats.map((f) => ['format', f])
     queryParams.push(['test', test])
+    if (nextId) queryParams.push(['nextId', nextId])
     return await this.apiRequest({
       route: `/invoices?${new URLSearchParams(queryParams)}`,
     })

@@ -11,7 +11,8 @@ import {get} from 'lodash'
 const getRowClassNames = (invoice) => invoice.test ? 'text-secondary' : ''
 
 const InvoiceList = ({
-  areCustomFilterFieldsValid, CustomFilter, getInvoices, invoices, invoiceIds, path, t, title,
+  areCustomFilterFieldsValid, CustomFilter, getInvoices, invoices, invoiceIds, nextId, path, t,
+  title,
 }) => (
   <Card className="m-1">
     <Card.Header className="bg-primary text-white text-center" as="h3">{title}</Card.Header>
@@ -50,6 +51,15 @@ const InvoiceList = ({
           ))}
         </tbody>
       </Table>
+      {nextId && <div
+        className="text-primary d-flex border border-primary rounded-lg"
+        style={{cursor: 'pointer'}}
+        onClick={() => getInvoices(nextId)}
+      >
+        <div className="m-auto">
+          {t('loadMore')}
+        </div>
+      </div>}
     </Card.Body>
   </Card>
 )
@@ -59,6 +69,7 @@ export default compose(
     (state, {path}) => ({
       invoices: state.invoices,
       invoiceIds: get(state, [...path, 'ids']),
+      nextId: get(state, [...path, 'nextId']),
     }),
   ),
   lifecycle({
