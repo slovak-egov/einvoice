@@ -29,5 +29,6 @@
   "invoiceType": "Typ faktúry",
   "received": "Prijaté",
   "supplied": "Odoslané",
-  "download": "Stiahnuť"
+  "download": "Stiahnuť",
+  "loadMore": "Načítaj viac"
 }

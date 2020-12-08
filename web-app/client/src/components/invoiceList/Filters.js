@@ -58,7 +58,7 @@ const Filters = ({
             <Button
               variant="primary"
               className="ml-auto"
-              onClick={getInvoices}
+              onClick={() => getInvoices()}
               disabled={searchDisabled}
             >
               {t('search')}
