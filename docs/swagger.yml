@@ -488,6 +488,7 @@ components:
             - d16b
         test:
           type: boolean
+          description: If true, service will create test-only invoice
         invoice:
           type: string
           format: binary

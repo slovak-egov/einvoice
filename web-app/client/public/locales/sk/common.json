@@ -5,15 +5,27 @@
   "cancel": "Zrušiť",
   "save": "Uložiť",
   "edit": "Upraviť",
-  "email": "E-mail",
-  "serviceAccountPublicKey": "Verejny kľúč k technickemu účtu",
+  "email": {
+    "label": "E-mail",
+    "tooltip": "Na túto emailovú adresu vám budú zasielané vaše (vystavené a prijaté) faktúry"
+  },
+  "accountPublicKey": {
+    "label": "Verejny kľúč k vášmu účtu",
+    "tooltip": "Kľúč, ktorým overíme vašu totožnosť pri prihlasovaní pomocou API"
+  },
   "confirm": "Potvrdiť",
   "submit": "Odovzdaj",
   "filters": "Filtre",
   "search": "Hľadaj",
   "uploadInvoice": "Nahraj faktúru",
-  "userId": "Identifikačné číslo používateľa",
-  "substituteIds": "Identifikačné čísla zastupujúcich používateľov",
+  "userId": {
+    "label": "Identifikačné číslo používateľa",
+    "tooltip": "Identifikačné číslo"
+  },
+  "substituteIds": {
+    "label": "Identifikačné čísla zastupujúcich používateľov",
+    "tooltip": "Títo používatelia budú mať právomoc zadávať faktúry vo vašom mene"
+  },
   "invoiceType": "Typ faktúry",
   "received": "Prijaté",
   "supplied": "Odoslané",
