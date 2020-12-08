@@ -17,10 +17,11 @@ const Filters = ({
       <Accordion.Toggle
         as={Card.Header}
         eventKey="0"
-        className="bg-primary text-white"
+        className="bg-primary text-white d-flex align-items-center"
         style={{cursor: 'pointer'}}
       >
-        {t('filters')}
+        <span>{t('filters')}</span>
+        <i className="fas fa-plus ml-auto" />
       </Accordion.Toggle>
       <Accordion.Collapse eventKey="0">
         <Card.Body>

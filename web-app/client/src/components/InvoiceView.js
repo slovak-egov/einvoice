@@ -3,10 +3,11 @@ import {compose} from 'redux'
 import {connect} from 'react-redux'
 import {useHistory, useParams} from 'react-router-dom'
 import {branch, lifecycle, renderComponent, renderNothing} from 'recompose'
-import {Button, Card, Col, Form, FormCheck, Row} from 'react-bootstrap'
+import {Button, Card, Col, Form, Row} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import {get} from 'lodash'
 import NotFound from './helpers/NotFound'
+import BoolIcon from './helpers/BoolIcon'
 import {getInvoiceDetail, getInvoiceMeta} from '../actions/invoices'
 import {invoiceDownloadUrl} from '../utils/constants'
 
@@ -23,11 +24,7 @@ const TextField = ({label, value}) => (
 const CheckboxField = ({label, value}) => (
   <Form.Group>
     <Form.Label>{label}</Form.Label>
-    <FormCheck
-      type="checkbox"
-      checked={value}
-      readOnly
-    />
+    <BoolIcon value={value} />
   </Form.Group>
 )
 

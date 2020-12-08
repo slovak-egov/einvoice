@@ -1,4 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.css'
+import '@fortawesome/fontawesome-free/css/all.css'
 import React from 'react'
 import {compose} from 'redux'
 import {connect} from 'react-redux'
