@@ -8,10 +8,12 @@ import {withTranslation} from 'react-i18next'
 import Filters from './Filters'
 import {get} from 'lodash'
 
+const getRowClassNames = (invoice) => invoice.test ? 'text-secondary' : ''
+
 const InvoiceList = ({
   areCustomFilterFieldsValid, CustomFilter, getInvoices, invoices, invoiceIds, path, t, title,
 }) => (
-  <Card style={{margin: '5px'}}>
+  <Card className="m-1">
     <Card.Header className="bg-primary text-white text-center" as="h3">{title}</Card.Header>
     <Card.Body>
       <Filters
@@ -34,7 +36,7 @@ const InvoiceList = ({
         </thead>
         <tbody>
           {invoiceIds.map((invoiceId, i) => (
-            <tr key={i}>
+            <tr key={i} className={getRowClassNames(invoices[invoiceId])}>
               <td>{invoiceId}</td>
               <td>{invoices[invoiceId].sender}</td>
               <td>{invoices[invoiceId].receiver}</td>

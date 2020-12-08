@@ -8,7 +8,7 @@ export default compose(
   withTranslation(['TopBar']),
   connect(
     (state, {t}) => ({
-      title: t('TopBar:tabs.allInvoices'),
+      title: t('TopBar:tabs.publicInvoices'),
       path: ['publicInvoicesScreen'],
       areCustomFilterFieldsValid: () => true,
     }),

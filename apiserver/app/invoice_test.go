@@ -14,8 +14,9 @@ import (
 func TestGetInvoices(t *testing.T) {
 	// Fill DB
 	t.Cleanup(cleanDb(t))
-	firstInvoiceId := createTestInvoice(t)
-	secondInvoiceId := createTestInvoice(t)
+	firstInvoiceId := createTestInvoice(t, false)
+	createTestInvoice(t, true)
+	thirdInvoiceId := createTestInvoice(t, false)
 
 	var flagtests = []struct {
 		query          string
@@ -23,8 +24,9 @@ func TestGetInvoices(t *testing.T) {
 		responseNextId *int
 	}{
 		{"", 2, nil},
+		{"?test=true", 3, nil},
 		{"?format=d16b", 0, nil},
-		{fmt.Sprintf("?nextId=%d&limit=1", secondInvoiceId), 1, &firstInvoiceId},
+		{fmt.Sprintf("?nextId=%d&limit=1", thirdInvoiceId), 1, &firstInvoiceId},
 		{fmt.Sprintf("?nextId=%d", firstInvoiceId), 1, nil},
 	}
 	// Run tests
@@ -47,7 +49,7 @@ func TestGetInvoices(t *testing.T) {
 
 func TestGetInvoice(t *testing.T) {
 	t.Cleanup(cleanDb(t))
-	id := createTestInvoice(t)
+	id := createTestInvoice(t, false)
 
 	req, _ := http.NewRequest("GET", fmt.Sprintf("/invoices/%d", id), nil)
 	response := executeRequest(req)

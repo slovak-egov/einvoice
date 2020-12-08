@@ -1,3 +1,4 @@
+import './Filters.css'
 import React from 'react'
 import {compose} from 'redux'
 import {connect} from 'react-redux'
@@ -8,9 +9,11 @@ import {invoiceFormats} from '../../utils/constants'
 import {isInvoicesFilterValid} from '../../utils/validations'
 import {toggleField} from '../../actions/common'
 
-const Filters = ({CustomFilter, formats, getInvoices, searchDisabled, t, toggleFormatFilter}) => (
+const Filters = ({
+  CustomFilter, formats, getInvoices, searchDisabled, t, test, toggleFilter,
+}) => (
   <Accordion>
-    <Card style={{textAlign: 'left'}}>
+    <Card>
       <Accordion.Toggle
         as={Card.Header}
         eventKey="0"
@@ -22,25 +25,38 @@ const Filters = ({CustomFilter, formats, getInvoices, searchDisabled, t, toggleF
       <Accordion.Collapse eventKey="0">
         <Card.Body>
           <div>
-            <strong style={{textDecoration: 'underline', fontSize: '20px'}}>{t('format')}</strong>
-            <div style={{display: 'flex'}}>
-              {Object.values(invoiceFormats).map((format) => (
+            <div className="d-flex">
+              <div style={{flex: 1}}>
+                <strong className="filter-heading">{t('format')}</strong>
+                <div className="d-flex">
+                  {Object.values(invoiceFormats).map((format) => (
+                    <FormCheck
+                      type="checkbox"
+                      key={format}
+                      checked={formats[format]}
+                      onChange={toggleFilter(['formats', format])}
+                      label={format}
+                      className="mr-3"
+                    />
+                  ))}
+                </div>
+              </div>
+              <div style={{flex: 1}}>
+                <strong className="filter-heading">Test</strong>
                 <FormCheck
                   type="checkbox"
-                  key={format}
-                  checked={formats[format]}
-                  onChange={() => toggleFormatFilter(format)}
-                  label={format}
-                  style={{marginRight: '15px'}}
+                  checked={test}
+                  onChange={toggleFilter(['test'])}
+                  label="Test"
                 />
-              ))}
+              </div>
             </div>
             {CustomFilter && <CustomFilter />}
           </div>
-          <div style={{display: 'flex'}}>
+          <div className="d-flex">
             <Button
               variant="primary"
-              style={{marginLeft: 'auto'}}
+              className="ml-auto"
               onClick={getInvoices}
               disabled={searchDisabled}
             >
@@ -63,7 +79,7 @@ export default compose(
       }
     },
     (dispatch, {path}) => ({
-      toggleFormatFilter: (format) => dispatch(toggleField([...path, 'formats', format])),
+      toggleFilter: (fieldPath) => () => dispatch(toggleField([...path, ...fieldPath])),
     })
   ),
   withTranslation('common')

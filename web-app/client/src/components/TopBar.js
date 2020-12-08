@@ -27,7 +27,7 @@ const TopBar = ({i18n, isLogged, loggedUser, logout, startLoading, t}) => (
           </NavDropdown.Item>
         </NavDropdown>
         <NavLink className="nav-link" to="/invoices">
-          <Navbar.Text>{t('tabs.allInvoices')}</Navbar.Text>
+          <Navbar.Text>{t('tabs.publicInvoices')}</Navbar.Text>
         </NavLink>
       </Nav>
       <Nav>

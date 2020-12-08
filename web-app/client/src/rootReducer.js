@@ -12,6 +12,7 @@ const getInitialState = () => ({
   loadingRequests: 0,
   createInvoiceScreen: {
     format: invoiceFormats.UBL,
+    test: false,
   },
   publicInvoicesScreen: {
     filters: {
@@ -19,6 +20,7 @@ const getInitialState = () => ({
         [invoiceFormats.UBL]: true,
         [invoiceFormats.D16B]: true,
       },
+      test: false,
     },
   },
   myInvoicesScreen: {
@@ -27,6 +29,7 @@ const getInitialState = () => ({
         [invoiceFormats.UBL]: true,
         [invoiceFormats.D16B]: true,
       },
+      test: false,
       received: true,
       supplied: true,
     },

@@ -1,7 +1,7 @@
 {
   "title": "E-invoice",
   "tabs": {
-    "allInvoices": "All invoices",
+    "publicInvoices": "Public invoices",
     "createInvoice": "Create invoice",
     "accountSettings": "Account settings",
     "myInvoices": "My invoices"

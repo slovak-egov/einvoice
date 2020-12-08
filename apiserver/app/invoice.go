@@ -35,10 +35,15 @@ func NewPublicInvoicesOptions(params url.Values, maxLimit int) (*db.PublicInvoic
 	if err != nil {
 		return nil, fmt.Errorf("limit: %w", err)
 	}
+	test, err := getOptionalBool(params.Get("test"), false)
+	if err != nil {
+		return nil, fmt.Errorf("test: %w", err)
+	}
 	return &db.PublicInvoicesOptions{
 		params["format"],
 		nextId,
 		limit,
+		test,
 	}, nil
 }
 
@@ -52,7 +57,7 @@ func (a *App) getPublicInvoices(res http.ResponseWriter, req *http.Request) erro
 		return handlerutil.NewBadRequestError(err.Error())
 	}
 
-	invoices, err := a.db.GetInvoices(req.Context(), requestOptions)
+	invoices, err := a.db.GetPublicInvoices(req.Context(), requestOptions)
 	if err != nil {
 		return err
 	}
