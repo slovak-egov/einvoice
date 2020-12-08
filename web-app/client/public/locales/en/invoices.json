@@ -3,5 +3,9 @@
   "sender": "Sender",
   "receiver": "Receiver",
   "issueDate": "Issue date",
-  "price": "Price"
+  "price": "Price",
+  "createdAt": "Created at",
+  "supplierIco": "Supplier IČO",
+  "customerIco": "Customer IČO",
+  "public": "Public"
 }

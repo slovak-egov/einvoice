@@ -27,6 +27,29 @@ var formatToParsers = map[string]struct{
 	},
 }
 
+func parseRequestBody(req *http.Request) (invoice []byte, format string, test bool, err error) {
+	// TODO: return 413 if request is too large
+	err = req.ParseMultipartForm(10 << 20)
+	if err != nil {
+		err = handlerutil.NewBadRequestError("Invalid payload")
+		return
+	}
+
+	invoice, err = parseInvoice(req)
+	if err != nil {
+		err = handlerutil.NewBadRequestError(err.Error())
+		return
+	}
+	test, err = getOptionalBool(req.PostFormValue("test"), false)
+	if err != nil {
+		err = handlerutil.NewBadRequestError("testParameter.invalid")
+		return
+	}
+
+	format = req.PostFormValue("format")
+	return
+}
+
 func parseInvoice(req *http.Request) ([]byte, error) {
 	file, _, err := req.FormFile("invoice")
 	defer file.Close()
@@ -55,25 +78,18 @@ func validateInvoice(ctx goContext.Context, db *db.Connector, inv *entity.Invoic
 }
 
 func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
-	// TODO: return 413 if request is too large
-	err := req.ParseMultipartForm(10 << 20)
+	invoice, format, test, err := parseRequestBody(req)
 	if err != nil {
-		return handlerutil.NewBadRequestError("Invalid payload")
+		return err
 	}
-
-	format := req.PostFormValue("format")
-	invoice, err := parseInvoice(req)
-	if err != nil {
-		return handlerutil.NewBadRequestError(err.Error())
-	}
-
-	// Validate invoice format
-	var metadata *entity.Invoice
 
 	parsers, ok := formatToParsers[format]
 	if !ok {
 		return handlerutil.NewBadRequestError("Unknown invoice format")
 	}
+
+	// Validate invoice format
+	var metadata *entity.Invoice
 
 	if err = parsers.GetValidator(a)(invoice); err != nil {
 		return handlerutil.NewBadRequestError(err.Error())
@@ -83,8 +99,11 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 		return handlerutil.NewBadRequestError(err.Error())
 	}
 
-	// Add creator Id
+	// Add creator Id, test flag, isPublic flag
 	metadata.CreatedBy = context.GetUserId(req.Context())
+	metadata.Test = test
+	// TODO: add public ICO list
+	metadata.IsPublic = true
 
 	err = validateInvoice(req.Context(), a.db, metadata)
 	if _, ok := err.(*db.NoSubstituteError); ok {

@@ -51,6 +51,7 @@ func TestCreateInvoice(t *testing.T) {
 		Format:      entity.UblFormat,
 		CreatedBy:   user.Id,
 		IssueDate:   timeutil.Date{time.Date(2011, 9, 22, 0, 0, 0, 0, time.UTC)},
+		IsPublic:    true,
 	}
 	if !reflect.DeepEqual(createdResponse, expectedResponse) {
 		t.Errorf("Expected created response was %v. Got %v", expectedResponse, createdResponse)

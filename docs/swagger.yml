@@ -249,6 +249,11 @@ paths:
           description: Limit number of invoices returned
           schema:
             type: integer
+        - name: test
+          in: query
+          description: If flag turned on, test invoices are fetched as well
+          schema:
+            type: boolean
       security:
         - sessionAuth: []
         - apiKeyAuth: []
@@ -283,6 +288,11 @@ paths:
           description: Limit number of invoices returned
           schema:
             type: integer
+        - name: test
+          in: query
+          description: If flag turned on, test invoices are fetched as well
+          schema:
+            type: boolean
       responses:
         200:
           description: Successfull response
@@ -462,6 +472,12 @@ components:
           format: date
         createdBy:
           type: integer
+        isPublic:
+          type: boolean
+          description: True if invoice is visible to everyone
+        test:
+          type: boolean
+          description: True if invoice is just for test purposes
     CreateInvoiceRequest:
       type: object
       properties:
@@ -470,6 +486,8 @@ components:
           enum:
             - ubl2.1
             - d16b
+        test:
+          type: boolean
         invoice:
           type: string
           format: binary

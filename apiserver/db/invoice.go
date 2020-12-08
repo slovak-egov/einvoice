@@ -18,14 +18,33 @@ type PublicInvoicesOptions struct {
 	Formats []string
 	NextId  int
 	Limit   int
+	Test    bool
 }
 
-func (r *PublicInvoicesOptions) Validate(maxLimit int) error {
-	if r.Limit <= 0 || r.Limit > maxLimit {
+func (o *PublicInvoicesOptions) Validate(maxLimit int) error {
+	if o.Limit <= 0 || o.Limit > maxLimit {
 		return fmt.Errorf("limit should be positive integer less than or equal to %d", maxLimit)
 	}
 
 	return nil
+}
+
+func (o *PublicInvoicesOptions) buildQuery(query *orm.Query) *orm.Query {
+	if len(o.Formats) > 0 {
+		query = query.Where("format IN (?)", pg.In(o.Formats))
+	}
+
+	// If next id is not provided, do not search by id
+	if o.NextId != 0 {
+		query = query.Where("id <= ?", o.NextId)
+	}
+
+	// Filter out test invoices if not explicitly requested
+	if !o.Test {
+		query = query.Where("test = FALSE")
+	}
+
+	return query.Order("id DESC").Limit(o.Limit + 1)
 }
 
 type UserInvoicesOptions struct {
@@ -43,20 +62,11 @@ func (r *UserInvoicesOptions) Validate(maxLimit int) error {
 	return r.PublicInvoicesOptions.Validate(maxLimit)
 }
 
-func (c *Connector) GetInvoices(ctx goContext.Context, options *PublicInvoicesOptions) ([]entity.Invoice, error) {
+func (c *Connector) GetPublicInvoices(ctx goContext.Context, options *PublicInvoicesOptions) ([]entity.Invoice, error) {
 	invoices := []entity.Invoice{}
-	query := c.GetDb(ctx).Model(&invoices).Order("id DESC").Limit(options.Limit + 1)
+	query := c.GetDb(ctx).Model(&invoices).Where("is_public = TRUE")
 
-	if len(options.Formats) > 0 {
-		query = query.Where("format IN (?)", pg.In(options.Formats))
-	}
-
-	// If next id is not provided, do not search by id
-	if options.NextId != 0 {
-		query = query.Where("id <= ?", options.NextId)
-	}
-
-	if err := query.Select(); err != nil {
+	if err := options.buildQuery(query).Select(); err != nil {
 		context.GetLogger(ctx).WithFields(log.Fields{
 			"error":   err.Error(),
 			"formats": options.Formats,
@@ -117,18 +127,7 @@ func (c *Connector) GetUserInvoices(ctx goContext.Context, options *UserInvoices
 			return subquery, nil
 		})
 
-	if len(options.Formats) > 0 {
-		query = query.Where("format IN (?)", pg.In(options.Formats))
-	}
-
-	// If next id is not provided, do not search by id
-	if options.NextId != 0 {
-		query = query.Where("id <= ?", options.NextId)
-	}
-
-	err := query.Order("id DESC").Limit(options.Limit + 1).Select()
-
-	if err != nil {
+	if err := options.PublicInvoicesOptions.buildQuery(query).Select(); err != nil {
 		context.GetLogger(ctx).WithField("error", err.Error()).Error("db.getUserInvoices.failed")
 		return nil, err
 	}

@@ -56,7 +56,7 @@ const AccountSettings = ({
 }) => {
   const {t} = useTranslation(['common', 'TopBar'])
   return (
-    <Card style={{margin: '5px'}}>
+    <Card className="m-1">
       <Card.Header className="bg-primary text-white text-center" as="h3">{t('TopBar:tabs.accountSettings')}</Card.Header>
       <Card.Body>
         <Form.Group>

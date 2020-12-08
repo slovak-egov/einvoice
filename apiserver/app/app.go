@@ -103,6 +103,6 @@ func (a *App) CloseResources() {
 	a.db.Close()
 }
 
-func (a *App) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	a.router.ServeHTTP(w, req)
+func (a *App) ServeHTTP(res http.ResponseWriter, req *http.Request) {
+	a.router.ServeHTTP(res, req)
 }

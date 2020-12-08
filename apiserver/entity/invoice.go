@@ -22,4 +22,6 @@ type Invoice struct {
 	CreatedAt   time.Time     `json:"createdAt"`
 	IssueDate   timeutil.Date `json:"issueDate"`
 	CreatedBy   int           `json:"createdBy"` // User id of invoice creator
+	Test        bool          `json:"test"`
+	IsPublic    bool          `json:"isPublic"`
 }

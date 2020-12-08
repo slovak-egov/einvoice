@@ -1,12 +1,13 @@
 import swal from 'sweetalert'
 import {get} from 'lodash'
-import {setData, loadingWrapper} from './common'
+import {loadingWrapper, setData} from './common'
 
 const setPublicInvoiceIds = setData(['publicInvoicesScreen', 'ids'])
 const setMyInvoiceIds = setData(['myInvoicesScreen', 'ids'])
 
 export const setCreateInvoiceFormat = setData(['createInvoiceScreen', 'format'])
 export const setCreateInvoiceData = setData(['createInvoiceScreen', 'invoice'])
+export const setCreateInvoiceTest = setData(['createInvoiceScreen', 'test'])
 
 const setInvoice = (id, data) => ({
   type: 'SET INVOICES',
@@ -42,7 +43,7 @@ export const getInvoiceDetail = (id) => loadingWrapper(
   async (dispatch, getState, {api}) => {
     try {
       const invoiceDetail = await api.getInvoiceDetail(id)
-      dispatch(setInvoice(id, {data: invoiceDetail}))
+      dispatch(setInvoice(id, {xml: invoiceDetail}))
     } catch (error) {
       if (error.statusCode === 404) {
         dispatch(setInvoiceNotFound(id))
@@ -113,7 +114,12 @@ const getInvoices = ({getAdditionalFilters, path, setIds, fetchInvoices}) => () 
     const formats = Object.keys(filters.formats).filter((k) => filters.formats[k])
 
     try {
-      const {invoices} = await fetchInvoices(api)({formats, ...getAdditionalFilters(filters)})
+      const {invoices} = await fetchInvoices(api)({
+        formats,
+        test: filters.test,
+        ...getAdditionalFilters(filters),
+      })
+
       dispatch(setInvoices(
         invoices.reduce((acc, val) => ({
           ...acc,

@@ -1,3 +1,4 @@
+import './invoiceList/Filters.css'
 import React from 'react'
 import {compose} from 'redux'
 import {connect} from 'react-redux'
@@ -12,21 +13,20 @@ const FilterView = ({filters, toggleField}) => {
   const {t} = useTranslation('common')
   return (
     <React.Fragment>
-      <strong style={{textDecoration: 'underline', fontSize: '20px'}}>{t('invoiceType')}</strong>
-      <div style={{display: 'flex'}}>
+      <strong className="filter-heading">{t('invoiceType')}</strong>
+      <div className="d-flex">
         <FormCheck
           type="checkbox"
           checked={filters.supplied}
           label={t('supplied')}
-          onChange={() => toggleField('supplied')}
-          style={{marginRight: '15px'}}
+          onChange={toggleField('supplied')}
+          className="mr-3"
         />
         <FormCheck
           type="checkbox"
           checked={filters.received}
           label={t('received')}
-          onChange={() => toggleField('received')}
-          style={{marginRight: '15px'}}
+          onChange={toggleField('received')}
         />
       </div>
     </React.Fragment>
@@ -38,7 +38,7 @@ const Filter = connect(
     filters: state.myInvoicesScreen.filters,
   }),
   (dispatch) => ({
-    toggleField: (field) => dispatch(toggleField(['myInvoicesScreen', 'filters', field])),
+    toggleField: (field) => () => dispatch(toggleField(['myInvoicesScreen', 'filters', field])),
   })
 )(FilterView)
 
