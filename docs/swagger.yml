@@ -395,8 +395,6 @@ paths:
           description: Successful response
           content:
             application/pdf:
-              schema:
-                $ref: '#/components/schemas/Invoice'
         404:
           description: Invoice not found
           content:
