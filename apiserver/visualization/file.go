@@ -1,8 +1,9 @@
-package pdf
+package visualization
 
 import (
-	"github.com/jung-kurt/gofpdf"
 	"io"
+
+	"github.com/jung-kurt/gofpdf"
 )
 
 type File struct {

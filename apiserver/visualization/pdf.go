@@ -1,4 +1,4 @@
-package pdf
+package visualization
 
 import (
 	"fmt"
@@ -9,7 +9,7 @@ import (
 	"github.com/slovak-egov/einvoice/apiserver/entity"
 )
 
-func Generate(inv *entity.Invoice) (*File, error) {
+func Generate(inv *entity.Invoice) *File {
 	pdf := gofpdf.New("P", "mm", "A4", "")
 
 	pdf.AddPage()
@@ -33,5 +33,5 @@ func Generate(inv *entity.Invoice) (*File, error) {
 
 	pdf.Text(30, 110, fmt.Sprintf("Price: %v", inv.Price))
 
-	return &File{pdf}, nil
+	return &File{pdf}
 }

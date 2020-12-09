@@ -10,7 +10,7 @@ import (
 
 	"github.com/slovak-egov/einvoice/apiserver/db"
 	"github.com/slovak-egov/einvoice/apiserver/entity"
-	"github.com/slovak-egov/einvoice/apiserver/pdf"
+	"github.com/slovak-egov/einvoice/apiserver/visualization"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
@@ -115,16 +115,12 @@ func (a *App) getInvoicePdf(res http.ResponseWriter, req *http.Request) error {
 		return err
 	}
 
-	pdfFile, err := pdf.Generate(invoice)
-	if err != nil {
-		return err
-	}
+	pdfFile := visualization.Generate(invoice)
 
 	res.Header().Set("Content-Type", "application/pdf")
 	res.Header().Set("Content-Disposition", "attachment; filename=invoice-"+vars["id"]+".pdf")
 	res.WriteHeader(http.StatusOK)
-	pdfFile.Write(res)
-	return nil
+	return pdfFile.Write(res)
 }
 
 func NewUserInvoicesOptions(userId int, params url.Values, maxLimit int) (*db.UserInvoicesOptions, error) {

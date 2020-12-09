@@ -6,5 +6,5 @@ export const invoiceFormats = {
 }
 
 export const swaggerUrl = 'https://generator.swagger.io/?url=https://raw.githubusercontent.com/slovak-egov/einvoice/main/docs/swagger.yml'
-export const invoiceDownloadXmlUrl = (id) => `${CONFIG.apiServerUrl}/invoices/${id}/xml`
-export const invoiceDownloadPdfUrl = (id) => `${CONFIG.apiServerUrl}/invoices/${id}/pdf`
+export const invoiceDownloadXmlUrl = (id) => `${CONFIG.apiServerUrl}/invoices/${id}/detail`
+export const invoiceDownloadPdfUrl = (id) => `${CONFIG.apiServerUrl}/invoices/${id}/visualization`

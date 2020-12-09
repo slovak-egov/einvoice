@@ -69,7 +69,7 @@ func TestCreateInvoice(t *testing.T) {
 	}
 
 	// Try to get actual invoice through API
-	req, _ = http.NewRequest("GET", fmt.Sprintf("/invoices/%d/xml", createdResponse.Id), nil)
+	req, _ = http.NewRequest("GET", fmt.Sprintf("/invoices/%d/detail", createdResponse.Id), nil)
 	response = executeRequest(req)
 
 	checkResponseCode(t, http.StatusOK, response.Code)

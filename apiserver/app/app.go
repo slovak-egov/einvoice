@@ -67,8 +67,8 @@ func (a *App) initializeHandlers() {
 
 	registerHandler(a.router, "GET", "/invoices", a.getPublicInvoices)
 	registerHandler(a.router, "GET", "/invoices/{id:[0-9]+}", a.getInvoice)
-	registerHandler(a.router, "GET", "/invoices/{id:[0-9]+}/xml", a.getInvoiceXml)
-	registerHandler(a.router, "GET", "/invoices/{id:[0-9]+}/pdf", a.getInvoicePdf)
+	registerHandler(a.router, "GET", "/invoices/{id:[0-9]+}/detail", a.getInvoiceXml)
+	registerHandler(a.router, "GET", "/invoices/{id:[0-9]+}/visualization", a.getInvoicePdf)
 	registerHandler(authRouter, "POST", "/invoices", a.createInvoice)
 
 	registerHandler(a.router, "GET", "/login", a.handleLogin)
