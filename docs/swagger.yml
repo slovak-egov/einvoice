@@ -378,6 +378,32 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /invoices/{invoice_id}/visualization:
+    get:
+      tags:
+        - Invoices
+      summary: Get invoice content
+      parameters:
+        - name: invoice_id
+          in: path
+          description: Invoice ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        404:
+          description: Invoice not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 components:
   securitySchemes:
     slovenskoSkOboTokenAuth:

@@ -9,7 +9,7 @@ import {get} from 'lodash'
 import NotFound from './helpers/NotFound'
 import BoolIcon from './helpers/BoolIcon'
 import {getInvoiceDetail, getInvoiceMeta} from '../actions/invoices'
-import {invoiceDownloadUrl} from '../utils/constants'
+import {invoiceDownloadXmlUrl, invoiceDownloadPdfUrl} from '../utils/constants'
 
 const TextField = ({label, value}) => (
   <Form.Group>
@@ -97,8 +97,11 @@ const InvoiceView = ({
           </Row>
         </div>
         <Row className="justify-content-center">
-          <a href={invoiceDownloadUrl(id)}>
-            <Button variant="success">{t('download')}</Button>
+          <a href={invoiceDownloadXmlUrl(id)}>
+            <Button variant="primary">{`${t('download')} XML`}</Button>
+          </a>
+          <a href={invoiceDownloadPdfUrl(id)}>
+            <Button variant="success">{`${t('download')} PDF`}</Button>
           </a>
         </Row>
       </Card.Body>
