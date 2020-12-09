@@ -100,7 +100,7 @@ export default class Api {
 
   getInvoiceDetail = async (id) =>
     await this.apiRequest({
-      route: `/invoices/${id}/detail`,
+      route: `/invoices/${id}/xml`,
       jsonResponse: false,
     })
 
