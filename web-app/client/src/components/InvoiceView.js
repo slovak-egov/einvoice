@@ -8,7 +8,7 @@ import {useTranslation} from 'react-i18next'
 import {get} from 'lodash'
 import NotFound from './helpers/NotFound'
 import {getInvoiceDetail, getInvoiceMeta} from '../actions/invoices'
-import {invoiceDownloadUrl} from '../utils/constants'
+import {invoiceDownloadXmlUrl, invoiceDownloadPdfUrl} from '../utils/constants'
 
 const InvoiceView = ({invoice}) => {
   const {id} = useParams()
@@ -33,8 +33,11 @@ const InvoiceView = ({invoice}) => {
           />
         </div>
         <div className="row justify-content-center">
-          <a href={invoiceDownloadUrl(id)}>
-            <Button variant="success">{t('download')}</Button>
+          <a href={invoiceDownloadXmlUrl(id)}>
+            <Button variant="success">{`${t('download')} XML`}</Button>
+          </a>
+          <a href={invoiceDownloadPdfUrl(id)}>
+            <Button variant="success">{`${t('download')} PDF`}</Button>
           </a>
         </div>
       </Card.Body>

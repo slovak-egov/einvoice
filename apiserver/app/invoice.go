@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/slovak-egov/einvoice/apiserver/db"
+	"github.com/slovak-egov/einvoice/apiserver/pdf"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
@@ -39,7 +40,7 @@ func (a *App) getInvoice(res http.ResponseWriter, req *http.Request) error {
 	return nil
 }
 
-func (a *App) getInvoiceDetail(res http.ResponseWriter, req *http.Request) error {
+func (a *App) getInvoiceXml(res http.ResponseWriter, req *http.Request) error {
 	vars := mux.Vars(req)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
@@ -55,6 +56,30 @@ func (a *App) getInvoiceDetail(res http.ResponseWriter, req *http.Request) error
 	res.Header().Set("Content-Disposition", "attachment; filename=invoice-"+vars["id"]+".xml")
 	res.WriteHeader(http.StatusOK)
 	res.Write(invoice)
+	return nil
+}
+
+func (a *App) getInvoicePdf(res http.ResponseWriter, req *http.Request) error {
+	vars := mux.Vars(req)
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		return handlerutil.NewBadRequestError("ID should be an integer")
+	}
+
+	invoice, err := a.db.GetInvoice(req.Context(), id)
+	if err != nil {
+		return err
+	}
+
+	pdfFile, err := pdf.Generate(invoice)
+	if err != nil {
+		return err
+	}
+
+	res.Header().Set("Content-Type", "application/pdf")
+	res.Header().Set("Content-Disposition", "attachment; filename=invoice-"+vars["id"]+".pdf")
+	res.WriteHeader(http.StatusOK)
+	pdfFile.Write(res)
 	return nil
 }
 

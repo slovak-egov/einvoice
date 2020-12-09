@@ -66,8 +66,9 @@ func (a *App) initializeHandlers() {
 	authRouter.Use(a.authMiddleware)
 
 	registerHandler(a.router, "GET", "/invoices", a.getPublicInvoices)
-	registerHandler(a.router, "GET", "/invoices/{id:[0-9]+}",a.getInvoice)
-	registerHandler(a.router, "GET", "/invoices/{id:[0-9]+}/detail", a.getInvoiceDetail)
+	registerHandler(a.router, "GET", "/invoices/{id:[0-9]+}", a.getInvoice)
+	registerHandler(a.router, "GET", "/invoices/{id:[0-9]+}/xml", a.getInvoiceXml)
+	registerHandler(a.router, "GET", "/invoices/{id:[0-9]+}/pdf", a.getInvoicePdf)
 	registerHandler(authRouter, "POST", "/invoices", a.createInvoice)
 
 	registerHandler(a.router, "GET", "/login", a.handleLogin)
