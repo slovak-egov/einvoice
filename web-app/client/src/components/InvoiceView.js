@@ -29,7 +29,7 @@ const CheckboxField = ({label, value}) => (
 )
 
 const InvoiceView = ({
-  createdAt, customerICO, format, isPublic, issueDate, price, receiver, sender, supplierICO, test,
+  createdAt, customerIco, format, isPublic, issueDate, price, receiver, sender, supplierIco, test,
   xml,
 }) => {
   const {id} = useParams()
@@ -50,7 +50,7 @@ const InvoiceView = ({
               <TextField label={t('invoices:sender')} value={sender} />
             </Col>
             <Col>
-              <TextField label={t('invoices:supplierIco')} value={supplierICO} />
+              <TextField label={t('invoices:supplierIco')} value={supplierIco} />
             </Col>
           </Row>
           <Row>
@@ -58,7 +58,7 @@ const InvoiceView = ({
               <TextField label={t('invoices:receiver')} value={receiver} />
             </Col>
             <Col>
-              <TextField label={t('invoices:customerIco')} value={customerICO} />
+              <TextField label={t('invoices:customerIco')} value={customerIco} />
             </Col>
           </Row>
           <Row>

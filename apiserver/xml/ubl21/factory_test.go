@@ -27,8 +27,8 @@ func TestFactory(t *testing.T) {
 		Sender:      "Custom Cotter Pins",
 		Receiver:    "North American Veeblefetzer",
 		Format:      "ubl2.1",
-		SupplierICO: "11190993",
-		CustomerICO: "22222222",
+		SupplierIco: "11190993",
+		CustomerIco: "22222222",
 		Price:       100,
 		IssueDate:   timeutil.Date{time.Date(2011, 9, 22, 0, 0, 0, 0, time.UTC)},
 	}
