@@ -122,11 +122,13 @@ const getInvoices = ({getAdditionalFilters, path, fetchInvoices}) => (nextId) =>
   async (dispatch, getState, {api}) => {
     const filters = get(getState(), [...path, 'filters'])
     const formats = Object.keys(filters.formats).filter((k) => filters.formats[k])
+    const ico = filters.ico.send && filters.ico.value
 
     try {
       const {invoices, nextId: newNextId} = await fetchInvoices(api)({
         formats,
         nextId,
+        ico,
         test: filters.test,
         ...getAdditionalFilters(filters),
       })

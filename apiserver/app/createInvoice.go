@@ -74,7 +74,7 @@ func parseInvoice(req *http.Request) ([]byte, error) {
 
 // Check if creator has permission to submit invoice as supplier IČO
 func validateInvoice(ctx goContext.Context, db *db.Connector, inv *entity.Invoice) error {
-	return db.IsValidSubstitute(ctx, inv.CreatedBy, inv.SupplierICO)
+	return db.IsValidSubstitute(ctx, inv.CreatedBy, inv.SupplierIco)
 }
 
 func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
@@ -127,7 +127,7 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 	// Send mail notifications
 	if a.mail != nil {
 		// Can run in daemon, ideally separate worker scraping DB
-		receivers, err := a.db.GetUserEmails(req.Context(), []string{metadata.SupplierICO, metadata.CustomerICO})
+		receivers, err := a.db.GetUserEmails(req.Context(), []string{metadata.SupplierIco, metadata.CustomerIco})
 		if err != nil && len(receivers) > 0 {
 			a.mail.SendInvoice(req.Context(), receivers, invoice)
 		}

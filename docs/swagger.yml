@@ -227,11 +227,9 @@ paths:
             type: boolean
         - name: ico
           in: query
-          description: Request invoices related to particular IČO. If not provided, all will be considered
+          description: Request invoices related to given IČO. If not provided, all will be considered
           schema:
-            type: array
-            items:
-              type: string
+            type: string
         - name: format
           in: query
           description: Filter invoices by format
@@ -293,6 +291,11 @@ paths:
           description: If flag turned on, test invoices are fetched as well
           schema:
             type: boolean
+        - name: ico
+          in: query
+          description: Request invoices related to given IČO. If not provided, all will be considered
+          schema:
+            type: string
       responses:
         200:
           description: Successfull response
@@ -458,10 +461,10 @@ components:
         price:
           type: integer
           example: 100
-        supplierICO:
+        supplierIco:
           type: string
           example: '11190993'
-        customerICO:
+        customerIco:
           type: string
           example: '11190993'
         createdAt:

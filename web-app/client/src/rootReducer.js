@@ -21,6 +21,10 @@ const getInitialState = () => ({
         [invoiceFormats.D16B]: true,
       },
       test: false,
+      ico: {
+        value: '',
+        send: false,
+      },
     },
   },
   myInvoicesScreen: {
@@ -32,6 +36,10 @@ const getInitialState = () => ({
       test: false,
       received: true,
       supplied: true,
+      ico: {
+        value: '',
+        send: false,
+      },
     },
   },
   logging: true, // Always start with login attempt

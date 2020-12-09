@@ -19,6 +19,7 @@ type PublicInvoicesOptions struct {
 	NextId  int
 	Limit   int
 	Test    bool
+	Ico     string
 }
 
 func (o *PublicInvoicesOptions) Validate(maxLimit int) error {
@@ -44,6 +45,13 @@ func (o *PublicInvoicesOptions) buildQuery(query *orm.Query) *orm.Query {
 		query = query.Where("test = FALSE")
 	}
 
+	if o.Ico != "" {
+		// Keep only invoices, given ICO was involved
+		query = query.WhereGroup(func(q *orm.Query) (*orm.Query, error) {
+			return query.WhereOr("supplier_ico = ?", o.Ico).WhereOr("customer_ico = ?", o.Ico), nil
+		})
+	}
+
 	return query.Order("id DESC").Limit(o.Limit + 1)
 }
 
@@ -51,7 +59,6 @@ type UserInvoicesOptions struct {
 	UserId   int
 	Received bool
 	Supplied bool
-	Icos     []string
 	*PublicInvoicesOptions
 }
 
@@ -101,7 +108,6 @@ func (c *Connector) CreateInvoice(ctx goContext.Context, invoice *entity.Invoice
 }
 
 func (c *Connector) GetUserInvoices(ctx goContext.Context, options *UserInvoicesOptions) ([]entity.Invoice, error) {
-	requestedUris := icosToUris(options.Icos)
 	invoices := []entity.Invoice{}
 	accessibleUris := c.GetDb(ctx).Model(&entity.User{}).
 		Join("LEFT JOIN substitutes ON owner_id = id").
@@ -109,10 +115,6 @@ func (c *Connector) GetUserInvoices(ctx goContext.Context, options *UserInvoices
 		WhereGroup(func(q *orm.Query) (*orm.Query, error) {
 			return q.WhereOr("substitute_id = ?", options.UserId).WhereOr("id = ?", options.UserId), nil
 		})
-
-	if len(requestedUris) > 0 {
-		accessibleUris = accessibleUris.Where("slovensko_sk_uri IN (?)", pg.In(requestedUris))
-	}
 
 	query := c.GetDb(ctx).Model(&invoices).
 		With("accessible_uris", accessibleUris).

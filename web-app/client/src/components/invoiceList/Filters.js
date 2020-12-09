@@ -2,15 +2,15 @@ import './Filters.css'
 import React from 'react'
 import {compose} from 'redux'
 import {connect} from 'react-redux'
-import {Accordion, Button, Card, FormCheck} from 'react-bootstrap'
+import {Accordion, Button, Card, Form, FormCheck, InputGroup} from 'react-bootstrap'
 import {withTranslation} from 'react-i18next'
 import {get} from 'lodash'
 import {invoiceFormats} from '../../utils/constants'
-import {isInvoicesFilterValid} from '../../utils/validations'
-import {toggleField} from '../../actions/common'
+import {isInvoicesFilterValid, keepDigitsOnly} from '../../utils/validations'
+import {setData, toggleField} from '../../actions/common'
 
 const Filters = ({
-  CustomFilter, formats, getInvoices, searchDisabled, t, test, toggleFilter,
+  changeFilter, CustomFilter, formats, getInvoices, ico, searchDisabled, t, test, toggleFilter,
 }) => (
   <Accordion>
     <Card>
@@ -52,6 +52,22 @@ const Filters = ({
                 />
               </div>
             </div>
+            <div>
+              <strong className="filter-heading">IČO</strong>
+              <InputGroup style={{width: '140px'}}>
+                <Form.Control
+                  value={ico.value}
+                  onChange={changeFilter(['ico', 'value'])}
+                  readOnly={!ico.send}
+                />
+                <InputGroup.Append>
+                  <InputGroup.Checkbox
+                    checked={ico.send}
+                    onChange={toggleFilter(['ico', 'send'])}
+                  />
+                </InputGroup.Append>
+              </InputGroup>
+            </div>
             {CustomFilter && <CustomFilter />}
           </div>
           <div className="d-flex">
@@ -81,6 +97,9 @@ export default compose(
     },
     (dispatch, {path}) => ({
       toggleFilter: (fieldPath) => () => dispatch(toggleField([...path, ...fieldPath])),
+      changeFilter: (fieldPath) => (e) => dispatch(
+        setData([...path, ...fieldPath])(keepDigitsOnly(e.target.value))
+      ),
     })
   ),
   withTranslation('common')

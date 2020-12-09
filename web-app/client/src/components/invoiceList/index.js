@@ -27,8 +27,8 @@ const InvoiceList = ({
         <thead>
           <tr>
             <th>ID</th>
-            <th>{t('invoices:sender')}</th>
-            <th>{t('invoices:receiver')}</th>
+            <th>{t('invoices:supplierIco')}</th>
+            <th>{t('invoices:customerIco')}</th>
             <th>{t('invoices:issueDate')}</th>
             <th>{t('invoices:price')}</th>
             <th>{t('format')}</th>
@@ -39,8 +39,8 @@ const InvoiceList = ({
           {invoiceIds.map((invoiceId, i) => (
             <tr key={i} className={getRowClassNames(invoices[invoiceId])}>
               <td>{invoiceId}</td>
-              <td>{invoices[invoiceId].sender}</td>
-              <td>{invoices[invoiceId].receiver}</td>
+              <td>{invoices[invoiceId].supplierIco}</td>
+              <td>{invoices[invoiceId].customerIco}</td>
               <td>{invoices[invoiceId].issueDate}</td>
               <td>{invoices[invoiceId].price}</td>
               <td>{invoices[invoiceId].format}</td>

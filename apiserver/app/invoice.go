@@ -44,6 +44,7 @@ func NewPublicInvoicesOptions(params url.Values, maxLimit int) (*db.PublicInvoic
 		nextId,
 		limit,
 		test,
+		params.Get("ico"),
 	}, nil
 }
 
@@ -110,7 +111,6 @@ func NewUserInvoicesOptions(userId int, params url.Values, maxLimit int) (*db.Us
 		userId,
 		params.Get("received") == "true",
 		params.Get("supplied") == "true",
-		params["ico"],
 		publicInvoicesOptions,
 	}, nil
 }

@@ -24,8 +24,9 @@ func TestGetInvoices(t *testing.T) {
 		responseNextId *int
 	}{
 		{"", 2, nil},
-		{"?test=true", 3, nil},
+		{"?test=true&ico=11111111", 3, nil},
 		{"?format=d16b", 0, nil},
+		{"?ico=11111112", 0, nil},
 		{fmt.Sprintf("?nextId=%d&limit=1", thirdInvoiceId), 1, &firstInvoiceId},
 		{fmt.Sprintf("?nextId=%d", firstInvoiceId), 1, nil},
 	}

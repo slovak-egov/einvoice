@@ -11,6 +11,7 @@ import {
   addUserSubstitute, getUserSubstitutes, removeUserSubstitute, setNewSubstituteId,
 } from '../actions/substitutes'
 import {getLoggedUser} from '../state/users'
+import {keepDigitsOnly} from '../utils/validations'
 
 const EditableField = ({actualValue, label, save, tooltipText, ...props}) => {
   const {t} = useTranslation('common')
@@ -150,10 +151,8 @@ export default Auth(
           setNewSubstituteId('')
         }
       },
-      changeNewSubstituteId: ({setNewSubstituteId}) => (e) => {
-        // Allow only digits
-        setNewSubstituteId(e.target.value.replace(/[^0-9]/g, ''))
-      },
+      changeNewSubstituteId: ({setNewSubstituteId}) => (e) =>
+        setNewSubstituteId(keepDigitsOnly(e.target.value)),
     }),
     branch(
       ({substituteIds}) => substituteIds == null,
