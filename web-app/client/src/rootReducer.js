@@ -12,12 +12,18 @@ const getInitialState = () => ({
   loadingRequests: 0,
   createInvoiceScreen: {
     format: invoiceFormats.UBL,
+    test: false,
   },
   publicInvoicesScreen: {
     filters: {
       formats: {
         [invoiceFormats.UBL]: true,
         [invoiceFormats.D16B]: true,
+      },
+      test: false,
+      ico: {
+        value: '',
+        send: false,
       },
     },
   },
@@ -27,12 +33,17 @@ const getInitialState = () => ({
         [invoiceFormats.UBL]: true,
         [invoiceFormats.D16B]: true,
       },
+      test: false,
       received: true,
       supplied: true,
+      ico: {
+        value: '',
+        send: false,
+      },
     },
   },
   logging: true, // Always start with login attempt
-  loggedUserId: null
+  loggedUserId: null,
 })
 
 const rootReducer = (state = getInitialState(), action) => {

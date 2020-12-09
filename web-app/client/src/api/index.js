@@ -24,7 +24,7 @@ export default class Api {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
-      data: [id]
+      data: [id],
     })
 
   addUserSubstitute = async (id) =>
@@ -34,7 +34,7 @@ export default class Api {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
-      data: [id]
+      data: [id],
     })
 
   getUserInfo = async () =>
@@ -72,9 +72,17 @@ export default class Api {
       jsonResponse: false,
     })
 
-  getMyInvoices = async ({formats, supplied, received}) => {
-    const userId = localStorage.getItem('userId')
+  getInvoicesQueryParams = ({formats, ico, nextId, test}) => {
     const queryParams = formats.map((f) => ['format', f])
+    queryParams.push(['test', test])
+    if (nextId) queryParams.push(['nextId', nextId])
+    if (ico) queryParams.push(['ico', ico])
+    return queryParams
+  }
+
+  getMyInvoices = async ({supplied, received, ...otherParams}) => {
+    const userId = localStorage.getItem('userId')
+    const queryParams = this.getInvoicesQueryParams(otherParams)
     queryParams.push(['received', received])
     queryParams.push(['supplied', supplied])
     return await this.apiRequest({
@@ -85,12 +93,10 @@ export default class Api {
     })
   }
 
-  getPublicInvoices = async ({formats}) => {
-    const queryParams = formats.map((f) => ['format', f])
-    return await this.apiRequest({
-      route: `/invoices?${new URLSearchParams(queryParams)}`,
+  getPublicInvoices = async (params) =>
+    await this.apiRequest({
+      route: `/invoices?${new URLSearchParams(this.getInvoicesQueryParams(params))}`,
     })
-  }
 
   getInvoiceDetail = async (id) =>
     await this.apiRequest({

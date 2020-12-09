@@ -19,6 +19,7 @@ var devConfig = Configuration{
 	LogLevel:           logrus.DebugLevel,
 	ServerReadTimeout:  15 * time.Second,
 	ServerWriteTimeout: 15 * time.Second,
+	GracefulTimeout:    15 * time.Second,
 	Cache: CacheConfiguration{
 		Host:                   "localhost",
 		Port:                   6379,
@@ -27,6 +28,7 @@ var devConfig = Configuration{
 	SlovenskoSk: SlovenskoSkConfiguration{
 		Url: "https://upvs.dev.filipsladek.com",
 	},
+	InvoicesLimit: 5,
 }
 
 var prodConfig = Configuration{
@@ -43,6 +45,7 @@ var prodConfig = Configuration{
 	},
 	ServerReadTimeout:  15 * time.Second,
 	ServerWriteTimeout: 15 * time.Second,
+	GracefulTimeout:    15 * time.Second,
 	Cache: CacheConfiguration{
 		Port:                   6379,
 		SessionTokenExpiration: 1 * time.Hour,
@@ -50,6 +53,7 @@ var prodConfig = Configuration{
 	SlovenskoSk: SlovenskoSkConfiguration{
 		Url: "https://upvs.dev.filipsladek.com",
 	},
+	InvoicesLimit: 20,
 }
 
 var testConfig = Configuration{
@@ -61,12 +65,14 @@ var testConfig = Configuration{
 	},
 	D16bXsdPath:        "xml/d16b/xsd",
 	Ubl21XsdPath:       "xml/ubl21/xsd",
-	LogLevel:           logrus.InfoLevel,
+	LogLevel:           logrus.WarnLevel,
 	ServerReadTimeout:  15 * time.Second,
 	ServerWriteTimeout: 15 * time.Second,
+	GracefulTimeout:    15 * time.Second,
 	Cache: CacheConfiguration{
 		Host:                   "localhost",
 		Port:                   6379,
 		SessionTokenExpiration: 1 * time.Hour,
 	},
+	InvoicesLimit: 5,
 }

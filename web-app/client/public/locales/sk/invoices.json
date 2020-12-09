@@ -3,5 +3,9 @@
   "sender": "Odosielateľ",
   "receiver": "Prijímateľ",
   "issueDate": "Dátum vydania",
-  "price": "Cena"
+  "price": "Cena",
+  "createdAt": "Vytvorené o",
+  "supplierIco": "IČO dodávateľa",
+  "customerIco": "IČO zákazníka",
+  "public": "Verejne prístupné"
 }

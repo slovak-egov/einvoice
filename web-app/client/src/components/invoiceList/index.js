@@ -8,8 +8,13 @@ import {withTranslation} from 'react-i18next'
 import Filters from './Filters'
 import {get} from 'lodash'
 
-const InvoiceList = ({areCustomFilterFieldsValid, CustomFilter, getInvoices, invoices, invoiceIds, path, t, title}) => (
-  <Card style={{margin: '5px'}}>
+const getRowClassNames = (invoice) => invoice.test ? 'text-secondary' : ''
+
+const InvoiceList = ({
+  areCustomFilterFieldsValid, CustomFilter, getInvoices, invoices, invoiceIds, nextId, path, t,
+  title,
+}) => (
+  <Card className="m-1">
     <Card.Header className="bg-primary text-white text-center" as="h3">{title}</Card.Header>
     <Card.Body>
       <Filters
@@ -22,8 +27,8 @@ const InvoiceList = ({areCustomFilterFieldsValid, CustomFilter, getInvoices, inv
         <thead>
           <tr>
             <th>ID</th>
-            <th>{t('invoices:sender')}</th>
-            <th>{t('invoices:receiver')}</th>
+            <th>{t('invoices:supplierIco')}</th>
+            <th>{t('invoices:customerIco')}</th>
             <th>{t('invoices:issueDate')}</th>
             <th>{t('invoices:price')}</th>
             <th>{t('format')}</th>
@@ -32,10 +37,10 @@ const InvoiceList = ({areCustomFilterFieldsValid, CustomFilter, getInvoices, inv
         </thead>
         <tbody>
           {invoiceIds.map((invoiceId, i) => (
-            <tr key={i}>
+            <tr key={i} className={getRowClassNames(invoices[invoiceId])}>
               <td>{invoiceId}</td>
-              <td>{invoices[invoiceId].sender}</td>
-              <td>{invoices[invoiceId].receiver}</td>
+              <td>{invoices[invoiceId].supplierIco}</td>
+              <td>{invoices[invoiceId].customerIco}</td>
               <td>{invoices[invoiceId].issueDate}</td>
               <td>{invoices[invoiceId].price}</td>
               <td>{invoices[invoiceId].format}</td>
@@ -46,6 +51,15 @@ const InvoiceList = ({areCustomFilterFieldsValid, CustomFilter, getInvoices, inv
           ))}
         </tbody>
       </Table>
+      {nextId && <div
+        className="text-primary d-flex border border-primary rounded-lg"
+        style={{cursor: 'pointer'}}
+        onClick={() => getInvoices(nextId)}
+      >
+        <div className="m-auto">
+          {t('loadMore')}
+        </div>
+      </div>}
     </Card.Body>
   </Card>
 )
@@ -55,6 +69,7 @@ export default compose(
     (state, {path}) => ({
       invoices: state.invoices,
       invoiceIds: get(state, [...path, 'ids']),
+      nextId: get(state, [...path, 'nextId']),
     }),
   ),
   lifecycle({

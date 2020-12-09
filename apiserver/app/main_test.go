@@ -12,7 +12,7 @@ func TestMain(m *testing.M) {
 
 	result := m.Run()
 
-	a.Close()
+	a.CloseResources()
 
 	os.Exit(result)
 }

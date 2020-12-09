@@ -1,15 +1,26 @@
 import swal from 'sweetalert'
 import {get} from 'lodash'
-import {setData, loadingWrapper} from './common'
-
-const setPublicInvoiceIds = setData(['publicInvoicesScreen', 'ids'])
-const setMyInvoiceIds = setData(['myInvoicesScreen', 'ids'])
+import {loadingWrapper, setData} from './common'
 
 export const setCreateInvoiceFormat = setData(['createInvoiceScreen', 'format'])
 export const setCreateInvoiceData = setData(['createInvoiceScreen', 'invoice'])
+export const setCreateInvoiceTest = setData(['createInvoiceScreen', 'test'])
+
+const setInvoiceIds = (path, data) => ({
+  type: 'SET INVOICE IDS',
+  path,
+  payload: data,
+  reducer: (state, {setOrUpdate, ids}) => setOrUpdate ? ids : [...state, ...ids],
+})
+
+const savePagedIds = ({path, ids, nextId, setOrUpdate}) =>
+  (dispatch) => {
+    dispatch(setData([...path, 'nextId'])(nextId))
+    dispatch(setInvoiceIds([...path, 'ids'], {ids, setOrUpdate}))
+  }
 
 const setInvoice = (id, data) => ({
-  type: 'SET INVOICES',
+  type: 'SET INVOICE',
   path: ['invoices', id],
   payload: data,
   reducer: (state, data) => ({
@@ -42,7 +53,7 @@ export const getInvoiceDetail = (id) => loadingWrapper(
   async (dispatch, getState, {api}) => {
     try {
       const invoiceDetail = await api.getInvoiceDetail(id)
-      dispatch(setInvoice(id, {data: invoiceDetail}))
+      dispatch(setInvoice(id, {xml: invoiceDetail}))
     } catch (error) {
       if (error.statusCode === 404) {
         dispatch(setInvoiceNotFound(id))
@@ -107,13 +118,21 @@ export const createInvoice = (data) => loadingWrapper(
   }
 )
 
-const getInvoices = ({getAdditionalFilters, path, setIds, fetchInvoices}) => () => loadingWrapper(
+const getInvoices = ({getAdditionalFilters, path, fetchInvoices}) => (nextId) => loadingWrapper(
   async (dispatch, getState, {api}) => {
     const filters = get(getState(), [...path, 'filters'])
     const formats = Object.keys(filters.formats).filter((k) => filters.formats[k])
+    const ico = filters.ico.send && filters.ico.value
 
     try {
-      const invoices = await fetchInvoices(api)({formats, ...getAdditionalFilters(filters)})
+      const {invoices, nextId: newNextId} = await fetchInvoices(api)({
+        formats,
+        nextId,
+        ico,
+        test: filters.test,
+        ...getAdditionalFilters(filters),
+      })
+
       dispatch(setInvoices(
         invoices.reduce((acc, val) => ({
           ...acc,
@@ -121,12 +140,15 @@ const getInvoices = ({getAdditionalFilters, path, setIds, fetchInvoices}) => () 
         }), {})
       ))
 
-      dispatch(setIds(
-        invoices.reduce((acc, val) => ([
+      dispatch(savePagedIds({
+        path,
+        ids: invoices.reduce((acc, val) => ([
           ...acc,
           val.id,
-        ]), []))
-      )
+        ]), []),
+        nextId: newNextId,
+        setOrUpdate: nextId == null,
+      }))
     } catch (error) {
       await swal({
         title: 'Invoices could not be fetched',
@@ -139,17 +161,15 @@ const getInvoices = ({getAdditionalFilters, path, setIds, fetchInvoices}) => () 
 
 export const getMyInvoices = getInvoices({
   path: ['myInvoicesScreen'],
-  setIds: setMyInvoiceIds,
   fetchInvoices: (api) => api.getMyInvoices,
   getAdditionalFilters: (filters) => ({
     supplied: filters.supplied,
     received: filters.received,
-  })
+  }),
 })
 
 export const getPublicInvoices = getInvoices({
   path: ['publicInvoicesScreen'],
-  setIds: setPublicInvoiceIds,
   fetchInvoices: (api) => api.getPublicInvoices,
   getAdditionalFilters: () => null,
 })

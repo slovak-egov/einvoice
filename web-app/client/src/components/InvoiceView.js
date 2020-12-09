@@ -3,19 +3,40 @@ import {compose} from 'redux'
 import {connect} from 'react-redux'
 import {useHistory, useParams} from 'react-router-dom'
 import {branch, lifecycle, renderComponent, renderNothing} from 'recompose'
-import {Button, Card} from 'react-bootstrap'
+import {Button, Card, Col, Form, Row} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import {get} from 'lodash'
 import NotFound from './helpers/NotFound'
+import BoolIcon from './helpers/BoolIcon'
 import {getInvoiceDetail, getInvoiceMeta} from '../actions/invoices'
 import {invoiceDownloadXmlUrl, invoiceDownloadPdfUrl} from '../utils/constants'
 
-const InvoiceView = ({invoice}) => {
+const TextField = ({label, value}) => (
+  <Form.Group>
+    <Form.Label>{label}</Form.Label>
+    <Form.Control
+      value={value}
+      readOnly
+    />
+  </Form.Group>
+)
+
+const CheckboxField = ({label, value}) => (
+  <Form.Group>
+    <Form.Label>{label}</Form.Label>
+    <BoolIcon value={value} />
+  </Form.Group>
+)
+
+const InvoiceView = ({
+  createdAt, customerIco, format, isPublic, issueDate, price, receiver, sender, supplierIco, test,
+  xml,
+}) => {
   const {id} = useParams()
-  const {t} = useTranslation('common')
+  const {t} = useTranslation(['common', 'invoices'])
   const history = useHistory()
   return (
-    <Card style={{margin: '5px'}}>
+    <Card className="m-1">
       <Card.Header className="bg-primary text-white text-center" as="h3" style={{display: 'grid'}}>
         <div style={{gridRowStart: 1, gridColumnStart: 1, justifySelf: 'center'}}>{t('invoice')} {id}</div>
         <div style={{gridRowStart: 1, gridColumnStart: 1, justifySelf: 'right'}}>
@@ -23,23 +44,66 @@ const InvoiceView = ({invoice}) => {
         </div>
       </Card.Header>
       <Card.Body>
-        <div className="row justify-content-center">
-          <textarea
-            style={{borderStyle: 'solid'}}
-            rows="20"
-            cols="100"
-            readOnly
-            value={invoice}
-          />
+        <div>
+          <Row>
+            <Col>
+              <TextField label={t('invoices:sender')} value={sender} />
+            </Col>
+            <Col>
+              <TextField label={t('invoices:supplierIco')} value={supplierIco} />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <TextField label={t('invoices:receiver')} value={receiver} />
+            </Col>
+            <Col>
+              <TextField label={t('invoices:customerIco')} value={customerIco} />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <TextField label={t('invoices:createdAt')} value={createdAt} />
+            </Col>
+            <Col>
+              <TextField label={t('invoices:issueDate')} value={issueDate} />
+            </Col>
+            <Col>
+              <TextField label={t('format')} value={format} />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <TextField label={t('invoices:price')} value={price} />
+            </Col>
+            <Col>
+              <CheckboxField label="Test" value={test} />
+            </Col>
+            <Col>
+              <CheckboxField label={t('invoices:public')} value={isPublic} />
+            </Col>
+          </Row>
+          <Row className="justify-content-center">
+            <Form.Group>
+              <Form.Label>XML</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows="20"
+                cols="100"
+                value={xml}
+                readOnly
+              />
+            </Form.Group>
+          </Row>
         </div>
-        <div className="row justify-content-center">
+        <Row className="justify-content-center">
           <a href={invoiceDownloadXmlUrl(id)}>
             <Button variant="success">{`${t('download')} XML`}</Button>
           </a>
           <a href={invoiceDownloadPdfUrl(id)}>
             <Button variant="success">{`${t('download')} PDF`}</Button>
           </a>
-        </div>
+        </Row>
       </Card.Body>
     </Card>
   )
@@ -48,7 +112,7 @@ const InvoiceView = ({invoice}) => {
 export default compose(
   connect(
     (state, {match: {params: {id}}}) => ({
-      invoice: get(state, ['invoices', id, 'data']),
+      ...get(state, ['invoices', id]),
       invoiceDoesNotExist: get(state, ['invoices', id, 'notFound']),
     }),
     {getInvoiceDetail, getInvoiceMeta}
@@ -60,7 +124,9 @@ export default compose(
     },
   }),
   branch(
-    ({invoice}) => invoice == null,
+    // Metadata and XML are fetched from different endpoints, so we need to check
+    // if both of them are already fetched
+    ({id, xml}) => id == null || xml == null,
     renderNothing,
   ),
   branch(

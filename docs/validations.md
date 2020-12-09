@@ -28,3 +28,4 @@ Invoice in xml file must follow one of UBL2.1 or D16B XSD schema.
 | price.value.parsingError | Price must be number |
 | issueDate.undefined | Issue date must be defined |
 | issueDate.parsingError | Issue date must be in format 2020-12-24 |
+| testParameter.invalid | If test is defined it should be 'true' or 'false' |

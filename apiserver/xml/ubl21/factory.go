@@ -47,8 +47,8 @@ func Create(value []byte) (*entity.Invoice, error) {
 		Sender:      supplier.name,
 		Receiver:    customer.name,
 		Format:      entity.UblFormat,
-		CustomerICO: customer.ico,
-		SupplierICO: supplier.ico,
+		CustomerIco: customer.ico,
+		SupplierIco: supplier.ico,
 		Price:       price,
 		IssueDate:   *issueDate,
 	}, nil
@@ -70,7 +70,7 @@ func parseParty(partyName string, party *Party) (res partyInfo, errs []string) {
 		res.name = name
 	}
 
-	if ico, icoErr := getICO(party); icoErr != "" {
+	if ico, icoErr := getIco(party); icoErr != "" {
 		errs = append(errs, icoErr)
 	} else {
 		res.ico = ico
@@ -114,7 +114,7 @@ func getPartyName(party *Party) string {
 	return builder.String()
 }
 
-func getICO(party *Party) (ico string, err string) {
+func getIco(party *Party) (ico string, err string) {
 	for _, identification := range party.PartyIdentification {
 		if identification.ID.SchemeID == nil || *identification.ID.SchemeID != "0158" {
 			continue

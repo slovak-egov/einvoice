@@ -48,8 +48,8 @@ func Create(value []byte) (*entity.Invoice, error) {
 		Receiver:    customer.name,
 		Format:      entity.D16bFormat,
 		Price:       price,
-		CustomerICO: customer.ico,
-		SupplierICO: supplier.ico,
+		CustomerIco: customer.ico,
+		SupplierIco: supplier.ico,
 		IssueDate:   *issueDate,
 	}, nil
 }
@@ -86,7 +86,7 @@ func parseParty(partyName string, party *TradePartyType) (res partyInfo, errs []
 		}
 	}
 
-	ico, icoErr := getICO(party)
+	ico, icoErr := getIco(party)
 	if icoErr != "" {
 		errs = append(errs, icoErr)
 	} else {
@@ -122,7 +122,7 @@ func getPrice(inv *CrossIndustryInvoice) (sum float64, err string) {
 	return
 }
 
-func getICO(party *TradePartyType) (ico string, err string) {
+func getIco(party *TradePartyType) (ico string, err string) {
 	for _, id := range party.ID {
 
 		if id.SchemeID == nil || *id.SchemeID != "0158" {

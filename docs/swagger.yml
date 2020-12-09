@@ -5,7 +5,7 @@ info:
   title: E-invoice API
 servers:
   - description: Dev
-    url: https://einvoice-authproxy.mypaas.vnet.sk
+    url: https://apiserver.dev.filipsladek.com
 paths:
   /login:
     get:
@@ -13,7 +13,7 @@ paths:
         - Auth
       summary: Authenticate user with slovensko.sk token
       security:
-        - bearerAuth: []
+        - slovenskoSkOboTokenAuth: []
       responses:
         200:
           description: User is sucessfully logged in.
@@ -21,18 +21,32 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LoginResponse'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /logout:
     get:
       tags:
         - Auth
       summary: Logout user
       security:
-        - bearerAuth: []
+        - sessionAuth: []
       responses:
         200:
           description: User is successfully logged out.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogoutResponse'
         401:
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
   /users/{user_id}:
     get:
@@ -47,7 +61,7 @@ paths:
           schema:
             type: integer
       security:
-        - bearerAuth: []
+        - sessionAuth: []
         - apiKeyAuth: []
       responses:
         200:
@@ -58,6 +72,10 @@ paths:
                 $ref: '#/components/schemas/UserInfo'
         401:
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     patch:
       tags:
         - Users
@@ -70,7 +88,7 @@ paths:
           schema:
             type: integer
       security:
-        - bearerAuth: []
+        - sessionAuth: []
         - apiKeyAuth: []
       requestBody:
         content:
@@ -84,15 +102,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserInfo'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         401:
           description: Unauthorized
-        400:
-          description: Empty body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /users/{user_id}/substitutes:
     post:
       tags:
         - Users
       summary: Add substitute users
+      description: Add rights for particular users to create invoices on your behalf
       parameters:
         - name: user_id
           in: path
@@ -101,7 +128,7 @@ paths:
           schema:
             type: integer
       security:
-        - bearerAuth: []
+        - sessionAuth: []
         - apiKeyAuth: []
       requestBody:
         content:
@@ -125,6 +152,7 @@ paths:
       tags:
         - Users
       summary: Remove substitute users
+      description: Revoke rights for particular users to create invoices on your behalf
       parameters:
         - name: user_id
           in: path
@@ -133,7 +161,7 @@ paths:
           schema:
             type: integer
       security:
-        - bearerAuth: []
+        - sessionAuth: []
         - apiKeyAuth: []
       requestBody:
         content:
@@ -157,6 +185,7 @@ paths:
       tags:
         - Users
       summary: Get substitute users
+      description: Get list of users that can create invoices on your behalf
       parameters:
         - name: user_id
           in: path
@@ -165,7 +194,7 @@ paths:
           schema:
             type: integer
       security:
-        - bearerAuth: []
+        - sessionAuth: []
         - apiKeyAuth: []
       responses:
         200:
@@ -198,11 +227,9 @@ paths:
             type: boolean
         - name: ico
           in: query
-          description: Request invoices related to particular IČO. If not provided, all will be considered
+          description: Request invoices related to given IČO. If not provided, all will be considered
           schema:
-            type: array
-            items:
-              type: string
+            type: string
         - name: format
           in: query
           description: Filter invoices by format
@@ -210,8 +237,23 @@ paths:
             type: array
             items:
               type: string
+        - name: nextId
+          in: query
+          description: Id of next invoice to fetch
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          description: Limit number of invoices returned
+          schema:
+            type: integer
+        - name: test
+          in: query
+          description: If flag turned on, test invoices are fetched as well
+          schema:
+            type: boolean
       security:
-        - bearerAuth: []
+        - sessionAuth: []
         - apiKeyAuth: []
       responses:
         200:
@@ -225,7 +267,7 @@ paths:
     get:
       tags:
         - Invoices
-      summary: Get list of metadata of all public invoices
+      summary: Get list of metadata of public invoices
       parameters:
         - name: format
           in: query
@@ -234,6 +276,26 @@ paths:
             type: array
             items:
               type: string
+        - name: nextId
+          in: query
+          description: Id of next invoice to fetch
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          description: Limit number of invoices returned
+          schema:
+            type: integer
+        - name: test
+          in: query
+          description: If flag turned on, test invoices are fetched as well
+          schema:
+            type: boolean
+        - name: ico
+          in: query
+          description: Request invoices related to given IČO. If not provided, all will be considered
+          schema:
+            type: string
       responses:
         200:
           description: Successfull response
@@ -243,7 +305,7 @@ paths:
                 $ref: '#/components/schemas/Invoices'
     post:
       security:
-        - bearerAuth: []
+        - sessionAuth: []
         - apiKeyAuth: []
       tags:
         - Invoices
@@ -318,10 +380,34 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   securitySchemes:
-    bearerAuth:
+    slovenskoSkOboTokenAuth:
+      description: OBO token received from slovensko.sk
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    sessionAuth:
+      description: Token received in response of login request
       type: http
       scheme: bearer
     apiKeyAuth:
+      description: |
+        JWT token satisfying:
+        - encoded by RS256 algorithm
+        - signed by your private key (paired with public key you set in your account)
+        - `sub` claim set to your user Id as a string
+
+        Example of `header` segment:
+
+            {
+              "alg": "RS256",
+              "type": "JWT"
+            }
+
+        Example of `payload` segment:
+
+            {
+              "sub": "1"
+            }
       type: apiKey
       in: header
       name: X-API-Key
@@ -342,14 +428,19 @@ components:
           type: string
         serviceAccountPublicKey:
           type: string
-        taxId:
+        createdAt:
           type: string
-        vatNumber:
-          type: string
+          format: date-time
     Invoices:
-      type: array
-      items:
-        $ref: '#/components/schemas/Invoice'
+      type: object
+      properties:
+        nextId:
+          type: integer
+          nullable: true
+        invoices:
+          type: array
+          items:
+            $ref: '#/components/schemas/Invoice'
     Invoice:
       type: object
       properties:
@@ -370,6 +461,26 @@ components:
         price:
           type: integer
           example: 100
+        supplierIco:
+          type: string
+          example: '11190993'
+        customerIco:
+          type: string
+          example: '11190993'
+        createdAt:
+          type: string
+          format: date-time
+        issueDate:
+          type: string
+          format: date
+        createdBy:
+          type: integer
+        isPublic:
+          type: boolean
+          description: True if invoice is visible to everyone
+        test:
+          type: boolean
+          description: True if invoice is just for test purposes
     CreateInvoiceRequest:
       type: object
       properties:
@@ -378,8 +489,15 @@ components:
           enum:
             - ubl2.1
             - d16b
-        data:
+        test:
+          type: boolean
+          description: If true, service will create test-only invoice
+        invoice:
           type: string
+          format: binary
+      required:
+        - format
+        - invoice
     PatchUserRequest:
       type: object
       properties:
@@ -389,29 +507,24 @@ components:
         serviceAccountPublicKey:
           type: string
     LoginResponse:
-      type: object
-      properties:
-        token:
-          type: string
-          example: 80f2baac-43c2-497b-b78e-e6680f5b809b
-        id:
-          type: integer
-          example: 8498081
-        slovenskoSkUri:
-          type: string
-          example: rc://sk/8314451298_tisici_janko
-        email:
-          type: string
-          example: test@test.example.com
-        name:
-          type: string
-        serviceAccountPublicKey:
-          type: string
+      allOf:
+        - $ref: '#/components/schemas/UserInfo'
+        - type: object
+          properties:
+            token:
+              type: string
+              format: uuid
     SubstituteIds:
       type: array
       items:
         type: integer
         description: Substitute ID
+    LogoutResponse:
+      type: object
+      properties:
+        logout:
+          type: string
+          example: successful
     ErrorResponse:
       type: object
       properties:

@@ -51,7 +51,7 @@ export const removeUserSubstitute = (id) => loadingWrapper(
 export const addUserSubstitute = (id) => loadingWrapper(
   async (dispatch, getState, {api}) => {
     try {
-      const addedIds = await api.addUserSubstitute(parseInt(id))
+      const addedIds = await api.addUserSubstitute(parseInt(id, 10))
       if (addedIds.length > 0) {
         dispatch(addSubstitute(localStorage.getItem('userId'), addedIds[0]))
         return true
@@ -61,6 +61,7 @@ export const addUserSubstitute = (id) => loadingWrapper(
           text: 'This user is substitute already',
           icon: 'error',
         })
+        return false
       }
     } catch (error) {
       await swal({
@@ -68,6 +69,7 @@ export const addUserSubstitute = (id) => loadingWrapper(
         text: error.message,
         icon: 'error',
       })
+      return false
     }
   }
 )

@@ -3,6 +3,7 @@ package db
 import (
 	goContext "context"
 	"errors"
+	"fmt"
 
 	"github.com/go-pg/pg/v10"
 	"github.com/go-pg/pg/v10/orm"
@@ -13,32 +14,69 @@ import (
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
-type UserInvoicesOptions struct {
-	Received bool
-	Supplied bool
-	Icos     []string
-	Formats  []string
+type PublicInvoicesOptions struct {
+	Formats []string
+	NextId  int
+	Limit   int
+	Test    bool
+	Ico     string
 }
 
-func (r *UserInvoicesOptions) Validate() error {
-	if !r.Received && !r.Supplied {
-		return errors.New("Either received or supplied should be requested")
+func (o *PublicInvoicesOptions) Validate(maxLimit int) error {
+	if o.Limit <= 0 || o.Limit > maxLimit {
+		return fmt.Errorf("limit should be positive integer less than or equal to %d", maxLimit)
 	}
+
 	return nil
 }
 
-func (c *Connector) GetInvoices(ctx goContext.Context, formats []string) ([]entity.Invoice, error) {
-	invoices := []entity.Invoice{}
-	query := c.GetDb(ctx).Model(&invoices)
-
-	if len(formats) > 0 {
-		query = query.Where("format IN (?)", pg.In(formats))
+func (o *PublicInvoicesOptions) buildQuery(query *orm.Query) *orm.Query {
+	if len(o.Formats) > 0 {
+		query = query.Where("format IN (?)", pg.In(o.Formats))
 	}
 
-	if err := query.Select(); err != nil {
+	// If next id is not provided, do not search by id
+	if o.NextId != 0 {
+		query = query.Where("id <= ?", o.NextId)
+	}
+
+	// Filter out test invoices if not explicitly requested
+	if !o.Test {
+		query = query.Where("test = FALSE")
+	}
+
+	if o.Ico != "" {
+		// Keep only invoices, given ICO was involved
+		query = query.WhereGroup(func(q *orm.Query) (*orm.Query, error) {
+			return query.WhereOr("supplier_ico = ?", o.Ico).WhereOr("customer_ico = ?", o.Ico), nil
+		})
+	}
+
+	return query.Order("id DESC").Limit(o.Limit + 1)
+}
+
+type UserInvoicesOptions struct {
+	UserId   int
+	Received bool
+	Supplied bool
+	*PublicInvoicesOptions
+}
+
+func (r *UserInvoicesOptions) Validate(maxLimit int) error {
+	if !r.Received && !r.Supplied {
+		return errors.New("Either received or supplied should be requested")
+	}
+	return r.PublicInvoicesOptions.Validate(maxLimit)
+}
+
+func (c *Connector) GetPublicInvoices(ctx goContext.Context, options *PublicInvoicesOptions) ([]entity.Invoice, error) {
+	invoices := []entity.Invoice{}
+	query := c.GetDb(ctx).Model(&invoices).Where("is_public = TRUE")
+
+	if err := options.buildQuery(query).Select(); err != nil {
 		context.GetLogger(ctx).WithFields(log.Fields{
 			"error":   err.Error(),
-			"formats": formats,
+			"formats": options.Formats,
 		}).Error("db.getInvoices.failed")
 		return nil, err
 	}
@@ -69,23 +107,14 @@ func (c *Connector) CreateInvoice(ctx goContext.Context, invoice *entity.Invoice
 	return err
 }
 
-func (c *Connector) GetUserInvoices(
-	ctx goContext.Context,
-	userId int,
-	options *UserInvoicesOptions,
-) ([]entity.Invoice, error) {
-	requestedUris := icosToUris(options.Icos)
+func (c *Connector) GetUserInvoices(ctx goContext.Context, options *UserInvoicesOptions) ([]entity.Invoice, error) {
 	invoices := []entity.Invoice{}
 	accessibleUris := c.GetDb(ctx).Model(&entity.User{}).
 		Join("LEFT JOIN substitutes ON owner_id = id").
 		ColumnExpr("slovensko_sk_uri").
 		WhereGroup(func(q *orm.Query) (*orm.Query, error) {
-			return q.WhereOr("substitute_id = ?", userId).WhereOr("id = ?", userId), nil
+			return q.WhereOr("substitute_id = ?", options.UserId).WhereOr("id = ?", options.UserId), nil
 		})
-
-	if len(requestedUris) > 0 {
-		accessibleUris = accessibleUris.Where("slovensko_sk_uri IN (?)", pg.In(requestedUris))
-	}
 
 	query := c.GetDb(ctx).Model(&invoices).
 		With("accessible_uris", accessibleUris).
@@ -100,13 +129,7 @@ func (c *Connector) GetUserInvoices(
 			return subquery, nil
 		})
 
-	if len(options.Formats) > 0 {
-		query = query.Where("format IN (?)", pg.In(options.Formats))
-	}
-
-	err := query.Select()
-
-	if err != nil {
+	if err := options.PublicInvoicesOptions.buildQuery(query).Select(); err != nil {
 		context.GetLogger(ctx).WithField("error", err.Error()).Error("db.getUserInvoices.failed")
 		return nil, err
 	}

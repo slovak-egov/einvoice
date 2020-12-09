@@ -91,14 +91,19 @@ func (a *App) Run() {
 
 	log.WithField("address", srv.Addr).Info("app.server.started")
 
-	log.WithField("error", srv.ListenAndServe()).Fatal("app.server.failed")
+	go func() {
+		if err := srv.ListenAndServe(); err != http.ErrServerClosed {
+			log.WithField("error", err.Error()).Fatal("app.server.failed")
+		}
+	}()
+
+	handlerutil.GracefulShutdown(srv, a.config.GracefulTimeout)
 }
 
-func (a *App) Close() {
-	// TODO: https://github.com/gorilla/mux#graceful-shutdown
+func (a *App) CloseResources() {
 	a.db.Close()
 }
 
-func (a *App) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	a.router.ServeHTTP(w, req)
+func (a *App) ServeHTTP(res http.ResponseWriter, req *http.Request) {
+	a.router.ServeHTTP(res, req)
 }

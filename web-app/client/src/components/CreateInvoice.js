@@ -1,17 +1,22 @@
 import React from 'react'
 import {compose} from 'redux'
 import {connect} from 'react-redux'
-import {Button, Card, Col, Form, InputGroup, Row} from 'react-bootstrap'
+import {Button, Card, Col, Form, FormCheck, InputGroup, Row} from 'react-bootstrap'
 import {withHandlers} from 'recompose'
 import {withTranslation} from 'react-i18next'
 import ConfirmationButton from './helpers/ConfirmationButton'
 import FileUploader from './helpers/FileUploader'
 import Auth from './helpers/Auth'
-import {createInvoice, setCreateInvoiceData, setCreateInvoiceFormat} from '../actions/invoices'
+import {
+  createInvoice, setCreateInvoiceData, setCreateInvoiceFormat, setCreateInvoiceTest,
+} from '../actions/invoices'
 import {invoiceFormats} from '../utils/constants'
 
-const CreateInvoice = ({clearInvoiceData, format, invoice, submitInvoice, t, updateFormat, updateInvoiceData}) => (
-  <Card style={{margin: '5px'}}>
+const CreateInvoice = ({
+  clearInvoiceData, format, invoice, submitInvoice, t, test, toggleTest, updateFormat,
+  updateInvoiceData,
+}) => (
+  <Card className="m-1">
     <Card.Header className="bg-primary text-white text-center" as="h3">
       {t('TopBar:tabs.createInvoice')}
     </Card.Header>
@@ -55,6 +60,16 @@ const CreateInvoice = ({clearInvoiceData, format, invoice, submitInvoice, t, upd
               </Form.Control>
             </Form.Group>
           </Col>
+          <Col>
+            <Form.Group>
+              <Form.Label>Test</Form.Label>
+              <FormCheck
+                type="checkbox"
+                checked={test}
+                onChange={toggleTest}
+              />
+            </Form.Group>
+          </Col>
         </Row>
         <Row className="justify-content-center">
           <ConfirmationButton
@@ -78,21 +93,27 @@ export default Auth(
         return {
           format: state.createInvoiceScreen.format,
           invoice: state.createInvoiceScreen.invoice,
+          test: state.createInvoiceScreen.test,
         }
       },
-      {createInvoice, setCreateInvoiceData, setCreateInvoiceFormat}
+      {createInvoice, setCreateInvoiceData, setCreateInvoiceFormat, setCreateInvoiceTest}
     ),
     withHandlers({
-      submitInvoice: ({createInvoice, format, history, invoice, setCreateInvoiceData, setCreateInvoiceFormat}) =>
+      submitInvoice: ({
+        createInvoice, format, history, invoice, setCreateInvoiceData, setCreateInvoiceFormat,
+        setCreateInvoiceTest, test,
+      }) =>
         async () => {
           const formData = new FormData()
           formData.append('format', format)
           formData.append('invoice', invoice)
+          formData.append('test', test)
 
           const {invoiceId, redirect} = await createInvoice(formData)
           if (invoiceId) {
             setCreateInvoiceFormat(invoiceFormats.UBL)
             setCreateInvoiceData(null)
+            setCreateInvoiceTest(false)
             if (redirect) {
               history.push(`/invoices/${invoiceId}`)
             }
@@ -101,6 +122,7 @@ export default Auth(
       updateFormat: ({setCreateInvoiceFormat}) => (e) => setCreateInvoiceFormat(e.target.value),
       updateInvoiceData: ({setCreateInvoiceData}) => (e) => setCreateInvoiceData(e.target.files[0]),
       clearInvoiceData: ({setCreateInvoiceData}) => () => setCreateInvoiceData(null),
+      toggleTest: ({setCreateInvoiceTest, test}) => () => setCreateInvoiceTest(!test),
     }),
     withTranslation(['common', 'TopBar', 'invoices']),
   )(CreateInvoice)

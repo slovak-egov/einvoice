@@ -5,17 +5,30 @@
   "cancel": "Cancel",
   "save": "Save",
   "edit": "Edit",
-  "email": "E-mail",
-  "serviceAccountPublicKey": "Service account public key",
+  "email": {
+    "label": "E-mail",
+    "tooltip": "We will be sending your (received & supplied) invoices to this email"
+  },
+  "accountPublicKey": {
+    "label": "Account public key",
+    "tooltip": "We will verify your identity using this key, when connecting via API"
+  },
   "confirm": "Confirm",
   "submit": "Submit",
   "filters": "Filters",
   "search": "Search",
   "uploadInvoice": "Upload an invoice",
-  "userId": "User ID",
-  "substituteIds": "Substitute user ids",
+  "userId": {
+    "label": "User ID",
+    "tooltip": "Identification number"
+  },
+  "substituteIds": {
+    "label": "Substitute user ids",
+    "tooltip": "These users will be able to submit invoices on your behalf"
+  },
   "invoiceType": "Invoice type",
   "received": "Received",
   "supplied": "Supplied",
-  "download": "Download"
+  "download": "Download",
+  "loadMore": "Load more"
 }

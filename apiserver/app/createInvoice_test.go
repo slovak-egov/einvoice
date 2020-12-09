@@ -46,11 +46,12 @@ func TestCreateInvoice(t *testing.T) {
 		Sender:      "Custom Cotter Pins",
 		Receiver:    "North American Veeblefetzer",
 		Price:       100,
-		SupplierICO: "11190993",
-		CustomerICO: "22222222",
+		SupplierIco: "11190993",
+		CustomerIco: "22222222",
 		Format:      entity.UblFormat,
 		CreatedBy:   user.Id,
 		IssueDate:   timeutil.Date{time.Date(2011, 9, 22, 0, 0, 0, 0, time.UTC)},
+		IsPublic:    true,
 	}
 	if !reflect.DeepEqual(createdResponse, expectedResponse) {
 		t.Errorf("Expected created response was %v. Got %v", expectedResponse, createdResponse)
