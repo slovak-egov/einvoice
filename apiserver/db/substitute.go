@@ -33,8 +33,8 @@ func (c *Connector) AddUserSubstitutes(ctx goContext.Context, ownerId int, subst
 
 	if err != nil {
 		context.GetLogger(ctx).WithFields(log.Fields{
-			"error": err.Error(),
-			"ownerId": ownerId,
+			"error":         err.Error(),
+			"ownerId":       ownerId,
 			"substituteIds": substituteIds,
 		}).Warn("db.addSubstitutes")
 
@@ -57,8 +57,8 @@ func (c *Connector) RemoveUserSubstitutes(ctx goContext.Context, ownerId int, su
 		Delete(&deletedSubstituteIds)
 	if err != nil {
 		context.GetLogger(ctx).WithFields(log.Fields{
-			"error": err.Error(),
-			"ownerId": ownerId,
+			"error":         err.Error(),
+			"ownerId":       ownerId,
 			"substituteIds": substituteIds,
 		}).Error("db.removeSubstitutes")
 
@@ -76,13 +76,45 @@ func (c *Connector) GetUserSubstitutes(ctx goContext.Context, ownerId int) ([]in
 
 	if err != nil {
 		context.GetLogger(ctx).WithFields(log.Fields{
-			"error": err.Error(),
+			"error":   err.Error(),
 			"ownerId": ownerId,
 		}).Error("db.getSubstitutes")
 
 		return nil, err
 	}
 	return substituteIds, nil
+}
+
+func (c *Connector) GetUserOrganizationIds(ctx goContext.Context, userId int) ([]string, error) {
+	uris := []string{}
+	err := c.GetDb(ctx).Model(&entity.User{}).
+		Join("LEFT JOIN substitutes ON owner_id = id").
+		WhereGroup(func(q *orm.Query) (*orm.Query, error) {
+			return q.WhereOr("substitute_id = ?", userId).WhereOr("id = ?", userId), nil
+		}).
+		Where("slovensko_sk_uri LIKE 'ico://sk/%'").
+		Column("slovensko_sk_uri").
+		Select(&uris)
+
+	if err != nil {
+		context.GetLogger(ctx).WithFields(log.Fields{
+			"error":  err.Error(),
+			"userId": userId,
+		}).Error("db.GetUserOrganizations")
+
+		return nil, err
+	}
+
+	icos := []string{}
+	for _, uri := range uris {
+		ico, err := uriToIco(uri)
+		if err != nil {
+			return nil, err
+		}
+		icos = append(icos, ico)
+	}
+
+	return icos, nil
 }
 
 func (c *Connector) IsValidSubstitute(ctx goContext.Context, userId int, ico string) error {

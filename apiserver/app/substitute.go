@@ -23,6 +23,21 @@ func (a *App) getUserSubstitutes(res http.ResponseWriter, req *http.Request) err
 	return nil
 }
 
+func (a *App) getUserOrganizations(res http.ResponseWriter, req *http.Request) error {
+	requestedUserId, err := getRequestedUserId(req)
+	if err != nil {
+		return err
+	}
+
+	icos, err := a.db.GetUserOrganizationIds(req.Context(), requestedUserId)
+	if err != nil {
+		return err
+	}
+
+	handlerutil.RespondWithJSON(res, http.StatusOK, icos)
+	return nil
+}
+
 func (a *App) addUserSubstitutes(res http.ResponseWriter, req *http.Request) error {
 	requestedUserId, err := getRequestedUserId(req)
 	if err != nil {
@@ -80,4 +95,3 @@ func (a *App) removeUserSubstitutes(res http.ResponseWriter, req *http.Request) 
 	handlerutil.RespondWithJSON(res, http.StatusOK, substituteIds)
 	return nil
 }
-
