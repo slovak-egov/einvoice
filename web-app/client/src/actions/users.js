@@ -23,7 +23,7 @@ export const getMyInfo = () =>
     dispatch(setLogging(true))
     if (localStorage.getItem('token')) {
       try {
-        const userData = await api.getUserInfo()
+        const userData = await api.users.getInfo()
         dispatch(setUser(userData.id)(userData))
         dispatch(setLoggedUserId(userData.id))
         dispatch(setLogging(false))
@@ -42,7 +42,7 @@ export const getMyInfo = () =>
 export const updateUser = (data) => loadingWrapper(
   async (dispatch, getState, {api}) => {
     try {
-      const userData = await api.updateUser(data)
+      const userData = await api.users.updateInfo(data)
       dispatch(updateUserData(userData.id, userData))
       return true
     } catch (error) {
