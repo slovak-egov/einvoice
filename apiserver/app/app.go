@@ -62,24 +62,29 @@ func (a *App) initializeHandlers() {
 	a.router.Use(handlerutil.RequestIdMiddleware)
 	a.router.Use(handlerutil.LoggingMiddleware)
 	a.router.Use(handlerutil.ErrorRecovery)
-	authRouter := a.router.PathPrefix("/").Subrouter()
-	authRouter.Use(a.authMiddleware)
-
-	registerHandler(a.router, "GET", "/invoices", a.getPublicInvoices)
-	registerHandler(a.router, "GET", "/invoices/{id:[0-9]+}", a.getInvoice)
-	registerHandler(a.router, "GET", "/invoices/{id:[0-9]+}/detail", a.getInvoiceXml)
-	registerHandler(a.router, "GET", "/invoices/{id:[0-9]+}/visualization", a.getInvoicePdf)
-	registerHandler(authRouter, "POST", "/invoices", a.createInvoice)
 
 	registerHandler(a.router, "GET", "/login", a.handleLogin)
 	registerHandler(a.router, "GET", "/logout", a.handleLogout)
-	registerHandler(authRouter, "GET", "/users/{id:[0-9]+}", a.getUser)
-	registerHandler(authRouter, "PATCH", "/users/{id:[0-9]+}", a.updateUser)
-	registerHandler(authRouter, "GET", "/users/{id:[0-9]+}/substitutes", a.getUserSubstitutes)
-	registerHandler(authRouter, "POST", "/users/{id:[0-9]+}/substitutes", a.addUserSubstitutes)
-	registerHandler(authRouter, "DELETE", "/users/{id:[0-9]+}/substitutes", a.removeUserSubstitutes)
-	registerHandler(authRouter, "GET", "/users/{id:[0-9]+}/organizations", a.getUserOrganizations)
-	registerHandler(authRouter, "GET", "/users/{id:[0-9]+}/invoices", a.getUserInvoices)
+
+	apiRouter := a.router.PathPrefix("/").Subrouter()
+	apiRouter.Use(a.userIdentificationMiddleware)
+
+	invoicesRouter := apiRouter.PathPrefix("/invoices").Subrouter()
+	registerHandler(invoicesRouter, "GET", "", a.getPublicInvoices)
+	registerHandler(invoicesRouter, "GET", "/{id:[0-9]+}", a.getInvoice)
+	registerHandler(invoicesRouter, "GET", "/{id:[0-9]+}/detail", a.getInvoiceXml)
+	registerHandler(invoicesRouter, "GET", "/{id:[0-9]+}/visualization", a.getInvoiceVisualization)
+	registerHandler(invoicesRouter, "POST", "", a.createInvoice)
+
+	usersRouter := apiRouter.PathPrefix("/users/{id:[0-9]+}").Subrouter()
+	usersRouter.Use(requireUserMiddleware)
+	registerHandler(usersRouter, "GET", "", a.getUser)
+	registerHandler(usersRouter, "PATCH", "", a.updateUser)
+	registerHandler(usersRouter, "GET", "/substitutes", a.getUserSubstitutes)
+	registerHandler(usersRouter, "POST", "/substitutes", a.addUserSubstitutes)
+	registerHandler(usersRouter, "DELETE", "/substitutes", a.removeUserSubstitutes)
+	registerHandler(usersRouter, "GET", "/invoices", a.getUserInvoices)
+	registerHandler(usersRouter, "GET", "/organizations", a.getUserOrganizations)
 }
 
 func (a *App) Run() {

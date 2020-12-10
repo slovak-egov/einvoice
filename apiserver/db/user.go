@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/go-pg/pg/v10"
+	"github.com/go-pg/pg/v10/orm"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/slovak-egov/einvoice/apiserver/entity"
@@ -93,4 +94,37 @@ func (c *Connector) GetUserEmails(ctx goContext.Context, icos []string) ([]strin
 		return nil, err
 	}
 	return emails, nil
+}
+
+func (c *Connector) accessibleUrisQuery(ctx goContext.Context, userId int) *orm.Query {
+	return c.GetDb(ctx).Model(&entity.User{}).
+		Join("LEFT JOIN substitutes ON owner_id = id").
+		WhereGroup(func(q *orm.Query) (*orm.Query, error) {
+			return q.WhereOr("substitute_id = ?", userId).WhereOr("id = ?", userId), nil
+		}).
+		Where("slovensko_sk_uri LIKE 'ico://sk/%'").
+		Column("slovensko_sk_uri")
+}
+
+func (c *Connector) GetUserOrganizationIds(ctx goContext.Context, userId int) ([]string, error) {
+	uris := []string{}
+	err := c.accessibleUrisQuery(ctx, userId).Select(&uris)
+	if err != nil {
+		context.GetLogger(ctx).WithFields(log.Fields{
+			"error": err.Error(),
+			"userId": userId,
+		}).Error("db.GetUserOrganizationIds.failed")
+
+		return nil, err
+	}
+
+	icos := []string{}
+	for _, uri := range uris {
+		ico, err := uriToIco(uri)
+		if err == nil {
+			icos = append(icos, ico)
+		}
+	}
+
+	return icos, nil
 }

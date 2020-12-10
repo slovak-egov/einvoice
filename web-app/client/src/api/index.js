@@ -12,18 +12,12 @@ export default class Api {
   getUserSubstituteIds = async () =>
     await this.apiRequest({
       route: `/users/${localStorage.getItem('userId')}/substitutes`,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
     })
 
   removeUserSubstitute = async (id) =>
     await this.apiRequest({
       method: 'DELETE',
       route: `/users/${localStorage.getItem('userId')}/substitutes`,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
       data: [id],
     })
 
@@ -31,18 +25,12 @@ export default class Api {
     await this.apiRequest({
       method: 'POST',
       route: `/users/${localStorage.getItem('userId')}/substitutes`,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
       data: [id],
     })
 
   getUserInfo = async () =>
     await this.apiRequest({
       route: `/users/${localStorage.getItem('userId')}`,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
     })
 
   updateUser = async (data) =>
@@ -50,9 +38,6 @@ export default class Api {
       method: 'PATCH',
       route: `/users/${localStorage.getItem('userId')}`,
       data,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
     })
 
   loginWithSlovenskoSkToken = async (token) =>
@@ -66,9 +51,6 @@ export default class Api {
   logout = async () =>
     await this.apiRequest({
       route: '/logout',
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
       jsonResponse: false,
     })
 
@@ -87,9 +69,6 @@ export default class Api {
     queryParams.push(['supplied', supplied])
     return await this.apiRequest({
       route: `/users/${userId}/invoices?${new URLSearchParams(queryParams)}`,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
     })
   }
 
@@ -115,17 +94,26 @@ export default class Api {
       method: 'POST',
       route: '/invoices',
       data: formData,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
       jsonBody: false,
     })
 
-  apiRequest = (params) =>
-    this.standardRequest({
+  apiRequest = (params) => {
+    // Add authorization header if logged in
+    if (localStorage.getItem('token')) {
+      params = {
+        ...params,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          ...params.headers,
+        },
+      }
+    }
+
+    return this.standardRequest({
       ...params,
       route: `${CONFIG.apiServerUrl}${params.route}`,
     })
+  }
 
   async standardRequest({method, data, route, jsonResponse = true, jsonBody = true, ...opts}) {
     let contentType = {}

@@ -6,5 +6,14 @@ export const invoiceFormats = {
 }
 
 export const swaggerUrl = 'https://generator.swagger.io/?url=https://raw.githubusercontent.com/slovak-egov/einvoice/main/docs/swagger.yml'
-export const invoiceDownloadXmlUrl = (id) => `${CONFIG.apiServerUrl}/invoices/${id}/detail`
-export const invoiceDownloadPdfUrl = (id) => `${CONFIG.apiServerUrl}/invoices/${id}/visualization`
+// This is temporary solution to send session token in query
+export const invoiceDownloadXmlUrl = (id, token) => {
+  let url = `${CONFIG.apiServerUrl}/invoices/${id}/detail`
+  if (token != null) url += `?token=${token}`
+  return url
+}
+export const invoiceDownloadPdfUrl = (id, token) => {
+  let url = `${CONFIG.apiServerUrl}/invoices/${id}/visualization`
+  if (token != null) url += `?token=${token}`
+  return url
+}

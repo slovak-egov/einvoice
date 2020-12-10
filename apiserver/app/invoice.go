@@ -1,6 +1,7 @@
 package app
 
 import (
+	goContext "context"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -11,6 +12,7 @@ import (
 	"github.com/slovak-egov/einvoice/apiserver/db"
 	"github.com/slovak-egov/einvoice/apiserver/entity"
 	"github.com/slovak-egov/einvoice/apiserver/visualization"
+	"github.com/slovak-egov/einvoice/pkg/context"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
@@ -68,6 +70,29 @@ func (a *App) getPublicInvoices(res http.ResponseWriter, req *http.Request) erro
 	return nil
 }
 
+func (a *App) canUserViewInvoice(ctx goContext.Context, invoice *entity.Invoice) error {
+	// Anyone can view invoice if it is public
+	if invoice.IsPublic {
+		return nil
+	} else if context.GetUserId(ctx) == 0 {
+		// Unauthenticated user does not have access to private invoices
+		return handlerutil.NewAuthorizationError("Unauthorized")
+	}
+
+	accessibleIcos, err := a.db.GetUserOrganizationIds(ctx, context.GetUserId(ctx))
+	if err != nil {
+		return err
+	}
+
+	for _, ico := range accessibleIcos {
+		// User can view invoice if one of contract parties is accessible by him
+		if ico == invoice.CustomerIco || ico == invoice.SupplierIco {
+			return nil
+		}
+	}
+	return handlerutil.NewForbiddenError("You have no permission to view this invoice")
+}
+
 func (a *App) getInvoice(res http.ResponseWriter, req *http.Request) error {
 	vars := mux.Vars(req)
 	id, err := strconv.Atoi(vars["id"])
@@ -77,6 +102,10 @@ func (a *App) getInvoice(res http.ResponseWriter, req *http.Request) error {
 
 	invoice, err := a.db.GetInvoice(req.Context(), id)
 	if err != nil {
+		return err
+	}
+
+	if err := a.canUserViewInvoice(req.Context(), invoice); err != nil {
 		return err
 	}
 
@@ -91,6 +120,15 @@ func (a *App) getInvoiceXml(res http.ResponseWriter, req *http.Request) error {
 		return handlerutil.NewBadRequestError("ID should be an integer")
 	}
 
+	invoiceMeta, err := a.db.GetInvoice(req.Context(), id)
+	if err != nil {
+		return err
+	}
+
+	if err := a.canUserViewInvoice(req.Context(), invoiceMeta); err != nil {
+		return err
+	}
+
 	invoice, err := a.storage.GetInvoice(req.Context(), id)
 	if err != nil {
 		return err
@@ -103,7 +141,7 @@ func (a *App) getInvoiceXml(res http.ResponseWriter, req *http.Request) error {
 	return nil
 }
 
-func (a *App) getInvoicePdf(res http.ResponseWriter, req *http.Request) error {
+func (a *App) getInvoiceVisualization(res http.ResponseWriter, req *http.Request) error {
 	vars := mux.Vars(req)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
@@ -112,6 +150,10 @@ func (a *App) getInvoicePdf(res http.ResponseWriter, req *http.Request) error {
 
 	invoice, err := a.db.GetInvoice(req.Context(), id)
 	if err != nil {
+		return err
+	}
+
+	if err := a.canUserViewInvoice(req.Context(), invoice); err != nil {
 		return err
 	}
 
