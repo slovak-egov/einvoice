@@ -203,6 +203,29 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SubstituteIds'
+  /users/{user_id}/organizations:
+    get:
+      tags:
+        - Users
+      summary: Get substituted organizations
+      description: Get list of organizations that you can create invoices on behalf of
+      parameters:
+        - name: user_id
+          in: path
+          description: User ID
+          required: true
+          schema:
+            type: integer
+      security:
+        - sessionAuth: []
+        - apiKeyAuth: []
+      responses:
+        200:
+          description: List of substituted organizations for requested user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubstitutedOrganizations'
   /users/{user_id}/invoices:
     get:
       tags:
@@ -545,6 +568,19 @@ components:
       items:
         type: integer
         description: Substitute ID
+    SubstitutedOrganizations:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+            example: 864618
+          slovenskoSkUri:
+            type: string
+            example: ico://sk/11190993
+          name:
+            type: string
     LogoutResponse:
       type: object
       properties:

@@ -78,6 +78,7 @@ func (a *App) initializeHandlers() {
 	registerHandler(authRouter, "GET", "/users/{id:[0-9]+}/substitutes", a.getUserSubstitutes)
 	registerHandler(authRouter, "POST", "/users/{id:[0-9]+}/substitutes", a.addUserSubstitutes)
 	registerHandler(authRouter, "DELETE", "/users/{id:[0-9]+}/substitutes", a.removeUserSubstitutes)
+	registerHandler(authRouter, "GET", "/users/{id:[0-9]+}/organizations", a.getUserOrganizations)
 	registerHandler(authRouter, "GET", "/users/{id:[0-9]+}/invoices", a.getUserInvoices)
 }
 

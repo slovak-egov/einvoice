@@ -48,7 +48,7 @@ func (o *PublicInvoicesOptions) buildQuery(query *orm.Query) *orm.Query {
 	if o.Ico != "" {
 		// Keep only invoices, given ICO was involved
 		query = query.WhereGroup(func(q *orm.Query) (*orm.Query, error) {
-			return query.WhereOr("supplier_ico = ?", o.Ico).WhereOr("customer_ico = ?", o.Ico), nil
+			return q.WhereOr("supplier_ico = ?", o.Ico).WhereOr("customer_ico = ?", o.Ico), nil
 		})
 	}
 

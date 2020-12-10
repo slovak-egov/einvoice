@@ -33,8 +33,8 @@ func (c *Connector) AddUserSubstitutes(ctx goContext.Context, ownerId int, subst
 
 	if err != nil {
 		context.GetLogger(ctx).WithFields(log.Fields{
-			"error": err.Error(),
-			"ownerId": ownerId,
+			"error":         err.Error(),
+			"ownerId":       ownerId,
 			"substituteIds": substituteIds,
 		}).Warn("db.addSubstitutes")
 
@@ -57,8 +57,8 @@ func (c *Connector) RemoveUserSubstitutes(ctx goContext.Context, ownerId int, su
 		Delete(&deletedSubstituteIds)
 	if err != nil {
 		context.GetLogger(ctx).WithFields(log.Fields{
-			"error": err.Error(),
-			"ownerId": ownerId,
+			"error":         err.Error(),
+			"ownerId":       ownerId,
 			"substituteIds": substituteIds,
 		}).Error("db.removeSubstitutes")
 
@@ -76,13 +76,31 @@ func (c *Connector) GetUserSubstitutes(ctx goContext.Context, ownerId int) ([]in
 
 	if err != nil {
 		context.GetLogger(ctx).WithFields(log.Fields{
-			"error": err.Error(),
+			"error":   err.Error(),
 			"ownerId": ownerId,
 		}).Error("db.getSubstitutes")
 
 		return nil, err
 	}
 	return substituteIds, nil
+}
+
+func (c *Connector) GetUserOrganizations(ctx goContext.Context, userId int) ([]int, error) {
+	organizationIds := []int{}
+	err := c.GetDb(ctx).Model(&entity.Substitute{}).
+		Column("owner_id").
+		Where("substitute_id = ?", userId).
+		Select(&organizationIds)
+
+	if err != nil {
+		context.GetLogger(ctx).WithFields(log.Fields{
+			"error":  err.Error(),
+			"userId": userId,
+		}).Error("db.GetUserOrganizations")
+
+		return nil, err
+	}
+	return organizationIds, nil
 }
 
 func (c *Connector) IsValidSubstitute(ctx goContext.Context, userId int, ico string) error {
