@@ -3,6 +3,7 @@ package db
 import (
 	goContext "context"
 	"errors"
+	"regexp"
 	"strings"
 
 	"github.com/go-pg/pg/v10"
@@ -25,9 +26,16 @@ func icosToUris(icos []string) []string {
 	return uris
 }
 
-func uriToIco(uri string) string {
+func uriToIco(uri string) (string, error) {
+	valid, err := regexp.Match("ico://sk/.*", []byte(uri))
+	if err != nil {
+		return "", err
+	}
+	if !valid {
+		return "", errors.New("not valid ico uri")
+	}
 	split := strings.Split(uri, "/")
-	return split[len(split)-1]
+	return split[len(split)-1], nil
 }
 
 func (c *Connector) GetUser(ctx goContext.Context, id int) (*entity.User, error) {

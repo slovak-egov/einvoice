@@ -29,7 +29,7 @@ func (a *App) getUserOrganizations(res http.ResponseWriter, req *http.Request) e
 		return err
 	}
 
-	icos, err := a.db.GetUserOrganizations(req.Context(), requestedUserId)
+	icos, err := a.db.GetUserOrganizationIds(req.Context(), requestedUserId)
 	if err != nil {
 		return err
 	}

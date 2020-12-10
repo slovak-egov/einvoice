@@ -208,7 +208,7 @@ paths:
       tags:
         - Users
       summary: Get substituted organizations
-      description: Get list of organizations that you can create invoices on behalf of
+      description: Get list of IČOs that requested user can create invoices on behalf of
       parameters:
         - name: user_id
           in: path

@@ -85,7 +85,7 @@ func (c *Connector) GetUserSubstitutes(ctx goContext.Context, ownerId int) ([]in
 	return substituteIds, nil
 }
 
-func (c *Connector) GetUserOrganizations(ctx goContext.Context, userId int) ([]string, error) {
+func (c *Connector) GetUserOrganizationIds(ctx goContext.Context, userId int) ([]string, error) {
 	uris := []string{}
 	err := c.GetDb(ctx).Model(&entity.User{}).
 		Join("LEFT JOIN substitutes ON owner_id = id").
@@ -107,7 +107,11 @@ func (c *Connector) GetUserOrganizations(ctx goContext.Context, userId int) ([]s
 
 	icos := []string{}
 	for _, uri := range uris {
-		icos = append(icos, uriToIco(uri))
+		ico, err := uriToIco(uri)
+		if err != nil {
+			return nil, err
+		}
+		icos = append(icos, ico)
 	}
 
 	return icos, nil
