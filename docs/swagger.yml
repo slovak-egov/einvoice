@@ -608,16 +608,8 @@ components:
     SubstitutedOrganizations:
       type: array
       items:
-        type: object
-        properties:
-          id:
-            type: integer
-            example: 864618
-          slovenskoSkUri:
-            type: string
-            example: ico://sk/11190993
-          name:
-            type: string
+        type: integer
+        description: Organization IČO
     LogoutResponse:
       type: object
       properties:

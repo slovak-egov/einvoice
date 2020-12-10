@@ -3,6 +3,7 @@ package db
 import (
 	goContext "context"
 	"errors"
+	"strings"
 
 	"github.com/go-pg/pg/v10"
 	log "github.com/sirupsen/logrus"
@@ -13,7 +14,7 @@ import (
 )
 
 func icoToUri(ico string) string {
-	return "ico://sk/"+ico
+	return "ico://sk/" + ico
 }
 
 func icosToUris(icos []string) []string {
@@ -22,6 +23,11 @@ func icosToUris(icos []string) []string {
 		uris = append(uris, icoToUri(ico))
 	}
 	return uris
+}
+
+func uriToIco(uri string) string {
+	split := strings.Split(uri, "/")
+	return split[len(split)-1]
 }
 
 func (c *Connector) GetUser(ctx goContext.Context, id int) (*entity.User, error) {
@@ -57,8 +63,8 @@ func (c *Connector) GetOrCreateUser(ctx goContext.Context, slovenskoSkUri, name 
 
 	if err != nil {
 		context.GetLogger(ctx).WithFields(log.Fields{
-			"error": err.Error(),
-			"name": name,
+			"error":          err.Error(),
+			"name":           name,
 			"slovenskoSkUri": slovenskoSkUri,
 		}).Error("db.createUser")
 

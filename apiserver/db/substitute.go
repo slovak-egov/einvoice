@@ -85,12 +85,12 @@ func (c *Connector) GetUserSubstitutes(ctx goContext.Context, ownerId int) ([]in
 	return substituteIds, nil
 }
 
-func (c *Connector) GetUserOrganizations(ctx goContext.Context, userId int) ([]int, error) {
-	organizationIds := []int{}
-	err := c.GetDb(ctx).Model(&entity.Substitute{}).
-		Column("owner_id").
+func (c *Connector) GetUserOrganizations(ctx goContext.Context, userId int) ([]string, error) {
+	orgs := []entity.User{}
+	err := c.GetDb(ctx).Model(&entity.User{}).
+		Join("INNER JOIN substitutes ON owner_id = id").
 		Where("substitute_id = ?", userId).
-		Select(&organizationIds)
+		Select(&orgs)
 
 	if err != nil {
 		context.GetLogger(ctx).WithFields(log.Fields{
@@ -100,7 +100,13 @@ func (c *Connector) GetUserOrganizations(ctx goContext.Context, userId int) ([]i
 
 		return nil, err
 	}
-	return organizationIds, nil
+
+	icos := []string{}
+	for _, org := range orgs {
+		icos = append(icos, uriToIco(org.SlovenskoSkUri))
+	}
+
+	return icos, nil
 }
 
 func (c *Connector) IsValidSubstitute(ctx goContext.Context, userId int, ico string) error {
