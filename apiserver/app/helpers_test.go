@@ -32,7 +32,7 @@ func checkResponseCode(t *testing.T, expected, actual int) {
 	}
 }
 
-func createTestInvoice(t *testing.T, test bool) int {
+func createTestInvoice(t *testing.T, test, isPublic bool) int {
 	t.Helper()
 	user, _ := createTestUser(t)
 	invoice := &entity.Invoice{
@@ -45,6 +45,7 @@ func createTestInvoice(t *testing.T, test bool) int {
 		CreatedBy:   user.Id,
 		IssueDate:   timeutil.Date{time.Date(2011, 9, 22, 0, 0, 0, 0, time.UTC)},
 		Test:        test,
+		IsPublic:    isPublic,
 	}
 
 	if err := a.db.CreateInvoice(ctx, invoice); err != nil {
