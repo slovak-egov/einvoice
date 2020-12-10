@@ -52,11 +52,11 @@ paths:
     get:
       tags:
         - Users
-      summary: Get info about user
+      summary: Get info about requested user
       parameters:
         - name: user_id
           in: path
-          description: User ID
+          description: ID of requested user
           required: true
           schema:
             type: integer
@@ -83,7 +83,7 @@ paths:
       parameters:
         - name: user_id
           in: path
-          description: User ID
+          description: User ID of user to be updated
           required: true
           schema:
             type: integer
@@ -123,7 +123,7 @@ paths:
       parameters:
         - name: user_id
           in: path
-          description: User ID
+          description: Add substitutes for user with this user ID
           required: true
           schema:
             type: integer
@@ -156,7 +156,7 @@ paths:
       parameters:
         - name: user_id
           in: path
-          description: User ID
+          description: Remove substitutes for user with this user ID
           required: true
           schema:
             type: integer
@@ -189,7 +189,7 @@ paths:
       parameters:
         - name: user_id
           in: path
-          description: User ID
+          description: Get substitutes for user with this user ID
           required: true
           schema:
             type: integer
@@ -207,22 +207,22 @@ paths:
     get:
       tags:
         - Users
-      summary: Get user invoices
+      summary: Get all invoices requested user can view
       parameters:
         - name: user_id
           in: path
-          description: User ID
+          description: Get invoices of user with this user ID
           required: true
           schema:
             type: integer
         - name: supplied
           in: query
-          description: Request invoices issued by you
+          description: Request invoices supplied by IČO requested user has access to
           schema:
             type: boolean
         - name: received
           in: query
-          description: Request invoices issued to you
+          description: Request invoices received by IČO requested user has acccess to
           schema:
             type: boolean
         - name: ico
@@ -330,6 +330,9 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /invoices/{invoice_id}:
     get:
+      security:
+        - sessionAuth: []
+        - apiKeyAuth: []
       tags:
         - Invoices
       summary: Get invoice meta data
@@ -347,6 +350,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Invoice'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         404:
           description: Invoice not found
           content:
@@ -355,6 +364,9 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /invoices/{invoice_id}/detail:
     get:
+      security:
+        - sessionAuth: []
+        - apiKeyAuth: []
       tags:
         - Invoices
       summary: Get invoice content
@@ -372,6 +384,12 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/Invoice'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         404:
           description: Invoice not found
           content:
@@ -380,9 +398,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /invoices/{invoice_id}/visualization:
     get:
+      security:
+        - sessionAuth: []
+        - apiKeyAuth: []
       tags:
         - Invoices
-      summary: Get invoice content
+      summary: Get invoice visualization
       parameters:
         - name: invoice_id
           in: path
@@ -398,6 +419,12 @@ paths:
               schema:
                 type: string
                 format: binary
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         404:
           description: Invoice not found
           content:
@@ -421,6 +448,8 @@ components:
         - encoded by RS256 algorithm
         - signed by your private key (paired with public key you set in your account)
         - `sub` claim set to your user Id as a string
+        - `exp` claim set to current UTC timestamp + 30 minutes
+        - `jti` claim set to random string unique during 60 minutes
 
         Example of `header` segment:
 
@@ -432,8 +461,16 @@ components:
         Example of `payload` segment:
 
             {
-              "sub": "1"
+              "sub": "1",
+              "exp": 1607590024,
+              "jti": "4dee8618-abbe-4dc3-83ba-e984d1396f9f"
             }
+
+        Notes:
+
+        - `jti` value should follow regular expression `/\A[0-9a-z\-_]{32,256}\z/i`
+        - same `jti` value cannot be reused in 60 minute timeframe
+        - server considers `exp` valid if it fits in time interval `(current UTC; current UTC + 30 minutes)`
       type: apiKey
       in: header
       name: X-API-Key
