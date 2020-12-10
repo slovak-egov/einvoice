@@ -86,11 +86,15 @@ func (c *Connector) GetUserSubstitutes(ctx goContext.Context, ownerId int) ([]in
 }
 
 func (c *Connector) GetUserOrganizations(ctx goContext.Context, userId int) ([]string, error) {
-	orgs := []entity.User{}
+	uris := []string{}
 	err := c.GetDb(ctx).Model(&entity.User{}).
-		Join("INNER JOIN substitutes ON owner_id = id").
-		Where("substitute_id = ?", userId).
-		Select(&orgs)
+		Join("LEFT JOIN substitutes ON owner_id = id").
+		WhereGroup(func(q *orm.Query) (*orm.Query, error) {
+			return q.WhereOr("substitute_id = ?", userId).WhereOr("id = ?", userId), nil
+		}).
+		Where("slovensko_sk_uri LIKE 'ico://sk/%'").
+		Column("slovensko_sk_uri").
+		Select(&uris)
 
 	if err != nil {
 		context.GetLogger(ctx).WithFields(log.Fields{
@@ -102,8 +106,8 @@ func (c *Connector) GetUserOrganizations(ctx goContext.Context, userId int) ([]s
 	}
 
 	icos := []string{}
-	for _, org := range orgs {
-		icos = append(icos, uriToIco(org.SlovenskoSkUri))
+	for _, uri := range uris {
+		icos = append(icos, uriToIco(uri))
 	}
 
 	return icos, nil
