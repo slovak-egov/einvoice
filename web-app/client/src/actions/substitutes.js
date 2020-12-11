@@ -21,7 +21,7 @@ const addSubstitute = (userId, substituteId) => ({
 export const getUserSubstitutes = () => loadingWrapper(
   async (dispatch, getState, {api}) => {
     try {
-      const substituteIds = await api.getUserSubstituteIds()
+      const substituteIds = await api.users.getSubstituteIds()
       dispatch(setSubstitutes(localStorage.getItem('userId'))(substituteIds))
     } catch (error) {
       await swal({
@@ -36,7 +36,7 @@ export const getUserSubstitutes = () => loadingWrapper(
 export const removeUserSubstitute = (id) => loadingWrapper(
   async (dispatch, getState, {api}) => {
     try {
-      const [deletedId] = await api.removeUserSubstitute(id)
+      const [deletedId] = await api.users.removeSubstitute(id)
       dispatch(removeSubstitute(localStorage.getItem('userId'), deletedId))
     } catch (error) {
       await swal({
@@ -51,7 +51,7 @@ export const removeUserSubstitute = (id) => loadingWrapper(
 export const addUserSubstitute = (id) => loadingWrapper(
   async (dispatch, getState, {api}) => {
     try {
-      const addedIds = await api.addUserSubstitute(parseInt(id, 10))
+      const addedIds = await api.users.addSubstitute(parseInt(id, 10))
       if (addedIds.length > 0) {
         dispatch(addSubstitute(localStorage.getItem('userId'), addedIds[0]))
         return true

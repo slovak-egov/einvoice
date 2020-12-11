@@ -19,15 +19,9 @@ const savePagedIds = ({path, ids, nextId, setOrUpdate}) =>
     dispatch(setInvoiceIds([...path, 'ids'], {ids, setOrUpdate}))
   }
 
-const setInvoice = (id, data) => ({
-  type: 'SET INVOICE',
-  path: ['invoices', id],
-  payload: data,
-  reducer: (state, data) => ({
-    ...state,
-    ...data,
-  }),
-})
+
+const setInvoice = (id) => setData(['invoices', id])
+const setInvoiceNotFound = (id) => setInvoice(id)({notFound: true})
 
 const setInvoices = (data) => ({
   type: 'SET INVOICES',
@@ -39,40 +33,11 @@ const setInvoices = (data) => ({
   }),
 })
 
-const setInvoiceNotFound = (id) => ({
-  type: 'SET INVOICE NOT FOUND',
-  path: ['invoices', id],
-  payload: null,
-  reducer: () => ({
-    notFound: true,
-    data: '',
-  }),
-})
-
-export const getInvoiceDetail = (id) => loadingWrapper(
-  async (dispatch, getState, {api}) => {
-    try {
-      const invoiceDetail = await api.getInvoiceDetail(id)
-      dispatch(setInvoice(id, {xml: invoiceDetail}))
-    } catch (error) {
-      if (error.statusCode === 404) {
-        dispatch(setInvoiceNotFound(id))
-      } else {
-        await swal({
-          title: `Invoice ${id} could not be fetched`,
-          text: error.message,
-          icon: 'error',
-        })
-      }
-    }
-  }
-)
-
 export const getInvoiceMeta = (id) => loadingWrapper(
   async (dispatch, getState, {api}) => {
     try {
-      const meta = await api.getInvoiceMeta(id)
-      dispatch(setInvoice(id, meta))
+      const meta = await api.invoices.getMeta(id)
+      dispatch(setInvoice(id)(meta))
     } catch (error) {
       if (error.statusCode === 404) {
         dispatch(setInvoiceNotFound(id))
@@ -90,7 +55,7 @@ export const getInvoiceMeta = (id) => loadingWrapper(
 export const createInvoice = (data) => loadingWrapper(
   async (dispatch, getState, {api}) => {
     try {
-      const invoice = await api.createInvoice(data)
+      const invoice = await api.invoices.create(data)
       dispatch(setInvoices({
         [invoice.id]: invoice,
       }))
@@ -161,7 +126,7 @@ const getInvoices = ({getAdditionalFilters, path, fetchInvoices}) => (nextId) =>
 
 export const getMyInvoices = getInvoices({
   path: ['myInvoicesScreen'],
-  fetchInvoices: (api) => api.getMyInvoices,
+  fetchInvoices: (api) => api.users.getMyInvoices,
   getAdditionalFilters: (filters) => ({
     supplied: filters.supplied,
     received: filters.received,
@@ -170,6 +135,6 @@ export const getMyInvoices = getInvoices({
 
 export const getPublicInvoices = getInvoices({
   path: ['publicInvoicesScreen'],
-  fetchInvoices: (api) => api.getPublicInvoices,
+  fetchInvoices: (api) => api.invoices.getPublic,
   getAdditionalFilters: () => null,
 })
