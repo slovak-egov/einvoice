@@ -8,7 +8,7 @@ import {useTranslation} from 'react-i18next'
 import {get} from 'lodash'
 import NotFound from './helpers/NotFound'
 import BoolIcon from './helpers/BoolIcon'
-import {getInvoiceDetail, getInvoiceMeta} from '../actions/invoices'
+import {getInvoiceMeta} from '../actions/invoices'
 import {invoiceDownloadXmlUrl, invoiceDownloadPdfUrl} from '../utils/constants'
 
 const TextField = ({label, value}) => (
@@ -30,7 +30,6 @@ const CheckboxField = ({label, value}) => (
 
 const InvoiceView = ({
   createdAt, customerIco, format, isPublic, issueDate, price, receiver, sender, supplierIco, test,
-  xml,
 }) => {
   const {id} = useParams()
   const {t} = useTranslation(['common', 'invoices'])
@@ -83,24 +82,12 @@ const InvoiceView = ({
               <CheckboxField label={t('invoices:public')} value={isPublic} />
             </Col>
           </Row>
-          <Row className="justify-content-center">
-            <Form.Group>
-              <Form.Label>XML</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows="20"
-                cols="100"
-                value={xml}
-                readOnly
-              />
-            </Form.Group>
-          </Row>
         </div>
         <Row className="justify-content-center">
-          <a href={invoiceDownloadXmlUrl(id)}>
+          <a href={invoiceDownloadXmlUrl(id, localStorage.getItem('token'))}>
             <Button variant="primary">{`${t('download')} XML`}</Button>
           </a>
-          <a href={invoiceDownloadPdfUrl(id)}>
+          <a href={invoiceDownloadPdfUrl(id, localStorage.getItem('token'))}>
             <Button variant="success">{`${t('download')} PDF`}</Button>
           </a>
         </Row>
@@ -115,18 +102,15 @@ export default compose(
       ...get(state, ['invoices', id]),
       invoiceDoesNotExist: get(state, ['invoices', id, 'notFound']),
     }),
-    {getInvoiceDetail, getInvoiceMeta}
+    {getInvoiceMeta}
   ),
   lifecycle({
     componentDidMount() {
-      this.props.getInvoiceDetail(this.props.match.params.id)
       this.props.getInvoiceMeta(this.props.match.params.id)
     },
   }),
   branch(
-    // Metadata and XML are fetched from different endpoints, so we need to check
-    // if both of them are already fetched
-    ({id, xml}) => id == null || xml == null,
+    ({id, notFound}) => id == null && !notFound,
     renderNothing,
   ),
   branch(

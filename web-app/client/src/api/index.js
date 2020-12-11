@@ -1,7 +1,14 @@
 import {CONFIG} from '../appSettings'
 import ApiError from './ApiError'
+import createUsersApi from './users'
+import createInvoicesApi from './invoices'
 
 export default class Api {
+
+  constructor() {
+    this.users = createUsersApi(this)
+    this.invoices = createInvoicesApi(this)
+  }
 
   validateResponse = ({status, body}) => {
     if (status < 200 || status >= 300) {
@@ -9,76 +16,15 @@ export default class Api {
     }
   }
 
-  getUserSubstituteIds = async () =>
-    await this.apiRequest({
-      route: `/users/${localStorage.getItem('userId')}/substitutes`,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    })
-
-  removeUserSubstitute = async (id) =>
-    await this.apiRequest({
-      method: 'DELETE',
-      route: `/users/${localStorage.getItem('userId')}/substitutes`,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-      data: [id],
-    })
-
-  addUserSubstitute = async (id) =>
-    await this.apiRequest({
-      method: 'POST',
-      route: `/users/${localStorage.getItem('userId')}/substitutes`,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-      data: [id],
-    })
-
-  getUserInfo = async () =>
-    await this.apiRequest({
-      route: `/users/${localStorage.getItem('userId')}`,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    })
-
-  getUserOrganizationIcos = async () =>
-    await this.apiRequest({
-      route: `/users/${localStorage.getItem('userId')}/organizations`,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    })
-
-  updateUser = async (data) =>
-    await this.apiRequest({
-      method: 'PATCH',
-      route: `/users/${localStorage.getItem('userId')}`,
-      data,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    })
-
-  loginWithSlovenskoSkToken = async (token) =>
-    await this.apiRequest({
+  loginWithSlovenskoSkToken = (token) =>
+    this.apiRequest({
       route: '/login',
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
 
-  logout = async () =>
-    await this.apiRequest({
-      route: '/logout',
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-      jsonResponse: false,
-    })
+  logout = () => this.apiRequest({route: '/logout'})
 
   getInvoicesQueryParams = ({formats, ico, nextId, test}) => {
     const queryParams = formats.map((f) => ['format', f])
@@ -88,69 +34,37 @@ export default class Api {
     return queryParams
   }
 
-  getMyInvoices = async ({supplied, received, ...otherParams}) => {
-    const userId = localStorage.getItem('userId')
-    const queryParams = this.getInvoicesQueryParams(otherParams)
-    queryParams.push(['received', received])
-    queryParams.push(['supplied', supplied])
-    return await this.apiRequest({
-      route: `/users/${userId}/invoices?${new URLSearchParams(queryParams)}`,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    })
-  }
+  apiRequest = (params) => {
+    // Add authorization header if logged in
+    if (localStorage.getItem('token')) {
+      params = {
+        ...params,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          ...params.headers,
+        },
+      }
+    }
 
-  getPublicInvoices = async (params) =>
-    await this.apiRequest({
-      route: `/invoices?${new URLSearchParams(this.getInvoicesQueryParams(params))}`,
-    })
-
-  getInvoiceDetail = async (id) =>
-    await this.apiRequest({
-      route: `/invoices/${id}/detail`,
-      jsonResponse: false,
-    })
-
-  getInvoiceMeta = async (id) => {
-    return await this.apiRequest({
-      route: `/invoices/${id}`,
-    })
-  }
-
-  createInvoice = async (formData) =>
-    await this.apiRequest({
-      method: 'POST',
-      route: '/invoices',
-      data: formData,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-      jsonBody: false,
-    })
-
-  apiRequest = (params) =>
-    this.standardRequest({
+    return this.standardRequest({
       ...params,
       route: `${CONFIG.apiServerUrl}${params.route}`,
     })
+  }
+
+  prefixRoute = (requestParams, prefix) => ({
+    ...requestParams,
+    route: `${prefix}${requestParams.route}`,
+  })
 
   async standardRequest({method, data, route, jsonResponse = true, jsonBody = true, ...opts}) {
-    let contentType = {}
-    if (jsonBody) {
-      contentType = {'Content-Type': 'application/json'}
-    }
     const response = await fetch(route, {
       method,
       body: jsonBody ? JSON.stringify(data) : data,
       ...opts,
-      headers: {
-        ...contentType,
-        ...opts.headers,
-      },
     })
 
-    const body = jsonResponse ? await response.json() : await response.text()
+    const body = await response.json()
     this.validateResponse({status: response.status, body})
     return body
   }

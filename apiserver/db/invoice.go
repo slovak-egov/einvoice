@@ -109,15 +109,9 @@ func (c *Connector) CreateInvoice(ctx goContext.Context, invoice *entity.Invoice
 
 func (c *Connector) GetUserInvoices(ctx goContext.Context, options *UserInvoicesOptions) ([]entity.Invoice, error) {
 	invoices := []entity.Invoice{}
-	accessibleUris := c.GetDb(ctx).Model(&entity.User{}).
-		Join("LEFT JOIN substitutes ON owner_id = id").
-		ColumnExpr("slovensko_sk_uri").
-		WhereGroup(func(q *orm.Query) (*orm.Query, error) {
-			return q.WhereOr("substitute_id = ?", options.UserId).WhereOr("id = ?", options.UserId), nil
-		})
 
 	query := c.GetDb(ctx).Model(&invoices).
-		With("accessible_uris", accessibleUris).
+		With("accessible_uris", c.accessibleUrisQuery(ctx, options.UserId)).
 		WhereGroup(func(q *orm.Query) (*orm.Query, error) {
 			subquery := q
 			if options.Received {

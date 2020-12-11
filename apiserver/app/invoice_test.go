@@ -14,9 +14,10 @@ import (
 func TestGetInvoices(t *testing.T) {
 	// Fill DB
 	t.Cleanup(cleanDb(t))
-	firstInvoiceId := createTestInvoice(t, false)
-	createTestInvoice(t, true)
-	thirdInvoiceId := createTestInvoice(t, false)
+	firstInvoiceId := createTestInvoice(t, false, true)
+	createTestInvoice(t, true, true)
+	thirdInvoiceId := createTestInvoice(t, false, true)
+	createTestInvoice(t, false, false)
 
 	var flagtests = []struct {
 		query          string
@@ -50,19 +51,26 @@ func TestGetInvoices(t *testing.T) {
 
 func TestGetInvoice(t *testing.T) {
 	t.Cleanup(cleanDb(t))
-	id := createTestInvoice(t, false)
+	id1 := createTestInvoice(t, false, true)
+	id2 := createTestInvoice(t, false, false)
 
-	req, _ := http.NewRequest("GET", fmt.Sprintf("/invoices/%d", id), nil)
+	req, _ := http.NewRequest("GET", fmt.Sprintf("/invoices/%d", id1), nil)
 	response := executeRequest(req)
 
 	checkResponseCode(t, http.StatusOK, response.Code)
 	var parsedResponse entity.Invoice
 	json.Unmarshal(response.Body.Bytes(), &parsedResponse)
 
-	assert.Equal(t, id, parsedResponse.Id)
+	assert.Equal(t, id1, parsedResponse.Id)
+
+	// Try to get private invoice
+	req, _ = http.NewRequest("GET", fmt.Sprintf("/invoices/%d", id2), nil)
+	response = executeRequest(req)
+
+	checkResponseCode(t, http.StatusUnauthorized, response.Code)
 
 	// Try to get nonexistent invoice
-	req, _ = http.NewRequest("GET", fmt.Sprintf("/invoices/%d", id+1), nil)
+	req, _ = http.NewRequest("GET", fmt.Sprintf("/invoices/%d", id2+1), nil)
 	response = executeRequest(req)
 
 	checkResponseCode(t, http.StatusNotFound, response.Code)

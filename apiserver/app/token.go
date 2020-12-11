@@ -17,6 +17,12 @@ type Token struct {
 	Type  string
 }
 
+type MissingToken struct {}
+
+func (e MissingToken) Error() string {
+	return "Missing authorization"
+}
+
 func getBearerToken(header string) (*Token, error) {
 	parts := strings.Split(header, " ")
 	if len(parts) != 2 {
@@ -43,5 +49,11 @@ func GetAuthToken(req *http.Request) (*Token, error) {
 		return getApiToken(apiKey)
 	}
 
-	return nil, handlerutil.NewAuthorizationError("Missing authorization")
+	// Temporarily allow sending token via query parameter
+	token := req.URL.Query().Get("token")
+	if token != "" {
+		return getBearerToken("Bearer " + token)
+	}
+
+	return nil, &MissingToken{}
 }
