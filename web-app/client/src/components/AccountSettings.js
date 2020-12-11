@@ -57,7 +57,7 @@ const EditableField = ({actualValue, label, save, tooltipText, ...props}) => {
 
 const AccountSettings = ({
   addUserSubstitute, changeNewSubstituteId, loggedUser, newSubstituteId, removeUserSubstitute,
-  substituteIds, updateUser,
+  substituteIds, updateUser, organizationIcos
 }) => {
   const {t} = useTranslation(['common', 'TopBar'])
   return (
@@ -124,12 +124,20 @@ const AccountSettings = ({
         <Form.Group>
           <Form.Label>{t('organizationIcos.label')}</Form.Label>
           <Tooltip tooltipText={t('organizationIcos.tooltip')} />
-          { loggedUser && loggedUser.organizationIcos && loggedUser.organizationIcos.length > 0 ?
-            loggedUser.organizationIcos.map((ico, i) => (
-              <div key={i}>{ico}</div>
-            )) :
-            <div>{t('organizationIcos.empty')}</div>
-          }
+          <div className="d-flex flex-wrap">
+            {organizationIcos.length > 0 ?
+              organizationIcos.map((ico, i) => (
+                <Form.Control
+                  key={i}
+                  value={ico}
+                  readOnly
+                  className="m-1"
+                  style={{width: '115px'}}
+                />
+              ))  :
+              <strong>{t('organizationIcos.empty')}</strong>
+            }
+          </div>
         </Form.Group>
       </Card.Body>
     </Card>
@@ -145,6 +153,7 @@ export default Auth(
           loggedUser,
           substituteIds: loggedUser.substituteIds,
           newSubstituteId: state.accountScreen.newSubstituteId,
+          organizationIcos: loggedUser.organizationIcos
         }
       },
       {addUserSubstitute, getUserSubstitutes, removeUserSubstitute, setNewSubstituteId, updateUser, getUserOrganizationIcos}
@@ -166,7 +175,7 @@ export default Auth(
         setNewSubstituteId(keepDigitsOnly(e.target.value)),
     }),
     branch(
-      ({substituteIds}) => substituteIds == null,
+      ({substituteIds, organizationIcos}) => substituteIds == null || organizationIcos == null,
       renderNothing,
     ),
   )(AccountSettings)
