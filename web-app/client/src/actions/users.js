@@ -93,7 +93,7 @@ export const logout = () => (
 export const getUserOrganizationIcos = () => loadingWrapper(
   async (dispatch, getState, {api}) => {
     try {
-      const organizationIcos = await api.getUserOrganizationIcos()
+      const organizationIcos = await api.users.getOrganizationIcos()
       dispatch(setOrganizationIcos(localStorage.getItem('userId'))(organizationIcos))
     } catch (error) {
       await swal({
