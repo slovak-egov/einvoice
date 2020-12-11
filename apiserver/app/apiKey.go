@@ -18,8 +18,7 @@ func getIntClaim(claims jwt.MapClaims, key string) (int, error) {
 	if !ok {
 		return 0, fmt.Errorf("Key '%v' not found in claims", key)
 	}
-	switch v := rawValue.(type) {
-	case json.Number:
+	if v, ok := rawValue.(json.Number); ok {
 		if i, err := v.Int64(); err == nil {
 			return int(i), nil
 		}
