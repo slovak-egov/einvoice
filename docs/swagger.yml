@@ -484,7 +484,7 @@ components:
         Example of `payload` segment:
 
             {
-              "sub": "1",
+              "sub": 1,
               "exp": 1607590024,
               "jti": "4dee8618-abbe-4dc3-83ba-e984d1396f9f"
             }

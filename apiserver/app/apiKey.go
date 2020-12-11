@@ -2,9 +2,8 @@ package app
 
 import (
 	goContext "context"
-	"errors"
+	"encoding/json"
 	"fmt"
-	"math"
 
 	"github.com/dgrijalva/jwt-go"
 	log "github.com/sirupsen/logrus"
@@ -17,22 +16,21 @@ import (
 func getIntClaim(claims jwt.MapClaims, key string) (int, error) {
 	rawValue, ok := claims[key]
 	if !ok {
-		return 0, errors.New(fmt.Sprintf("Key '%v' not found in claims", key))
+		return 0, fmt.Errorf("Key '%v' not found in claims", key)
 	}
 	switch v := rawValue.(type) {
-	case float64:
-		if math.Mod(v, 1.0) == 0 {
-			return int(v), nil
+	case json.Number:
+		if i, err := v.Int64(); err == nil {
+			return int(i), nil
 		}
-	case int:
-		return v, nil
 	}
-	return 0, errors.New(fmt.Sprintf("Key '%v' in claims has wrong type", key))
+	return 0, fmt.Errorf("Key '%v' in claims has wrong type", key)
 }
 
 func (a *App) getUserIdByApiKey(ctx goContext.Context, tokenString string) (int, error) {
 	var user *entity.User
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+	jwtParser := jwt.Parser{UseJSONNumber: true}
+	token, err := jwtParser.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodRSA); !ok {
 			return nil, handlerutil.NewAuthorizationError("Unexpected signing method")
 		}
