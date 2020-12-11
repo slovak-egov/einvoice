@@ -57,7 +57,7 @@ const EditableField = ({actualValue, label, save, tooltipText, ...props}) => {
 
 const AccountSettings = ({
   addUserSubstitute, changeNewSubstituteId, loggedUser, newSubstituteId, removeUserSubstitute,
-  substituteIds, updateUser, organizationIcos
+  substituteIds, updateUser, organizationIcos,
 }) => {
   const {t} = useTranslation(['common', 'TopBar'])
   return (
@@ -134,7 +134,7 @@ const AccountSettings = ({
                   className="m-1"
                   style={{width: '105px'}}
                 />
-              ))  :
+              )) :
               <strong>{t('organizationIcos.empty')}</strong>
             }
           </div>
@@ -153,10 +153,13 @@ export default Auth(
           loggedUser,
           substituteIds: loggedUser.substituteIds,
           newSubstituteId: state.accountScreen.newSubstituteId,
-          organizationIcos: loggedUser.organizationIcos
+          organizationIcos: loggedUser.organizationIcos,
         }
       },
-      {addUserSubstitute, getUserSubstitutes, removeUserSubstitute, setNewSubstituteId, updateUser, getUserOrganizationIcos}
+      {
+        addUserSubstitute, getUserSubstitutes, removeUserSubstitute, setNewSubstituteId, updateUser,
+        getUserOrganizationIcos,
+      }
     ),
     lifecycle({
       componentDidMount() {

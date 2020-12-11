@@ -31,7 +31,7 @@ paths:
     get:
       tags:
         - Auth
-      summary: Logout user
+      summary: Logout user from e-invoice
       security:
         - sessionAuth: []
       responses:
@@ -41,6 +41,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LogoutResponse'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /upvs/logout:
+    get:
+      tags:
+        - Auth
+      summary: Redirect to slovensko.sk logout
+      description: |
+        Redirect to ÚPVS and invalidate OBO token.
+        If OBO token is already invalid redirect to ÚPVS callback directly
+      parameters:
+        - name: token
+          in: query
+          description: OBO token
+          schema:
+            type: string
+          required: true
+      responses:
+        302:
+          description: Redirect user to ÚPVS logout
         401:
           description: Unauthorized
           content:
