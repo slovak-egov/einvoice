@@ -470,7 +470,7 @@ components:
         JWT token satisfying:
         - encoded by RS256 algorithm
         - signed by your private key (paired with public key you set in your account)
-        - `sub` claim set to your user Id as a string
+        - `sub` claim set to your user Id as integer
         - `exp` claim set to current UTC timestamp + 30 minutes
         - `jti` claim set to random string unique during 60 minutes
 
