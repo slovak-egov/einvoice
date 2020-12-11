@@ -1,17 +1,19 @@
-import {compose} from 'redux'
-import {connect} from 'react-redux'
-import {branch, renderComponent} from 'recompose'
+import React from 'react'
+import {useSelector} from 'react-redux'
+import {Route} from 'react-router-dom'
 import Unauthorized from './Unauthorized'
-import {isLogged} from '../../state/users'
+import {isUserLogged} from '../../state/users'
 
-export default compose(
-  connect(
-    (state) => ({
-      isLogged: isLogged(state),
-    })
-  ),
-  branch(
-    ({isLogged}) => !isLogged,
-    renderComponent(Unauthorized),
-  ),
+const Auth = ({children}) => {
+  const isLogged = useSelector(isUserLogged)
+
+  return isLogged ? children : <Unauthorized />
+}
+
+export const AuthRoute = ({children, ...otherProps}) => (
+  <Route {...otherProps}>
+    <Auth>
+      {children}
+    </Auth>
+  </Route>
 )

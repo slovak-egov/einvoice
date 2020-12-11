@@ -1,8 +1,8 @@
-import React from 'react'
+import React, {useRef} from 'react'
 import {Button} from 'react-bootstrap'
 
 export default ({accept, buttonStyle, buttonText, onChange}) => {
-  const hiddenFileInput = React.useRef(null)
+  const hiddenFileInput = useRef(null)
   return (
     <React.Fragment>
       <Button onClick={() => hiddenFileInput.current.click()} style={buttonStyle}>
