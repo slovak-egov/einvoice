@@ -19,7 +19,7 @@ import (
 )
 
 var corsOptions = []muxHandlers.CORSOption{
-	muxHandlers.AllowedHeaders([]string{"Content-Type", "Origin", "Accept", "token", "Authorization"}),
+	muxHandlers.AllowedHeaders([]string{"Content-Type", "Origin", "Accept", "X-API-Key", "Authorization"}),
 	muxHandlers.AllowedOrigins([]string{"*"}),
 	muxHandlers.AllowedMethods([]string{"GET", "POST", "OPTIONS", "DELETE", "PUT", "PATCH"}),
 }
