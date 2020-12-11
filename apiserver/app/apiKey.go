@@ -3,7 +3,9 @@ package app
 import (
 	goContext "context"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	log "github.com/sirupsen/logrus"
@@ -26,6 +28,17 @@ func getIntClaim(claims jwt.MapClaims, key string) (int, error) {
 	return 0, fmt.Errorf("Key '%v' in claims has wrong type", key)
 }
 
+func validateExp(exp int) error {
+	currentTimeEpoch := int(time.Now().Unix())
+	if exp < currentTimeEpoch {
+		return errors.New("Token has expired")
+	}
+	if exp-currentTimeEpoch > 1800 {
+		return errors.New("Token expiration time is too long")
+	}
+	return nil
+}
+
 func (a *App) getUserIdByApiKey(ctx goContext.Context, tokenString string) (int, error) {
 	var user *entity.User
 	jwtParser := jwt.Parser{UseJSONNumber: true}
@@ -41,10 +54,18 @@ func (a *App) getUserIdByApiKey(ctx goContext.Context, tokenString string) (int,
 
 		var (
 			err    error
+			exp    int
 			userId int
 		)
 
 		if userId, err = getIntClaim(claims, "sub"); err != nil {
+			return nil, handlerutil.NewAuthorizationError(err.Error())
+		}
+
+		if exp, err = getIntClaim(claims, "exp"); err != nil {
+			return nil, handlerutil.NewAuthorizationError(err.Error())
+		}
+		if err = validateExp(exp); err != nil {
 			return nil, handlerutil.NewAuthorizationError(err.Error())
 		}
 
