@@ -6,12 +6,6 @@ export default (api) => {
   const getPublic = (params) =>
     prepareRequest({route: `?${new URLSearchParams(api.getInvoicesQueryParams(params))}`})
 
-  const getDetail = (id) =>
-    prepareRequest({
-      route: `/${id}/detail`,
-      jsonResponse: false,
-    })
-
   const getMeta = (id) => prepareRequest({route: `/${id}`})
 
   const create = (formData) =>
@@ -24,7 +18,6 @@ export default (api) => {
 
   return {
     create,
-    getDetail,
     getMeta,
     getPublic,
   }

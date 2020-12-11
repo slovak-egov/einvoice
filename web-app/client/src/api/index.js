@@ -64,7 +64,7 @@ export default class Api {
       ...opts,
     })
 
-    const body = jsonResponse ? await response.json() : await response.text()
+    const body = await response.json()
     this.validateResponse({status: response.status, body})
     return body
   }
