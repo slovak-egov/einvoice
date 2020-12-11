@@ -45,6 +45,24 @@ func (a *App) handleLogin(res http.ResponseWriter, req *http.Request) error {
 	return nil
 }
 
+func (a *App) handleUpvsLogout(res http.ResponseWriter, req *http.Request) error {
+	oboToken, err := GetAuthToken(req)
+	if err != nil {
+		return handlerutil.NewAuthorizationError(err.Error())
+	} else if oboToken.Type != BearerToken {
+		return handlerutil.NewAuthorizationError("Token should be in Bearer format")
+	}
+
+	logoutUrl, err := a.slovenskoSk.GetLogoutUrl(req.Context(), oboToken.Value)
+	if err != nil {
+		return handlerutil.NewAuthorizationError("Unauthorized")
+	}
+
+	http.Redirect(res, req, logoutUrl, http.StatusFound)
+
+	return nil
+}
+
 func (a *App) handleLogout(res http.ResponseWriter, req *http.Request) error {
 	token, err := GetAuthToken(req)
 	if err != nil {

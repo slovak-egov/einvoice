@@ -65,6 +65,7 @@ func (a *App) initializeHandlers() {
 
 	registerHandler(a.router, "GET", "/login", a.handleLogin)
 	registerHandler(a.router, "GET", "/logout", a.handleLogout)
+	registerHandler(a.router, "GET", "/upvs/logout", a.handleUpvsLogout)
 
 	apiRouter := a.router.PathPrefix("/").Subrouter()
 	apiRouter.Use(a.userIdentificationMiddleware)

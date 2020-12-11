@@ -84,10 +84,10 @@ const InvoiceView = ({
           </Row>
         </div>
         <Row className="justify-content-center">
-          <a href={invoiceDownloadXmlUrl(id, localStorage.getItem('token'))}>
+          <a href={invoiceDownloadXmlUrl(id)}>
             <Button variant="primary">{`${t('download')} XML`}</Button>
           </a>
-          <a href={invoiceDownloadPdfUrl(id, localStorage.getItem('token'))}>
+          <a href={invoiceDownloadPdfUrl(id)}>
             <Button variant="success">{`${t('download')} PDF`}</Button>
           </a>
         </Row>

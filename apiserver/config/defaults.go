@@ -26,7 +26,8 @@ var devConfig = Configuration{
 		SessionTokenExpiration: 24 * time.Hour,
 	},
 	SlovenskoSk: SlovenskoSkConfiguration{
-		Url: "https://upvs.dev.filipsladek.com",
+		Url:               "https://upvs.dev.filipsladek.com",
+		LogoutCallbackUrl: "http://localhost:3000/logout-callback",
 	},
 	InvoicesLimit: 5,
 }
@@ -51,7 +52,8 @@ var prodConfig = Configuration{
 		SessionTokenExpiration: 1 * time.Hour,
 	},
 	SlovenskoSk: SlovenskoSkConfiguration{
-		Url: "https://upvs.dev.filipsladek.com",
+		Url:               "https://upvs.dev.filipsladek.com",
+		LogoutCallbackUrl: "https://web-app.dev.filipsladek.com/logout-callback",
 	},
 	InvoicesLimit: 20,
 }

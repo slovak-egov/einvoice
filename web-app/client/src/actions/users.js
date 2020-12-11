@@ -13,27 +13,28 @@ const updateUserData = (userId, data) => ({
   reducer: (state, data) => ({...state, ...data}),
 })
 
-const removeLoggedUser = () =>
+const removeLoggedUser = (removeLocalStorage = true) =>
   (dispatch) => {
     dispatch(setLoggedUserId(null))
     dispatch(setLogging(false))
+    if (removeLocalStorage) {
+      localStorage.removeItem('sessionToken')
+      localStorage.removeItem('userId')
+      localStorage.removeItem('oboToken')
+    }
   }
 
 export const getMyInfo = () =>
   async (dispatch, getState, {api}) => {
     dispatch(setLogging(true))
-    if (localStorage.getItem('token')) {
+    if (localStorage.getItem('sessionToken')) {
       try {
         const userData = await api.users.getInfo()
         dispatch(setUser(userData.id)(userData))
         dispatch(setLoggedUserId(userData.id))
         dispatch(setLogging(false))
       } catch (error) {
-        if (process.env.NODE_ENV === 'production') {
-          localStorage.removeItem('token')
-          localStorage.removeItem('userId')
-        }
-        dispatch(removeLoggedUser())
+        dispatch(removeLoggedUser(process.env.NODE_ENV === 'production'))
       }
     } else {
       dispatch(removeLoggedUser())
@@ -61,16 +62,15 @@ export const loginWithSlovenskoSkToken = (token) => (
   async (dispatch, getState, {api}) => {
     try {
       const userData = await api.loginWithSlovenskoSkToken(token)
-      localStorage.setItem('token', userData.token)
+      localStorage.setItem('sessionToken', userData.token)
       localStorage.setItem('userId', userData.id)
+      localStorage.setItem('oboToken', token)
       dispatch(setUser(userData.id)(userData))
       dispatch(setLoggedUserId(userData.id))
       dispatch(setLogging(false))
       return true
     } catch (error) {
       dispatch(removeLoggedUser())
-      localStorage.removeItem('token')
-      localStorage.removeItem('userId')
       await swal({
         title: 'Login failed',
         text: error.message,
@@ -85,8 +85,6 @@ export const logout = () => (
   async (dispatch, getState, {api}) => {
     await api.logout()
     dispatch(removeLoggedUser())
-    localStorage.removeItem('token')
-    localStorage.removeItem('userId')
   }
 )
 
