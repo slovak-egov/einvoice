@@ -43,9 +43,9 @@ func getPrivateKey(privateKey string) *rsa.PrivateKey {
 }
 
 func getPublicKey(publicKey string) *rsa.PublicKey {
-	verifyBytes := "-----BEGIN RSA PRIVATE KEY-----\n" +
+	verifyBytes := "-----BEGIN RSA PUBLIC KEY-----\n" +
 		strings.ReplaceAll(publicKey, " ", string(byte(10))) +
-		"\n-----END RSA PRIVATE KEY-----\n"
+		"\n-----END RSA PUBLIC KEY-----\n"
 	verifyKey, err := jwt.ParseRSAPublicKeyFromPEM([]byte(verifyBytes))
 	if err != nil {
 		log.WithField("error", err).Fatal("slovenskosk.keys.parsePublic")
