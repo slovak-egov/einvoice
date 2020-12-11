@@ -6,7 +6,7 @@ import {Button, Card, Form, InputGroup} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import Auth from './helpers/Auth'
 import Tooltip from './helpers/Tooltip'
-import {updateUser} from '../actions/users'
+import {getUserOrganizationIcos, updateUser} from '../actions/users'
 import {
   addUserSubstitute, getUserSubstitutes, removeUserSubstitute, setNewSubstituteId,
 } from '../actions/substitutes'
@@ -121,6 +121,16 @@ const AccountSettings = ({
             </InputGroup>
           </div>
         </Form.Group>
+        <Form.Group>
+          <Form.Label>{t('organizationIcos.label')}</Form.Label>
+          <Tooltip tooltipText={t('organizationIcos.tooltip')} />
+          { loggedUser && loggedUser.organizationIcos && loggedUser.organizationIcos.length > 0 ?
+            loggedUser.organizationIcos.map((ico, i) => (
+              <div key={i}>{ico}</div>
+            )) :
+            <div>{t('organizationIcos.empty')}</div>
+          }
+        </Form.Group>
       </Card.Body>
     </Card>
   )
@@ -137,11 +147,12 @@ export default Auth(
           newSubstituteId: state.accountScreen.newSubstituteId,
         }
       },
-      {addUserSubstitute, getUserSubstitutes, removeUserSubstitute, setNewSubstituteId, updateUser}
+      {addUserSubstitute, getUserSubstitutes, removeUserSubstitute, setNewSubstituteId, updateUser, getUserOrganizationIcos}
     ),
     lifecycle({
       componentDidMount() {
         this.props.getUserSubstitutes()
+        this.props.getUserOrganizationIcos()
       },
     }),
     withHandlers({

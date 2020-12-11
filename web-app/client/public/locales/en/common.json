@@ -26,6 +26,11 @@
     "label": "Substitute user ids",
     "tooltip": "These users will be able to submit invoices on your behalf"
   },
+  "organizationIcos": {
+    "label": "Organization IČOs",
+    "tooltip": "List of organization IČOs that you can create invoices on behalf of",
+    "empty": "Empty list"
+  },
   "invoiceType": "Invoice type",
   "received": "Received",
   "supplied": "Supplied",

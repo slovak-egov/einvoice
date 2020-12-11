@@ -45,6 +45,14 @@ export default class Api {
       },
     })
 
+  getUserOrganizationIcos = async () =>
+    await this.apiRequest({
+      route: `/users/${localStorage.getItem('userId')}/organizations`,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    })
+
   updateUser = async (data) =>
     await this.apiRequest({
       method: 'PATCH',
