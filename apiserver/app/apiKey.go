@@ -2,7 +2,8 @@ package app
 
 import (
 	goContext "context"
-	"strconv"
+	"encoding/json"
+	"fmt"
 
 	"github.com/dgrijalva/jwt-go"
 	log "github.com/sirupsen/logrus"
@@ -12,9 +13,23 @@ import (
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
+func getIntClaim(claims jwt.MapClaims, key string) (int, error) {
+	rawValue, ok := claims[key]
+	if !ok {
+		return 0, fmt.Errorf("Key '%v' not found in claims", key)
+	}
+	if v, ok := rawValue.(json.Number); ok {
+		if i, err := v.Int64(); err == nil {
+			return int(i), nil
+		}
+	}
+	return 0, fmt.Errorf("Key '%v' in claims has wrong type", key)
+}
+
 func (a *App) getUserIdByApiKey(ctx goContext.Context, tokenString string) (int, error) {
 	var user *entity.User
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+	jwtParser := jwt.Parser{UseJSONNumber: true}
+	token, err := jwtParser.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodRSA); !ok {
 			return nil, handlerutil.NewAuthorizationError("Unexpected signing method")
 		}
@@ -25,15 +40,12 @@ func (a *App) getUserIdByApiKey(ctx goContext.Context, tokenString string) (int,
 		}
 
 		var (
-			err error
-			rawUserId string
+			err    error
 			userId int
 		)
-		if rawUserId, ok = claims["sub"].(string); !ok {
-			return nil, handlerutil.NewNotFoundError("User not found")
-		}
-		if userId, err = strconv.Atoi(rawUserId); err != nil {
-			return nil, handlerutil.NewNotFoundError("User not found")
+
+		if userId, err = getIntClaim(claims, "sub"); err != nil {
+			return nil, handlerutil.NewAuthorizationError(err.Error())
 		}
 
 		user, err = a.db.GetUser(ctx, userId)

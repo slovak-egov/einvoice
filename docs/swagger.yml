@@ -494,7 +494,7 @@ components:
         JWT token satisfying:
         - encoded by RS256 algorithm
         - signed by your private key (paired with public key you set in your account)
-        - `sub` claim set to your user Id as a string
+        - `sub` claim set to your user Id as integer
         - `exp` claim set to current UTC timestamp + 30 minutes
         - `jti` claim set to random string unique during 60 minutes
 
@@ -508,7 +508,7 @@ components:
         Example of `payload` segment:
 
             {
-              "sub": "1",
+              "sub": 1,
               "exp": 1607590024,
               "jti": "4dee8618-abbe-4dc3-83ba-e984d1396f9f"
             }
