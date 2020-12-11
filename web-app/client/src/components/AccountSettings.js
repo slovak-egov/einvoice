@@ -132,7 +132,7 @@ const AccountSettings = ({
                   value={ico}
                   readOnly
                   className="m-1"
-                  style={{width: '115px'}}
+                  style={{width: '105px'}}
                 />
               ))  :
               <strong>{t('organizationIcos.empty')}</strong>
