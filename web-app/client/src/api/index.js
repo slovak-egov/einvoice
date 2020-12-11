@@ -36,11 +36,12 @@ export default class Api {
 
   apiRequest = (params) => {
     // Add authorization header if logged in
-    if (localStorage.getItem('token')) {
+    const sessionToken = localStorage.getItem('sessionToken')
+    if (sessionToken) {
       params = {
         ...params,
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${sessionToken}`,
           ...params.headers,
         },
       }

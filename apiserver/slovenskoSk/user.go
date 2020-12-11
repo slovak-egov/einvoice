@@ -3,14 +3,10 @@ package slovenskoSk
 import (
 	goContext "context"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 
-	"github.com/dgrijalva/jwt-go"
-
 	"github.com/slovak-egov/einvoice/pkg/context"
-	"github.com/slovak-egov/einvoice/pkg/random"
 )
 
 type User struct {
@@ -19,33 +15,7 @@ type User struct {
 }
 
 func (c *Connector) GetUser(ctx goContext.Context, oboToken string) (*User, error) {
-	token, err := jwt.Parse(oboToken, func(token *jwt.Token) (interface{}, error) {
-		if _, ok := token.Method.(*jwt.SigningMethodRSA); !ok {
-			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
-		}
-
-		return c.oboTokenPublic, nil
-	})
-
-	if !token.Valid {
-		return nil, &InvalidTokenError{"Invalid token"}
-	}
-
-	claims, ok := token.Claims.(jwt.MapClaims)
-	if !ok {
-		return nil, &InvalidTokenError{"Cannot parse claims"}
-	}
-
-	slovenskoSkToken := jwt.NewWithClaims(jwt.SigningMethodRS256, jwt.MapClaims{
-		"exp": claims["exp"],
-		"jti": random.String(32),
-		"obo": oboToken,
-	})
-	slovenskoSkToken.Header["alg"] = "RS256"
-	slovenskoSkToken.Header["cty"] = "JWT"
-	delete(slovenskoSkToken.Header, "typ")
-
-	slovenskoSkTokenString, err := slovenskoSkToken.SignedString(c.apiTokenPrivate)
+	signedOboToken, err := c.signOboToken(ctx, oboToken)
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +25,7 @@ func (c *Connector) GetUser(ctx goContext.Context, oboToken string) (*User, erro
 		&Request{
 			"GET",
 			"/api/upvs/user/info",
-			map[string]string{"Authorization": "Bearer "+slovenskoSkTokenString},
+			map[string]string{"Authorization": "Bearer "+signedOboToken},
 		},
 	)
 	if err != nil {

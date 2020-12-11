@@ -9,8 +9,9 @@ import {CONFIG} from '../appSettings'
 import {logout} from '../actions/users'
 import {updateRunningRequests} from '../actions/common'
 import {getLoggedUser, isLogged} from '../state/users'
+import {logoutUrl} from '../utils/constants'
 
-const TopBar = ({i18n, isLogged, loggedUser, logout, startLoading, t}) => (
+const TopBar = ({i18n, isLogged, loggedUser, startLoading, t}) => (
   <Navbar bg="primary" variant="dark" sticky="top" expand="md">
     <NavLink to="/">
       <Navbar.Brand>{t('title')}</Navbar.Brand>
@@ -43,7 +44,11 @@ const TopBar = ({i18n, isLogged, loggedUser, logout, startLoading, t}) => (
               <Navbar.Text>{loggedUser.name}</Navbar.Text>
             </NavLink>
             <div className="nav-link">
-              <Button variant="danger" onClick={logout}>{t('logout')}</Button>
+              <a href={logoutUrl()}>
+                <Button variant="danger" onClick={startLoading}>
+                  {t('logout')}
+                </Button>
+              </a>
             </div>
           </React.Fragment>
           :

@@ -34,6 +34,7 @@ type SlovenskoSkConfiguration struct {
 	Url                string
 	ApiTokenPrivateKey string
 	OboTokenPublicKey  string
+	LogoutCallbackUrl  string
 }
 
 type Configuration struct {
@@ -86,6 +87,7 @@ func (c *Configuration) initSlovenskoSk() {
 		Url:                environment.Getenv("SLOVENSKO_SK_URL", c.SlovenskoSk.Url),
 		ApiTokenPrivateKey: environment.Getenv("API_TOKEN_PRIVATE", c.SlovenskoSk.ApiTokenPrivateKey),
 		OboTokenPublicKey:  environment.Getenv("OBO_TOKEN_PUBLIC", c.SlovenskoSk.OboTokenPublicKey),
+		LogoutCallbackUrl:  environment.Getenv("LOGOUT_CALLBACK_URL", c.SlovenskoSk.LogoutCallbackUrl),
 	}
 }
 
