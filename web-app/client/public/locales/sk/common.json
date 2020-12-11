@@ -26,6 +26,11 @@
     "label": "Identifikačné čísla zastupujúcich používateľov",
     "tooltip": "Títo používatelia budú mať právomoc zadávať faktúry vo vašom mene"
   },
+  "organizationIcos": {
+    "label": "Identifikačné čísla zastupovaných organizácií",
+    "tooltip": "Identifikačné čísla organizácií, v mene ktorých môžete zadávať faktúry",
+    "empty": "Žiadne záznamy"
+  },
   "invoiceType": "Typ faktúry",
   "received": "Prijaté",
   "supplied": "Odoslané",

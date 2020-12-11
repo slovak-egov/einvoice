@@ -4,6 +4,7 @@ import {loadingWrapper, setData} from './common'
 const setLogging = setData(['logging'])
 const setLoggedUserId = setData(['loggedUserId'])
 const setUser = (id) => setData(['users', id])
+const setOrganizationIcos = (id) => setData(['users', id, 'organizationIcos'])
 
 const updateUserData = (userId, data) => ({
   type: 'UPDATE USER',
@@ -86,5 +87,20 @@ export const logout = () => (
     dispatch(removeLoggedUser())
     localStorage.removeItem('token')
     localStorage.removeItem('userId')
+  }
+)
+
+export const getUserOrganizationIcos = () => loadingWrapper(
+  async (dispatch, getState, {api}) => {
+    try {
+      const organizationIcos = await api.users.getOrganizationIcos()
+      dispatch(setOrganizationIcos(localStorage.getItem('userId'))(organizationIcos))
+    } catch (error) {
+      await swal({
+        title: 'User organization IČOs could not be fetched',
+        text: error.message,
+        icon: 'error',
+      })
+    }
   }
 )

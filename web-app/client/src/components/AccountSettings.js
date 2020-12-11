@@ -6,7 +6,7 @@ import {Button, Card, Form, InputGroup} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import Auth from './helpers/Auth'
 import Tooltip from './helpers/Tooltip'
-import {updateUser} from '../actions/users'
+import {getUserOrganizationIcos, updateUser} from '../actions/users'
 import {
   addUserSubstitute, getUserSubstitutes, removeUserSubstitute, setNewSubstituteId,
 } from '../actions/substitutes'
@@ -57,7 +57,7 @@ const EditableField = ({actualValue, label, save, tooltipText, ...props}) => {
 
 const AccountSettings = ({
   addUserSubstitute, changeNewSubstituteId, loggedUser, newSubstituteId, removeUserSubstitute,
-  substituteIds, updateUser,
+  substituteIds, updateUser, organizationIcos
 }) => {
   const {t} = useTranslation(['common', 'TopBar'])
   return (
@@ -121,6 +121,24 @@ const AccountSettings = ({
             </InputGroup>
           </div>
         </Form.Group>
+        <Form.Group>
+          <Form.Label>{t('organizationIcos.label')}</Form.Label>
+          <Tooltip tooltipText={t('organizationIcos.tooltip')} />
+          <div className="d-flex flex-wrap">
+            {organizationIcos.length > 0 ?
+              organizationIcos.map((ico, i) => (
+                <Form.Control
+                  key={i}
+                  value={ico}
+                  readOnly
+                  className="m-1"
+                  style={{width: '105px'}}
+                />
+              ))  :
+              <strong>{t('organizationIcos.empty')}</strong>
+            }
+          </div>
+        </Form.Group>
       </Card.Body>
     </Card>
   )
@@ -135,13 +153,15 @@ export default Auth(
           loggedUser,
           substituteIds: loggedUser.substituteIds,
           newSubstituteId: state.accountScreen.newSubstituteId,
+          organizationIcos: loggedUser.organizationIcos
         }
       },
-      {addUserSubstitute, getUserSubstitutes, removeUserSubstitute, setNewSubstituteId, updateUser}
+      {addUserSubstitute, getUserSubstitutes, removeUserSubstitute, setNewSubstituteId, updateUser, getUserOrganizationIcos}
     ),
     lifecycle({
       componentDidMount() {
         this.props.getUserSubstitutes()
+        this.props.getUserOrganizationIcos()
       },
     }),
     withHandlers({
@@ -155,7 +175,7 @@ export default Auth(
         setNewSubstituteId(keepDigitsOnly(e.target.value)),
     }),
     branch(
-      ({substituteIds}) => substituteIds == null,
+      ({substituteIds, organizationIcos}) => substituteIds == null || organizationIcos == null,
       renderNothing,
     ),
   )(AccountSettings)
