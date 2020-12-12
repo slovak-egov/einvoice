@@ -28,12 +28,12 @@ func getIntClaim(claims jwt.MapClaims, key string) (int, error) {
 	return 0, fmt.Errorf("Key '%v' in claims has wrong type", key)
 }
 
-func validateExp(exp int) error {
+func validateExp(exp, maxExpiration int) error {
 	currentTimeEpoch := int(time.Now().Unix())
 	if exp < currentTimeEpoch {
 		return errors.New("Token has expired")
 	}
-	if exp-currentTimeEpoch > 1800 {
+	if exp-currentTimeEpoch > maxExpiration {
 		return errors.New("Token expiration time is too long")
 	}
 	return nil
@@ -65,7 +65,7 @@ func (a *App) getUserIdByApiKey(ctx goContext.Context, tokenString string) (int,
 		if exp, err = getIntClaim(claims, "exp"); err != nil {
 			return nil, handlerutil.NewAuthorizationError(err.Error())
 		}
-		if err = validateExp(exp); err != nil {
+		if err = validateExp(exp, a.config.ApiKeyMaxExpiration); err != nil {
 			return nil, handlerutil.NewAuthorizationError(err.Error())
 		}
 

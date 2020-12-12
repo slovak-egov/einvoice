@@ -29,7 +29,8 @@ var devConfig = Configuration{
 		Url:               "https://upvs.dev.filipsladek.com",
 		LogoutCallbackUrl: "http://localhost:3000/logout-callback",
 	},
-	InvoicesLimit: 5,
+	InvoicesLimit:       5,
+	ApiKeyMaxExpiration: 1800,
 }
 
 var prodConfig = Configuration{
@@ -55,7 +56,8 @@ var prodConfig = Configuration{
 		Url:               "https://upvs.dev.filipsladek.com",
 		LogoutCallbackUrl: "https://web-app.dev.filipsladek.com/logout-callback",
 	},
-	InvoicesLimit: 20,
+	InvoicesLimit:       20,
+	ApiKeyMaxExpiration: 1800,
 }
 
 var testConfig = Configuration{
@@ -76,5 +78,6 @@ var testConfig = Configuration{
 		Port:                   6379,
 		SessionTokenExpiration: 1 * time.Hour,
 	},
-	InvoicesLimit: 5,
+	InvoicesLimit:       5,
+	ApiKeyMaxExpiration: 1800,
 }
