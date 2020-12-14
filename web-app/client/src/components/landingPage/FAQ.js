@@ -1,4 +1,3 @@
-import React from 'react'
 import {Accordion, Card} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import {swaggerUrl} from '../../utils/constants'

@@ -1,12 +1,17 @@
-import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
 import '@fortawesome/fontawesome-free/css/all.css'
-import React, {useEffect} from 'react'
+import {Suspense, useEffect} from 'react'
 import {useDispatch} from 'react-redux'
 import {Route, Switch} from 'react-router-dom'
 import {Spinner} from 'react-bootstrap'
 import App from './App'
-import LoadingModal from './helpers/LoadingModal'
 import {loginWithSlovenskoSkToken, logout} from '../actions/users'
+
+const CenteredSpinner = () => (
+  <div className="Modal">
+    <Spinner animation="border" variant="primary" />
+  </div>
+)
 
 const LoginCallback = ({history, location}) => {
   const dispatch = useDispatch()
@@ -22,7 +27,7 @@ const LoginCallback = ({history, location}) => {
     })()
   })
 
-  return <LoadingModal />
+  return <CenteredSpinner />
 }
 
 const LogoutCallback = ({history}) => {
@@ -35,23 +40,17 @@ const LogoutCallback = ({history}) => {
     })()
   })
 
-  return <LoadingModal />
+  return <CenteredSpinner />
 }
-
-const CenteredSpinner = () => (
-  <div className="Modal">
-    <Spinner animation="border" variant="primary" />
-  </div>
-)
 
 export default () => (
   <Switch>
     <Route path="/login-callback" component={LoginCallback} />
     <Route path="/logout-callback" component={LogoutCallback} />
     <Route>
-      <React.Suspense fallback={<CenteredSpinner />}>
+      <Suspense fallback={<CenteredSpinner />}>
         <App />
-      </React.Suspense>
+      </Suspense>
     </Route>
   </Switch>
 )

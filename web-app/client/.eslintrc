@@ -1,7 +1,9 @@
 {
   "extends": "vacuumlabs",
   "rules": {
-    "no-console": 0
+    "no-console": 0,
+    "react/jsx-uses-react": "off",
+    "react/react-in-jsx-scope": "off"
   },
   "env": {
     "node": true,
