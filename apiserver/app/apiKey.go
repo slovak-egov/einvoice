@@ -28,14 +28,16 @@ func getIntClaim(claims jwt.MapClaims, key string) (int, error) {
 	return 0, fmt.Errorf("Key '%v' in claims has wrong type", key)
 }
 
-func validateExp(exp, maxExpiration int) error {
-	currentTimeEpoch := int(time.Now().Unix())
-	if exp < currentTimeEpoch {
+// Validate if exp belongs to interval <now(), now()+maxExpiration>
+func validateExp(exp int, maxExpiration time.Duration) error {
+	currentTime, expTime := time.Now(), time.Unix(int64(exp), 0)
+
+	if currentTime.After(expTime) {
 		return errors.New("Token has expired")
-	}
-	if exp-currentTimeEpoch > maxExpiration {
+	} else if currentTime.Add(maxExpiration).Before(expTime) {
 		return errors.New("Token expiration time is too long")
 	}
+
 	return nil
 }
 

@@ -52,7 +52,7 @@ type Configuration struct {
 	Cache                CacheConfiguration
 	SlovenskoSk          SlovenskoSkConfiguration
 	InvoicesLimit        int
-	ApiKeyMaxExpiration  int
+	ApiKeyMaxExpiration  time.Duration
 }
 
 func (c *Configuration) initDb() {
@@ -133,7 +133,7 @@ func New() *Configuration {
 	config.GracefulTimeout = environment.ParseDuration("GRACEFUL_TIMEOUT", config.GracefulTimeout)
 
 	config.InvoicesLimit = environment.ParseInt("INVOICES_LIMIT", config.InvoicesLimit)
-	config.ApiKeyMaxExpiration = environment.ParseInt("API_KEY_MAX_EXPIRATION", config.ApiKeyMaxExpiration)
+	config.ApiKeyMaxExpiration = environment.ParseDuration("API_KEY_MAX_EXPIRATION", config.ApiKeyMaxExpiration)
 
 	log.Info("config.loaded")
 
