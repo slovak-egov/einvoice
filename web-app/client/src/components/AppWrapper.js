@@ -19,7 +19,7 @@ const LoginCallback = ({history, location}) => {
         history.push('/')
       }
     })()
-  }, [])
+  })
 
   return <LoadingModal />
 }
@@ -32,7 +32,7 @@ const LogoutCallback = ({history}) => {
       await dispatch(logout())
       history.push('/')
     })()
-  }, [])
+  })
 
   return <LoadingModal />
 }

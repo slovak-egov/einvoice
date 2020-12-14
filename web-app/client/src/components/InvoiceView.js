@@ -1,14 +1,11 @@
-import React from 'react'
-import {compose} from 'redux'
-import {connect} from 'react-redux'
-import {useHistory, useParams} from 'react-router-dom'
-import {branch, lifecycle, renderComponent, renderNothing} from 'recompose'
+import React, {useEffect} from 'react'
+import {useDispatch, useSelector} from 'react-redux'
 import {Button, Card, Col, Form, Row} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
-import {get} from 'lodash'
 import NotFound from './helpers/NotFound'
 import BoolIcon from './helpers/BoolIcon'
 import {getInvoiceMeta} from '../actions/invoices'
+import {getInvoiceSelector} from '../state/invoices'
 import {invoiceDownloadXmlUrl, invoiceDownloadPdfUrl} from '../utils/constants'
 
 const TextField = ({label, value}) => (
@@ -28,16 +25,35 @@ const CheckboxField = ({label, value}) => (
   </Form.Group>
 )
 
-const InvoiceView = ({
-  createdAt, customerIco, format, isPublic, issueDate, price, receiver, sender, supplierIco, test,
-}) => {
-  const {id} = useParams()
+export default ({history, match: {params: {id}}}) => {
   const {t} = useTranslation(['common', 'invoices'])
-  const history = useHistory()
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(getInvoiceMeta(id))
+  }, [dispatch, id])
+
+  const invoice = useSelector(getInvoiceSelector(id))
+
+  // Data are still not loaded
+  if (invoice == null) {
+    return null
+  }
+
+  if (invoice.notFound) {
+    return <NotFound />
+  }
+
+  const {
+    createdAt, customerIco, format, isPublic, issueDate, price, receiver, sender, supplierIco, test,
+  } = invoice
+
   return (
     <Card className="m-1">
       <Card.Header className="bg-primary text-white text-center" as="h3" style={{display: 'grid'}}>
-        <div style={{gridRowStart: 1, gridColumnStart: 1, justifySelf: 'center'}}>{t('invoice')} {id}</div>
+        <div style={{gridRowStart: 1, gridColumnStart: 1, justifySelf: 'center'}}>
+          {t('invoice')} {id}
+        </div>
         <div style={{gridRowStart: 1, gridColumnStart: 1, justifySelf: 'right'}}>
           <Button variant="danger" onClick={history.goBack}>{t('close')}</Button>
         </div>
@@ -95,26 +111,3 @@ const InvoiceView = ({
     </Card>
   )
 }
-
-export default compose(
-  connect(
-    (state, {match: {params: {id}}}) => ({
-      ...get(state, ['invoices', id]),
-      invoiceDoesNotExist: get(state, ['invoices', id, 'notFound']),
-    }),
-    {getInvoiceMeta}
-  ),
-  lifecycle({
-    componentDidMount() {
-      this.props.getInvoiceMeta(this.props.match.params.id)
-    },
-  }),
-  branch(
-    ({id, notFound}) => id == null && !notFound,
-    renderNothing,
-  ),
-  branch(
-    ({invoiceDoesNotExist}) => invoiceDoesNotExist,
-    renderComponent(NotFound),
-  ),
-)(InvoiceView)

@@ -23,4 +23,4 @@ export const invoiceDownloadPdfUrl = (id) => {
 }
 
 // This needs to be function, so URL is generated with current localStorage content
-export const logoutUrl = () => `${CONFIG.apiServerUrl}/upvs/logout?token=${localStorage.getItem('oboToken')}`
+export const getLogoutUrl = () => `${CONFIG.apiServerUrl}/upvs/logout?token=${localStorage.getItem('oboToken')}`

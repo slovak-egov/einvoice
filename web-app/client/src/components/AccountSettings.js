@@ -1,15 +1,13 @@
-import React, {useState} from 'react'
-import {compose} from 'redux'
-import {connect} from 'react-redux'
-import {branch, lifecycle, renderNothing, withHandlers} from 'recompose'
+import React, {useCallback, useEffect, useState} from 'react'
+import {useDispatch, useSelector} from 'react-redux'
 import {Button, Card, Form, InputGroup} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
-import Auth from './helpers/Auth'
 import Tooltip from './helpers/Tooltip'
 import {getUserOrganizationIcos, updateUser} from '../actions/users'
 import {
   addUserSubstitute, getUserSubstitutes, removeUserSubstitute, setNewSubstituteId,
 } from '../actions/substitutes'
+import {newSubstituteIdSelector} from '../state/accountScreen'
 import {getLoggedUser} from '../state/users'
 import {keepDigitsOnly} from '../utils/validations'
 
@@ -55,11 +53,39 @@ const EditableField = ({actualValue, label, save, tooltipText, ...props}) => {
   )
 }
 
-const AccountSettings = ({
-  addUserSubstitute, changeNewSubstituteId, loggedUser, newSubstituteId, removeUserSubstitute,
-  substituteIds, updateUser, organizationIcos,
-}) => {
+export default () => {
   const {t} = useTranslation(['common', 'TopBar'])
+
+  const newSubstituteId = useSelector(newSubstituteIdSelector)
+  const loggedUser = useSelector(getLoggedUser)
+
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getUserSubstitutes())
+    dispatch(getUserOrganizationIcos())
+  }, [dispatch])
+
+  const removeSubstitute = useCallback(
+    (id) => () => dispatch(removeUserSubstitute(id)), [dispatch]
+  )
+  const changeNewSubstituteId = useCallback(
+    (e) => dispatch(setNewSubstituteId(keepDigitsOnly(e.target.value))), [dispatch]
+  )
+  const addSubstitute = useCallback(
+    async () => {
+      if (await dispatch(addUserSubstitute(newSubstituteId))) {
+        dispatch(setNewSubstituteId(''))
+      }
+    },
+    [dispatch, newSubstituteId]
+  )
+  const updateUserData = useCallback(
+    (newData) => dispatch(updateUser(newData)), [dispatch]
+  )
+
+  // Data is still loading
+  if (loggedUser.substituteIds == null || loggedUser.organizationIcos == null) return null
+
   return (
     <Card className="m-1">
       <Card.Header className="bg-primary text-white text-center" as="h3">
@@ -78,13 +104,13 @@ const AccountSettings = ({
           actualValue={loggedUser.email}
           label={t('email.label')}
           tooltipText={t('email.tooltip')}
-          save={(email) => updateUser({email})}
+          save={(email) => updateUserData({email})}
         />
         <EditableField
           actualValue={loggedUser.serviceAccountPublicKey}
           label={t('accountPublicKey.label')}
           tooltipText={t('accountPublicKey.tooltip')}
-          save={(serviceAccountPublicKey) => updateUser({serviceAccountPublicKey})}
+          save={(serviceAccountPublicKey) => updateUserData({serviceAccountPublicKey})}
           as="textarea"
           rows={10}
         />
@@ -92,14 +118,14 @@ const AccountSettings = ({
           <Form.Label>{t('substituteIds.label')}</Form.Label>
           <Tooltip tooltipText={t('substituteIds.tooltip')} />
           <div className="d-flex flex-wrap">
-            {substituteIds.map((id) => (
+            {loggedUser.substituteIds.map((id) => (
               <InputGroup className="m-1" key={id} style={{width: '115px'}}>
                 <Form.Control
                   value={id}
                   readOnly
                 />
                 <InputGroup.Append>
-                  <Button className="m-0" variant="danger" onClick={removeUserSubstitute(id)}>X</Button>
+                  <Button className="m-0" variant="danger" onClick={removeSubstitute(id)}>X</Button>
                 </InputGroup.Append>
               </InputGroup>
             ))}
@@ -111,7 +137,7 @@ const AccountSettings = ({
               <InputGroup.Append>
                 <Button
                   variant="success"
-                  onClick={addUserSubstitute}
+                  onClick={addSubstitute}
                   className="m-0"
                   disabled={newSubstituteId === ''}
                 >
@@ -125,8 +151,8 @@ const AccountSettings = ({
           <Form.Label>{t('organizationIcos.label')}</Form.Label>
           <Tooltip tooltipText={t('organizationIcos.tooltip')} />
           <div className="d-flex flex-wrap">
-            {organizationIcos.length > 0 ?
-              organizationIcos.map((ico, i) => (
+            {loggedUser.organizationIcos.length > 0 ?
+              loggedUser.organizationIcos.map((ico, i) => (
                 <Form.Control
                   key={i}
                   value={ico}
@@ -143,43 +169,3 @@ const AccountSettings = ({
     </Card>
   )
 }
-
-export default Auth(
-  compose(
-    connect(
-      (state) => {
-        const loggedUser = getLoggedUser(state)
-        return {
-          loggedUser,
-          substituteIds: loggedUser.substituteIds,
-          newSubstituteId: state.accountScreen.newSubstituteId,
-          organizationIcos: loggedUser.organizationIcos,
-        }
-      },
-      {
-        addUserSubstitute, getUserSubstitutes, removeUserSubstitute, setNewSubstituteId, updateUser,
-        getUserOrganizationIcos,
-      }
-    ),
-    lifecycle({
-      componentDidMount() {
-        this.props.getUserSubstitutes()
-        this.props.getUserOrganizationIcos()
-      },
-    }),
-    withHandlers({
-      removeUserSubstitute: ({removeUserSubstitute}) => (id) => () => removeUserSubstitute(id),
-      addUserSubstitute: ({addUserSubstitute, newSubstituteId, setNewSubstituteId}) => async () => {
-        if (await addUserSubstitute(newSubstituteId)) {
-          setNewSubstituteId('')
-        }
-      },
-      changeNewSubstituteId: ({setNewSubstituteId}) => (e) =>
-        setNewSubstituteId(keepDigitsOnly(e.target.value)),
-    }),
-    branch(
-      ({substituteIds, organizationIcos}) => substituteIds == null || organizationIcos == null,
-      renderNothing,
-    ),
-  )(AccountSettings)
-)
