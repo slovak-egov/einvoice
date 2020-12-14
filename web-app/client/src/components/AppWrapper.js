@@ -3,6 +3,7 @@ import '@fortawesome/fontawesome-free/css/all.css'
 import React, {useEffect} from 'react'
 import {useDispatch} from 'react-redux'
 import {Route, Switch} from 'react-router-dom'
+import {Spinner} from 'react-bootstrap'
 import App from './App'
 import LoadingModal from './helpers/LoadingModal'
 import {loginWithSlovenskoSkToken, logout} from '../actions/users'
@@ -37,10 +38,20 @@ const LogoutCallback = ({history}) => {
   return <LoadingModal />
 }
 
+const CenteredSpinner = () => (
+  <div className="Modal">
+    <Spinner animation="border" variant="primary" />
+  </div>
+)
+
 export default () => (
   <Switch>
     <Route path="/login-callback" component={LoginCallback} />
     <Route path="/logout-callback" component={LogoutCallback} />
-    <Route component={App} />
+    <Route>
+      <React.Suspense fallback={<CenteredSpinner />}>
+        <App />
+      </React.Suspense>
+    </Route>
   </Switch>
 )

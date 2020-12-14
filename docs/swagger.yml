@@ -495,7 +495,7 @@ components:
         - encoded by RS256 algorithm
         - signed by your private key (paired with public key you set in your account)
         - `sub` claim set to your user Id as integer
-        - `exp` claim set to current UTC timestamp + 30 minutes
+        - `exp` claim set to current Unix timestamp + 30 minutes
         - `jti` claim set to random string unique during 60 minutes
 
         Example of `header` segment:
@@ -517,7 +517,7 @@ components:
 
         - `jti` value should follow regular expression `/\A[0-9a-z\-_]{32,256}\z/i`
         - same `jti` value cannot be reused in 60 minute timeframe
-        - server considers `exp` valid if it fits in time interval `(current UTC; current UTC + 30 minutes)`
+        - server considers `exp` valid if it fits in time interval `(current Unix; current Unix + 30 minutes)`
       type: apiKey
       in: header
       name: X-API-Key
