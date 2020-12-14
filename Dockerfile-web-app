@@ -21,9 +21,6 @@ RUN go mod download
 
 COPY . .
 
-# Unit tests
-RUN CGO_ENABLED=0 go test -v ./web-app/server
-
 RUN go build -o /out/server ./web-app/server
 
 # Start fresh from a smaller image
