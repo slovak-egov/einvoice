@@ -1,5 +1,5 @@
 import './Filters.css'
-import React, {useCallback} from 'react'
+import {useCallback} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {Accordion, Button, Card, Form, FormCheck, InputGroup} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'

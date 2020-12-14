@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react'
+import {Fragment, useCallback} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {Button, Nav, Navbar, NavDropdown} from 'react-bootstrap'
 import {NavLink} from 'react-router-dom'
@@ -41,7 +41,7 @@ const TopBar = () => {
         </Nav>
         <Nav>
           {isLogged ?
-            <React.Fragment>
+            <Fragment>
               <NavLink className="nav-link" to="/create-invoice">
                 <Navbar.Text>{t('tabs.createInvoice')}</Navbar.Text>
               </NavLink>
@@ -58,7 +58,7 @@ const TopBar = () => {
                   </Button>
                 </a>
               </div>
-            </React.Fragment>
+            </Fragment>
             :
             <a href={CONFIG.slovenskoSkLoginUrl}>
               <Button variant="success" onClick={startLoading}>

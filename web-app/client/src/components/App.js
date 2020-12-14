@@ -1,5 +1,5 @@
 import './App.css'
-import React, {useEffect} from 'react'
+import {Fragment, useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {Route, Switch} from 'react-router-dom'
 import PublicInvoices from './PublicInvoices'
@@ -29,7 +29,7 @@ export default () => {
   }
 
   return (
-    <React.Fragment>
+    <Fragment>
       <TopBar />
       <div className="container">
         <Switch>
@@ -49,6 +49,6 @@ export default () => {
         </Switch>
       </div>
       {isLoading && <LoadingModal />}
-    </React.Fragment>
+    </Fragment>
   )
 }

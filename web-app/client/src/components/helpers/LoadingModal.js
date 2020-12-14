@@ -1,5 +1,4 @@
 import './LoadingModal.css'
-import React from 'react'
 import {Modal, Spinner} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 
