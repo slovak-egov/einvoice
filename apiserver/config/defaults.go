@@ -19,7 +19,7 @@ var devConfig = Configuration{
 	LogLevel:           logrus.DebugLevel,
 	ServerReadTimeout:  15 * time.Second,
 	ServerWriteTimeout: 15 * time.Second,
-	GracefulTimeout:    15 * time.Second,
+	GracefulTimeout:    10 * time.Second,
 	Cache: CacheConfiguration{
 		Host:                   "localhost",
 		Port:                   6379,
@@ -47,7 +47,7 @@ var prodConfig = Configuration{
 	},
 	ServerReadTimeout:  15 * time.Second,
 	ServerWriteTimeout: 15 * time.Second,
-	GracefulTimeout:    15 * time.Second,
+	GracefulTimeout:    10 * time.Second,
 	Cache: CacheConfiguration{
 		Port:                   6379,
 		SessionTokenExpiration: 1 * time.Hour,
@@ -72,7 +72,7 @@ var testConfig = Configuration{
 	LogLevel:           logrus.WarnLevel,
 	ServerReadTimeout:  15 * time.Second,
 	ServerWriteTimeout: 15 * time.Second,
-	GracefulTimeout:    15 * time.Second,
+	GracefulTimeout:    10 * time.Second,
 	Cache: CacheConfiguration{
 		Host:                   "localhost",
 		Port:                   6379,
