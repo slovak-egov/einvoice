@@ -49,8 +49,8 @@ func init() {
 		log.Println("Creating table substitutes")
 		_, err = db.Exec(`
 			CREATE TABLE substitutes (
-				owner_id INTEGER NOT NULL,
-				substitute_id INTEGER NOT NULL,
+				owner_id INTEGER,
+				substitute_id INTEGER,
 				created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 				CONSTRAINT fk_substitute_id
 					  FOREIGN KEY(substitute_id)
@@ -58,7 +58,7 @@ func init() {
 				CONSTRAINT fk_owner_id
 					  FOREIGN KEY(owner_id)
 					  REFERENCES users(id),
-				UNIQUE (owner_id, substitute_id)
+				PRIMARY KEY (owner_id, substitute_id)
 			);
 		`)
 

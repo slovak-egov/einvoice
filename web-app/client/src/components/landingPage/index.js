@@ -1,5 +1,5 @@
 import {useTranslation} from 'react-i18next'
-import Faq from './FAQ'
+import {Card} from 'react-bootstrap'
 
 export default () => {
   const {t} = useTranslation('LandingPage')
@@ -7,7 +7,7 @@ export default () => {
     <div>
       <h1 style={{textAlign: 'center'}}>{t('title')}</h1>
       <div style={{margin: '10px 0'}}>
-        <span>{t('introduction1')}:</span>
+        <span>{t('introduction')}:</span>
         <ol>
           <li>
             <span style={{fontWeight: 'bold'}}>(B/G)2(B/G)</span> - {t('version1')}
@@ -25,9 +25,15 @@ export default () => {
             <span style={{fontWeight: 'bold'}}>(B/G)2C</span> - {t('version5')}
           </li>
         </ol>
-        <span>{t('introduction2')}</span>
       </div>
-      <Faq />
+      <Card style={{margin: '10px 0'}}>
+        <Card.Header className="bg-primary text-white text-center" as="h3">
+          {t('announcements')}
+        </Card.Header>
+        <Card.Body>
+          <strong>{t('announcement1')}</strong>
+        </Card.Body>
+      </Card>
     </div>
   )
 }

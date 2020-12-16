@@ -313,7 +313,7 @@ const Version5 = ({eventKey}) => (
 export default () => {
   const {t} = useTranslation('LandingPage')
   return (
-    <Card style={{margin: '10px 0'}}>
+    <Card className="m-1">
       <Card.Header className="bg-primary text-white text-center" as="h3">
         {t('faq')}
       </Card.Header>

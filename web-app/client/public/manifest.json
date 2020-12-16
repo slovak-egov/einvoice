@@ -1,7 +1,13 @@
 {
   "short_name": "Einvoice",
-  "name": "Einvoice Web App",
-  "icons": [],
+  "name": "Slovak e-invoicing system",
+  "icons": [
+    {
+      "src": "images/logo192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ],
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",

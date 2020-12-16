@@ -35,5 +35,6 @@
   "received": "Received",
   "supplied": "Supplied",
   "download": "Download",
-  "loadMore": "Load more"
+  "loadMore": "Load more",
+  "invoiceValidation": "Invoice validation"
 }

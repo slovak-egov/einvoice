@@ -1,4 +1,4 @@
-import {Fragment, useCallback} from 'react'
+import {useCallback} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {Button, Nav, Navbar, NavDropdown} from 'react-bootstrap'
 import {NavLink} from 'react-router-dom'
@@ -24,8 +24,8 @@ const TopBar = () => {
       <NavLink to="/">
         <Navbar.Brand>{t('title')}</Navbar.Brand>
       </NavLink>
-      <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-      <Navbar.Collapse id="responsive-navbar-nav">
+      <Navbar.Toggle />
+      <Navbar.Collapse>
         <Nav className="mr-auto">
           <NavDropdown className="nav-link" title={i18n.language.toUpperCase()}>
             <NavDropdown.Item active={i18n.language === 'sk'} onClick={() => i18n.changeLanguage('sk')}>
@@ -41,7 +41,7 @@ const TopBar = () => {
         </Nav>
         <Nav>
           {isLogged ?
-            <Fragment>
+            <>
               <NavLink className="nav-link" to="/create-invoice">
                 <Navbar.Text>{t('tabs.createInvoice')}</Navbar.Text>
               </NavLink>
@@ -58,7 +58,7 @@ const TopBar = () => {
                   </Button>
                 </a>
               </div>
-            </Fragment>
+            </>
             :
             <a href={CONFIG.slovenskoSkLoginUrl}>
               <Button variant="success" onClick={startLoading}>

@@ -1,0 +1,12 @@
+.footer-wrapper {
+  padding: .25rem 1rem;
+  margin-top: auto;
+  justify-content: flex-end;
+  display: flex;
+}
+
+.footer-link {
+  color: white!important;
+  text-decoration: underline!important;
+  padding: 0 .5rem;
+}
