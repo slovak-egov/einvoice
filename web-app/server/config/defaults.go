@@ -16,7 +16,7 @@ var devConfig = Configuration{
 	LogLevel:           logrus.DebugLevel,
 	ServerReadTimeout:  15 * time.Second,
 	ServerWriteTimeout: 15 * time.Second,
-	GracefulTimeout:    15 * time.Second,
+	GracefulTimeout:    10 * time.Second,
 }
 
 var prodConfig = Configuration{
@@ -28,5 +28,5 @@ var prodConfig = Configuration{
 	LogLevel:           logrus.InfoLevel,
 	ServerReadTimeout:  15 * time.Second,
 	ServerWriteTimeout: 15 * time.Second,
-	GracefulTimeout:    15 * time.Second,
+	GracefulTimeout:    10 * time.Second,
 }
