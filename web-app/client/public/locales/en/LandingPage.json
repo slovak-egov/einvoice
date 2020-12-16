@@ -1,7 +1,6 @@
 {
   "title": "Welcome to Slovak E-invoicing system EINVOICE",
-  "introduction1": "This system will support 5 different use-cases",
-  "introduction2": "These use-cases will be released sequentially, currently all of them are under development",
+  "introduction": "This system will support 5 different use-cases",
   "version1": "Slovak business (or government) to slovak business (government) invoices",
   "version2": "Business (or government) to business (or government) invoices for foreign receivers",
   "version3": "Business (or government) to government invoices for foreign issuers",
@@ -9,5 +8,7 @@
   "version5": "Business (or government) to customer invoices",
   "forForeignIssuers": "for foreign issuers",
   "forForeignReceivers": "for foreign receivers",
-  "faq": "Frequently asked questions"
+  "faq": "Frequently asked questions",
+  "announcements": "Announcements",
+  "announcement1": "All use-cases will be released sequentially, currently all of them are under development"
 }

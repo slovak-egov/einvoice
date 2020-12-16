@@ -1,11 +1,13 @@
 import './App.css'
-import {Fragment, useEffect} from 'react'
+import {useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {Route, Switch} from 'react-router-dom'
 import PublicInvoices from './PublicInvoices'
 import MyInvoices from './MyInvoices'
 import LandingPage from './landingPage'
+import FAQ from './landingPage/FAQ'
 import TopBar from './TopBar'
+import Footer from './Footer'
 import CreateInvoice from './CreateInvoice'
 import InvoiceView from './InvoiceView'
 import AccountSettings from './AccountSettings'
@@ -29,11 +31,12 @@ export default () => {
   }
 
   return (
-    <Fragment>
+    <div className="d-flex min-vh-100 flex-column">
       <TopBar />
       <div className="container">
         <Switch>
           <Route exact path="/" component={LandingPage} />
+          <Route exact path="/faq" component={FAQ} />
           <AuthRoute exact path="/account">
             <AccountSettings />
           </AuthRoute>
@@ -49,6 +52,7 @@ export default () => {
         </Switch>
       </div>
       {isLoading && <LoadingModal />}
-    </Fragment>
+      <Footer />
+    </div>
   )
 }

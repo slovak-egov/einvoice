@@ -1,5 +1,5 @@
 import './invoiceList/Filters.css'
-import {Fragment, useCallback} from 'react'
+import {useCallback} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {FormCheck} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
@@ -18,7 +18,7 @@ const Filter = () => {
     (field) => () => dispatch(toggleField(['myInvoicesScreen', 'filters', field])), [dispatch]
   )
   return (
-    <Fragment>
+    <>
       <strong className="filter-heading">{t('invoiceType')}</strong>
       <div className="d-flex">
         <FormCheck
@@ -35,7 +35,7 @@ const Filter = () => {
           onChange={toggleFilter('received')}
         />
       </div>
-    </Fragment>
+    </>
   )
 }
 

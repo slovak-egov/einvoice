@@ -3,11 +3,10 @@ import {useSelector} from 'react-redux'
 import {NavLink} from 'react-router-dom'
 import {Card, Table} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
+import classnames from 'classnames'
 import {get} from 'lodash'
 import Filters from './Filters'
 import {invoicesSelector} from '../../state/invoices'
-
-const getRowClassNames = (invoice) => invoice.test ? 'text-secondary' : ''
 
 export default ({areCustomFilterFieldsValid, CustomFilter, getInvoices, path, title}) => {
   const {t} = useTranslation(['common', 'invoices'])
@@ -46,7 +45,7 @@ export default ({areCustomFilterFieldsValid, CustomFilter, getInvoices, path, ti
           </thead>
           <tbody>
             {invoiceIds.map((invoiceId, i) => (
-              <tr key={i} className={getRowClassNames(invoices[invoiceId])}>
+              <tr key={i} className={classnames({'text-secondary': invoices[invoiceId].test})}>
                 <td>{invoiceId}</td>
                 <td>{invoices[invoiceId].supplierIco}</td>
                 <td>{invoices[invoiceId].customerIco}</td>

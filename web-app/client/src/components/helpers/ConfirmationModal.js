@@ -44,7 +44,7 @@ export default class extends React.Component {
   }
 
   render = () => (
-    <React.Fragment>
+    <>
       {this.props.children(this.show)}
       {this.state.open && (
         <ConfirmationModal
@@ -54,6 +54,6 @@ export default class extends React.Component {
           cancel={this.hide}
         />
       )}
-    </React.Fragment>
+    </>
   )
 }
