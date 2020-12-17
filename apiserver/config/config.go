@@ -37,6 +37,11 @@ type SlovenskoSkConfiguration struct {
 	LogoutCallbackUrl  string
 }
 
+type ApiKeyConfiguration struct {
+	MaxExpiration time.Duration
+	JtiExpiration time.Duration
+}
+
 type Configuration struct {
 	Db                   DbConfiguration
 	Port                 int
@@ -52,7 +57,7 @@ type Configuration struct {
 	Cache                CacheConfiguration
 	SlovenskoSk          SlovenskoSkConfiguration
 	InvoicesLimit        int
-	ApiKeyMaxExpiration  time.Duration
+	ApiKey               ApiKeyConfiguration
 }
 
 func (c *Configuration) initDb() {
@@ -133,7 +138,8 @@ func New() *Configuration {
 	config.GracefulTimeout = environment.ParseDuration("GRACEFUL_TIMEOUT", config.GracefulTimeout)
 
 	config.InvoicesLimit = environment.ParseInt("INVOICES_LIMIT", config.InvoicesLimit)
-	config.ApiKeyMaxExpiration = environment.ParseDuration("API_KEY_MAX_EXPIRATION", config.ApiKeyMaxExpiration)
+	config.ApiKey.MaxExpiration = environment.ParseDuration("API_KEY_MAX_EXPIRATION", config.ApiKey.MaxExpiration)
+	config.ApiKey.JtiExpiration = environment.ParseDuration("API_KEY_JTI_EXPIRATION", config.ApiKey.JtiExpiration)
 
 	log.Info("config.loaded")
 

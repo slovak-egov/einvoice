@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"regexp"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -28,6 +29,17 @@ func getIntClaim(claims jwt.MapClaims, key string) (int, error) {
 	return 0, fmt.Errorf("Key '%v' in claims has wrong type", key)
 }
 
+func getStringClaim(claims jwt.MapClaims, key string) (string, error) {
+	rawValue, ok := claims[key]
+	if !ok {
+		return "", fmt.Errorf("Key '%v' not found in claims", key)
+	}
+	if v, ok := rawValue.(string); ok {
+		return v, nil
+	}
+	return "", fmt.Errorf("Key '%v' in claims has wrong type", key)
+}
+
 // Validate if exp belongs to interval <now(), now()+maxExpiration>
 func validateExp(exp int, maxExpiration time.Duration) error {
 	currentTime, expTime := time.Now(), time.Unix(int64(exp), 0)
@@ -41,8 +53,19 @@ func validateExp(exp int, maxExpiration time.Duration) error {
 	return nil
 }
 
+func validateJti(jti string) error {
+	if matched, err := regexp.Match(`\A[0-9a-zA-Z\-_]{32,256}\z`, []byte(jti)); err != nil {
+		return err
+	} else if !matched {
+		return errors.New("Invalid jti")
+	}
+
+	return nil
+}
+
 func (a *App) getUserIdByApiKey(ctx goContext.Context, tokenString string) (int, error) {
 	var user *entity.User
+	var jti string
 	jwtParser := jwt.Parser{UseJSONNumber: true}
 	token, err := jwtParser.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodRSA); !ok {
@@ -67,13 +90,20 @@ func (a *App) getUserIdByApiKey(ctx goContext.Context, tokenString string) (int,
 		if exp, err = getIntClaim(claims, "exp"); err != nil {
 			return nil, handlerutil.NewAuthorizationError(err.Error())
 		}
-		if err = validateExp(exp, a.config.ApiKeyMaxExpiration); err != nil {
+		if err = validateExp(exp, a.config.ApiKey.MaxExpiration); err != nil {
 			return nil, handlerutil.NewAuthorizationError(err.Error())
 		}
 
 		user, err = a.db.GetUser(ctx, userId)
 		if err != nil {
 			return nil, err
+		}
+
+		if jti, err = getStringClaim(claims, "jti"); err != nil {
+			return nil, handlerutil.NewAuthorizationError(err.Error())
+		}
+		if err = validateJti(jti); err != nil {
+			return nil, handlerutil.NewAuthorizationError(err.Error())
 		}
 
 		verifyKey, err := jwt.ParseRSAPublicKeyFromPEM([]byte(*user.ServiceAccountPublicKey))
@@ -101,6 +131,17 @@ func (a *App) getUserIdByApiKey(ctx goContext.Context, tokenString string) (int,
 			Debug("app.authMiddleware.parseToken.invalid")
 
 		return 0, handlerutil.NewAuthorizationError("Invalid key")
+	}
+
+	if err := a.cache.SaveJti(ctx, user.Id, jti, a.config.ApiKey.JtiExpiration); err != nil {
+		context.GetLogger(ctx).
+			WithFields(log.Fields{
+				"token": tokenString,
+				"error": err.Error(),
+			}).
+			Debug("app.authMiddleware.parseToken.invalid")
+
+		return 0, err
 	}
 
 	return user.Id, nil
