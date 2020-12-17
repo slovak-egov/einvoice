@@ -31,8 +31,8 @@ var devConfig = Configuration{
 	},
 	InvoicesLimit: 5,
 	ApiKey: ApiKeyConfiguration{
-		MaxExpiration: 30 * time.Minute,
-		JtiExpiration: 60 * time.Minute,
+		MaxExpiration: 10 * time.Minute,
+		JtiExpiration: 15 * time.Minute,
 	},
 }
 
@@ -61,8 +61,8 @@ var prodConfig = Configuration{
 	},
 	InvoicesLimit: 20,
 	ApiKey: ApiKeyConfiguration{
-		MaxExpiration: 30 * time.Minute,
-		JtiExpiration: 60 * time.Minute,
+		MaxExpiration: 10 * time.Minute,
+		JtiExpiration: 15 * time.Minute,
 	},
 }
 
@@ -86,7 +86,7 @@ var testConfig = Configuration{
 	},
 	InvoicesLimit: 5,
 	ApiKey: ApiKeyConfiguration{
-		MaxExpiration: 30 * time.Minute,
-		JtiExpiration: 60 * time.Minute,
+		MaxExpiration: 10 * time.Minute,
+		JtiExpiration: 15 * time.Minute,
 	},
 }

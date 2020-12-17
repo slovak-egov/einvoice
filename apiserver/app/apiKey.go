@@ -133,17 +133,15 @@ func (a *App) getUserIdByApiKey(ctx goContext.Context, tokenString string) (int,
 		return 0, handlerutil.NewAuthorizationError("Invalid key")
 	}
 
-	if jtiAdded, err := a.cache.AddJti(ctx, user.Id, jti, a.config.ApiKey.JtiExpiration); err != nil {
+	if err := a.cache.SaveJti(ctx, user.Id, jti, a.config.ApiKey.JtiExpiration); err != nil {
 		context.GetLogger(ctx).
 			WithFields(log.Fields{
 				"token": tokenString,
 				"error": err.Error(),
 			}).
-			Debug("app.authMiddleware.parseToken.cache.failed")
+			Debug("app.authMiddleware.parseToken.invalid")
 
 		return 0, err
-	} else if !jtiAdded {
-		return 0, handlerutil.NewAuthorizationError("Invalid reused jti")
 	}
 
 	return user.Id, nil

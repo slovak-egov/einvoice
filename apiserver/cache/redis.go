@@ -2,8 +2,8 @@ package cache
 
 import (
 	goContext "context"
+	"errors"
 	"fmt"
-	"strconv"
 	"time"
 
 	"github.com/go-redis/redis/v8"
@@ -43,7 +43,7 @@ func NewRedis(cacheConfig config.CacheConfiguration) *Cache {
 }
 
 func userIdKey(token string) string {
-	return "token-" + token
+	return fmt.Sprintf("token:%s", token)
 }
 
 func (r *Cache) SaveUserToken(ctx goContext.Context, token string, userId int) error {
@@ -91,16 +91,18 @@ func (r *Cache) RemoveUserToken(ctx goContext.Context, token string) error {
 }
 
 func jtiKey(userId int, jti string) string {
-	return fmt.Sprintf("jti-%v-%v", strconv.Itoa(userId), jti)
+	return fmt.Sprintf("userId:%d:jti:%s", userId, jti)
 }
 
-func (r *Cache) AddJti(ctx goContext.Context, userId int, jti string, expiration time.Duration) (bool, error) {
+func (r *Cache) SaveJti(ctx goContext.Context, userId int, jti string, expiration time.Duration) error {
 	v, err := r.client.SetNX(ctx, jtiKey(userId, jti), "", expiration).Result()
 	if err != nil {
-		return false, err
+		return err
 	}
-
-	return v, nil
+	if !v {
+		return errors.New("Jti already exists")
+	}
+	return nil
 }
 
 func (r *Cache) FlushAll(ctx goContext.Context) error {
