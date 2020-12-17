@@ -4,6 +4,7 @@ go 1.15
 
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/elastic/go-elasticsearch/v7 v7.10.0
 	github.com/go-ozzo/ozzo-validation/v4 v4.3.0
 	github.com/go-pg/migrations/v8 v8.0.1
 	github.com/go-pg/pg/v10 v10.7.3
@@ -18,6 +19,7 @@ require (
 	github.com/sirupsen/logrus v1.7.0
 	github.com/stretchr/testify v1.6.1
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
+	gopkg.in/go-extras/elogrus.v7 v7.2.0
 	gopkg.in/xmlpath.v1 v1.0.0-20140413065638-a146725ea6e7 // indirect
 	launchpad.net/gocheck v0.0.0-20140225173054-000000000087 // indirect
 	launchpad.net/xmlpath v0.0.0-20130614043138-000000000004 // indirect

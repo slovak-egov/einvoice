@@ -42,14 +42,22 @@ type ApiKeyConfiguration struct {
 	JtiExpiration time.Duration
 }
 
+type LoggerConfiguration struct {
+	LogLevel              log.Level
+	ElasticsearchUrl      string
+	ElasticsearchUser     string
+	ElasticsearchPassword string
+	ElasticIndex          string
+	Format                string
+}
+
 type Configuration struct {
 	Db                   DbConfiguration
+	Host                 string
 	Port                 int
 	D16bXsdPath          string
 	Ubl21XsdPath         string
 	LocalStorageBasePath string
-	GcsBucket            string
-	LogLevel             log.Level
 	Mail                 MailConfiguration
 	ServerReadTimeout    time.Duration
 	ServerWriteTimeout   time.Duration
@@ -58,6 +66,7 @@ type Configuration struct {
 	SlovenskoSk          SlovenskoSkConfiguration
 	InvoicesLimit        int
 	ApiKey               ApiKeyConfiguration
+	Logger               LoggerConfiguration
 }
 
 func (c *Configuration) initDb() {
@@ -97,14 +106,43 @@ func (c *Configuration) initSlovenskoSk() {
 	}
 }
 
+func (c *Configuration) initLogger() {
+	loggerConfig := LoggerConfiguration{
+		ElasticsearchUrl:      environment.Getenv("LOGGER_ELASTICSEARCH_URL", c.Logger.ElasticsearchUrl),
+		ElasticIndex:          environment.Getenv("LOGGER_ELASTIC_INDEX", c.Logger.ElasticIndex),
+		Format:                environment.Getenv("LOGGER_FORMAT", c.Logger.Format),
+		ElasticsearchUser:     environment.Getenv("LOGGER_ELASTICSEARCH_USER", c.Logger.ElasticsearchUser),
+		ElasticsearchPassword: environment.Getenv("LOGGER_ELASTICSEARCH_PASSWORD", c.Logger.ElasticsearchPassword),
+	}
+
+	// Set level
+	var err error
+	logLevel := environment.Getenv("LOG_LEVEL", c.Logger.LogLevel.String())
+	loggerConfig.LogLevel, err = log.ParseLevel(logLevel)
+	if err != nil {
+		log.WithField("logLevel", logLevel).Fatal("config.logger.logLevel.unknown")
+	}
+	log.SetLevel(loggerConfig.LogLevel)
+
+	// Set format
+	switch loggerConfig.Format {
+	case "json":
+		log.SetFormatter(&log.JSONFormatter{})
+	case "text":
+		log.SetFormatter(&log.TextFormatter{})
+	default:
+		log.WithField("format", loggerConfig.Format).Fatal("config.logger.format.unknown")
+	}
+
+	c.Logger = loggerConfig
+}
+
 func New() *Configuration {
 	apiserverEnv := environment.Getenv("APISERVER_ENV", "")
 	var config Configuration
 	switch apiserverEnv {
 	case "prod":
 		config = prodConfig
-		// Use different formatting in production, which can be easily processed by elasticsearch
-		log.SetFormatter(&log.JSONFormatter{})
 	case "dev":
 		config = devConfig
 	case "test":
@@ -113,14 +151,7 @@ func New() *Configuration {
 		log.WithField("environment", apiserverEnv).Fatal("config.environment.unknown")
 	}
 
-	var err error
-	logLevel := environment.Getenv("LOG_LEVEL", config.LogLevel.String())
-	config.LogLevel, err = log.ParseLevel(logLevel)
-	if err != nil {
-		log.WithField("logLevel", logLevel).Fatal("config.logLevel.unknown")
-	}
-	log.SetLevel(config.LogLevel)
-
+	config.initLogger()
 	config.initDb()
 	config.initMail()
 	config.initCache()
