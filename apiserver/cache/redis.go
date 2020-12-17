@@ -94,19 +94,13 @@ func jtiKey(userId int, jti string) string {
 	return fmt.Sprintf("jti-%v-%v", strconv.Itoa(userId), jti)
 }
 
-func (r *Cache) ContainsJti(ctx goContext.Context, userId int, jti string) (bool, error) {
-	_, err := r.client.Get(ctx, jtiKey(userId, jti)).Result()
-	if err == redis.Nil {
-		return false, nil
-	} else if err != nil {
+func (r *Cache) AddJti(ctx goContext.Context, userId int, jti string, expiration time.Duration) (bool, error) {
+	v, err := r.client.SetNX(ctx, jtiKey(userId, jti), "", expiration).Result()
+	if err != nil {
 		return false, err
 	}
-	return true, nil
-}
 
-func (r *Cache) AddJti(ctx goContext.Context, userId int, jti string, expiration time.Duration) error {
-	_, err := r.client.Set(ctx, jtiKey(userId, jti), "", expiration).Result()
-	return err
+	return v, nil
 }
 
 func (r *Cache) FlushAll(ctx goContext.Context) error {

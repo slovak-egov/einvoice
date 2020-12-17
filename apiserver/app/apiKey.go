@@ -11,7 +11,6 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/slovak-egov/einvoice/apiserver/cache"
 	"github.com/slovak-egov/einvoice/apiserver/entity"
 	"github.com/slovak-egov/einvoice/pkg/context"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
@@ -54,17 +53,13 @@ func validateExp(exp int, maxExpiration time.Duration) error {
 	return nil
 }
 
-func validateJti(ctx goContext.Context, jti string, userId int, cache *cache.Cache) error {
+func validateJti(jti string) error {
 	if matched, err := regexp.Match(`\A[0-9a-zA-Z\-_]{32,256}\z`, []byte(jti)); err != nil {
 		return err
 	} else if !matched {
 		return errors.New("Invalid jti")
 	}
-	if exists, err := cache.ContainsJti(ctx, userId, jti); err != nil {
-		return err
-	} else if exists {
-		return errors.New("Invalid reused jti")
-	}
+
 	return nil
 }
 
@@ -107,7 +102,7 @@ func (a *App) getUserIdByApiKey(ctx goContext.Context, tokenString string) (int,
 		if jti, err = getStringClaim(claims, "jti"); err != nil {
 			return nil, handlerutil.NewAuthorizationError(err.Error())
 		}
-		if err = validateJti(ctx, jti, userId, a.cache); err != nil {
+		if err = validateJti(jti); err != nil {
 			return nil, handlerutil.NewAuthorizationError(err.Error())
 		}
 
@@ -138,7 +133,7 @@ func (a *App) getUserIdByApiKey(ctx goContext.Context, tokenString string) (int,
 		return 0, handlerutil.NewAuthorizationError("Invalid key")
 	}
 
-	if err = a.cache.AddJti(ctx, user.Id, jti, a.config.ApiKey.JtiExpiration); err != nil {
+	if jtiAdded, err := a.cache.AddJti(ctx, user.Id, jti, a.config.ApiKey.JtiExpiration); err != nil {
 		context.GetLogger(ctx).
 			WithFields(log.Fields{
 				"token": tokenString,
@@ -147,6 +142,8 @@ func (a *App) getUserIdByApiKey(ctx goContext.Context, tokenString string) (int,
 			Debug("app.authMiddleware.parseToken.cache.failed")
 
 		return 0, err
+	} else if !jtiAdded {
+		return 0, handlerutil.NewAuthorizationError("Invalid reused jti")
 	}
 
 	return user.Id, nil
