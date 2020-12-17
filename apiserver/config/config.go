@@ -37,7 +37,7 @@ type SlovenskoSkConfiguration struct {
 	LogoutCallbackUrl  string
 }
 
-type ApiKey struct {
+type ApiKeyConfiguration struct {
 	MaxExpiration time.Duration
 	JtiExpiration time.Duration
 }
@@ -57,7 +57,7 @@ type Configuration struct {
 	Cache                CacheConfiguration
 	SlovenskoSk          SlovenskoSkConfiguration
 	InvoicesLimit        int
-	ApiKey               ApiKey
+	ApiKey               ApiKeyConfiguration
 }
 
 func (c *Configuration) initDb() {

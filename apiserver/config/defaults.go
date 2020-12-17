@@ -30,7 +30,7 @@ var devConfig = Configuration{
 		LogoutCallbackUrl: "http://localhost:3000/logout-callback",
 	},
 	InvoicesLimit: 5,
-	ApiKey: ApiKey{
+	ApiKey: ApiKeyConfiguration{
 		MaxExpiration: 30 * time.Minute,
 		JtiExpiration: 60 * time.Minute,
 	},
@@ -60,7 +60,7 @@ var prodConfig = Configuration{
 		LogoutCallbackUrl: "https://web-app.dev.filipsladek.com/logout-callback",
 	},
 	InvoicesLimit: 20,
-	ApiKey: ApiKey{
+	ApiKey: ApiKeyConfiguration{
 		MaxExpiration: 30 * time.Minute,
 		JtiExpiration: 60 * time.Minute,
 	},
@@ -85,7 +85,7 @@ var testConfig = Configuration{
 		SessionTokenExpiration: 1 * time.Hour,
 	},
 	InvoicesLimit: 5,
-	ApiKey: ApiKey{
+	ApiKey: ApiKeyConfiguration{
 		MaxExpiration: 30 * time.Minute,
 		JtiExpiration: 60 * time.Minute,
 	},
