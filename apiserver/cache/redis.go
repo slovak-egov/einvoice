@@ -3,6 +3,7 @@ package cache
 import (
 	goContext "context"
 	"fmt"
+	"strconv"
 	"time"
 
 	"github.com/go-redis/redis/v8"
@@ -22,14 +23,14 @@ func NewRedis(cacheConfig config.CacheConfiguration) *Cache {
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     fmt.Sprintf("%s:%d", cacheConfig.Host, cacheConfig.Port),
 		Password: cacheConfig.Password,
-		DB:       0,  // use default db
+		DB:       0, // use default db
 	})
 
 	err := rdb.Ping(goContext.Background()).Err()
 	if err != nil {
 		log.WithFields(log.Fields{
 			"redisConfig": cacheConfig,
-			"error": err,
+			"error":       err,
 		}).Fatal("redis.connection.failed")
 	} else {
 		log.Info("redis.connection.successful")
@@ -37,7 +38,7 @@ func NewRedis(cacheConfig config.CacheConfiguration) *Cache {
 
 	return &Cache{
 		userTokenExpiration: cacheConfig.SessionTokenExpiration,
-		client: rdb,
+		client:              rdb,
 	}
 }
 
@@ -87,6 +88,25 @@ func (r *Cache) RemoveUserToken(ctx goContext.Context, token string) error {
 	}
 
 	return nil
+}
+
+func jtiKey(userId int, jti string) string {
+	return fmt.Sprintf("jti-%v-%v", strconv.Itoa(userId), jti)
+}
+
+func (r *Cache) ContainsJti(ctx goContext.Context, userId int, jti string) (bool, error) {
+	_, err := r.client.Get(ctx, jtiKey(userId, jti)).Result()
+	if err == redis.Nil {
+		return false, nil
+	} else if err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
+func (r *Cache) AddJti(ctx goContext.Context, userId int, jti string, expiration time.Duration) error {
+	_, err := r.client.Set(ctx, jtiKey(userId, jti), "", expiration).Result()
+	return err
 }
 
 func (r *Cache) FlushAll(ctx goContext.Context) error {
