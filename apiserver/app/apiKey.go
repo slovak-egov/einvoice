@@ -3,8 +3,6 @@ package app
 import (
 	goContext "context"
 	"encoding/json"
-	"errors"
-	"fmt"
 	"regexp"
 	"time"
 
@@ -19,25 +17,25 @@ import (
 func getIntClaim(claims jwt.MapClaims, key string) (int, error) {
 	rawValue, ok := claims[key]
 	if !ok {
-		return 0, fmt.Errorf("Key '%v' not found in claims", key)
+		return 0, ApiKeyClaimError(key, "missing")
 	}
 	if v, ok := rawValue.(json.Number); ok {
 		if i, err := v.Int64(); err == nil {
 			return int(i), nil
 		}
 	}
-	return 0, fmt.Errorf("Key '%v' in claims has wrong type", key)
+	return 0, ApiKeyClaimError(key, "wrongType")
 }
 
 func getStringClaim(claims jwt.MapClaims, key string) (string, error) {
 	rawValue, ok := claims[key]
 	if !ok {
-		return "", fmt.Errorf("Key '%v' not found in claims", key)
+		return "", ApiKeyClaimError(key, "missing")
 	}
 	if v, ok := rawValue.(string); ok {
 		return v, nil
 	}
-	return "", fmt.Errorf("Key '%v' in claims has wrong type", key)
+	return "", ApiKeyClaimError(key, "wrongType")
 }
 
 // Validate if exp belongs to interval <now(), now()+maxExpiration>
@@ -45,9 +43,9 @@ func validateExp(exp int, maxExpiration time.Duration) error {
 	currentTime, expTime := time.Now(), time.Unix(int64(exp), 0)
 
 	if currentTime.After(expTime) {
-		return errors.New("Token has expired")
+		return ApiKeyExpError("expired")
 	} else if currentTime.Add(maxExpiration).Before(expTime) {
-		return errors.New("Token expiration time is too long")
+		return ApiKeyExpError("tooLong")
 	}
 
 	return nil
@@ -57,7 +55,7 @@ func validateJti(jti string) error {
 	if matched, err := regexp.Match(`\A[0-9a-zA-Z\-_]{32,256}\z`, []byte(jti)); err != nil {
 		return err
 	} else if !matched {
-		return errors.New("Invalid jti")
+		return ApiKeyJtiError("invalid")
 	}
 
 	return nil
@@ -69,12 +67,12 @@ func (a *App) getUserIdByApiKey(ctx goContext.Context, tokenString string) (int,
 	jwtParser := jwt.Parser{UseJSONNumber: true}
 	token, err := jwtParser.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodRSA); !ok {
-			return nil, handlerutil.NewAuthorizationError("Unexpected signing method")
+			return nil, handlerutil.NewAuthorizationError(ApiKeySignError("method.invalid").Error())
 		}
 
 		claims, ok := token.Claims.(jwt.MapClaims)
 		if !ok {
-			return nil, handlerutil.NewAuthorizationError("Cannot parse claims")
+			return nil, handlerutil.NewAuthorizationError(ApiKeyError("claims.parsingError").Error())
 		}
 
 		var (
@@ -108,7 +106,7 @@ func (a *App) getUserIdByApiKey(ctx goContext.Context, tokenString string) (int,
 
 		verifyKey, err := jwt.ParseRSAPublicKeyFromPEM([]byte(*user.ServiceAccountPublicKey))
 		if err != nil {
-			return nil, handlerutil.NewAuthorizationError("Invalid key")
+			return nil, handlerutil.NewAuthorizationError(ApiKeyError("publicKey.invalid").Error())
 		}
 
 		return verifyKey, nil
@@ -130,7 +128,7 @@ func (a *App) getUserIdByApiKey(ctx goContext.Context, tokenString string) (int,
 			WithField("token", tokenString).
 			Debug("app.authMiddleware.parseToken.invalid")
 
-		return 0, handlerutil.NewAuthorizationError("Invalid key")
+		return 0, handlerutil.NewAuthorizationError(ApiKeySignError("invalid").Error())
 	}
 
 	if err := a.cache.SaveJti(ctx, user.Id, jti, a.config.ApiKey.JtiExpiration); err != nil {
@@ -141,7 +139,7 @@ func (a *App) getUserIdByApiKey(ctx goContext.Context, tokenString string) (int,
 			}).
 			Debug("app.authMiddleware.parseToken.invalid")
 
-		return 0, err
+		return 0, handlerutil.NewAuthorizationError(ApiKeyJtiError("invalid").Error())
 	}
 
 	return user.Id, nil

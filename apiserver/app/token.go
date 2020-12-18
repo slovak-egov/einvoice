@@ -8,8 +8,8 @@ import (
 )
 
 const (
-	BearerToken          = "BearerToken"
-	ServiceAccountToken  = "ServiceAccountToken"
+	BearerToken         = "BearerToken"
+	ServiceAccountToken = "ServiceAccountToken"
 )
 
 type Token struct {
@@ -17,10 +17,10 @@ type Token struct {
 	Type  string
 }
 
-type MissingToken struct {}
+type MissingToken struct{}
 
 func (e MissingToken) Error() string {
-	return "Missing authorization"
+	return AuthError("missing").Error()
 }
 
 func getBearerToken(header string) (*Token, error) {
