@@ -28,8 +28,9 @@ func TestGetInvoices(t *testing.T) {
 		{"?test=true&ico=11111111", 3, nil},
 		{"?format=d16b", 0, nil},
 		{"?ico=11111112", 0, nil},
-		{fmt.Sprintf("?nextId=%d&limit=1", thirdInvoiceId), 1, &firstInvoiceId},
-		{fmt.Sprintf("?nextId=%d", firstInvoiceId), 1, nil},
+		{fmt.Sprintf("?startId=%d&limit=1", thirdInvoiceId), 1, &firstInvoiceId},
+		{fmt.Sprintf("?startId=%d", firstInvoiceId), 1, nil},
+		{fmt.Sprintf("?startId=%d&order=asc", firstInvoiceId), 2, nil},
 	}
 	// Run tests
 	for _, tt := range flagtests {

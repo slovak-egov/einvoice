@@ -12,6 +12,11 @@ import (
 	"github.com/slovak-egov/einvoice/pkg/context"
 )
 
+const (
+	AscOrder  = "asc"
+	DescOrder = "desc"
+)
+
 type Connector struct {
 	db *pg.DB
 }

@@ -16,15 +16,20 @@ import (
 
 type PublicInvoicesOptions struct {
 	Formats []string
-	NextId  int
+	StartId int
 	Limit   int
 	Test    bool
 	Ico     string
+	Order   string
 }
 
 func (o *PublicInvoicesOptions) Validate(maxLimit int) error {
 	if o.Limit <= 0 || o.Limit > maxLimit {
 		return fmt.Errorf("limit should be positive integer less than or equal to %d", maxLimit)
+	}
+
+	if o.Order != AscOrder && o.Order != DescOrder {
+		return errors.New("order should be either asc or desc")
 	}
 
 	return nil
@@ -35,9 +40,15 @@ func (o *PublicInvoicesOptions) buildQuery(query *orm.Query) *orm.Query {
 		query = query.Where("format IN (?)", pg.In(o.Formats))
 	}
 
-	// If next id is not provided, do not search by id
-	if o.NextId != 0 {
-		query = query.Where("id <= ?", o.NextId)
+	// If start id is not provided, do not search by id
+	if o.StartId != 0 {
+		// If ascending order was requested, start id is the lowest id
+		// otherwise it is the largest one
+		if o.Order == AscOrder {
+			query = query.Where("id >= ?", o.StartId)
+		} else {
+			query = query.Where("id <= ?", o.StartId)
+		}
 	}
 
 	// Filter out test invoices if not explicitly requested
@@ -52,7 +63,13 @@ func (o *PublicInvoicesOptions) buildQuery(query *orm.Query) *orm.Query {
 		})
 	}
 
-	return query.Order("id DESC").Limit(o.Limit + 1)
+	if o.Order == AscOrder {
+		query = query.Order("id ASC")
+	} else {
+		query = query.Order("id DESC")
+	}
+
+	return query.Limit(o.Limit + 1)
 }
 
 type UserInvoicesOptions struct {
