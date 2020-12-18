@@ -25,6 +25,11 @@ func executeAuthRequest(req *http.Request, authToken string) *httptest.ResponseR
 	return executeRequest(req)
 }
 
+func executeApiKeyRequest(req *http.Request, token string) *httptest.ResponseRecorder {
+	req.Header.Set("X-API-Key", token)
+	return executeRequest(req)
+}
+
 func checkResponseCode(t *testing.T, expected, actual int) {
 	t.Helper()
 	if expected != actual {
