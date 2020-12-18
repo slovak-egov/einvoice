@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/elastic/go-elasticsearch/v7"
 	muxHandlers "github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
+	"gopkg.in/go-extras/elogrus.v7"
 
 	"github.com/slovak-egov/einvoice/apiserver/cache"
 	"github.com/slovak-egov/einvoice/apiserver/config"
@@ -49,9 +51,35 @@ func NewApp() *App {
 		mail:        mail.NewSender(appConfig.Mail),
 	}
 
+	// If elasticsearch url is configured
+	// hook logging to send logs there
+	if a.config.Logger.ElasticsearchUrl != "" {
+		a.initializeLogger()
+	}
+
 	a.initializeHandlers()
 
 	return a
+}
+
+// Asynchronously send logs to elasticsearch
+// In future we can replace this with filebeat
+func (a *App) initializeLogger() {
+	client, err := elasticsearch.NewClient(elasticsearch.Config{
+		Addresses: []string{a.config.Logger.ElasticsearchUrl},
+		Username:  a.config.Logger.ElasticsearchUser,
+		Password:  a.config.Logger.ElasticsearchPassword,
+	})
+	if err != nil {
+		log.WithField("error", err.Error()).Fatal("server.logger.elasticClientCreation.failed")
+	}
+	hook, err := elogrus.NewAsyncElasticHook(
+		client, a.config.Host, a.config.Logger.LogLevel, a.config.Logger.ElasticIndex,
+	)
+	if err != nil {
+		log.WithField("error", err.Error()).Fatal("server.logger.elasticHookCreation.failed")
+	}
+	log.AddHook(hook)
 }
 
 func registerHandler(router *mux.Router, method, path string, handler func(http.ResponseWriter, *http.Request) error) {
@@ -91,7 +119,7 @@ func (a *App) initializeHandlers() {
 func (a *App) Run() {
 	srv := &http.Server{
 		Handler:      muxHandlers.CORS(corsOptions...)(a.router),
-		Addr:         fmt.Sprintf("%s:%d", "0.0.0.0", a.config.Port),
+		Addr:         fmt.Sprintf("%s:%d", a.config.Host, a.config.Port),
 		WriteTimeout: a.config.ServerWriteTimeout,
 		ReadTimeout:  a.config.ServerReadTimeout,
 	}
