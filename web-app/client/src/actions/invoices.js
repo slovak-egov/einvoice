@@ -83,16 +83,16 @@ export const createInvoice = (data) => loadingWrapper(
   }
 )
 
-const getInvoices = ({getAdditionalFilters, path, fetchInvoices}) => (nextId) => loadingWrapper(
+const getInvoices = ({getAdditionalFilters, path, fetchInvoices}) => (startId) => loadingWrapper(
   async (dispatch, getState, {api}) => {
     const filters = get(getState(), [...path, 'filters'])
     const formats = Object.keys(filters.formats).filter((k) => filters.formats[k])
     const ico = filters.ico.send && filters.ico.value
 
     try {
-      const {invoices, nextId: newNextId} = await fetchInvoices(api)({
+      const {invoices, nextId} = await fetchInvoices(api)({
         formats,
-        nextId,
+        startId,
         ico,
         test: filters.test,
         ...getAdditionalFilters(filters),
@@ -111,8 +111,8 @@ const getInvoices = ({getAdditionalFilters, path, fetchInvoices}) => (nextId) =>
           ...acc,
           val.id,
         ]), []),
-        nextId: newNextId,
-        setOrUpdate: nextId == null,
+        nextId,
+        setOrUpdate: startId == null,
       }))
     } catch (error) {
       await swal({

@@ -16,17 +16,9 @@ paths:
         - slovenskoSkOboTokenAuth: []
       responses:
         200:
-          description: User is sucessfully logged in.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LoginResponse'
+          $ref: '#/components/responses/Login'
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: '#/components/responses/Error'
   /logout:
     get:
       tags:
@@ -36,17 +28,9 @@ paths:
         - sessionAuth: []
       responses:
         200:
-          description: User is successfully logged out.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LogoutResponse'
+          $ref: '#/components/responses/Logout'
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: '#/components/responses/Error'
   /upvs/logout:
     get:
       tags:
@@ -66,24 +50,20 @@ paths:
         302:
           description: Redirect user to ÚPVS logout
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: '#/components/responses/Error'
 
   /users/{user_id}:
+    parameters:
+      - name: user_id
+        in: path
+        description: ID of user to be affected
+        required: true
+        schema:
+          type: integer
     get:
       tags:
         - Users
       summary: Get info about requested user
-      parameters:
-        - name: user_id
-          in: path
-          description: ID of requested user
-          required: true
-          schema:
-            type: integer
       security:
         - sessionAuth: []
         - apiKeyAuth: []
@@ -95,30 +75,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/UserInfo'
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: '#/components/responses/Error'
     patch:
       tags:
         - Users
       summary: Update user info
-      parameters:
-        - name: user_id
-          in: path
-          description: User ID of user to be updated
-          required: true
-          schema:
-            type: integer
       security:
         - sessionAuth: []
         - apiKeyAuth: []
       requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchUserRequest'
+        $ref: '#/components/requestBodies/PatchUser'
       responses:
         200:
           description: Updated user info
@@ -127,30 +93,22 @@ paths:
               schema:
                 $ref: '#/components/schemas/UserInfo'
         400:
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: '#/components/responses/Error'
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: '#/components/responses/Error'
   /users/{user_id}/substitutes:
+    parameters:
+      - name: user_id
+        in: path
+        description: ID of user to be affected
+        required: true
+        schema:
+          type: integer
     post:
       tags:
         - Users
       summary: Add substitute users
       description: Add rights for particular users to create invoices on your behalf
-      parameters:
-        - name: user_id
-          in: path
-          description: Add substitutes for user with this user ID
-          required: true
-          schema:
-            type: integer
       security:
         - sessionAuth: []
         - apiKeyAuth: []
@@ -167,23 +125,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/SubstituteIds'
         400:
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: '#/components/responses/Error'
     delete:
       tags:
         - Users
       summary: Remove substitute users
       description: Revoke rights for particular users to create invoices on your behalf
-      parameters:
-        - name: user_id
-          in: path
-          description: Remove substitutes for user with this user ID
-          required: true
-          schema:
-            type: integer
       security:
         - sessionAuth: []
         - apiKeyAuth: []
@@ -200,23 +147,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/SubstituteIds'
         400:
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: '#/components/responses/Error'
     get:
       tags:
         - Users
       summary: Get substitute users
       description: Get list of users that can create invoices on your behalf
-      parameters:
-        - name: user_id
-          in: path
-          description: Get substitutes for user with this user ID
-          required: true
-          schema:
-            type: integer
       security:
         - sessionAuth: []
         - apiKeyAuth: []
@@ -272,33 +208,12 @@ paths:
           description: Request invoices received by IČO requested user has acccess to
           schema:
             type: boolean
-        - name: ico
-          in: query
-          description: Request invoices related to given IČO. If not provided, all will be considered
-          schema:
-            type: string
-        - name: format
-          in: query
-          description: Filter invoices by format
-          schema:
-            type: array
-            items:
-              type: string
-        - name: nextId
-          in: query
-          description: Id of next invoice to fetch
-          schema:
-            type: integer
-        - name: limit
-          in: query
-          description: Limit number of invoices returned
-          schema:
-            type: integer
-        - name: test
-          in: query
-          description: If flag turned on, test invoices are fetched as well
-          schema:
-            type: boolean
+        - $ref: '#/components/parameters/Ico'
+        - $ref: '#/components/parameters/InvoiceFormat'
+        - $ref: '#/components/parameters/StartId'
+        - $ref: '#/components/parameters/Order'
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/TestInvoice'
       security:
         - sessionAuth: []
         - apiKeyAuth: []
@@ -316,33 +231,12 @@ paths:
         - Invoices
       summary: Get list of metadata of public invoices
       parameters:
-        - name: format
-          in: query
-          description: Filter invoices by format
-          schema:
-            type: array
-            items:
-              type: string
-        - name: nextId
-          in: query
-          description: Id of next invoice to fetch
-          schema:
-            type: integer
-        - name: limit
-          in: query
-          description: Limit number of invoices returned
-          schema:
-            type: integer
-        - name: test
-          in: query
-          description: If flag turned on, test invoices are fetched as well
-          schema:
-            type: boolean
-        - name: ico
-          in: query
-          description: Request invoices related to given IČO. If not provided, all will be considered
-          schema:
-            type: string
+        - $ref: '#/components/parameters/InvoiceFormat'
+        - $ref: '#/components/parameters/StartId'
+        - $ref: '#/components/parameters/Order'
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/TestInvoice'
+        - $ref: '#/components/parameters/Ico'
       responses:
         200:
           description: Successfull response
@@ -358,10 +252,7 @@ paths:
         - Invoices
       summary: Create invoice
       requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/CreateInvoiceRequest'
+        $ref: '#/components/requestBodies/CreateInvoice'
       responses:
         201:
           description: Invoice created
@@ -370,11 +261,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Invoice'
         400:
-          description: Invalid request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: '#/components/responses/Error'
   /invoices/{invoice_id}:
     get:
       security:
@@ -398,17 +285,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Invoice'
         403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: '#/components/responses/Error'
         404:
-          description: Invoice not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: '#/components/responses/Error'
   /invoices/{invoice_id}/detail:
     get:
       security:
@@ -432,17 +311,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Invoice'
         403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: '#/components/responses/Error'
         404:
-          description: Invoice not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: '#/components/responses/Error'
   /invoices/{invoice_id}/visualization:
     get:
       security:
@@ -467,17 +338,9 @@ paths:
                 type: string
                 format: binary
         403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: '#/components/responses/Error'
         404:
-          description: Invoice not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: '#/components/responses/Error'
 components:
   securitySchemes:
     slovenskoSkOboTokenAuth:
@@ -551,6 +414,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Invoice'
+    InvoiceFormat:
+      type: string
+      enum:
+        - ubl2.1
+        - d16b
     Invoice:
       type: object
       properties:
@@ -564,10 +432,7 @@ components:
           type: string
           example: SubjectB
         format:
-          type: string
-          enum:
-            - ubl2.1
-            - d16b
+          $ref: '#/components/schemas/InvoiceFormat'
         price:
           type: integer
           example: 100
@@ -591,39 +456,6 @@ components:
         test:
           type: boolean
           description: True if invoice is just for test purposes
-    CreateInvoiceRequest:
-      type: object
-      properties:
-        format:
-          type: string
-          enum:
-            - ubl2.1
-            - d16b
-        test:
-          type: boolean
-          description: If true, service will create test-only invoice
-        invoice:
-          type: string
-          format: binary
-      required:
-        - format
-        - invoice
-    PatchUserRequest:
-      type: object
-      properties:
-        email:
-          type: string
-          example: test@test.com
-        serviceAccountPublicKey:
-          type: string
-    LoginResponse:
-      allOf:
-        - $ref: '#/components/schemas/UserInfo'
-        - type: object
-          properties:
-            token:
-              type: string
-              format: uuid
     SubstituteIds:
       type: array
       items:
@@ -634,14 +466,112 @@ components:
       items:
         type: integer
         description: Organization IČO
-    LogoutResponse:
-      type: object
-      properties:
-        logout:
-          type: string
-          example: successful
-    ErrorResponse:
+    Error:
       type: object
       properties:
         error:
           type: string
+  parameters:
+    Limit:
+      name: limit
+      in: query
+      description: Limit number of entities returned
+      schema:
+        type: integer
+        minimum: 1
+    TestInvoice:
+      name: test
+      in: query
+      description: If flag turned on, test invoices are considered as well
+      schema:
+        type: boolean
+    Order:
+      name: order
+      in: query
+      description: |
+        Order of returned entities. If not provided order is not guaranteed.
+        - `asc` - entitites are returned from the oldest to the newest
+        - `desc` - entities are returned from the newest to the oldest
+      schema:
+        type: string
+        enum:
+          - asc
+          - desc
+    StartId:
+      name: startId
+      in: query
+      description: Entity id where service start search
+      schema:
+        type: integer
+    InvoiceFormat:
+      name: format
+      in: query
+      description: Filter invoices by format
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/InvoiceFormat'
+    Ico:
+      name: ico
+      in: query
+      description: Request entities related to given IČO. If not provided, all will be considered
+      schema:
+        type: string
+  requestBodies:
+    PatchUser:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                example: test@test.com
+              serviceAccountPublicKey:
+                type: string
+    CreateInvoice:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              format:
+                $ref: '#/components/schemas/InvoiceFormat'
+              test:
+                type: boolean
+                description: If true, service will create test-only invoice
+              invoice:
+                type: string
+                format: binary
+            required:
+              - format
+              - invoice
+  responses:
+    Login:
+      description: User is sucessfully logged in.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/UserInfo'
+              - type: object
+                properties:
+                  token:
+                    type: string
+                    format: uuid
+    Logout:
+      description: User is successfully logged out.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              logout:
+                type: string
+                example: successful
+    Error:
+      description: There was an error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
