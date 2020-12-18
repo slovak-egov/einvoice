@@ -30,9 +30,9 @@ func NewPagedInvoices(invoices []entity.Invoice, limit int) *PagedInvoices {
 }
 
 func NewPublicInvoicesOptions(params url.Values, maxLimit int) (*db.PublicInvoicesOptions, error) {
-	nextId, err := getOptionalInt(params.Get("nextId"), 0)
+	startId, err := getOptionalInt(params.Get("startId"), 0)
 	if err != nil {
-		return nil, fmt.Errorf("nextId: %w", err)
+		return nil, fmt.Errorf("startId: %w", err)
 	}
 	limit, err := getOptionalInt(params.Get("limit"), maxLimit)
 	if err != nil {
@@ -42,12 +42,17 @@ func NewPublicInvoicesOptions(params url.Values, maxLimit int) (*db.PublicInvoic
 	if err != nil {
 		return nil, fmt.Errorf("test: %w", err)
 	}
+	order := params.Get("order")
+	if order == "" {
+		order = db.DescOrder
+	}
 	return &db.PublicInvoicesOptions{
 		params["format"],
-		nextId,
+		startId,
 		limit,
 		test,
 		params.Get("ico"),
+		order,
 	}, nil
 }
 
