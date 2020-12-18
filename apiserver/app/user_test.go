@@ -15,7 +15,7 @@ import (
 func TestGetUser(t *testing.T) {
 	// Fill DB
 	t.Cleanup(cleanDb(t))
-	user, sessionToken, _ := createTestUser(t)
+	user, sessionToken := createTestUser(t, "")
 
 	// Temporarily do not compare this field
 	user.CreatedAt = time.Time{}
@@ -56,7 +56,7 @@ func TestGetUser(t *testing.T) {
 func TestPatchUser(t *testing.T) {
 	// Fill DB
 	t.Cleanup(cleanDb(t))
-	user, sessionToken, _ := createTestUser(t)
+	user, sessionToken := createTestUser(t, "")
 
 	expectedUserResponse := map[string]interface{}{
 		"name":                    user.Name,

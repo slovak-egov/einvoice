@@ -17,7 +17,7 @@ import (
 
 func TestCreateInvoice(t *testing.T) {
 	t.Cleanup(cleanDb(t))
-	user, sessionToken, _ := createTestUser(t)
+	user, sessionToken := createTestUser(t, "")
 	user.SlovenskoSkUri = "ico://sk/11190993"
 	a.db.UpdateUser(ctx, user)
 
