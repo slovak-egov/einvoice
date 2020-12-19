@@ -13,16 +13,16 @@ import (
 func (a *App) handleLogin(res http.ResponseWriter, req *http.Request) error {
 	oboToken, err := GetAuthToken(req)
 	if err != nil {
-		return handlerutil.NewAuthorizationError(err.Error())
+		return err
 	} else if oboToken.Type != BearerToken {
-		return handlerutil.NewAuthorizationError("Token should be in Bearer format")
+		return handlerutil.AuthInvalidTypeError
 	}
 
 	slovenskoSkUser, err := a.slovenskoSk.GetUser(req.Context(), oboToken.Value)
 	if _, ok := err.(*slovenskoSk.InvalidTokenError); ok {
-		return handlerutil.NewAuthorizationError("Unauthorized")
+		return handlerutil.UnauthorizedError
 	} else if _, ok := err.(*slovenskoSk.UpvsError); ok {
-		return handlerutil.NewFailedDependencyError(err.Error())
+		return handlerutil.NewFailedDependencyError("slovenskoSk.request.failed")
 	} else if err != nil {
 		return err
 	}
@@ -48,14 +48,14 @@ func (a *App) handleLogin(res http.ResponseWriter, req *http.Request) error {
 func (a *App) handleUpvsLogout(res http.ResponseWriter, req *http.Request) error {
 	oboToken, err := GetAuthToken(req)
 	if err != nil {
-		return handlerutil.NewAuthorizationError(err.Error())
+		return err
 	} else if oboToken.Type != BearerToken {
-		return handlerutil.NewAuthorizationError("Token should be in Bearer format")
+		return handlerutil.AuthInvalidTypeError
 	}
 
 	logoutUrl, err := a.slovenskoSk.GetLogoutUrl(req.Context(), oboToken.Value)
 	if err != nil {
-		return handlerutil.NewAuthorizationError("Unauthorized")
+		return handlerutil.UnauthorizedError
 	}
 
 	http.Redirect(res, req, logoutUrl, http.StatusFound)
@@ -66,9 +66,9 @@ func (a *App) handleUpvsLogout(res http.ResponseWriter, req *http.Request) error
 func (a *App) handleLogout(res http.ResponseWriter, req *http.Request) error {
 	token, err := GetAuthToken(req)
 	if err != nil {
-		return handlerutil.NewAuthorizationError(err.Error())
+		return err
 	} else if token.Type != BearerToken {
-		return handlerutil.NewAuthorizationError("No Bearer token provided")
+		return handlerutil.AuthInvalidTypeError
 	}
 
 	err = a.cache.RemoveUserToken(req.Context(), token.Value)

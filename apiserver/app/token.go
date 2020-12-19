@@ -20,16 +20,16 @@ type Token struct {
 type MissingToken struct{}
 
 func (e MissingToken) Error() string {
-	return AuthError("missing").Error()
+	return handlerutil.AuthError("missing").Error()
 }
 
 func getBearerToken(header string) (*Token, error) {
 	parts := strings.Split(header, " ")
 	if len(parts) != 2 {
-		return nil, handlerutil.NewAuthorizationError("Invalid token format")
+		return nil, handlerutil.AuthError("bearer.invalid")
 	}
 	if parts[0] != "Bearer" {
-		return nil, handlerutil.NewAuthorizationError("Invalid authorization type")
+		return nil, handlerutil.AuthInvalidTypeError
 	}
 	return &Token{parts[1], BearerToken}, nil
 }

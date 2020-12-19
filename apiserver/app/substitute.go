@@ -50,16 +50,16 @@ func (a *App) addUserSubstitutes(res http.ResponseWriter, req *http.Request) err
 	decoder.DisallowUnknownFields()
 
 	if err := decoder.Decode(&requestBody); err != nil {
-		return handlerutil.NewBadRequestError(err.Error())
+		return handlerutil.SubstituteError("body.parsingError").WithCause(err)
 	}
 
 	if len(requestBody) == 0 {
-		return handlerutil.NewBadRequestError("You should add at least 1 substitute")
+		return handlerutil.SubstituteError("body.empty")
 	}
 
 	substituteIds, err := a.db.AddUserSubstitutes(req.Context(), requestedUserId, requestBody)
 	if _, ok := err.(*db.IntegrityViolationError); ok {
-		return handlerutil.NewBadRequestError(err.Error())
+		return handlerutil.SubstituteError("create.failed").WithCause(err)
 	} else if err != nil {
 		return err
 	}
@@ -80,11 +80,11 @@ func (a *App) removeUserSubstitutes(res http.ResponseWriter, req *http.Request) 
 	decoder.DisallowUnknownFields()
 
 	if err := decoder.Decode(&requestBody); err != nil {
-		return handlerutil.NewBadRequestError(err.Error())
+		return handlerutil.SubstituteError("body.parsingError").WithCause(err)
 	}
 
 	if len(requestBody) == 0 {
-		return handlerutil.NewBadRequestError("You should remove at least 1 substitute")
+		return handlerutil.SubstituteError("body.empty")
 	}
 
 	substituteIds, err := a.db.RemoveUserSubstitutes(req.Context(), requestedUserId, requestBody)

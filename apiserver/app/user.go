@@ -21,11 +21,11 @@ func getRequestedUserId(req *http.Request) (int, error) {
 
 	requestedUserId, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		return 0, handlerutil.NewBadRequestError("User id should be int")
+		return 0, handlerutil.UserError("id.invalid")
 	}
 	// Currently everyone can request only own data
 	if requestedUserId != requesterUserId {
-		return 0, handlerutil.NewAuthorizationError("Unauthorized")
+		return 0, handlerutil.UnauthorizedError
 	}
 
 	return requestedUserId, nil
@@ -75,11 +75,11 @@ func (a *App) updateUser(res http.ResponseWriter, req *http.Request) error {
 	decoder.DisallowUnknownFields()
 
 	if err := decoder.Decode(&requestBody); err != nil {
-		return handlerutil.NewBadRequestError(err.Error())
+		return handlerutil.UserError("parsingError").WithCause(err)
 	}
 
 	if err := requestBody.Validate(); err != nil {
-		return handlerutil.NewBadRequestError(err.Error())
+		return handlerutil.UserError("validation.failed").WithCause(err)
 	}
 
 	user, err := a.db.UpdateUser(req.Context(), &entity.User{

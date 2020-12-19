@@ -39,7 +39,7 @@ func (c *Connector) GetUser(ctx goContext.Context, id int) (*entity.User, error)
 	err := c.GetDb(ctx).Model(user).Where("id = ?", id).Select(user)
 
 	if errors.Is(err, pg.ErrNoRows) {
-		return nil, handlerutil.NewNotFoundError("User not found")
+		return nil, handlerutil.NewNotFoundError("user.not.found")
 	} else if err != nil {
 		context.GetLogger(ctx).WithField("error", err.Error()).Error("db.getUser")
 		return nil, err
@@ -111,7 +111,7 @@ func (c *Connector) GetUserOrganizationIds(ctx goContext.Context, userId int) ([
 	err := c.accessibleUrisQuery(ctx, userId).Select(&uris)
 	if err != nil {
 		context.GetLogger(ctx).WithFields(log.Fields{
-			"error": err.Error(),
+			"error":  err.Error(),
 			"userId": userId,
 		}).Error("db.GetUserOrganizationIds.failed")
 

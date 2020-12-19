@@ -105,7 +105,7 @@ func (c *Connector) GetInvoice(ctx goContext.Context, id int) (*entity.Invoice, 
 	inv := &entity.Invoice{}
 	err := c.GetDb(ctx).Model(inv).Where("id = ?", id).Select(inv)
 	if errors.Is(err, pg.ErrNoRows) {
-		return nil, handlerutil.NewNotFoundError("Invoice not found")
+		return nil, handlerutil.NewNotFoundError("invoice.not.found")
 	} else if err != nil {
 		context.GetLogger(ctx).WithField("error", err.Error()).Error("db.getInvoice.failed")
 		return nil, err

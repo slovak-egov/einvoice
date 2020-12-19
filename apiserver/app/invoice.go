@@ -59,11 +59,11 @@ func NewPublicInvoicesOptions(params url.Values, maxLimit int) (*db.PublicInvoic
 func (a *App) getPublicInvoices(res http.ResponseWriter, req *http.Request) error {
 	requestOptions, err := NewPublicInvoicesOptions(req.URL.Query(), a.config.InvoicesLimit)
 	if err != nil {
-		return handlerutil.NewBadRequestError(err.Error())
+		return handlerutil.InvoiceError("params.invalid").WithCause(err)
 	}
 
 	if err := requestOptions.Validate(a.config.InvoicesLimit); err != nil {
-		return handlerutil.NewBadRequestError(err.Error())
+		return handlerutil.InvoiceError("params.invalid").WithCause(err)
 	}
 
 	invoices, err := a.db.GetPublicInvoices(req.Context(), requestOptions)
@@ -81,7 +81,7 @@ func (a *App) canUserViewInvoice(ctx goContext.Context, invoice *entity.Invoice)
 		return nil
 	} else if context.GetUserId(ctx) == 0 {
 		// Unauthenticated user does not have access to private invoices
-		return handlerutil.NewAuthorizationError("Unauthorized")
+		return handlerutil.UnauthorizedError
 	}
 
 	accessibleIcos, err := a.db.GetUserOrganizationIds(ctx, context.GetUserId(ctx))
@@ -95,14 +95,14 @@ func (a *App) canUserViewInvoice(ctx goContext.Context, invoice *entity.Invoice)
 			return nil
 		}
 	}
-	return handlerutil.NewForbiddenError("You have no permission to view this invoice")
+	return handlerutil.NewForbiddenError("invoice.permission.missing")
 }
 
 func (a *App) getInvoice(res http.ResponseWriter, req *http.Request) error {
 	vars := mux.Vars(req)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		return handlerutil.NewBadRequestError("ID should be an integer")
+		return handlerutil.InvoiceError("params.id.invalid")
 	}
 
 	invoice, err := a.db.GetInvoice(req.Context(), id)
@@ -122,7 +122,7 @@ func (a *App) getInvoiceXml(res http.ResponseWriter, req *http.Request) error {
 	vars := mux.Vars(req)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		return handlerutil.NewBadRequestError("ID should be an integer")
+		return handlerutil.InvoiceError("params.id.invalid")
 	}
 
 	invoiceMeta, err := a.db.GetInvoice(req.Context(), id)
@@ -150,7 +150,7 @@ func (a *App) getInvoiceVisualization(res http.ResponseWriter, req *http.Request
 	vars := mux.Vars(req)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		return handlerutil.NewBadRequestError("ID should be an integer")
+		return handlerutil.InvoiceError("params.id.invalid")
 	}
 
 	invoice, err := a.db.GetInvoice(req.Context(), id)
@@ -191,11 +191,11 @@ func (a *App) getUserInvoices(res http.ResponseWriter, req *http.Request) error 
 
 	requestOptions, err := NewUserInvoicesOptions(requestedUserId, req.URL.Query(), a.config.InvoicesLimit)
 	if err != nil {
-		return handlerutil.NewBadRequestError(err.Error())
+		return handlerutil.InvoiceError("params.invalid").WithCause(err)
 	}
 
 	if err := requestOptions.Validate(a.config.InvoicesLimit); err != nil {
-		return handlerutil.NewBadRequestError(err.Error())
+		return handlerutil.InvoiceError("params.invalid").WithCause(err)
 	}
 
 	invoices, err := a.db.GetUserInvoices(req.Context(), requestOptions)
