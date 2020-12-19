@@ -2,13 +2,15 @@ package app
 
 import (
 	"context"
-	"github.com/slovak-egov/einvoice/pkg/timeutil"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 	"time"
 
+	"github.com/google/uuid"
+
 	"github.com/slovak-egov/einvoice/apiserver/entity"
+	"github.com/slovak-egov/einvoice/pkg/timeutil"
 )
 
 var ctx = context.Background()
@@ -39,7 +41,7 @@ func checkResponseCode(t *testing.T, expected, actual int) {
 
 func createTestInvoice(t *testing.T, test, isPublic bool) int {
 	t.Helper()
-	user, _ := createTestUser(t)
+	user, _ := createTestUser(t, "")
 	invoice := &entity.Invoice{
 		Sender:      "sender",
 		Receiver:    "receiver",
@@ -60,15 +62,18 @@ func createTestInvoice(t *testing.T, test, isPublic bool) int {
 	return invoice.Id
 }
 
-func createTestUser(t *testing.T) (*entity.User, string) {
+func createTestUser(t *testing.T, ico string) (*entity.User, string) {
 	t.Helper()
 
-	user, err := a.db.GetOrCreateUser(ctx, "ico://sk/11190993", "Frantisek")
+	if ico == "" {
+		ico = "11190993"
+	}
+	user, err := a.db.GetOrCreateUser(ctx, "ico://sk/"+ico, "Frantisek")
 	if err != nil {
 		t.Error(err)
 	}
 
-	sessionToken := "123"
+	sessionToken := uuid.New().String()
 	err = a.cache.SaveUserToken(ctx, sessionToken, user.Id)
 	if err != nil {
 		t.Error(err)

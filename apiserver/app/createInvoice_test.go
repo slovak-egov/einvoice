@@ -17,7 +17,7 @@ import (
 
 func TestCreateInvoice(t *testing.T) {
 	t.Cleanup(cleanDb(t))
-	user, sessionToken := createTestUser(t)
+	user, sessionToken := createTestUser(t, "")
 
 	var requestBody bytes.Buffer
 	multipartWriter := multipart.NewWriter(&requestBody)
