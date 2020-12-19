@@ -22,7 +22,3 @@ func stringWithCharset(length int, charset string) string {
 func String(length int) string {
 	return stringWithCharset(length, charset)
 }
-
-func Int(n int) int {
-	return seededRand.Intn(n)
-}

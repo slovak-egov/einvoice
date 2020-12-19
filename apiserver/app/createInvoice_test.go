@@ -18,8 +18,6 @@ import (
 func TestCreateInvoice(t *testing.T) {
 	t.Cleanup(cleanDb(t))
 	user, sessionToken := createTestUser(t, "")
-	user.SlovenskoSkUri = "ico://sk/11190993"
-	a.db.UpdateUser(ctx, user)
 
 	var requestBody bytes.Buffer
 	multipartWriter := multipart.NewWriter(&requestBody)
