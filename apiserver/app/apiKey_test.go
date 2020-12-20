@@ -42,7 +42,7 @@ func TestApiKey(t *testing.T) {
 		responseStatus int
 	}{
 		{"correct token", user.Id, exp, jti, http.StatusOK},
-		{"unknown sub", user.Id + 1, exp, random.String(32), http.StatusUnauthorized},
+		{"unknown sub", user.Id + 1, exp, random.String(32), http.StatusNotFound},
 		{"missing sub", nil, exp, random.String(32), http.StatusUnauthorized},
 		{"wrong sub type", strconv.Itoa(user.Id), exp, random.String(32), http.StatusUnauthorized},
 		{"missing exp", user.Id, nil, random.String(32), http.StatusUnauthorized},
