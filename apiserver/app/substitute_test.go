@@ -4,126 +4,68 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
-	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
-func TestSubstitute(t *testing.T) {
-	t.Cleanup(cleanDb(t))
-	user1, token1, ico1 := createTestUser(t)
-	user2, token2, ico2 := createTestUser(t)
-
-	var parsedInts []int
-	var parsedStrings []string
-
-	t.Run("add substitute", func(t *testing.T) {
-		exp := []int{user2.Id}
-		data, _ := json.Marshal([]int{user2.Id})
-
-		req, _ := http.NewRequest("POST", substituteReq(user1.Id), bytes.NewReader(data))
-		response := executeAuthRequest(req, token1)
-		checkResponseCode(t, http.StatusOK, response.Code)
-		json.Unmarshal(response.Body.Bytes(), &parsedInts)
-
-		if !reflect.DeepEqual(exp, parsedInts) {
-			t.Errorf("Expected %v. Got %v\n", exp, parsedInts)
-		}
-	})
-
-	t.Run("get substitutes for user1", func(t *testing.T) {
-		exp := []int{user2.Id}
-
-		req, _ := http.NewRequest("GET", substituteReq(user1.Id), nil)
-		response := executeAuthRequest(req, token1)
-		checkResponseCode(t, http.StatusOK, response.Code)
-		json.Unmarshal(response.Body.Bytes(), &parsedInts)
-
-		if !reflect.DeepEqual(exp, parsedInts) {
-			t.Errorf("Expected %v. Got %v\n", exp, parsedInts)
-		}
-	})
-
-	t.Run("get organizations for user1", func(t *testing.T) {
-		exp := []string{ico1}
-
-		req, _ := http.NewRequest("GET", organizationReq(user1.Id), nil)
-		response := executeAuthRequest(req, token1)
-		checkResponseCode(t, http.StatusOK, response.Code)
-		json.Unmarshal(response.Body.Bytes(), &parsedStrings)
-
-		if !reflect.DeepEqual(exp, parsedStrings) {
-			t.Errorf("Expected %v. Got %v\n", exp, parsedStrings)
-		}
-	})
-
-	t.Run("get substitutes for user2", func(t *testing.T) {
-		req, _ := http.NewRequest("GET", substituteReq(user2.Id), nil)
-		response := executeAuthRequest(req, token2)
-		checkResponseCode(t, http.StatusOK, response.Code)
-		json.Unmarshal(response.Body.Bytes(), &parsedInts)
-
-		if len(parsedInts) > 0 {
-			t.Errorf("Expected empty array. Got %v\n", parsedInts)
-		}
-	})
-
-	t.Run("get organizations for user2", func(t *testing.T) {
-		exp := []string{ico1, ico2}
-
-		req, _ := http.NewRequest("GET", organizationReq(user2.Id), nil)
-		response := executeAuthRequest(req, token2)
-		checkResponseCode(t, http.StatusOK, response.Code)
-		json.Unmarshal(response.Body.Bytes(), &parsedStrings)
-
-		if !reflect.DeepEqual(exp, parsedStrings) {
-			t.Errorf("Expected %v. Got %v\n", exp, parsedStrings)
-		}
-	})
-
-	t.Run("delete substitute", func(t *testing.T) {
-		exp := []int{user2.Id}
-		data, _ := json.Marshal([]int{user2.Id})
-
-		req, _ := http.NewRequest("DELETE", substituteReq(user1.Id), bytes.NewReader(data))
-		response := executeAuthRequest(req, token1)
-		checkResponseCode(t, http.StatusOK, response.Code)
-		json.Unmarshal(response.Body.Bytes(), &parsedInts)
-
-		if !reflect.DeepEqual(exp, parsedInts) {
-			t.Errorf("Expected %v. Got %v\n", exp, parsedInts)
-		}
-	})
-
-	t.Run("get substitutes after deletion", func(t *testing.T) {
-		req, _ := http.NewRequest("GET", substituteReq(user1.Id), nil)
-		response := executeAuthRequest(req, token1)
-		checkResponseCode(t, http.StatusOK, response.Code)
-		json.Unmarshal(response.Body.Bytes(), &parsedInts)
-
-		if len(parsedInts) > 0 {
-			t.Errorf("Expected empty array. Got %v\n", parsedInts)
-		}
-	})
-
-	t.Run("get organizations after deletion", func(t *testing.T) {
-		exp := []string{ico2}
-
-		req, _ := http.NewRequest("GET", organizationReq(user2.Id), nil)
-		response := executeAuthRequest(req, token2)
-		checkResponseCode(t, http.StatusOK, response.Code)
-		json.Unmarshal(response.Body.Bytes(), &parsedStrings)
-
-		if !reflect.DeepEqual(exp, parsedStrings) {
-			t.Errorf("Expected %v. Got %v\n", exp, parsedStrings)
-		}
-	})
-}
-
-func substituteReq(userId int) string {
+func substituteReqUrl(userId int) string {
 	return fmt.Sprintf("/users/%d/substitutes", userId)
 }
 
-func organizationReq(userId int) string {
+func organizationReqUrl(userId int) string {
 	return fmt.Sprintf("/users/%d/organizations", userId)
+}
+
+func TestSubstitute(t *testing.T) {
+	t.Cleanup(cleanDb(t))
+	ico1 := "10000001"
+	ico2 := "10000002"
+	user1, token1 := createTestUser(t, ico1)
+	user2, token2 := createTestUser(t, ico2)
+
+	var flagtests = []struct {
+		name     string
+		method   string
+		url      string
+		token    string
+		body     interface{}
+		response interface{}
+	}{
+		{"add substitute", "POST", substituteReqUrl(user1.Id), token1, []int{user2.Id}, []int{user2.Id}},
+		{"get substitutes for user1", "GET", substituteReqUrl(user1.Id), token1, nil, []int{user2.Id}},
+		{"get organizations for user1", "GET", organizationReqUrl(user1.Id), token1, nil, []string{ico1}},
+		{"get substitutes for user2", "GET", substituteReqUrl(user2.Id), token2, nil, []int{}},
+		{"get organizations for user2", "GET", organizationReqUrl(user2.Id), token2, nil, []string{ico1, ico2}},
+		{"delete substitute", "DELETE", substituteReqUrl(user1.Id), token1, []int{user2.Id}, []int{user2.Id}},
+		{"get substitutes after deletion", "GET", substituteReqUrl(user1.Id), token1, nil, []int{}},
+		{"get organizations after deletion", "GET", organizationReqUrl(user2.Id), token2, nil, []string{ico2}},
+	}
+	for _, tt := range flagtests {
+		t.Run(tt.name, func(t *testing.T) {
+			var reader io.Reader
+			if tt.body != nil {
+				data, err := json.Marshal(tt.body)
+				if err != nil {
+					t.Error(err.Error())
+				}
+				reader = bytes.NewReader(data)
+			}
+			req, err := http.NewRequest(tt.method, tt.url, reader)
+			if err != nil {
+				t.Error(err.Error())
+			}
+			response := executeAuthRequest(req, tt.token)
+
+			checkResponseCode(t, http.StatusOK, response.Code)
+			expBytes, err := json.Marshal(tt.response)
+			if err != nil {
+				t.Error(err.Error())
+			}
+
+			assert.Equal(t, expBytes, response.Body.Bytes())
+		})
+	}
 }

@@ -4,12 +4,12 @@ import (
 	"context"
 	"net/http"
 	"net/http/httptest"
-	"strconv"
 	"testing"
 	"time"
 
+	"github.com/google/uuid"
+
 	"github.com/slovak-egov/einvoice/apiserver/entity"
-	"github.com/slovak-egov/einvoice/pkg/random"
 	"github.com/slovak-egov/einvoice/pkg/timeutil"
 )
 
@@ -41,7 +41,7 @@ func checkResponseCode(t *testing.T, expected, actual int) {
 
 func createTestInvoice(t *testing.T, test, isPublic bool) int {
 	t.Helper()
-	user, _, _ := createTestUser(t)
+	user, _ := createTestUser(t, "")
 	invoice := &entity.Invoice{
 		Sender:      "sender",
 		Receiver:    "receiver",
@@ -62,22 +62,24 @@ func createTestInvoice(t *testing.T, test, isPublic bool) int {
 	return invoice.Id
 }
 
-func createTestUser(t *testing.T) (*entity.User, string, string) {
+func createTestUser(t *testing.T, ico string) (*entity.User, string) {
 	t.Helper()
 
-	ico := strconv.Itoa(random.Int(10000000) + 10000000)
+	if ico == "" {
+		ico = "11190993"
+	}
 	user, err := a.db.GetOrCreateUser(ctx, "ico://sk/"+ico, "Frantisek")
 	if err != nil {
 		t.Error(err)
 	}
 
-	sessionToken := random.String(10)
+	sessionToken := uuid.New().String()
 	err = a.cache.SaveUserToken(ctx, sessionToken, user.Id)
 	if err != nil {
 		t.Error(err)
 	}
 
-	return user, sessionToken, ico
+	return user, sessionToken
 }
 
 func cleanDb(t *testing.T) func() {
