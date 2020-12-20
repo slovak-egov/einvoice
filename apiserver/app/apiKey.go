@@ -120,6 +120,9 @@ func (a *App) getUserIdByApiKey(ctx goContext.Context, tokenString string) (int,
 			}).
 			Debug("app.authMiddleware.parseToken.failed")
 
+		if v, ok := err.(*jwt.ValidationError); ok {
+			return 0, v.Inner
+		}
 		return 0, err
 	}
 
