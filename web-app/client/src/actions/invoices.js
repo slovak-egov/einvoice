@@ -1,5 +1,4 @@
 import swal from 'sweetalert'
-import {get} from 'lodash'
 import {loadingWrapper, setData} from './common'
 
 export const setCreateInvoiceFormat = setData(['createInvoiceScreen', 'format'])
@@ -83,20 +82,10 @@ export const createInvoice = (data) => loadingWrapper(
   }
 )
 
-const getInvoices = ({getAdditionalFilters, path, fetchInvoices}) => (startId) => loadingWrapper(
+const getInvoices = ({path, fetchInvoices}) => (query, startId) => loadingWrapper(
   async (dispatch, getState, {api}) => {
-    const filters = get(getState(), [...path, 'filters'])
-    const formats = Object.keys(filters.formats).filter((k) => filters.formats[k])
-    const ico = filters.ico.send && filters.ico.value
-
     try {
-      const {invoices, nextId} = await fetchInvoices(api)({
-        formats,
-        startId,
-        ico,
-        test: filters.test,
-        ...getAdditionalFilters(filters),
-      })
+      const {invoices, nextId} = await fetchInvoices(api)(query, startId)
 
       dispatch(setInvoices(
         invoices.reduce((acc, val) => ({
@@ -127,14 +116,9 @@ const getInvoices = ({getAdditionalFilters, path, fetchInvoices}) => (startId) =
 export const getMyInvoices = getInvoices({
   path: ['myInvoicesScreen'],
   fetchInvoices: (api) => api.users.getMyInvoices,
-  getAdditionalFilters: (filters) => ({
-    supplied: filters.supplied,
-    received: filters.received,
-  }),
 })
 
 export const getPublicInvoices = getInvoices({
   path: ['publicInvoicesScreen'],
   fetchInvoices: (api) => api.invoices.getPublic,
-  getAdditionalFilters: () => null,
 })

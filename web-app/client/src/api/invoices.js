@@ -3,8 +3,11 @@ export default (api) => {
   const prepareRequest = (params) =>
     api.apiRequest(api.prefixRoute(params, '/invoices'))
 
-  const getPublic = (params) =>
-    prepareRequest({route: `?${new URLSearchParams(api.getInvoicesQueryParams(params))}`})
+  const getPublic = (query, startId) => {
+    const queryParams = new URLSearchParams(query)
+    if (startId) queryParams.set('startId', startId)
+    return prepareRequest({route: `?${queryParams}`})
+  }
 
   const getMeta = (id) => prepareRequest({route: `/${id}`})
 

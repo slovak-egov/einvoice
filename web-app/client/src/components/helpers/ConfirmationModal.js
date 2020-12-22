@@ -7,8 +7,8 @@ const ConfirmationModal = ({cancel, confirm, text, title}) => {
   return (
     <div className="static-modal Modal" style={{cursor: 'default'}}>
       <Modal.Dialog>
-        <Modal.Header style={{display: 'flex'}}>
-          <Modal.Title style={{margin: 'auto'}}>{title}</Modal.Title>
+        <Modal.Header className="d-flex">
+          <Modal.Title className="m-auto">{title}</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>{text}</Modal.Body>
