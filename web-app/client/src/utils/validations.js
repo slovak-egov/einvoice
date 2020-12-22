@@ -1,7 +1,7 @@
 const areFormatsValid = (formats) =>
-  Object.values(formats).reduce((acc, v) => acc || v, false)
+  Object.values(formats).reduce((acc, {value}) => acc || value, false)
 
-const isIcoValid = ({value, send}) => !send || value.length === 8
+const isIcoValid = (ico) => ico == null || ico.length === 8
 
 export const isInvoicesFilterValid = ({formats, ico}) =>
   areFormatsValid(formats) && isIcoValid(ico)

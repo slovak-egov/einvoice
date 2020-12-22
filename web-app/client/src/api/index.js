@@ -26,14 +26,6 @@ export default class Api {
 
   logout = () => this.apiRequest({route: '/logout'})
 
-  getInvoicesQueryParams = ({formats, ico, startId, test}) => {
-    const queryParams = formats.map((f) => ['format', f])
-    queryParams.push(['test', test])
-    if (startId) queryParams.push(['startId', startId])
-    if (ico) queryParams.push(['ico', ico])
-    return queryParams
-  }
-
   apiRequest = (params) => {
     // Add authorization header if logged in
     const sessionToken = localStorage.getItem('sessionToken')

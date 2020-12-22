@@ -68,7 +68,7 @@ export default () => {
                         style={{maxWidth: '200px'}}
                       />
                       <InputGroup.Append>
-                        <Button variant="danger" onClick={clearInvoiceData} style={{margin: 0}}>X</Button>
+                        <Button variant="danger" onClick={clearInvoiceData} className="m-0">X</Button>
                       </InputGroup.Append>
                     </InputGroup> :
                     <FileUploader
