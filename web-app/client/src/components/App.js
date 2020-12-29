@@ -1,5 +1,5 @@
 import './App.css'
-import {useEffect} from 'react'
+import {Suspense, useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {Route, Switch} from 'react-router-dom'
 import PublicInvoices from './PublicInvoices'
@@ -35,8 +35,16 @@ export default () => {
       <TopBar />
       <div className="container">
         <Switch>
-          <Route exact path="/" component={LandingPage} />
-          <Route exact path="/faq" component={FAQ} />
+          <Route exact path="/">
+            <Suspense fallback={<LoadingModal />}>
+              <LandingPage />
+            </Suspense>
+          </Route>
+          <Route exact path="/faq">
+            <Suspense fallback={<LoadingModal />}>
+              <FAQ />
+            </Suspense>
+          </Route>
           <AuthRoute exact path="/account">
             <AccountSettings />
           </AuthRoute>

@@ -5,13 +5,6 @@ export const setData = (path) => (data) => ({
   reducer: (_, data) => data,
 })
 
-export const toggleField = (path) => ({
-  type: `TOGGLE FIELD ON PATH ${path}`,
-  path,
-  payload: null,
-  reducer: (state) => !state,
-})
-
 export const updateRunningRequests = (change) => ({
   type: 'UPDATE RUNNING REQUESTS',
   path: ['loadingRequests'],

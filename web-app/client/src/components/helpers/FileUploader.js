@@ -12,7 +12,7 @@ export default ({accept, buttonStyle, buttonText, onChange}) => {
         type="file"
         ref={hiddenFileInput}
         onChange={onChange}
-        style={{display: 'none'}}
+        className="d-none"
         accept={accept}
       />
     </>

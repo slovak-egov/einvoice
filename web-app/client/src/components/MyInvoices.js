@@ -1,36 +1,34 @@
 import './invoiceList/Filters.css'
-import {useCallback} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
 import {FormCheck} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import InvoiceList from './invoiceList'
 import {getMyInvoices} from '../actions/invoices'
-import {toggleField} from '../actions/common'
-import {myInvoicesFiltersSelector} from '../state/invoices'
 
-const Filter = () => {
+const Filter = ({extraQuery, setExtraQuery}) => {
   const {t} = useTranslation('common')
 
-  const filters = useSelector(myInvoicesFiltersSelector)
+  const toggleFilter = (param) => () => {
+    const newValue = new URLSearchParams(extraQuery)
+    if (extraQuery.get(param) === 'true') newValue.delete(param)
+    else newValue.set(param, 'true')
 
-  const dispatch = useDispatch()
-  const toggleFilter = useCallback(
-    (field) => () => dispatch(toggleField(['myInvoicesScreen', 'filters', field])), [dispatch]
-  )
+    setExtraQuery(newValue)
+  }
+
   return (
     <>
       <strong className="filter-heading">{t('invoiceType')}</strong>
       <div className="d-flex">
         <FormCheck
           type="checkbox"
-          checked={filters.supplied}
+          checked={extraQuery.get('supplied') === 'true'}
           label={t('supplied')}
           onChange={toggleFilter('supplied')}
           className="mr-3"
         />
         <FormCheck
           type="checkbox"
-          checked={filters.received}
+          checked={extraQuery.get('received') === 'true'}
           label={t('received')}
           onChange={toggleFilter('received')}
         />
@@ -39,20 +37,24 @@ const Filter = () => {
   )
 }
 
+const defaultExtraQuery = new URLSearchParams({
+  supplied: true,
+  received: true
+})
+
+const filterValidator = (q) => q.get('supplied') === 'true' || q.get('received') === 'true'
+
 export default () => {
   const {t} = useTranslation('TopBar')
-  const dispatch = useDispatch()
-  const getInvoices = useCallback(
-    (params) => dispatch(getMyInvoices(params)), [dispatch]
-  )
 
   return (
     <InvoiceList
       title={t('tabs.myInvoices')}
       path={['myInvoicesScreen']}
       CustomFilter={Filter}
-      areCustomFilterFieldsValid={(filters) => filters.supplied || filters.received}
-      getInvoices={getInvoices}
+      areCustomFilterFieldsValid={filterValidator}
+      getInvoicesAction={getMyInvoices}
+      defaultExtraQuery={defaultExtraQuery}
     />
   )
 }

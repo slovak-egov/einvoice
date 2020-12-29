@@ -1,34 +1,75 @@
 import './Filters.css'
-import {useCallback} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import {useCallback, useEffect, useState} from 'react'
+import {useHistory, useLocation} from 'react-router'
 import {Accordion, Button, Card, Form, FormCheck, InputGroup} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
-import {get} from 'lodash'
 import {invoiceFormats} from '../../utils/constants'
 import {isInvoicesFilterValid, keepDigitsOnly} from '../../utils/validations'
-import {setData, toggleField} from '../../actions/common'
 
-export default ({areCustomFilterFieldsValid, CustomFilter, getInvoices, path}) => {
+export default ({areCustomFilterFieldsValid, CustomFilter, defaultExtraQuery, getInvoices}) => {
   const {t} = useTranslation('common')
+  const history = useHistory()
+  const {pathname, search} = useLocation()
+  const queryParams = new URLSearchParams(search)
 
-  const filters = useSelector((state) => get(state, path))
-  const searchDisabled = useSelector(
-    (state) =>
-      !isInvoicesFilterValid(get(state, path)) || !areCustomFilterFieldsValid(get(state, path))
+  const [test, setTest] = useState(queryParams.get('test') === 'true')
+
+  const formats = {}
+  for (const format of Object.values(invoiceFormats)) {
+    const [value, setter] = useState(queryParams.getAll('format').includes(format))
+    formats[format] = {value, setter, toggleFormat: () => setter((v) => !v)}
+  }
+
+  const [ico, setIco] = useState(queryParams.get('ico'))
+  // Rest of query params passed to CustomFilter
+  const initExtraQuery = new URLSearchParams(search)
+  initExtraQuery.delete('ico')
+  initExtraQuery.delete('format')
+  initExtraQuery.delete('test')
+  const [extraQuery, setExtraQuery] = useState(initExtraQuery)
+
+  // Triggering search with new filters is done by redirect
+  // Page itself is responsible to fetch proper data
+  const filterRedirect = useCallback(
+    () => {
+      const newQueryParams = new URLSearchParams(extraQuery)
+      if (test) newQueryParams.set('test', 'true')
+      for (const [format, {value}] of Object.entries(formats)) {
+        if (value) newQueryParams.append('format', format)
+      }
+      if (ico != null) newQueryParams.set('ico', ico)
+
+      history.push(`${pathname}?${newQueryParams}`)
+    },
+    [extraQuery, history, ico, pathname, test, ...Object.values(formats).map(({value}) => value)]
   )
 
-  const dispatch = useDispatch()
-  const toggleFilter = useCallback(
-    (fieldPath) => () => dispatch(toggleField([...path, ...fieldPath])), [dispatch, path]
-  )
-  const changeFilter = useCallback(
-    (fieldPath) => (e) => dispatch(
-      setData([...path, ...fieldPath])(keepDigitsOnly(e.target.value))
-    ),
-    [dispatch, path],
-  )
+  const searchEnabled = isInvoicesFilterValid({formats, ico}) &&
+    areCustomFilterFieldsValid(extraQuery)
 
-  const {formats, ico, test} = filters
+  // When query URL parameters change try to fetch proper data
+  // If query is invalid redirect to default search
+  useEffect(() => {
+    if (searchEnabled) {
+      getInvoices(search)
+    } else {
+      // Redirect to default view if query params are corrupted
+      // Synchronize state accordingly
+      const defaultQueryParams = new URLSearchParams(defaultExtraQuery)
+      setExtraQuery(defaultExtraQuery)
+
+      for (const format of Object.values(invoiceFormats)) {
+        defaultQueryParams.append('format', format)
+        formats[format].setter(true)
+      }
+
+      setTest(false)
+      setIco(null)
+
+      history.push(`${pathname}?${defaultQueryParams}`)
+    }
+
+  }, [search])
 
   return (
     <Accordion>
@@ -53,8 +94,8 @@ export default ({areCustomFilterFieldsValid, CustomFilter, getInvoices, path}) =
                       <FormCheck
                         type="checkbox"
                         key={format}
-                        checked={formats[format]}
-                        onChange={toggleFilter(['formats', format])}
+                        checked={formats[format].value}
+                        onChange={formats[format].toggleFormat}
                         label={format}
                         className="mr-3"
                       />
@@ -66,7 +107,7 @@ export default ({areCustomFilterFieldsValid, CustomFilter, getInvoices, path}) =
                   <FormCheck
                     type="checkbox"
                     checked={test}
-                    onChange={toggleFilter(['test'])}
+                    onChange={() => setTest((v) => !v)}
                     label="Test"
                   />
                 </div>
@@ -75,26 +116,28 @@ export default ({areCustomFilterFieldsValid, CustomFilter, getInvoices, path}) =
                 <strong className="filter-heading">IČO</strong>
                 <InputGroup style={{width: '140px'}}>
                   <Form.Control
-                    value={ico.value}
-                    onChange={changeFilter(['ico', 'value'])}
-                    readOnly={!ico.send}
+                    value={ico || ''}
+                    onChange={(e) => setIco(keepDigitsOnly(e.target.value))}
+                    readOnly={ico == null}
                   />
                   <InputGroup.Append>
                     <InputGroup.Checkbox
-                      checked={ico.send}
-                      onChange={toggleFilter(['ico', 'send'])}
+                      checked={ico != null}
+                      onChange={() => setIco(ico == null ? '' : null)}
                     />
                   </InputGroup.Append>
                 </InputGroup>
               </div>
-              {CustomFilter && <CustomFilter />}
+              {CustomFilter &&
+                <CustomFilter extraQuery={extraQuery} setExtraQuery={setExtraQuery} />
+              }
             </div>
             <div className="d-flex">
               <Button
                 variant="primary"
                 className="ml-auto"
-                onClick={() => getInvoices()}
-                disabled={searchDisabled}
+                onClick={filterRedirect}
+                disabled={!searchEnabled}
               >
                 {t('search')}
               </Button>

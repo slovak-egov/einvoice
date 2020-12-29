@@ -14,34 +14,8 @@ const getInitialState = () => ({
     format: invoiceFormats.UBL,
     test: false,
   },
-  publicInvoicesScreen: {
-    filters: {
-      formats: {
-        [invoiceFormats.UBL]: true,
-        [invoiceFormats.D16B]: true,
-      },
-      test: false,
-      ico: {
-        value: '',
-        send: false,
-      },
-    },
-  },
-  myInvoicesScreen: {
-    filters: {
-      formats: {
-        [invoiceFormats.UBL]: true,
-        [invoiceFormats.D16B]: true,
-      },
-      test: false,
-      received: true,
-      supplied: true,
-      ico: {
-        value: '',
-        send: false,
-      },
-    },
-  },
+  publicInvoicesScreen: {},
+  myInvoicesScreen: {},
   logging: true, // Always start with login attempt
   loggedUserId: null,
 })

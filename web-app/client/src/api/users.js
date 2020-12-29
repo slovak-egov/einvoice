@@ -7,13 +7,10 @@ export default (api) => {
 
   const updateInfo = (data) => prepareRequest({method: 'PATCH', route: '', data})
 
-  const getMyInvoices = ({supplied, received, ...otherParams}) => {
-    const queryParams = api.getInvoicesQueryParams(otherParams)
-    queryParams.push(['received', received])
-    queryParams.push(['supplied', supplied])
-    return prepareRequest({
-      route: `/invoices?${new URLSearchParams(queryParams)}`,
-    })
+  const getMyInvoices = (query, startId) => {
+    const queryParams = new URLSearchParams(query)
+    if (startId) queryParams.set('startId', startId)
+    return prepareRequest({route: `/invoices?${queryParams}`})
   }
 
   const getSubstituteIds = () => prepareRequest({route: '/substitutes'})
