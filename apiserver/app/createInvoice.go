@@ -31,22 +31,26 @@ func parseRequestBody(req *http.Request) (invoice []byte, format string, test bo
 	// TODO: return 413 if request is too large
 	err = req.ParseMultipartForm(10 << 20)
 	if err != nil {
-		err = InvoiceError("payload.invalid")
+		err = InvoiceError("payload.invalid").WithCause(err)
 		return
 	}
 
 	invoice, err = parseInvoice(req)
 	if err != nil {
-		err = InvoiceError("parsingError").WithCause(err)
+		err = InvoiceError("file.parsingError").WithCause(err)
 		return
 	}
 	test, err = getOptionalBool(req.PostFormValue("test"), false)
 	if err != nil {
-		err = InvoiceError("testParameter.invalid")
+		err = InvoiceError("test.invalid").WithCause(err)
 		return
 	}
 
 	format = req.PostFormValue("format")
+	if format == "" {
+		err = InvoiceError("format.missing")
+		return
+	}
 	return
 }
 
@@ -107,7 +111,7 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 
 	err = validateInvoice(req.Context(), a.db, metadata)
 	if _, ok := err.(*db.NoSubstituteError); ok {
-		return handlerutil.NewForbiddenError("invoice.permission.missing")
+		return handlerutil.NewForbiddenError("invoice.create.permission.missing")
 	} else if err != nil {
 		return err
 	}

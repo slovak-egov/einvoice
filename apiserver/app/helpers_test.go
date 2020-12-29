@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -94,6 +95,29 @@ func cleanDb(t *testing.T) func() {
 
 		if _, err := a.db.GetDb(ctx).Model(&entity.User{}).Where("TRUE").Delete(); err != nil {
 			t.Error(err)
+		}
+	}
+}
+
+type ErrorResponse struct {
+	Error string `json:"error"`
+}
+
+func checkError(t *testing.T, response *httptest.ResponseRecorder, expectedCode int, msg string) {
+	t.Helper()
+
+	if expectedCode != response.Code {
+		t.Errorf("Expected response code %d. Got %d\n", expectedCode, response.Code)
+	}
+
+	if msg != "" {
+		var e ErrorResponse
+		err := json.Unmarshal(response.Body.Bytes(), &e)
+		if err != nil {
+			t.Error(err.Error())
+		}
+		if e.Error != msg {
+			t.Errorf("Expected error message %s. Got %s", msg, e.Error)
 		}
 	}
 }

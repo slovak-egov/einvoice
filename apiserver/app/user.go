@@ -41,7 +41,7 @@ func (a *App) getUser(res http.ResponseWriter, req *http.Request) error {
 	user, err := a.db.GetUser(req.Context(), requestedUserId)
 	if err != nil {
 		if _, ok := err.(*db.NotFoundError); ok {
-			return UserError("notFound")
+			return handlerutil.NewNotFoundError("user.notFound")
 		}
 		return err
 	}

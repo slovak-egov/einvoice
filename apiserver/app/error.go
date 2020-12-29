@@ -44,5 +44,5 @@ func UserError(msg string) *handlerutil.HttpError {
 }
 
 func SlovenskoSkError(msg string) *handlerutil.HttpError {
-	return handlerutil.NewFailedDependencyError("slovenskoSk." + msg)
+	return handlerutil.NewFailedDependencyError("authorization.slovenskoSk." + msg)
 }

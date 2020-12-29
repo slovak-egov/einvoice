@@ -60,7 +60,7 @@ func NewPublicInvoicesOptions(params url.Values, maxLimit int) (*db.PublicInvoic
 func (a *App) getPublicInvoices(res http.ResponseWriter, req *http.Request) error {
 	requestOptions, err := NewPublicInvoicesOptions(req.URL.Query(), a.config.InvoicesLimit)
 	if err != nil {
-		return InvoiceError("params.invalid").WithCause(err)
+		return InvoiceError("params.parsingError").WithCause(err)
 	}
 
 	if err := requestOptions.Validate(a.config.InvoicesLimit); err != nil {
@@ -82,7 +82,7 @@ func (a *App) canUserViewInvoice(ctx goContext.Context, invoice *entity.Invoice)
 		return nil
 	} else if context.GetUserId(ctx) == 0 {
 		// Unauthenticated user does not have access to private invoices
-		return UnauthorizedError
+		return handlerutil.NewForbiddenError("invoice.view.permission.missing")
 	}
 
 	accessibleIcos, err := a.db.GetUserOrganizationIds(ctx, context.GetUserId(ctx))
@@ -96,14 +96,15 @@ func (a *App) canUserViewInvoice(ctx goContext.Context, invoice *entity.Invoice)
 			return nil
 		}
 	}
-	return handlerutil.NewForbiddenError("invoice.permission.missing")
+
+	return handlerutil.NewForbiddenError("invoice.view.permission.missing")
 }
 
 func (a *App) getInvoice(res http.ResponseWriter, req *http.Request) error {
 	vars := mux.Vars(req)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		return InvoiceError("params.id.invalid")
+		return InvoiceError("param.id.invalid").WithCause(err)
 	}
 
 	invoice, err := a.db.GetInvoice(req.Context(), id)

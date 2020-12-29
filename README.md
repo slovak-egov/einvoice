@@ -8,6 +8,8 @@ You can view it on this [website](https://generator.swagger.io/?url=https://raw.
 
 [Invoice validations](docs/validations.md)
 
+[Api errors](docs/errors.md)
+
 ## Try it out
 
 [https://web-app.dev.filipsladek.com](https://web-app.dev.filipsladek.com)
