@@ -41,7 +41,7 @@
 | invoice.xsd.validation.failed | 400 | Xml file must follow XSD schema | Error message |
 | invoice.validation.failed | 400 | Invoice must contain all required fields | Comma separated error codes from [Validation errors](validations.md) |
 | invoice.create.permission.missing | 403 | Missing permissions for creating invoices with posted IČO | |
-| invoice.view.permission.missing | 403 | Missing permissions for requested invoice | |
+| invoice.view.permission.missing | 401 | Missing permissions for requested invoice | |
 | invoice.param.parsingError | 400 | Cannot parse params | Error message |
 | invoice.param.invalid | 400 | Params validation failed | Error message |
 | invoice.param.id.invalid | 400 | Invoice id must be integer | Error message |
