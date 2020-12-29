@@ -4,7 +4,7 @@ import (
 	goContext "context"
 	b64 "encoding/base64"
 
-	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go"
 
 	"github.com/slovak-egov/einvoice/apiserver/config"
 	"github.com/slovak-egov/einvoice/pkg/context"
@@ -28,7 +28,7 @@ func NewSender(mailConfig config.MailConfiguration) *Sender {
 	}
 }
 
-func getMailjetRecipients(receiverEmails []string) *mailjet.RecipientsV31{
+func getMailjetRecipients(receiverEmails []string) *mailjet.RecipientsV31 {
 	recipientsArray := []mailjet.RecipientV31{}
 	for _, email := range receiverEmails {
 		recipientsArray = append(recipientsArray, mailjet.RecipientV31{Email: email})
@@ -38,19 +38,19 @@ func getMailjetRecipients(receiverEmails []string) *mailjet.RecipientsV31{
 }
 
 func (s *Sender) SendInvoice(ctx goContext.Context, receiverEmails []string, invoice []byte) {
-	messagesInfo := []mailjet.InfoMessagesV31 {
+	messagesInfo := []mailjet.InfoMessagesV31{
 		mailjet.InfoMessagesV31{
 			From: &mailjet.RecipientV31{
 				Email: s.sender,
-				Name: "E-invoice",
+				Name:  "E-invoice",
 			},
-			To: getMailjetRecipients(receiverEmails),
-			Subject: "Invoice",
+			To:       getMailjetRecipients(receiverEmails),
+			Subject:  "Invoice",
 			TextPart: "New invoice was created.",
 			Attachments: &mailjet.AttachmentsV31{
 				mailjet.AttachmentV31{
-					ContentType: "text/xml",
-					Filename: "invoice.xml",
+					ContentType:   "text/xml",
+					Filename:      "invoice.xml",
 					Base64Content: b64.StdEncoding.EncodeToString(invoice),
 				},
 			},

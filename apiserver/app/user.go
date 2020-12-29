@@ -10,6 +10,7 @@ import (
 	"github.com/go-ozzo/ozzo-validation/v4/is"
 	"github.com/gorilla/mux"
 
+	"github.com/slovak-egov/einvoice/apiserver/db"
 	"github.com/slovak-egov/einvoice/apiserver/entity"
 	"github.com/slovak-egov/einvoice/pkg/context"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
@@ -21,11 +22,11 @@ func getRequestedUserId(req *http.Request) (int, error) {
 
 	requestedUserId, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		return 0, handlerutil.UserError("id.invalid")
+		return 0, UserError("id.invalid").WithCause(err)
 	}
 	// Currently everyone can request only own data
 	if requestedUserId != requesterUserId {
-		return 0, handlerutil.UnauthorizedError
+		return 0, UnauthorizedError
 	}
 
 	return requestedUserId, nil
@@ -39,6 +40,9 @@ func (a *App) getUser(res http.ResponseWriter, req *http.Request) error {
 
 	user, err := a.db.GetUser(req.Context(), requestedUserId)
 	if err != nil {
+		if _, ok := err.(*db.NotFoundError); ok {
+			return UserError("notFound")
+		}
 		return err
 	}
 	handlerutil.RespondWithJSON(res, http.StatusOK, user)
@@ -75,11 +79,11 @@ func (a *App) updateUser(res http.ResponseWriter, req *http.Request) error {
 	decoder.DisallowUnknownFields()
 
 	if err := decoder.Decode(&requestBody); err != nil {
-		return handlerutil.UserError("parsingError").WithCause(err)
+		return UserError("parsingError").WithCause(err)
 	}
 
 	if err := requestBody.Validate(); err != nil {
-		return handlerutil.UserError("validation.failed").WithCause(err)
+		return UserError("validation.failed").WithCause(err)
 	}
 
 	user, err := a.db.UpdateUser(req.Context(), &entity.User{

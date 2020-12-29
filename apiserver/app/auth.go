@@ -15,14 +15,14 @@ func (a *App) handleLogin(res http.ResponseWriter, req *http.Request) error {
 	if err != nil {
 		return err
 	} else if oboToken.Type != BearerToken {
-		return handlerutil.AuthInvalidTypeError
+		return AuthInvalidTypeError
 	}
 
 	slovenskoSkUser, err := a.slovenskoSk.GetUser(req.Context(), oboToken.Value)
 	if _, ok := err.(*slovenskoSk.InvalidTokenError); ok {
-		return handlerutil.UnauthorizedError
+		return UnauthorizedError
 	} else if _, ok := err.(*slovenskoSk.UpvsError); ok {
-		return handlerutil.NewFailedDependencyError("slovenskoSk.request.failed")
+		return SlovenskoSkError("request.failed")
 	} else if err != nil {
 		return err
 	}
@@ -50,12 +50,12 @@ func (a *App) handleUpvsLogout(res http.ResponseWriter, req *http.Request) error
 	if err != nil {
 		return err
 	} else if oboToken.Type != BearerToken {
-		return handlerutil.AuthInvalidTypeError
+		return AuthInvalidTypeError
 	}
 
 	logoutUrl, err := a.slovenskoSk.GetLogoutUrl(req.Context(), oboToken.Value)
 	if err != nil {
-		return handlerutil.UnauthorizedError
+		return UnauthorizedError
 	}
 
 	http.Redirect(res, req, logoutUrl, http.StatusFound)
@@ -68,7 +68,7 @@ func (a *App) handleLogout(res http.ResponseWriter, req *http.Request) error {
 	if err != nil {
 		return err
 	} else if token.Type != BearerToken {
-		return handlerutil.AuthInvalidTypeError
+		return AuthInvalidTypeError
 	}
 
 	err = a.cache.RemoveUserToken(req.Context(), token.Value)

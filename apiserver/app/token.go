@@ -3,8 +3,6 @@ package app
 import (
 	"net/http"
 	"strings"
-
-	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
 const (
@@ -20,16 +18,16 @@ type Token struct {
 type MissingToken struct{}
 
 func (e MissingToken) Error() string {
-	return handlerutil.AuthError("missing").Error()
+	return AuthError("missing").Error()
 }
 
 func getBearerToken(header string) (*Token, error) {
 	parts := strings.Split(header, " ")
 	if len(parts) != 2 {
-		return nil, handlerutil.AuthError("bearer.invalid")
+		return nil, AuthError("bearer.invalid")
 	}
 	if parts[0] != "Bearer" {
-		return nil, handlerutil.AuthInvalidTypeError
+		return nil, AuthInvalidTypeError
 	}
 	return &Token{parts[1], BearerToken}, nil
 }

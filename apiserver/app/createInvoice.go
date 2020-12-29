@@ -31,18 +31,18 @@ func parseRequestBody(req *http.Request) (invoice []byte, format string, test bo
 	// TODO: return 413 if request is too large
 	err = req.ParseMultipartForm(10 << 20)
 	if err != nil {
-		err = handlerutil.InvoiceError("payload.invalid")
+		err = InvoiceError("payload.invalid")
 		return
 	}
 
 	invoice, err = parseInvoice(req)
 	if err != nil {
-		err = handlerutil.InvoiceError("parsingError").WithCause(err)
+		err = InvoiceError("parsingError").WithCause(err)
 		return
 	}
 	test, err = getOptionalBool(req.PostFormValue("test"), false)
 	if err != nil {
-		err = handlerutil.InvoiceError("testParameter.invalid")
+		err = InvoiceError("testParameter.invalid")
 		return
 	}
 
@@ -85,18 +85,18 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 
 	parsers, ok := formatToParsers[format]
 	if !ok {
-		return handlerutil.InvoiceError("format.unknown")
+		return InvoiceError("format.unknown")
 	}
 
 	// Validate invoice format
 	var metadata *entity.Invoice
 
 	if err = parsers.GetValidator(a)(invoice); err != nil {
-		return handlerutil.InvoiceError("xsd.validation.failed").WithCause(err)
+		return InvoiceError("xsd.validation.failed").WithCause(err)
 	}
 	metadata, err = parsers.MetadataExtractor(invoice)
 	if err != nil {
-		return handlerutil.InvoiceError("validation.failed").WithCause(err)
+		return InvoiceError("validation.failed").WithCause(err)
 	}
 
 	// Add creator Id, test flag, isPublic flag
