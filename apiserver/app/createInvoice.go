@@ -13,16 +13,16 @@ import (
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
-var formatToParsers = map[string]struct{
-	GetValidator func(*App) func([]byte) error
+var formatToParsers = map[string]struct {
+	GetValidator      func(*App) func([]byte) error
 	MetadataExtractor func([]byte) (*entity.Invoice, error)
 }{
 	entity.UblFormat: {
-		func(a *App) func([]byte) error {return a.validator.ValidateUBL21},
+		func(a *App) func([]byte) error { return a.validator.ValidateUBL21 },
 		ubl21.Create,
 	},
 	entity.D16bFormat: {
-		func(a *App) func([]byte) error {return a.validator.ValidateD16B},
+		func(a *App) func([]byte) error { return a.validator.ValidateD16B },
 		d16b.Create,
 	},
 }
@@ -82,6 +82,17 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 	if err != nil {
 		return err
 	}
+	userId := context.GetUserId(req.Context())
+
+	if test {
+		counter, err := a.cache.IncrementTestInvoiceCounter(req.Context(), userId)
+		if err != nil {
+			return err
+		}
+		if counter >= a.config.Cache.TestInvoiceRateLimiterThreshold {
+			return nil // todo error
+		}
+	}
 
 	parsers, ok := formatToParsers[format]
 	if !ok {
@@ -100,7 +111,7 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 	}
 
 	// Add creator Id, test flag, isPublic flag
-	metadata.CreatedBy = context.GetUserId(req.Context())
+	metadata.CreatedBy = userId
 	metadata.Test = test
 	// TODO: add public ICO list
 	metadata.IsPublic = true

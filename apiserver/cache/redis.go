@@ -15,8 +15,9 @@ import (
 )
 
 type Cache struct {
-	userTokenExpiration time.Duration
-	client              *redis.Client
+	userTokenExpiration              time.Duration
+	client                           *redis.Client
+	testInvoiceRateLimiterExpiration time.Duration
 }
 
 func NewRedis(cacheConfig config.CacheConfiguration) *Cache {
@@ -107,4 +108,24 @@ func (r *Cache) SaveJti(ctx goContext.Context, userId int, jti string, expiratio
 
 func (r *Cache) FlushAll(ctx goContext.Context) error {
 	return r.client.FlushAll(ctx).Err()
+}
+
+func testInvoiceRateLimiterKey(userId int) string {
+	return fmt.Sprintf("test:invoices:userId:%d", userId)
+}
+
+func (r *Cache) IncrementTestInvoiceCounter(ctx goContext.Context, userId int) (int, error) {
+	key := testInvoiceRateLimiterKey(userId)
+	v, err := r.client.Incr(ctx, key).Result()
+	if err != nil {
+		return 0, err
+	}
+
+	if v == 1 {
+		if _, err = r.client.Expire(ctx, key, r.testInvoiceRateLimiterExpiration).Result(); err != nil {
+			return 0, err
+		}
+	}
+
+	return int(v), nil
 }

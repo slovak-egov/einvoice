@@ -24,10 +24,12 @@ type DbConfiguration struct {
 }
 
 type CacheConfiguration struct {
-	Host                   string
-	Port                   int
-	Password               string
-	SessionTokenExpiration time.Duration
+	Host                             string
+	Port                             int
+	Password                         string
+	SessionTokenExpiration           time.Duration
+	TestInvoiceRateLimiterExpiration time.Duration
+	TestInvoiceRateLimiterThreshold  int
 }
 
 type SlovenskoSkConfiguration struct {
@@ -90,10 +92,12 @@ func (c *Configuration) initMail() {
 
 func (c *Configuration) initCache() {
 	c.Cache = CacheConfiguration{
-		Host:                   environment.Getenv("CACHE_HOST", c.Cache.Host),
-		Port:                   environment.ParseInt("CACHE_PORT", c.Cache.Port),
-		Password:               environment.Getenv("CACHE_PASSWORD", c.Cache.Password),
-		SessionTokenExpiration: environment.ParseDuration("SESSION_TOKEN_EXPIRATION", c.Cache.SessionTokenExpiration),
+		Host:                             environment.Getenv("CACHE_HOST", c.Cache.Host),
+		Port:                             environment.ParseInt("CACHE_PORT", c.Cache.Port),
+		Password:                         environment.Getenv("CACHE_PASSWORD", c.Cache.Password),
+		SessionTokenExpiration:           environment.ParseDuration("SESSION_TOKEN_EXPIRATION", c.Cache.SessionTokenExpiration),
+		TestInvoiceRateLimiterExpiration: environment.ParseDuration("TEST_INVOICE_RATE_LIMITER_EXPIRATION", c.Cache.TestInvoiceRateLimiterExpiration),
+		TestInvoiceRateLimiterThreshold:  environment.ParseInt("TEST_INVOICE_RATE_LIMITER_THRESHOLD", c.Cache.TestInvoiceRateLimiterThreshold),
 	}
 }
 
