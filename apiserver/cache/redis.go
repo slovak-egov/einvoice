@@ -38,8 +38,9 @@ func NewRedis(cacheConfig config.CacheConfiguration) *Cache {
 	}
 
 	return &Cache{
-		userTokenExpiration: cacheConfig.SessionTokenExpiration,
-		client:              rdb,
+		userTokenExpiration:              cacheConfig.SessionTokenExpiration,
+		client:                           rdb,
+		testInvoiceRateLimiterExpiration: cacheConfig.TestInvoiceRateLimiterExpiration,
 	}
 }
 

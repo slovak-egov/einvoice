@@ -2,6 +2,7 @@ package app
 
 import (
 	goContext "context"
+	"errors"
 	"io/ioutil"
 	"net/http"
 
@@ -89,8 +90,8 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 		if err != nil {
 			return err
 		}
-		if counter >= a.config.Cache.TestInvoiceRateLimiterThreshold {
-			return nil // todo error
+		if counter > a.config.Cache.TestInvoiceRateLimiterThreshold {
+			return &handlerutil.HttpError{http.StatusTooManyRequests, errors.New("e")} // todo error
 		}
 	}
 

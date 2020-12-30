@@ -21,8 +21,7 @@ func TestCreateInvoice(t *testing.T) {
 
 	var requestBody bytes.Buffer
 	multipartWriter := multipart.NewWriter(&requestBody)
-	formatWriter, _ := multipartWriter.CreateFormField("format")
-	formatWriter.Write([]byte(entity.UblFormat))
+	multipartWriter.WriteField("format", entity.UblFormat)
 
 	invoiceWriter, _ := multipartWriter.CreateFormFile("invoice", "ubl21_invoice.xml")
 	invoice, _ := ioutil.ReadFile("../../xml/ubl21/example/ubl21_invoice.xml")
@@ -76,4 +75,37 @@ func TestCreateInvoice(t *testing.T) {
 	if !bytes.Equal(invoice, response.Body.Bytes()) {
 		t.Errorf("Response was incorrect. We expected %s", invoice)
 	}
+}
+
+func TestRateLimiter(t *testing.T) {
+	t.Cleanup(cleanDb(t))
+	a.cache.FlushAll(ctx)
+	_, sessionToken := createTestUser(t, "")
+
+	var requestBody bytes.Buffer
+	multipartWriter := multipart.NewWriter(&requestBody)
+	multipartWriter.WriteField("format", entity.UblFormat)
+	multipartWriter.WriteField("test", "true")
+
+	invoiceWriter, _ := multipartWriter.CreateFormFile("invoice", "ubl21_invoice.xml")
+	invoice, _ := ioutil.ReadFile("../../xml/ubl21/example/ubl21_invoice.xml")
+	invoiceWriter.Write(invoice)
+	multipartWriter.Close()
+	body := requestBody.Bytes()
+
+	for i := 0; i < 20; i++ {
+		req, _ := http.NewRequest("POST", "/invoices", bytes.NewReader(body))
+		req.Header.Set("Content-Type", multipartWriter.FormDataContentType())
+
+		response := executeAuthRequest(req, sessionToken)
+		checkResponseCode(t, http.StatusCreated, response.Code)
+	}
+
+	req, _ := http.NewRequest("POST", "/invoices", bytes.NewReader(body))
+	req.Header.Set("Content-Type", multipartWriter.FormDataContentType())
+
+	response := executeAuthRequest(req, sessionToken)
+	checkResponseCode(t, http.StatusTooManyRequests, response.Code)
+
+	a.cache.FlushAll(ctx)
 }
