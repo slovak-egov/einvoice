@@ -15,9 +15,11 @@ paths:
       security:
         - slovenskoSkOboTokenAuth: []
       responses:
-        200:
+        '200':
           $ref: '#/components/responses/Login'
-        401:
+        '401':
+          $ref: '#/components/responses/Error'
+        '424':
           $ref: '#/components/responses/Error'
   /logout:
     get:
@@ -27,9 +29,9 @@ paths:
       security:
         - sessionAuth: []
       responses:
-        200:
+        '200':
           $ref: '#/components/responses/Logout'
-        401:
+        '401':
           $ref: '#/components/responses/Error'
   /upvs/logout:
     get:
@@ -47,9 +49,9 @@ paths:
             type: string
           required: true
       responses:
-        302:
+        '302':
           description: Redirect user to ÚPVS logout
-        401:
+        '401':
           $ref: '#/components/responses/Error'
 
   /users/{user_id}:
@@ -68,13 +70,13 @@ paths:
         - sessionAuth: []
         - apiKeyAuth: []
       responses:
-        200:
+        '200':
           description: User data
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserInfo'
-        401:
+        '401':
           $ref: '#/components/responses/Error'
     patch:
       tags:
@@ -86,15 +88,15 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/PatchUser'
       responses:
-        200:
+        '200':
           description: Updated user info
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserInfo'
-        400:
+        '400':
           $ref: '#/components/responses/Error'
-        401:
+        '401':
           $ref: '#/components/responses/Error'
   /users/{user_id}/substitutes:
     parameters:
@@ -118,13 +120,13 @@ paths:
             schema:
               $ref: '#/components/schemas/SubstituteIds'
       responses:
-        200:
+        '200':
           description: List of substitute Ids that were successfully added
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SubstituteIds'
-        400:
+        '400':
           $ref: '#/components/responses/Error'
     delete:
       tags:
@@ -140,13 +142,13 @@ paths:
             schema:
               $ref: '#/components/schemas/SubstituteIds'
       responses:
-        200:
+        '200':
           description: List of substitute Ids that were successfully removed
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SubstituteIds'
-        400:
+        '400':
           $ref: '#/components/responses/Error'
     get:
       tags:
@@ -157,7 +159,7 @@ paths:
         - sessionAuth: []
         - apiKeyAuth: []
       responses:
-        200:
+        '200':
           description: List of substitute user Ids of requested user
           content:
             application/json:
@@ -180,7 +182,7 @@ paths:
         - sessionAuth: []
         - apiKeyAuth: []
       responses:
-        200:
+        '200':
           description: List of substituted organizations for requested user
           content:
             application/json:
@@ -218,7 +220,7 @@ paths:
         - sessionAuth: []
         - apiKeyAuth: []
       responses:
-        200:
+        '200':
           description: List of user invoices
           content:
             application/json:
@@ -238,7 +240,7 @@ paths:
         - $ref: '#/components/parameters/TestInvoice'
         - $ref: '#/components/parameters/Ico'
       responses:
-        200:
+        '200':
           description: Successfull response
           content:
             application/json:
@@ -254,13 +256,15 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/CreateInvoice'
       responses:
-        201:
+        '201':
           description: Invoice created
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Invoice'
-        400:
+        '400':
+          $ref: '#/components/responses/Error'
+        '403':
           $ref: '#/components/responses/Error'
   /invoices/{invoice_id}:
     get:
@@ -278,15 +282,15 @@ paths:
           schema:
             type: integer
       responses:
-        200:
+        '200':
           description: Successfull response
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Invoice'
-        403:
+        '403':
           $ref: '#/components/responses/Error'
-        404:
+        '404':
           $ref: '#/components/responses/Error'
   /invoices/{invoice_id}/detail:
     get:
@@ -304,15 +308,15 @@ paths:
           schema:
             type: integer
       responses:
-        200:
+        '200':
           description: Successful response
           content:
             application/xml:
               schema:
                 $ref: '#/components/schemas/Invoice'
-        403:
+        '403':
           $ref: '#/components/responses/Error'
-        404:
+        '404':
           $ref: '#/components/responses/Error'
   /invoices/{invoice_id}/visualization:
     get:
@@ -330,16 +334,16 @@ paths:
           schema:
             type: integer
       responses:
-        200:
+        '200':
           description: Successful response
           content:
             application/pdf:
               schema:
                 type: string
                 format: binary
-        403:
+        '403':
           $ref: '#/components/responses/Error'
-        404:
+        '404':
           $ref: '#/components/responses/Error'
 components:
   securitySchemes:
