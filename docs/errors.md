@@ -1,6 +1,6 @@
 # Errors
 
-## Error response type 
+## Error response type
 
 ```json
 {
