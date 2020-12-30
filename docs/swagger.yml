@@ -6,6 +6,10 @@ info:
 servers:
   - description: Dev
     url: https://apiserver.dev.filipsladek.com
+tags:
+  - Auth
+  - Users
+  - Invoices
 paths:
   /login:
     get:
