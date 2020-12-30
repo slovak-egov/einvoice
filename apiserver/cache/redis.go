@@ -115,15 +115,24 @@ func testInvoiceRateLimiterKey(userId int) string {
 
 func (r *Cache) IncrementTestInvoiceCounter(ctx goContext.Context, userId int) (int, error) {
 	key := testInvoiceRateLimiterKey(userId)
-	v, err := r.client.Incr(ctx, key).Result()
+	var v int64
+
+	err := r.client.Watch(ctx, func(tx *redis.Tx) error {
+		var err error
+		v, err = tx.Incr(ctx, key).Result()
+		if err != nil {
+			return err
+		}
+		if v == 1 {
+			if _, err = tx.Expire(ctx, key, r.testInvoiceRateLimiterExpiration).Result(); err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+
 	if err != nil {
 		return 0, err
-	}
-
-	if v == 1 {
-		if _, err = r.client.Expire(ctx, key, r.testInvoiceRateLimiterExpiration).Result(); err != nil {
-			return 0, err
-		}
 	}
 
 	return int(v), nil
