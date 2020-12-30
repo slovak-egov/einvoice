@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
 
 	"github.com/slovak-egov/einvoice/apiserver/entity"
 	"github.com/slovak-egov/einvoice/pkg/timeutil"
@@ -116,8 +117,9 @@ func checkError(t *testing.T, response *httptest.ResponseRecorder, expectedCode 
 		if err != nil {
 			t.Error(err.Error())
 		}
+
 		if e.Error != msg {
-			t.Errorf("Expected error message %s. Got %s", msg, e.Error)
+			assert.Equal(t, msg, e.Error)
 		}
 	}
 }

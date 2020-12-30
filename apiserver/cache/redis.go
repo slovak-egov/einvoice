@@ -17,22 +17,6 @@ type Cache struct {
 	client              *redis.Client
 }
 
-type TokenNotFoundError struct {
-	token string
-}
-
-func (e *TokenNotFoundError) Error() string {
-	return fmt.Sprintf("Token not found %s", e.token)
-}
-
-type JtiExistsError struct {
-	jti string
-}
-
-func (e *JtiExistsError) Error() string {
-	return fmt.Sprintf("Jti exists %s", e.jti)
-}
-
 func NewRedis(cacheConfig config.CacheConfiguration) *Cache {
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     fmt.Sprintf("%s:%d", cacheConfig.Host, cacheConfig.Port),

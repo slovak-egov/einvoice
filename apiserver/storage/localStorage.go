@@ -14,14 +14,6 @@ type LocalStorage struct {
 	basePath string
 }
 
-type NotFoundError struct {
-	msg string
-}
-
-func (e *NotFoundError) Error() string {
-	return e.msg
-}
-
 func New(basePath string) *LocalStorage {
 	return &LocalStorage{basePath}
 }

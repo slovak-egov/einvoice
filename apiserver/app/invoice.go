@@ -82,7 +82,7 @@ func (a *App) canUserViewInvoice(ctx goContext.Context, invoice *entity.Invoice)
 		return nil
 	} else if context.GetUserId(ctx) == 0 {
 		// Unauthenticated user does not have access to private invoices
-		return handlerutil.NewAuthorizationError("invoice.view.permission.missing")
+		return AuthError("missing")
 	}
 
 	accessibleIcos, err := a.db.GetUserOrganizationIds(ctx, context.GetUserId(ctx))
@@ -97,7 +97,7 @@ func (a *App) canUserViewInvoice(ctx goContext.Context, invoice *entity.Invoice)
 		}
 	}
 
-	return handlerutil.NewAuthorizationError("invoice.view.permission.missing")
+	return handlerutil.NewForbiddenError("invoice.view.permission.missing")
 }
 
 func (a *App) getInvoice(res http.ResponseWriter, req *http.Request) error {
