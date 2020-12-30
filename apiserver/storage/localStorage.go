@@ -8,7 +8,6 @@ import (
 	"os"
 
 	"github.com/slovak-egov/einvoice/pkg/context"
-	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
 type LocalStorage struct {
@@ -27,7 +26,7 @@ func (storage *LocalStorage) GetInvoice(ctx goContext.Context, id int) ([]byte, 
 	bytes, err := storage.readObject(storage.invoiceFilename(id))
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
-			return nil, handlerutil.NewNotFoundError("Invoice not found")
+			return nil, &NotFoundError{fmt.Sprintf("Invoice %d not found", id)}
 		} else {
 			context.GetLogger(ctx).WithField("error", err.Error()).Error("localStorage.getInvoice.failed")
 			return nil, err

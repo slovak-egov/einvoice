@@ -8,6 +8,8 @@ You can view it on this [website](https://generator.swagger.io/?url=https://raw.
 
 [Invoice validations](docs/validations.md)
 
+[Api errors](docs/errors.md)
+
 ## Try it out
 
 [https://web-app.dev.filipsladek.com](https://web-app.dev.filipsladek.com)
@@ -54,8 +56,8 @@ APISERVER_ENV=dev
 ## XML
 
 Useful resources:
- 
-https://github.com/ConnectingEurope/eInvoicing-EN16931
+
+[eInvoicing-EN16931](https://github.com/ConnectingEurope/eInvoicing-EN16931)
 
 ### [UBL2.1](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32017D1870#ntc2-L_2017266EN.01002101-E0002)
 

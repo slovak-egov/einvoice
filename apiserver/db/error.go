@@ -15,3 +15,11 @@ type NoSubstituteError struct {
 func (e NoSubstituteError) Error() string {
 	return e.Message
 }
+
+type NotFoundError struct {
+	Message string
+}
+
+func (e NotFoundError) Error() string {
+	return e.Message
+}

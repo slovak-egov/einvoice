@@ -3,6 +3,7 @@ package app
 import (
 	"net/http"
 
+	"github.com/slovak-egov/einvoice/apiserver/cache"
 	"github.com/slovak-egov/einvoice/pkg/context"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
@@ -13,7 +14,7 @@ func (a *App) userIdentificationMiddleware(next http.Handler) http.Handler {
 			token, err := GetAuthToken(req)
 			// Skip token not found error
 			if _, ok := err.(*MissingToken); !ok && err != nil {
-				return handlerutil.NewAuthorizationError(err.Error())
+				return AuthError("missing")
 			}
 
 			var userId int
@@ -26,11 +27,14 @@ func (a *App) userIdentificationMiddleware(next http.Handler) http.Handler {
 				case ServiceAccountToken:
 					userId, err = a.getUserIdByApiKey(req.Context(), token.Value)
 				default:
-					err = handlerutil.NewAuthorizationError("Wrong authorization type")
+					err = AuthInvalidTypeError
 				}
 
 				if err != nil {
-					return handlerutil.NewAuthorizationError(err.Error())
+					if _, ok := err.(*cache.TokenNotFoundError); ok {
+						return UnauthorizedError
+					}
+					return err
 				}
 			}
 
@@ -48,7 +52,7 @@ func requireUserMiddleware(next http.Handler) http.Handler {
 		handlerutil.ErrorHandler(func(res http.ResponseWriter, req *http.Request) error {
 			// User is not authenticated
 			if context.GetUserId(req.Context()) == 0 {
-				return handlerutil.NewForbiddenError("Forbidden")
+				return UnauthorizedError
 			}
 			next.ServeHTTP(res, req)
 			return nil

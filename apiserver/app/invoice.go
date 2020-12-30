@@ -11,6 +11,7 @@ import (
 
 	"github.com/slovak-egov/einvoice/apiserver/db"
 	"github.com/slovak-egov/einvoice/apiserver/entity"
+	"github.com/slovak-egov/einvoice/apiserver/storage"
 	"github.com/slovak-egov/einvoice/apiserver/visualization"
 	"github.com/slovak-egov/einvoice/pkg/context"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
@@ -59,11 +60,11 @@ func NewPublicInvoicesOptions(params url.Values, maxLimit int) (*db.PublicInvoic
 func (a *App) getPublicInvoices(res http.ResponseWriter, req *http.Request) error {
 	requestOptions, err := NewPublicInvoicesOptions(req.URL.Query(), a.config.InvoicesLimit)
 	if err != nil {
-		return handlerutil.NewBadRequestError(err.Error())
+		return InvoiceError("params.parsingError").WithCause(err)
 	}
 
 	if err := requestOptions.Validate(a.config.InvoicesLimit); err != nil {
-		return handlerutil.NewBadRequestError(err.Error())
+		return InvoiceError("params.invalid").WithCause(err)
 	}
 
 	invoices, err := a.db.GetPublicInvoices(req.Context(), requestOptions)
@@ -81,7 +82,7 @@ func (a *App) canUserViewInvoice(ctx goContext.Context, invoice *entity.Invoice)
 		return nil
 	} else if context.GetUserId(ctx) == 0 {
 		// Unauthenticated user does not have access to private invoices
-		return handlerutil.NewAuthorizationError("Unauthorized")
+		return AuthError("missing")
 	}
 
 	accessibleIcos, err := a.db.GetUserOrganizationIds(ctx, context.GetUserId(ctx))
@@ -95,18 +96,22 @@ func (a *App) canUserViewInvoice(ctx goContext.Context, invoice *entity.Invoice)
 			return nil
 		}
 	}
-	return handlerutil.NewForbiddenError("You have no permission to view this invoice")
+
+	return handlerutil.NewForbiddenError("invoice.view.permission.missing")
 }
 
 func (a *App) getInvoice(res http.ResponseWriter, req *http.Request) error {
 	vars := mux.Vars(req)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		return handlerutil.NewBadRequestError("ID should be an integer")
+		return InvoiceError("param.id.invalid").WithCause(err)
 	}
 
 	invoice, err := a.db.GetInvoice(req.Context(), id)
 	if err != nil {
+		if _, ok := err.(*db.NotFoundError); ok {
+			return handlerutil.NewNotFoundError("invoice.notFound")
+		}
 		return err
 	}
 
@@ -122,11 +127,14 @@ func (a *App) getInvoiceXml(res http.ResponseWriter, req *http.Request) error {
 	vars := mux.Vars(req)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		return handlerutil.NewBadRequestError("ID should be an integer")
+		return InvoiceError("params.id.invalid")
 	}
 
 	invoiceMeta, err := a.db.GetInvoice(req.Context(), id)
 	if err != nil {
+		if _, ok := err.(*db.NotFoundError); ok {
+			return handlerutil.NewNotFoundError("invoice.notFound")
+		}
 		return err
 	}
 
@@ -136,6 +144,9 @@ func (a *App) getInvoiceXml(res http.ResponseWriter, req *http.Request) error {
 
 	invoice, err := a.storage.GetInvoice(req.Context(), id)
 	if err != nil {
+		if _, ok := err.(*storage.NotFoundError); ok {
+			return handlerutil.NewNotFoundError("invoice.notFound")
+		}
 		return err
 	}
 
@@ -150,11 +161,14 @@ func (a *App) getInvoiceVisualization(res http.ResponseWriter, req *http.Request
 	vars := mux.Vars(req)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		return handlerutil.NewBadRequestError("ID should be an integer")
+		return InvoiceError("params.id.invalid")
 	}
 
 	invoice, err := a.db.GetInvoice(req.Context(), id)
 	if err != nil {
+		if _, ok := err.(*db.NotFoundError); ok {
+			return handlerutil.NewNotFoundError("invoice.notFound")
+		}
 		return err
 	}
 
@@ -191,11 +205,11 @@ func (a *App) getUserInvoices(res http.ResponseWriter, req *http.Request) error 
 
 	requestOptions, err := NewUserInvoicesOptions(requestedUserId, req.URL.Query(), a.config.InvoicesLimit)
 	if err != nil {
-		return handlerutil.NewBadRequestError(err.Error())
+		return InvoiceError("params.invalid").WithCause(err)
 	}
 
 	if err := requestOptions.Validate(a.config.InvoicesLimit); err != nil {
-		return handlerutil.NewBadRequestError(err.Error())
+		return InvoiceError("params.invalid").WithCause(err)
 	}
 
 	invoices, err := a.db.GetUserInvoices(req.Context(), requestOptions)

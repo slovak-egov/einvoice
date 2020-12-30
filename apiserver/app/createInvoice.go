@@ -32,22 +32,26 @@ func parseRequestBody(req *http.Request) (invoice []byte, format string, test bo
 	// TODO: return 413 if request is too large
 	err = req.ParseMultipartForm(10 << 20)
 	if err != nil {
-		err = handlerutil.NewBadRequestError("Invalid payload")
+		err = InvoiceError("payload.invalid").WithCause(err)
 		return
 	}
 
 	invoice, err = parseInvoice(req)
 	if err != nil {
-		err = handlerutil.NewBadRequestError(err.Error())
+		err = InvoiceError("file.parsingError").WithCause(err)
 		return
 	}
 	test, err = getOptionalBool(req.PostFormValue("test"), false)
 	if err != nil {
-		err = handlerutil.NewBadRequestError("testParameter.invalid")
+		err = InvoiceError("test.invalid").WithCause(err)
 		return
 	}
 
 	format = req.PostFormValue("format")
+	if format == "" {
+		err = InvoiceError("format.missing")
+		return
+	}
 	return
 }
 
@@ -97,18 +101,18 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 
 	parsers, ok := formatToParsers[format]
 	if !ok {
-		return handlerutil.NewBadRequestError("Unknown invoice format")
+		return InvoiceError("format.unknown")
 	}
 
 	// Validate invoice format
 	var metadata *entity.Invoice
 
 	if err = parsers.GetValidator(a)(invoice); err != nil {
-		return handlerutil.NewBadRequestError(err.Error())
+		return InvoiceError("xsd.validation.failed").WithCause(err)
 	}
 	metadata, err = parsers.MetadataExtractor(invoice)
 	if err != nil {
-		return handlerutil.NewBadRequestError(err.Error())
+		return InvoiceError("validation.failed").WithCause(err)
 	}
 
 	// Add creator Id, test flag, isPublic flag
@@ -119,7 +123,7 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 
 	err = validateInvoice(req.Context(), a.db, metadata)
 	if _, ok := err.(*db.NoSubstituteError); ok {
-		return handlerutil.NewForbiddenError("You have no permission to create invoices with such IČO")
+		return handlerutil.NewForbiddenError("invoice.create.permission.missing")
 	} else if err != nil {
 		return err
 	}
