@@ -2,7 +2,6 @@ package cache
 
 import (
 	goContext "context"
-	"errors"
 	"fmt"
 	"time"
 
@@ -11,7 +10,6 @@ import (
 
 	"github.com/slovak-egov/einvoice/apiserver/config"
 	"github.com/slovak-egov/einvoice/pkg/context"
-	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
 type Cache struct {
@@ -62,7 +60,7 @@ func (r *Cache) GetUserId(ctx goContext.Context, token string) (int, error) {
 	id, err := r.client.Get(ctx, userIdKey(token)).Int()
 	if err == redis.Nil {
 		context.GetLogger(ctx).WithField("token", token).Debug("redis.getUserId.token.notFound")
-		return 0, handlerutil.NewNotFoundError("Token not found")
+		return 0, &TokenNotFoundError{token}
 	} else if err != nil {
 		context.GetLogger(ctx).WithField("token", token).Error("redis.getUserId.failed")
 		return 0, err
@@ -84,7 +82,7 @@ func (r *Cache) RemoveUserToken(ctx goContext.Context, token string) error {
 		return err
 	} else if res != 1 {
 		context.GetLogger(ctx).WithField("token", token).Debug("redis.removeUserToken.notFound")
-		return handlerutil.NewNotFoundError("Token not found")
+		return &TokenNotFoundError{token}
 	}
 
 	return nil
@@ -100,7 +98,7 @@ func (r *Cache) SaveJti(ctx goContext.Context, userId int, jti string, expiratio
 		return err
 	}
 	if !v {
-		return errors.New("Jti already exists")
+		return &JtiExistsError{jti}
 	}
 	return nil
 }

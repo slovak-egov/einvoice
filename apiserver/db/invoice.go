@@ -11,7 +11,6 @@ import (
 
 	"github.com/slovak-egov/einvoice/apiserver/entity"
 	"github.com/slovak-egov/einvoice/pkg/context"
-	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
 type PublicInvoicesOptions struct {
@@ -105,7 +104,7 @@ func (c *Connector) GetInvoice(ctx goContext.Context, id int) (*entity.Invoice, 
 	inv := &entity.Invoice{}
 	err := c.GetDb(ctx).Model(inv).Where("id = ?", id).Select(inv)
 	if errors.Is(err, pg.ErrNoRows) {
-		return nil, handlerutil.NewNotFoundError("Invoice not found")
+		return nil, &NotFoundError{fmt.Sprintf("Invoice %d not found", id)}
 	} else if err != nil {
 		context.GetLogger(ctx).WithField("error", err.Error()).Error("db.getInvoice.failed")
 		return nil, err
