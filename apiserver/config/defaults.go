@@ -13,10 +13,10 @@ var devConfig = Configuration{
 		Name: "einvoice",
 		User: "postgres",
 	},
-	Host:               "0.0.0.0",
-	Port:               8081,
-	D16bXsdPath:        "xml/d16b/xsd",
-	Ubl21XsdPath:       "xml/ubl21/xsd",
+	Host:         "0.0.0.0",
+	Port:         8081,
+	D16bXsdPath:  "xml/d16b/xsd",
+	Ubl21XsdPath: "xml/ubl21/xsd",
 	Logger: LoggerConfiguration{
 		LogLevel: logrus.DebugLevel,
 		Format:   "text",
@@ -25,9 +25,11 @@ var devConfig = Configuration{
 	ServerWriteTimeout: 15 * time.Second,
 	GracefulTimeout:    10 * time.Second,
 	Cache: CacheConfiguration{
-		Host:                   "localhost",
-		Port:                   6379,
-		SessionTokenExpiration: 24 * time.Hour,
+		Host:                             "localhost",
+		Port:                             6379,
+		SessionTokenExpiration:           24 * time.Hour,
+		TestInvoiceRateLimiterExpiration: 24 * time.Hour,
+		TestInvoiceRateLimiterThreshold:  20,
 	},
 	SlovenskoSk: SlovenskoSkConfiguration{
 		Url:               "https://upvs.dev.filipsladek.com",
@@ -61,8 +63,10 @@ var prodConfig = Configuration{
 	ServerWriteTimeout: 15 * time.Second,
 	GracefulTimeout:    10 * time.Second,
 	Cache: CacheConfiguration{
-		Port:                   6379,
-		SessionTokenExpiration: 1 * time.Hour,
+		Port:                             6379,
+		SessionTokenExpiration:           1 * time.Hour,
+		TestInvoiceRateLimiterExpiration: 24 * time.Hour,
+		TestInvoiceRateLimiterThreshold:  20,
 	},
 	SlovenskoSk: SlovenskoSkConfiguration{
 		Url:               "https://upvs.dev.filipsladek.com",
@@ -82,8 +86,8 @@ var testConfig = Configuration{
 		Name: "test",
 		User: "postgres",
 	},
-	D16bXsdPath:        "xml/d16b/xsd",
-	Ubl21XsdPath:       "xml/ubl21/xsd",
+	D16bXsdPath:  "xml/d16b/xsd",
+	Ubl21XsdPath: "xml/ubl21/xsd",
 	Logger: LoggerConfiguration{
 		LogLevel: logrus.WarnLevel,
 		Format:   "text",
@@ -92,9 +96,11 @@ var testConfig = Configuration{
 	ServerWriteTimeout: 15 * time.Second,
 	GracefulTimeout:    10 * time.Second,
 	Cache: CacheConfiguration{
-		Host:                   "localhost",
-		Port:                   6379,
-		SessionTokenExpiration: 1 * time.Hour,
+		Host:                             "localhost",
+		Port:                             6379,
+		SessionTokenExpiration:           1 * time.Hour,
+		TestInvoiceRateLimiterExpiration: 24 * time.Hour,
+		TestInvoiceRateLimiterThreshold:  1,
 	},
 	InvoicesLimit: 5,
 	ApiKey: ApiKeyConfiguration{

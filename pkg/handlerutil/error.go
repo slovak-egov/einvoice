@@ -43,3 +43,7 @@ func NewNotFoundError(message string) *HttpError {
 func NewFailedDependencyError(message string) *HttpError {
 	return &HttpError{http.StatusFailedDependency, errors.New(message), nil}
 }
+
+func NewTooManyRequestsError(message string) *HttpError {
+	return &HttpError{http.StatusTooManyRequests, errors.New(message), nil}
+}

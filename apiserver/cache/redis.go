@@ -13,8 +13,9 @@ import (
 )
 
 type Cache struct {
-	userTokenExpiration time.Duration
-	client              *redis.Client
+	userTokenExpiration              time.Duration
+	client                           *redis.Client
+	testInvoiceRateLimiterExpiration time.Duration
 }
 
 func NewRedis(cacheConfig config.CacheConfiguration) *Cache {
@@ -35,8 +36,9 @@ func NewRedis(cacheConfig config.CacheConfiguration) *Cache {
 	}
 
 	return &Cache{
-		userTokenExpiration: cacheConfig.SessionTokenExpiration,
-		client:              rdb,
+		userTokenExpiration:              cacheConfig.SessionTokenExpiration,
+		client:                           rdb,
+		testInvoiceRateLimiterExpiration: cacheConfig.TestInvoiceRateLimiterExpiration,
 	}
 }
 
@@ -105,4 +107,37 @@ func (r *Cache) SaveJti(ctx goContext.Context, userId int, jti string, expiratio
 
 func (r *Cache) FlushAll(ctx goContext.Context) error {
 	return r.client.FlushAll(ctx).Err()
+}
+
+func testInvoiceRateLimiterKey(userId int) string {
+	return fmt.Sprintf("test:invoices:userId:%d", userId)
+}
+
+/*
+Increments test invoice counter for user and returns it's new value.
+If counter doesn't exist new counter is created with value 1 and expiration 24 hours.
+*/
+func (r *Cache) IncrementTestInvoiceCounter(ctx goContext.Context, userId int) (int, error) {
+	key := testInvoiceRateLimiterKey(userId)
+	var counter int64
+
+	err := r.client.Watch(ctx, func(tx *redis.Tx) error {
+		var err error
+		counter, err = tx.Incr(ctx, key).Result()
+		if err != nil {
+			return err
+		}
+		if counter == 1 {
+			if _, err = tx.Expire(ctx, key, r.testInvoiceRateLimiterExpiration).Result(); err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+
+	if err != nil {
+		return 0, err
+	}
+
+	return int(counter), nil
 }

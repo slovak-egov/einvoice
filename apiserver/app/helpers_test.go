@@ -100,6 +100,14 @@ func cleanDb(t *testing.T) func() {
 	}
 }
 
+func cleanCache(t *testing.T) func() {
+	return func() {
+		if err := a.cache.FlushAll(ctx); err != nil {
+			t.Error(err)
+		}
+	}
+}
+
 type ErrorResponse struct {
 	Error string `json:"error"`
 }

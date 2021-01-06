@@ -21,24 +21,37 @@ func TestCreateInvoice(t *testing.T) {
 
 	var requestBody bytes.Buffer
 	multipartWriter := multipart.NewWriter(&requestBody)
-	formatWriter, _ := multipartWriter.CreateFormField("format")
-	formatWriter.Write([]byte(entity.UblFormat))
+	if err := multipartWriter.WriteField("format", entity.UblFormat); err != nil {
+		t.Error(err)
+	}
 
-	invoiceWriter, _ := multipartWriter.CreateFormFile("invoice", "ubl21_invoice.xml")
-	invoice, _ := ioutil.ReadFile("../../xml/ubl21/example/ubl21_invoice.xml")
-	invoiceWriter.Write(invoice)
-	multipartWriter.Close()
+	invoiceWriter, err := multipartWriter.CreateFormFile("invoice", "ubl21_invoice.xml")
+	if err != nil {
+		t.Error(err)
+	}
+	invoice, err := ioutil.ReadFile("../../xml/ubl21/example/ubl21_invoice.xml")
+	if err != nil {
+		t.Error(err)
+	}
+	if _, err = invoiceWriter.Write(invoice); err != nil {
+		t.Error(err)
+	}
+	if err = multipartWriter.Close(); err != nil {
+		t.Error(err)
+	}
 
-	req, _ := http.NewRequest("POST", "/invoices", &requestBody)
+	req, err := http.NewRequest("POST", "/invoices", &requestBody)
+	if err != nil {
+		t.Error(err)
+	}
 	req.Header.Set("Content-Type", multipartWriter.FormDataContentType())
 
 	response := executeAuthRequest(req, sessionToken)
 	checkResponseCode(t, http.StatusCreated, response.Code)
 
 	var createdResponse entity.Invoice
-	err := json.Unmarshal(response.Body.Bytes(), &createdResponse)
-	if err != nil {
-		t.Error(err.Error())
+	if err = json.Unmarshal(response.Body.Bytes(), &createdResponse); err != nil {
+		t.Error(err)
 	}
 	expectedResponse := entity.Invoice{
 		Id:          createdResponse.Id,        // No need to assert this param,
@@ -58,22 +71,80 @@ func TestCreateInvoice(t *testing.T) {
 	}
 
 	// Try to get invoice metadata through API
-	req, _ = http.NewRequest("GET", fmt.Sprintf("/invoices/%d", createdResponse.Id), nil)
+	req, err = http.NewRequest("GET", fmt.Sprintf("/invoices/%d", createdResponse.Id), nil)
+	if err != nil {
+		t.Error(err)
+	}
 	response = executeRequest(req)
 
 	checkResponseCode(t, http.StatusOK, response.Code)
 	var getResponse entity.Invoice
-	json.Unmarshal(response.Body.Bytes(), &getResponse)
+	if err = json.Unmarshal(response.Body.Bytes(), &getResponse); err != nil {
+		t.Error(err)
+	}
 	if !reflect.DeepEqual(createdResponse, getResponse) {
 		t.Errorf("Created response was %v. While GET request returned %v", createdResponse, getResponse)
 	}
 
 	// Try to get actual invoice through API
-	req, _ = http.NewRequest("GET", fmt.Sprintf("/invoices/%d/detail", createdResponse.Id), nil)
+	req, err = http.NewRequest("GET", fmt.Sprintf("/invoices/%d/detail", createdResponse.Id), nil)
+	if err != nil {
+		t.Error(err)
+	}
 	response = executeRequest(req)
 
 	checkResponseCode(t, http.StatusOK, response.Code)
 	if !bytes.Equal(invoice, response.Body.Bytes()) {
 		t.Errorf("Response was incorrect. We expected %s", invoice)
 	}
+}
+
+func TestRateLimiter(t *testing.T) {
+	t.Cleanup(cleanDb(t))
+	t.Cleanup(cleanCache(t))
+	_, sessionToken := createTestUser(t, "")
+
+	var requestBody bytes.Buffer
+	multipartWriter := multipart.NewWriter(&requestBody)
+	if err := multipartWriter.WriteField("format", entity.UblFormat); err != nil {
+		t.Error(err)
+	}
+	if err := multipartWriter.WriteField("test", "true"); err != nil {
+		t.Error(err)
+	}
+
+	invoiceWriter, err := multipartWriter.CreateFormFile("invoice", "ubl21_invoice.xml")
+	if err != nil {
+		t.Error(err)
+	}
+	invoice, err := ioutil.ReadFile("../../xml/ubl21/example/ubl21_invoice.xml")
+	if err != nil {
+		t.Error(err)
+	}
+	if _, err = invoiceWriter.Write(invoice); err != nil {
+		t.Error(err)
+	}
+	if err = multipartWriter.Close(); err != nil {
+		t.Error(err)
+	}
+	body := requestBody.Bytes()
+
+	req, err := http.NewRequest("POST", "/invoices", bytes.NewReader(body))
+	if err != nil {
+		t.Error(err)
+	}
+	req.Header.Set("Content-Type", multipartWriter.FormDataContentType())
+
+	response := executeAuthRequest(req, sessionToken)
+	checkResponseCode(t, http.StatusCreated, response.Code)
+
+	// Limit for creating test invoices was reached, creating another test invoice should be rejected
+	req, err = http.NewRequest("POST", "/invoices", bytes.NewReader(body))
+	if err != nil {
+		t.Error(err)
+	}
+	req.Header.Set("Content-Type", multipartWriter.FormDataContentType())
+
+	response = executeAuthRequest(req, sessionToken)
+	checkResponseCode(t, http.StatusTooManyRequests, response.Code)
 }

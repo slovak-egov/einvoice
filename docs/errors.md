@@ -1,6 +1,6 @@
 # Errors
 
-## Error response type 
+## Error response type
 
 ```json
 {
@@ -52,3 +52,4 @@
 | user.id.invalid | 400 | User id must be integer | Error message |
 | user.parsingError | 400 | Cannot parse user data | Error message |
 | user.validation.failed | 400 | User data validation failed | Error message |
+| invoice.test.rateLimit | 429 | Rate limit for creating test invoices reached | |

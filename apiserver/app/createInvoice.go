@@ -86,6 +86,7 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 	if err != nil {
 		return err
 	}
+	userId := context.GetUserId(req.Context())
 
 	parsers, ok := formatToParsers[format]
 	if !ok {
@@ -104,7 +105,7 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 	}
 
 	// Add creator Id, test flag, isPublic flag
-	metadata.CreatedBy = context.GetUserId(req.Context())
+	metadata.CreatedBy = userId
 	metadata.Test = test
 	// TODO: add public ICO list
 	metadata.IsPublic = true
@@ -114,6 +115,17 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 		return handlerutil.NewForbiddenError("invoice.create.permission.missing")
 	} else if err != nil {
 		return err
+	}
+
+	// Limit number of created test invoices
+	if test {
+		counter, err := a.cache.IncrementTestInvoiceCounter(req.Context(), userId)
+		if err != nil {
+			return err
+		}
+		if counter > a.config.Cache.TestInvoiceRateLimiterThreshold {
+			return handlerutil.NewTooManyRequestsError("invoice.test.rateLimit")
+		}
 	}
 
 	if err := a.db.RunInTransaction(req.Context(), func(ctx goContext.Context) error {
