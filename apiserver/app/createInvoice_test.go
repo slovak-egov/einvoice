@@ -138,6 +138,7 @@ func TestRateLimiter(t *testing.T) {
 	response := executeAuthRequest(req, sessionToken)
 	checkResponseCode(t, http.StatusCreated, response.Code)
 
+	// Limit for creating test invoices was reached, creating another test invoice should be rejected
 	req, err = http.NewRequest("POST", "/invoices", bytes.NewReader(body))
 	if err != nil {
 		t.Error(err)
