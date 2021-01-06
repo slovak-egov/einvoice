@@ -88,16 +88,6 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 	}
 	userId := context.GetUserId(req.Context())
 
-	if test {
-		counter, err := a.cache.IncrementTestInvoiceCounter(req.Context(), userId)
-		if err != nil {
-			return err
-		}
-		if counter > a.config.Cache.TestInvoiceRateLimiterThreshold {
-			return handlerutil.NewTooManyRequestsError("invoice.test.rateLimit")
-		}
-	}
-
 	parsers, ok := formatToParsers[format]
 	if !ok {
 		return InvoiceError("format.unknown")
@@ -125,6 +115,17 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 		return handlerutil.NewForbiddenError("invoice.create.permission.missing")
 	} else if err != nil {
 		return err
+	}
+
+	// Limit number of created test invoices
+	if test {
+		counter, err := a.cache.IncrementTestInvoiceCounter(req.Context(), userId)
+		if err != nil {
+			return err
+		}
+		if counter > a.config.Cache.TestInvoiceRateLimiterThreshold {
+			return handlerutil.NewTooManyRequestsError("invoice.test.rateLimit")
+		}
 	}
 
 	if err := a.db.RunInTransaction(req.Context(), func(ctx goContext.Context) error {

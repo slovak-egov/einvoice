@@ -113,17 +113,21 @@ func testInvoiceRateLimiterKey(userId int) string {
 	return fmt.Sprintf("test:invoices:userId:%d", userId)
 }
 
+/*
+Increments test invoice counter for user and returns it's new value.
+If counter doesn't exist new counter is created with value 1 and expiration 24 hours.
+*/
 func (r *Cache) IncrementTestInvoiceCounter(ctx goContext.Context, userId int) (int, error) {
 	key := testInvoiceRateLimiterKey(userId)
-	var v int64
+	var counter int64
 
 	err := r.client.Watch(ctx, func(tx *redis.Tx) error {
 		var err error
-		v, err = tx.Incr(ctx, key).Result()
+		counter, err = tx.Incr(ctx, key).Result()
 		if err != nil {
 			return err
 		}
-		if v == 1 {
+		if counter == 1 {
 			if _, err = tx.Expire(ctx, key, r.testInvoiceRateLimiterExpiration).Result(); err != nil {
 				return err
 			}
@@ -135,5 +139,5 @@ func (r *Cache) IncrementTestInvoiceCounter(ctx goContext.Context, userId int) (
 		return 0, err
 	}
 
-	return int(v), nil
+	return int(counter), nil
 }

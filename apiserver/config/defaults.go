@@ -100,7 +100,7 @@ var testConfig = Configuration{
 		Port:                             6379,
 		SessionTokenExpiration:           1 * time.Hour,
 		TestInvoiceRateLimiterExpiration: 24 * time.Hour,
-		TestInvoiceRateLimiterThreshold:  20,
+		TestInvoiceRateLimiterThreshold:  1,
 	},
 	InvoicesLimit: 5,
 	ApiKey: ApiKeyConfiguration{
