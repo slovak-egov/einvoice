@@ -1,4 +1,4 @@
-package db
+package dbutil
 
 import (
 	goContext "context"
@@ -7,13 +7,13 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-type dbLogger struct {}
+type Logger struct {}
 
-func (dbLogger) BeforeQuery(ctx goContext.Context, q *pg.QueryEvent) (goContext.Context, error) {
+func (Logger) BeforeQuery(ctx goContext.Context, q *pg.QueryEvent) (goContext.Context, error) {
 	return ctx, nil
 }
 
-func (dbLogger) AfterQuery(ctx goContext.Context, q *pg.QueryEvent) error {
+func (Logger) AfterQuery(ctx goContext.Context, q *pg.QueryEvent) error {
 	query, err := q.FormattedQuery()
 	if err != nil {
 		return err

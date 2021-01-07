@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/slovak-egov/einvoice/apiserver/entity"
+	"github.com/slovak-egov/einvoice/pkg/entity"
 	"github.com/slovak-egov/einvoice/pkg/timeutil"
 )
 

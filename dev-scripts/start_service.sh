@@ -6,7 +6,7 @@ service=$1
 shift
 
 # Check if valid service name was provided
-if ! [[ "$service" =~ ^(web-app/server|apiserver|migrations)$ ]]; then
+if ! [[ "$service" =~ ^(web-app/server|apiserver|migrations|notificationWorker)$ ]]; then
   echo Service "$service" does not exist.
   exit 1
 fi

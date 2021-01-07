@@ -6,10 +6,11 @@ import (
 	"net/http"
 
 	"github.com/slovak-egov/einvoice/apiserver/db"
-	"github.com/slovak-egov/einvoice/apiserver/entity"
 	"github.com/slovak-egov/einvoice/apiserver/xml/d16b"
 	"github.com/slovak-egov/einvoice/apiserver/xml/ubl21"
 	"github.com/slovak-egov/einvoice/pkg/context"
+	"github.com/slovak-egov/einvoice/pkg/dbutil"
+	"github.com/slovak-egov/einvoice/pkg/entity"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
@@ -111,7 +112,7 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 	metadata.IsPublic = true
 
 	err = validateInvoice(req.Context(), a.db, metadata)
-	if _, ok := err.(*db.NoSubstituteError); ok {
+	if _, ok := err.(*dbutil.NotFoundError); ok {
 		return handlerutil.NewForbiddenError("invoice.create.permission.missing")
 	} else if err != nil {
 		return err
@@ -140,14 +141,7 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 		return err
 	}
 
-	// Send mail notifications
-	if a.mail != nil {
-		// Can run in daemon, ideally separate worker scraping DB
-		receivers, err := a.db.GetUserEmails(req.Context(), []string{metadata.SupplierIco, metadata.CustomerIco})
-		if err != nil && len(receivers) > 0 {
-			a.mail.SendInvoice(req.Context(), receivers, invoice)
-		}
-	}
+	// Notifications to invoice parties are sent asynchronously by notificationWorker
 
 	handlerutil.RespondWithJSON(res, http.StatusCreated, metadata)
 	return nil

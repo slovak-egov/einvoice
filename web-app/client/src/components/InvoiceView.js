@@ -45,7 +45,8 @@ export default ({history, match: {params: {id}}}) => {
   }
 
   const {
-    createdAt, customerIco, format, isPublic, issueDate, price, receiver, sender, supplierIco, test,
+    createdAt, customerIco, format, isPublic, issueDate, notificationsSent, price, receiver,
+    sender, supplierIco, test,
   } = invoice
 
   return (
@@ -96,6 +97,9 @@ export default ({history, match: {params: {id}}}) => {
             </Col>
             <Col>
               <CheckboxField label={t('invoices:public')} value={isPublic} />
+            </Col>
+            <Col>
+              <CheckboxField label={t('invoices:notificationsSent')} value={notificationsSent} />
             </Col>
           </Row>
         </div>

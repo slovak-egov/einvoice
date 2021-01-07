@@ -4,42 +4,22 @@ import (
 	goContext "context"
 	"errors"
 	"fmt"
-	"strings"
 
 	"github.com/go-pg/pg/v10"
 	"github.com/go-pg/pg/v10/orm"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/slovak-egov/einvoice/apiserver/entity"
 	"github.com/slovak-egov/einvoice/pkg/context"
+	"github.com/slovak-egov/einvoice/pkg/dbutil"
+	"github.com/slovak-egov/einvoice/pkg/entity"
 )
-
-func icoToUri(ico string) string {
-	return "ico://sk/" + ico
-}
-
-func icosToUris(icos []string) []string {
-	uris := []string{}
-	for _, ico := range icos {
-		uris = append(uris, icoToUri(ico))
-	}
-	return uris
-}
-
-func uriToIco(uri string) (string, error) {
-	if !strings.HasPrefix(uri, "ico://sk/") {
-		return "", errors.New("not valid ico uri")
-	} else {
-		return uri[9:], nil
-	}
-}
 
 func (c *Connector) GetUser(ctx goContext.Context, id int) (*entity.User, error) {
 	user := &entity.User{}
 	err := c.GetDb(ctx).Model(user).Where("id = ?", id).Select(user)
 
 	if errors.Is(err, pg.ErrNoRows) {
-		return nil, &NotFoundError{fmt.Sprintf("User %d not found", id)}
+		return nil, &dbutil.NotFoundError{fmt.Sprintf("User %d not found", id)}
 	} else if err != nil {
 		context.GetLogger(ctx).WithField("error", err.Error()).Error("db.getUser")
 		return nil, err
@@ -78,24 +58,6 @@ func (c *Connector) GetOrCreateUser(ctx goContext.Context, slovenskoSkUri, name 
 	return user, err
 }
 
-func (c *Connector) GetUserEmails(ctx goContext.Context, icos []string) ([]string, error) {
-	uris := icosToUris(icos)
-
-	emails := []string{}
-	err := c.GetDb(ctx).Model((*entity.User)(nil)).
-		Column("email").
-		Where("email <> ''").
-		Distinct().
-		Where("slovensko_sk_uri IN (?)", pg.In(uris)).
-		Select(&emails)
-
-	if err != nil {
-		context.GetLogger(ctx).WithField("error", err.Error()).Error("db.getUserEmails.failed")
-		return nil, err
-	}
-	return emails, nil
-}
-
 func (c *Connector) accessibleUrisQuery(ctx goContext.Context, userId int) *orm.Query {
 	return c.GetDb(ctx).Model(&entity.User{}).
 		Join("LEFT JOIN substitutes ON owner_id = id").
@@ -120,7 +82,7 @@ func (c *Connector) GetUserOrganizationIds(ctx goContext.Context, userId int) ([
 
 	icos := []string{}
 	for _, uri := range uris {
-		ico, err := uriToIco(uri)
+		ico, err := entity.UriToIco(uri)
 		if err == nil {
 			icos = append(icos, ico)
 		}

@@ -466,6 +466,9 @@ components:
         test:
           type: boolean
           description: True if invoice is just for test purposes
+        notificationsSent:
+          type: boolean
+          description: True if involved parties were notified
     SubstituteIds:
       type: array
       items:

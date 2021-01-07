@@ -4,16 +4,13 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/elastic/go-elasticsearch/v7"
 	muxHandlers "github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
-	"gopkg.in/go-extras/elogrus.v7"
 
 	"github.com/slovak-egov/einvoice/apiserver/cache"
 	"github.com/slovak-egov/einvoice/apiserver/config"
 	"github.com/slovak-egov/einvoice/apiserver/db"
-	"github.com/slovak-egov/einvoice/apiserver/mail"
 	"github.com/slovak-egov/einvoice/apiserver/slovenskoSk"
 	"github.com/slovak-egov/einvoice/apiserver/storage"
 	"github.com/slovak-egov/einvoice/apiserver/xml"
@@ -34,7 +31,6 @@ type App struct {
 	validator   xml.Validator
 	cache       *cache.Cache
 	slovenskoSk *slovenskoSk.Connector
-	mail        *mail.Sender
 }
 
 func NewApp() *App {
@@ -48,38 +44,11 @@ func NewApp() *App {
 		validator:   xml.NewValidator(appConfig),
 		cache:       cache.NewRedis(appConfig.Cache),
 		slovenskoSk: slovenskoSk.New(appConfig.SlovenskoSk),
-		mail:        mail.NewSender(appConfig.Mail),
-	}
-
-	// If elasticsearch url is configured
-	// hook logging to send logs there
-	if a.config.Logger.ElasticsearchUrl != "" {
-		a.initializeLogger()
 	}
 
 	a.initializeHandlers()
 
 	return a
-}
-
-// Asynchronously send logs to elasticsearch
-// In future we can replace this with filebeat
-func (a *App) initializeLogger() {
-	client, err := elasticsearch.NewClient(elasticsearch.Config{
-		Addresses: []string{a.config.Logger.ElasticsearchUrl},
-		Username:  a.config.Logger.ElasticsearchUser,
-		Password:  a.config.Logger.ElasticsearchPassword,
-	})
-	if err != nil {
-		log.WithField("error", err.Error()).Fatal("server.logger.elasticClientCreation.failed")
-	}
-	hook, err := elogrus.NewAsyncElasticHook(
-		client, a.config.Host, a.config.Logger.LogLevel, a.config.Logger.ElasticIndex,
-	)
-	if err != nil {
-		log.WithField("error", err.Error()).Fatal("server.logger.elasticHookCreation.failed")
-	}
-	log.AddHook(hook)
 }
 
 func registerHandler(router *mux.Router, method, path string, handler func(http.ResponseWriter, *http.Request) error) {

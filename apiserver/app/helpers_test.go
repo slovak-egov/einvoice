@@ -11,7 +11,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/slovak-egov/einvoice/apiserver/entity"
+	"github.com/slovak-egov/einvoice/pkg/entity"
 	"github.com/slovak-egov/einvoice/pkg/timeutil"
 )
 

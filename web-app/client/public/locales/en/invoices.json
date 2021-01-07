@@ -7,5 +7,6 @@
   "createdAt": "Created at",
   "supplierIco": "Supplier IČO",
   "customerIco": "Customer IČO",
-  "public": "Public"
+  "public": "Public",
+  "notificationsSent": "Notifications sent"
 }

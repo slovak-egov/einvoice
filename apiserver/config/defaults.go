@@ -4,10 +4,13 @@ import (
 	"time"
 
 	"github.com/sirupsen/logrus"
+
+	"github.com/slovak-egov/einvoice/pkg/dbutil"
+	"github.com/slovak-egov/einvoice/pkg/loggerutil"
 )
 
 var devConfig = Configuration{
-	Db: DbConfiguration{
+	Db: dbutil.Configuration{
 		Host: "localhost",
 		Port: 5432,
 		Name: "einvoice",
@@ -17,7 +20,7 @@ var devConfig = Configuration{
 	Port:         8081,
 	D16bXsdPath:  "xml/d16b/xsd",
 	Ubl21XsdPath: "xml/ubl21/xsd",
-	Logger: LoggerConfiguration{
+	Logger: loggerutil.Configuration{
 		LogLevel: logrus.DebugLevel,
 		Format:   "text",
 	},
@@ -43,7 +46,7 @@ var devConfig = Configuration{
 }
 
 var prodConfig = Configuration{
-	Db: DbConfiguration{
+	Db: dbutil.Configuration{
 		Port: 5432,
 		Name: "einvoice",
 	},
@@ -51,13 +54,10 @@ var prodConfig = Configuration{
 	Port:         80,
 	D16bXsdPath:  "xml/d16b/xsd",
 	Ubl21XsdPath: "xml/ubl21/xsd",
-	Logger: LoggerConfiguration{
+	Logger: loggerutil.Configuration{
 		LogLevel:     logrus.InfoLevel,
 		ElasticIndex: "apiserver",
 		Format:       "json",
-	},
-	Mail: MailConfiguration{
-		Email: "einvoice.dev@gmail.com",
 	},
 	ServerReadTimeout:  15 * time.Second,
 	ServerWriteTimeout: 15 * time.Second,
@@ -77,10 +77,11 @@ var prodConfig = Configuration{
 		MaxExpiration: 10 * time.Minute,
 		JtiExpiration: 15 * time.Minute,
 	},
+	LocalStorageBasePath: "/data",
 }
 
 var testConfig = Configuration{
-	Db: DbConfiguration{
+	Db: dbutil.Configuration{
 		Host: "localhost",
 		Port: 5432,
 		Name: "test",
@@ -88,7 +89,7 @@ var testConfig = Configuration{
 	},
 	D16bXsdPath:  "xml/d16b/xsd",
 	Ubl21XsdPath: "xml/ubl21/xsd",
-	Logger: LoggerConfiguration{
+	Logger: loggerutil.Configuration{
 		LogLevel: logrus.WarnLevel,
 		Format:   "text",
 	},

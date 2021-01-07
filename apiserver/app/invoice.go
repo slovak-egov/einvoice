@@ -10,10 +10,11 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/slovak-egov/einvoice/apiserver/db"
-	"github.com/slovak-egov/einvoice/apiserver/entity"
 	"github.com/slovak-egov/einvoice/apiserver/storage"
 	"github.com/slovak-egov/einvoice/apiserver/visualization"
 	"github.com/slovak-egov/einvoice/pkg/context"
+	"github.com/slovak-egov/einvoice/pkg/dbutil"
+	"github.com/slovak-egov/einvoice/pkg/entity"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
@@ -45,7 +46,7 @@ func NewPublicInvoicesOptions(params url.Values, maxLimit int) (*db.PublicInvoic
 	}
 	order := params.Get("order")
 	if order == "" {
-		order = db.DescOrder
+		order = dbutil.DescOrder
 	}
 	return &db.PublicInvoicesOptions{
 		params["format"],
@@ -109,7 +110,7 @@ func (a *App) getInvoice(res http.ResponseWriter, req *http.Request) error {
 
 	invoice, err := a.db.GetInvoice(req.Context(), id)
 	if err != nil {
-		if _, ok := err.(*db.NotFoundError); ok {
+		if _, ok := err.(*dbutil.NotFoundError); ok {
 			return handlerutil.NewNotFoundError("invoice.notFound")
 		}
 		return err
@@ -132,7 +133,7 @@ func (a *App) getInvoiceXml(res http.ResponseWriter, req *http.Request) error {
 
 	invoiceMeta, err := a.db.GetInvoice(req.Context(), id)
 	if err != nil {
-		if _, ok := err.(*db.NotFoundError); ok {
+		if _, ok := err.(*dbutil.NotFoundError); ok {
 			return handlerutil.NewNotFoundError("invoice.notFound")
 		}
 		return err
@@ -166,7 +167,7 @@ func (a *App) getInvoiceVisualization(res http.ResponseWriter, req *http.Request
 
 	invoice, err := a.db.GetInvoice(req.Context(), id)
 	if err != nil {
-		if _, ok := err.(*db.NotFoundError); ok {
+		if _, ok := err.(*dbutil.NotFoundError); ok {
 			return handlerutil.NewNotFoundError("invoice.notFound")
 		}
 		return err

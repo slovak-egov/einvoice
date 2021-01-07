@@ -10,9 +10,9 @@ import (
 	"github.com/go-ozzo/ozzo-validation/v4/is"
 	"github.com/gorilla/mux"
 
-	"github.com/slovak-egov/einvoice/apiserver/db"
-	"github.com/slovak-egov/einvoice/apiserver/entity"
 	"github.com/slovak-egov/einvoice/pkg/context"
+	"github.com/slovak-egov/einvoice/pkg/dbutil"
+	"github.com/slovak-egov/einvoice/pkg/entity"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
@@ -40,7 +40,7 @@ func (a *App) getUser(res http.ResponseWriter, req *http.Request) error {
 
 	user, err := a.db.GetUser(req.Context(), requestedUserId)
 	if err != nil {
-		if _, ok := err.(*db.NotFoundError); ok {
+		if _, ok := err.(*dbutil.NotFoundError); ok {
 			return handlerutil.NewNotFoundError("user.notFound")
 		}
 		return err
