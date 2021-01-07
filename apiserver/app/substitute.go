@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/slovak-egov/einvoice/apiserver/db"
+	"github.com/slovak-egov/einvoice/pkg/dbutil"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
@@ -58,7 +58,7 @@ func (a *App) addUserSubstitutes(res http.ResponseWriter, req *http.Request) err
 	}
 
 	substituteIds, err := a.db.AddUserSubstitutes(req.Context(), requestedUserId, requestBody)
-	if _, ok := err.(*db.IntegrityViolationError); ok {
+	if _, ok := err.(*dbutil.IntegrityViolationError); ok {
 		return SubstituteError("create.failed").WithCause(err)
 	} else if err != nil {
 		return err

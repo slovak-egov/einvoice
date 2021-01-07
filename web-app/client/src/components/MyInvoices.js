@@ -39,7 +39,7 @@ const Filter = ({extraQuery, setExtraQuery}) => {
 
 const defaultExtraQuery = new URLSearchParams({
   supplied: true,
-  received: true
+  received: true,
 })
 
 const filterValidator = (q) => q.get('supplied') === 'true' || q.get('received') === 'true'

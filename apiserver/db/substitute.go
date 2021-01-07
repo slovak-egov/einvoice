@@ -8,8 +8,9 @@ import (
 	"github.com/go-pg/pg/v10/orm"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/slovak-egov/einvoice/apiserver/entity"
 	"github.com/slovak-egov/einvoice/pkg/context"
+	"github.com/slovak-egov/einvoice/pkg/dbutil"
+	"github.com/slovak-egov/einvoice/pkg/entity"
 )
 
 func NewSubstitutes(ownerId int, substituteIds []int) *[]entity.Substitute {
@@ -40,7 +41,7 @@ func (c *Connector) AddUserSubstitutes(ctx goContext.Context, ownerId int, subst
 
 		var e pg.Error
 		if errors.As(err, &e) && e.IntegrityViolation() {
-			return nil, &IntegrityViolationError{"Some of substitutes do not exist"}
+			return nil, &dbutil.IntegrityViolationError{"Some of substitutes do not exist"}
 		} else {
 			return nil, err
 		}
@@ -88,7 +89,7 @@ func (c *Connector) GetUserSubstitutes(ctx goContext.Context, ownerId int) ([]in
 func (c *Connector) IsValidSubstitute(ctx goContext.Context, userId int, ico string) error {
 	count, err := c.GetDb(ctx).Model(&entity.User{}).
 		Join("LEFT JOIN substitutes ON owner_id = id").
-		Where("slovensko_sk_uri = ?", icoToUri(ico)).
+		Where("slovensko_sk_uri = ?", entity.IcoToUri(ico)).
 		WhereGroup(func(q *orm.Query) (*orm.Query, error) {
 			return q.WhereOr("substitute_id = ?", userId).WhereOr("id = ?", userId), nil
 		}).
@@ -105,7 +106,7 @@ func (c *Connector) IsValidSubstitute(ctx goContext.Context, userId int, ico str
 	}
 
 	if count == 0 {
-		return &NoSubstituteError{"No valid substitutes found"}
+		return &dbutil.NotFoundError{"No valid substitutes found"}
 	}
 
 	return nil

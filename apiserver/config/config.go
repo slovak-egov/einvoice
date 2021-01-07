@@ -5,23 +5,10 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
+	"github.com/slovak-egov/einvoice/pkg/dbutil"
 	"github.com/slovak-egov/einvoice/pkg/environment"
+	"github.com/slovak-egov/einvoice/pkg/loggerutil"
 )
-
-type MailConfiguration struct {
-	PublicKey  string
-	PrivateKey string
-	Email      string
-}
-
-type DbConfiguration struct {
-	Host       string
-	Port       int
-	Name       string
-	User       string
-	Password   string
-	LogQueries bool
-}
 
 type CacheConfiguration struct {
 	Host                             string
@@ -44,23 +31,13 @@ type ApiKeyConfiguration struct {
 	JtiExpiration time.Duration
 }
 
-type LoggerConfiguration struct {
-	LogLevel              log.Level
-	ElasticsearchUrl      string
-	ElasticsearchUser     string
-	ElasticsearchPassword string
-	ElasticIndex          string
-	Format                string
-}
-
 type Configuration struct {
-	Db                   DbConfiguration
+	Db                   dbutil.Configuration
 	Host                 string
 	Port                 int
 	D16bXsdPath          string
 	Ubl21XsdPath         string
 	LocalStorageBasePath string
-	Mail                 MailConfiguration
 	ServerReadTimeout    time.Duration
 	ServerWriteTimeout   time.Duration
 	GracefulTimeout      time.Duration
@@ -68,77 +45,33 @@ type Configuration struct {
 	SlovenskoSk          SlovenskoSkConfiguration
 	InvoicesLimit        int
 	ApiKey               ApiKeyConfiguration
-	Logger               LoggerConfiguration
+	Logger               loggerutil.Configuration
 }
 
-func (c *Configuration) initDb() {
-	c.Db = DbConfiguration{
-		Host:       environment.Getenv("DB_HOST", c.Db.Host),
-		Port:       environment.ParseInt("DB_PORT", c.Db.Port),
-		Name:       environment.Getenv("DB_NAME", c.Db.Name),
-		User:       environment.Getenv("DB_USER", c.Db.User),
-		Password:   environment.Getenv("DB_PASSWORD", c.Db.Password),
-		LogQueries: environment.ParseBool("DB_LOG_QUERIES", c.Db.LogQueries),
-	}
-}
-
-func (c *Configuration) initMail() {
-	c.Mail = MailConfiguration{
-		PublicKey:  environment.Getenv("MAIL_APIKEY_PUBLIC", c.Mail.PublicKey),
-		PrivateKey: environment.Getenv("MAIL_APIKEY_PRIVATE", c.Mail.PrivateKey),
-		Email:      environment.Getenv("MAIL_ADDRESS", c.Mail.Email),
-	}
-}
-
-func (c *Configuration) initCache() {
-	c.Cache = CacheConfiguration{
-		Host:                             environment.Getenv("CACHE_HOST", c.Cache.Host),
-		Port:                             environment.ParseInt("CACHE_PORT", c.Cache.Port),
-		Password:                         environment.Getenv("CACHE_PASSWORD", c.Cache.Password),
-		SessionTokenExpiration:           environment.ParseDuration("SESSION_TOKEN_EXPIRATION", c.Cache.SessionTokenExpiration),
-		TestInvoiceRateLimiterExpiration: environment.ParseDuration("TEST_INVOICE_RATE_LIMITER_EXPIRATION", c.Cache.TestInvoiceRateLimiterExpiration),
-		TestInvoiceRateLimiterThreshold:  environment.ParseInt("TEST_INVOICE_RATE_LIMITER_THRESHOLD", c.Cache.TestInvoiceRateLimiterThreshold),
+func newCache(defaultConfig CacheConfiguration) CacheConfiguration {
+	return CacheConfiguration{
+		Host:                             environment.Getenv("CACHE_HOST", defaultConfig.Host),
+		Port:                             environment.ParseInt("CACHE_PORT", defaultConfig.Port),
+		Password:                         environment.Getenv("CACHE_PASSWORD", defaultConfig.Password),
+		SessionTokenExpiration:           environment.ParseDuration(
+			"SESSION_TOKEN_EXPIRATION", defaultConfig.SessionTokenExpiration,
+		),
+		TestInvoiceRateLimiterExpiration: environment.ParseDuration(
+			"TEST_INVOICE_RATE_LIMITER_EXPIRATION", defaultConfig.TestInvoiceRateLimiterExpiration,
+		),
+		TestInvoiceRateLimiterThreshold:  environment.ParseInt(
+			"TEST_INVOICE_RATE_LIMITER_THRESHOLD", defaultConfig.TestInvoiceRateLimiterThreshold,
+		),
 	}
 }
 
-func (c *Configuration) initSlovenskoSk() {
-	c.SlovenskoSk = SlovenskoSkConfiguration{
-		Url:                environment.Getenv("SLOVENSKO_SK_URL", c.SlovenskoSk.Url),
-		ApiTokenPrivateKey: environment.Getenv("API_TOKEN_PRIVATE", c.SlovenskoSk.ApiTokenPrivateKey),
-		OboTokenPublicKey:  environment.Getenv("OBO_TOKEN_PUBLIC", c.SlovenskoSk.OboTokenPublicKey),
-		LogoutCallbackUrl:  environment.Getenv("LOGOUT_CALLBACK_URL", c.SlovenskoSk.LogoutCallbackUrl),
+func newSlovenskoSk(defaultConfig SlovenskoSkConfiguration) SlovenskoSkConfiguration {
+	return SlovenskoSkConfiguration{
+		Url:                environment.Getenv("SLOVENSKO_SK_URL", defaultConfig.Url),
+		ApiTokenPrivateKey: environment.Getenv("API_TOKEN_PRIVATE", defaultConfig.ApiTokenPrivateKey),
+		OboTokenPublicKey:  environment.Getenv("OBO_TOKEN_PUBLIC", defaultConfig.OboTokenPublicKey),
+		LogoutCallbackUrl:  environment.Getenv("LOGOUT_CALLBACK_URL", defaultConfig.LogoutCallbackUrl),
 	}
-}
-
-func (c *Configuration) initLogger() {
-	loggerConfig := LoggerConfiguration{
-		ElasticsearchUrl:      environment.Getenv("LOGGER_ELASTICSEARCH_URL", c.Logger.ElasticsearchUrl),
-		ElasticIndex:          environment.Getenv("LOGGER_ELASTIC_INDEX", c.Logger.ElasticIndex),
-		Format:                environment.Getenv("LOGGER_FORMAT", c.Logger.Format),
-		ElasticsearchUser:     environment.Getenv("LOGGER_ELASTICSEARCH_USER", c.Logger.ElasticsearchUser),
-		ElasticsearchPassword: environment.Getenv("LOGGER_ELASTICSEARCH_PASSWORD", c.Logger.ElasticsearchPassword),
-	}
-
-	// Set level
-	var err error
-	logLevel := environment.Getenv("LOG_LEVEL", c.Logger.LogLevel.String())
-	loggerConfig.LogLevel, err = log.ParseLevel(logLevel)
-	if err != nil {
-		log.WithField("logLevel", logLevel).Fatal("config.logger.logLevel.unknown")
-	}
-	log.SetLevel(loggerConfig.LogLevel)
-
-	// Set format
-	switch loggerConfig.Format {
-	case "json":
-		log.SetFormatter(&log.JSONFormatter{})
-	case "text":
-		log.SetFormatter(&log.TextFormatter{})
-	default:
-		log.WithField("format", loggerConfig.Format).Fatal("config.logger.format.unknown")
-	}
-
-	c.Logger = loggerConfig
 }
 
 func New() *Configuration {
@@ -155,12 +88,15 @@ func New() *Configuration {
 		log.WithField("environment", apiserverEnv).Fatal("config.environment.unknown")
 	}
 
-	config.initLogger()
-	config.initDb()
-	config.initMail()
-	config.initCache()
-	config.initSlovenskoSk()
+	config.Logger = loggerutil.NewConfig(config.Logger)
+	// Send logs to elastic
+	config.Logger.ConnectElastic()
 
+	config.Db = dbutil.NewConfig(config.Db)
+	config.Cache = newCache(config.Cache)
+	config.SlovenskoSk = newSlovenskoSk(config.SlovenskoSk)
+
+	config.Host = environment.Getenv("HOST", config.Host)
 	config.Port = environment.ParseInt("PORT", config.Port)
 
 	config.D16bXsdPath = environment.Getenv("D16B_XSD_PATH", config.D16bXsdPath)

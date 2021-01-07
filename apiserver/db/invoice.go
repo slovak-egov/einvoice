@@ -9,8 +9,9 @@ import (
 	"github.com/go-pg/pg/v10/orm"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/slovak-egov/einvoice/apiserver/entity"
 	"github.com/slovak-egov/einvoice/pkg/context"
+	"github.com/slovak-egov/einvoice/pkg/dbutil"
+	"github.com/slovak-egov/einvoice/pkg/entity"
 )
 
 type PublicInvoicesOptions struct {
@@ -27,7 +28,7 @@ func (o *PublicInvoicesOptions) Validate(maxLimit int) error {
 		return fmt.Errorf("limit should be positive integer less than or equal to %d", maxLimit)
 	}
 
-	if o.Order != AscOrder && o.Order != DescOrder {
+	if o.Order != dbutil.AscOrder && o.Order != dbutil.DescOrder {
 		return errors.New("order should be either asc or desc")
 	}
 
@@ -43,7 +44,7 @@ func (o *PublicInvoicesOptions) buildQuery(query *orm.Query) *orm.Query {
 	if o.StartId != 0 {
 		// If ascending order was requested, start id is the lowest id
 		// otherwise it is the largest one
-		if o.Order == AscOrder {
+		if o.Order == dbutil.AscOrder {
 			query = query.Where("id >= ?", o.StartId)
 		} else {
 			query = query.Where("id <= ?", o.StartId)
@@ -62,7 +63,7 @@ func (o *PublicInvoicesOptions) buildQuery(query *orm.Query) *orm.Query {
 		})
 	}
 
-	if o.Order == AscOrder {
+	if o.Order == dbutil.AscOrder {
 		query = query.Order("id ASC")
 	} else {
 		query = query.Order("id DESC")
@@ -101,16 +102,16 @@ func (c *Connector) GetPublicInvoices(ctx goContext.Context, options *PublicInvo
 }
 
 func (c *Connector) GetInvoice(ctx goContext.Context, id int) (*entity.Invoice, error) {
-	inv := &entity.Invoice{}
-	err := c.GetDb(ctx).Model(inv).Where("id = ?", id).Select(inv)
+	invoice := &entity.Invoice{}
+	err := c.GetDb(ctx).Model(invoice).Where("id = ?", id).Select(invoice)
 	if errors.Is(err, pg.ErrNoRows) {
-		return nil, &NotFoundError{fmt.Sprintf("Invoice %d not found", id)}
+		return nil, &dbutil.NotFoundError{fmt.Sprintf("Invoice %d not found", id)}
 	} else if err != nil {
 		context.GetLogger(ctx).WithField("error", err.Error()).Error("db.getInvoice.failed")
 		return nil, err
 	}
 
-	return inv, nil
+	return invoice, nil
 }
 
 func (c *Connector) CreateInvoice(ctx goContext.Context, invoice *entity.Invoice) error {

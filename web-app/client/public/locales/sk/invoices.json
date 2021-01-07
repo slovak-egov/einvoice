@@ -7,5 +7,6 @@
   "createdAt": "Vytvorené o",
   "supplierIco": "IČO dodávateľa",
   "customerIco": "IČO zákazníka",
-  "public": "Verejne prístupné"
+  "public": "Verejne prístupné",
+  "notificationsSent": "Notifikácie odoslané"
 }

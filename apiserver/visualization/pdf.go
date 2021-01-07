@@ -6,7 +6,7 @@ import (
 
 	"github.com/jung-kurt/gofpdf"
 
-	"github.com/slovak-egov/einvoice/apiserver/entity"
+	"github.com/slovak-egov/einvoice/pkg/entity"
 )
 
 func Generate(inv *entity.Invoice) *File {

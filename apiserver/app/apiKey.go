@@ -10,9 +10,9 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	"github.com/slovak-egov/einvoice/apiserver/cache"
-	"github.com/slovak-egov/einvoice/apiserver/db"
-	"github.com/slovak-egov/einvoice/apiserver/entity"
 	"github.com/slovak-egov/einvoice/pkg/context"
+	"github.com/slovak-egov/einvoice/pkg/dbutil"
+	"github.com/slovak-egov/einvoice/pkg/entity"
 )
 
 func getIntClaim(claims jwt.MapClaims, key string) (int, error) {
@@ -95,7 +95,7 @@ func (a *App) getUserIdByApiKey(ctx goContext.Context, tokenString string) (int,
 
 		user, err = a.db.GetUser(ctx, userId)
 		if err != nil {
-			if _, ok := err.(*db.NotFoundError); ok {
+			if _, ok := err.(*dbutil.NotFoundError); ok {
 				return nil, ApiKeyError("sub.notFound")
 			}
 			return nil, err
