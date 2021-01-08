@@ -34,8 +34,6 @@ func New() *Worker {
 func (w *Worker) Run() {
 	log.Info("worker.started")
 
-	go w.TestInvoicesCleanupCron()
-
 	for {
 		w.checkInvoices()
 
@@ -107,44 +105,4 @@ func (w *Worker) notifyInvoiceParties(ctx goContext.Context, invoice entity.Invo
 	}
 
 	return nil
-}
-
-func (w *Worker) TestInvoicesCleanupCron() {
-	w.TestInvoicesCleanupJob()
-
-	for range time.Tick(24 * time.Hour) {
-		w.TestInvoicesCleanupJob()
-	}
-}
-
-func (w *Worker) TestInvoicesCleanupJob() {
-	ctx := goContext.Background()
-
-	err := w.db.RunInTransaction(ctx, func(ctx goContext.Context) error {
-		invoices, err := w.db.GetOldTestInvoices(ctx, w.config.TestInvoiceExpiration)
-		if err != nil {
-			return err
-		}
-
-		invoiceIds := []int{}
-		for _, invoice := range invoices {
-			invoiceIds = append(invoiceIds, invoice.Id)
-		}
-
-		if err = w.db.DeleteInvoices(ctx, invoiceIds); err != nil {
-			return err
-		}
-
-		if err = w.storage.DeleteInvoices(ctx, invoiceIds); err != nil {
-			return err
-		}
-
-		return nil
-	})
-
-	if err != nil {
-		context.GetLogger(ctx).
-			WithField("error", err.Error()).
-			Error("worker.testInvoices.cleanupJob.failed")
-	}
 }

@@ -11,13 +11,12 @@ import (
 )
 
 type Configuration struct {
-	Db                    dbutil.Configuration
-	SleepTime             time.Duration
-	BatchSize             int
-	Mail                  MailConfiguration
-	LocalStorageBasePath  string
-	Logger                loggerutil.Configuration
-	TestInvoiceExpiration time.Duration
+	Db                   dbutil.Configuration
+	SleepTime            time.Duration
+	BatchSize            int
+	Mail                 MailConfiguration
+	LocalStorageBasePath string
+	Logger               loggerutil.Configuration
 }
 
 type MailConfiguration struct {
@@ -55,7 +54,6 @@ func New() *Configuration {
 	config.BatchSize = environment.ParseInt("BATCH_SIZE", config.BatchSize)
 	config.SleepTime = environment.ParseDuration("SLEEP_TIME", config.SleepTime)
 	config.LocalStorageBasePath = environment.Getenv("LOCAL_STORAGE_BASE_PATH", config.LocalStorageBasePath)
-	config.TestInvoiceExpiration = environment.ParseDuration("TEST_INVOICE_EXPIRATION", config.TestInvoiceExpiration)
 
 	return &config
 }

@@ -10,8 +10,6 @@ import (
 )
 
 var devConfig = Configuration{
-	SleepTime: 1 * time.Minute,
-	BatchSize: 1,
 	Db: dbutil.Configuration{
 		Host: "localhost",
 		Port: 5432,
@@ -22,22 +20,21 @@ var devConfig = Configuration{
 		LogLevel: logrus.DebugLevel,
 		Format:   "text",
 	},
+	TestInvoiceExpiration: 7 * 24 * time.Hour,
+	Interval:              1 * time.Hour,
 }
 
 var prodConfig = Configuration{
-	SleepTime: 5 * time.Minute,
-	BatchSize: 10,
 	Db: dbutil.Configuration{
 		Port: 5432,
 		Name: "einvoice",
 	},
-	Mail: MailConfiguration{
-		Email: "einvoice.dev@gmail.com",
-	},
 	Logger: loggerutil.Configuration{
 		LogLevel:     logrus.InfoLevel,
-		ElasticIndex: "notification-worker",
+		ElasticIndex: "cleanup-worker",
 		Format:       "json",
 	},
-	LocalStorageBasePath: "/data",
+	LocalStorageBasePath:  "/data",
+	TestInvoiceExpiration: 7 * 24 * time.Hour,
+	Interval:              1 * time.Hour,
 }
