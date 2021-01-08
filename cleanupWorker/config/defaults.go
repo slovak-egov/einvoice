@@ -20,8 +20,8 @@ var devConfig = Configuration{
 		LogLevel: logrus.DebugLevel,
 		Format:   "text",
 	},
-	TestInvoiceExpiration: 7 * 24 * time.Hour,
-	Interval:              1 * time.Hour,
+	TestInvoiceExpiration: 10 * time.Minute,
+	CronInterval:          5 * time.Minute,
 }
 
 var prodConfig = Configuration{
@@ -35,6 +35,6 @@ var prodConfig = Configuration{
 		Format:       "json",
 	},
 	LocalStorageBasePath:  "/data",
-	TestInvoiceExpiration: 7 * 24 * time.Hour,
-	Interval:              1 * time.Hour,
+	TestInvoiceExpiration: 24 * time.Hour,
+	CronInterval:          6 * time.Hour,
 }

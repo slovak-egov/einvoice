@@ -30,9 +30,7 @@ func New() *Worker {
 func (w *Worker) Run() {
 	log.Info("worker.started")
 
-	w.TestInvoicesCleanupJob()
-
-	for range time.Tick(20 * time.Second) {
+	for range time.Tick(w.config.CronInterval) {
 		w.TestInvoicesCleanupJob()
 	}
 }

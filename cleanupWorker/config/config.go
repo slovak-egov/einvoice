@@ -15,7 +15,7 @@ type Configuration struct {
 	LocalStorageBasePath  string
 	Logger                loggerutil.Configuration
 	TestInvoiceExpiration time.Duration
-	Interval              time.Duration
+	CronInterval          time.Duration
 }
 
 func New() *Configuration {
@@ -37,7 +37,7 @@ func New() *Configuration {
 	config.Db = dbutil.NewConfig(config.Db)
 	config.LocalStorageBasePath = environment.Getenv("LOCAL_STORAGE_BASE_PATH", config.LocalStorageBasePath)
 	config.TestInvoiceExpiration = environment.ParseDuration("TEST_INVOICE_EXPIRATION", config.TestInvoiceExpiration)
-	config.Interval = environment.ParseDuration("INTERVAL", config.Interval)
+	config.CronInterval = environment.ParseDuration("CRON_INTERVAL", config.CronInterval)
 
 	return &config
 }
