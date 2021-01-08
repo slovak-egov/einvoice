@@ -39,6 +39,20 @@ func (storage *LocalStorage) SaveInvoice(ctx goContext.Context, id int, value []
 	return storage.saveObject(ctx, storage.invoiceFilename(id), value)
 }
 
+func (storage *LocalStorage) DeleteInvoices(ctx goContext.Context, ids []int) error {
+	for _, id := range ids {
+		if err := storage.deleteObject(storage.invoiceFilename(id)); err != nil {
+			context.GetLogger(ctx).
+				WithField("invoiceId", id).
+				WithField("error", err.Error()).
+				Error("localStorage.removeInvoices.failed")
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (storage *LocalStorage) saveObject(ctx goContext.Context, path string, value []byte) error {
 	err := ioutil.WriteFile(path, value, 0644)
 	if err != nil {
@@ -49,4 +63,8 @@ func (storage *LocalStorage) saveObject(ctx goContext.Context, path string, valu
 
 func (storage *LocalStorage) readObject(path string) ([]byte, error) {
 	return ioutil.ReadFile(path)
+}
+
+func (storage *LocalStorage) deleteObject(path string) error {
+	return os.Remove(path)
 }

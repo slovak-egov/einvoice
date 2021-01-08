@@ -22,6 +22,7 @@ var devConfig = Configuration{
 		LogLevel: logrus.DebugLevel,
 		Format:   "text",
 	},
+	TestInvoiceExpiration: 7 * 24 * time.Hour,
 }
 
 var prodConfig = Configuration{
@@ -39,5 +40,6 @@ var prodConfig = Configuration{
 		ElasticIndex: "notification-worker",
 		Format:       "json",
 	},
-	LocalStorageBasePath: "/data",
+	LocalStorageBasePath:  "/data",
+	TestInvoiceExpiration: 7 * 24 * time.Hour,
 }
