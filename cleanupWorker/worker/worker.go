@@ -42,22 +42,22 @@ func (w *Worker) CloseResources() {
 func (w *Worker) TestInvoicesCleanupJob() {
 	ctx := goContext.Background()
 
-	err := w.db.RunInTransaction(ctx, func(ctx goContext.Context) error {
-		invoiceIds, err := w.db.DeleteOldTestInvoices(ctx, w.config.TestInvoiceExpiration)
-		if err != nil {
-			return err
-		}
-
-		if err = w.storage.DeleteInvoices(ctx, invoiceIds); err != nil {
-			return err
-		}
-
-		return nil
-	})
-
+	invoiceIds, err := w.db.DeleteOldTestInvoices(ctx, w.config.TestInvoiceExpiration)
 	if err != nil {
 		context.GetLogger(ctx).
 			WithField("error", err.Error()).
-			Error("worker.testInvoices.cleanupJob.failed")
+			Error("worker.testInvoices.cleanupJob.db.failed")
+		return
 	}
+
+	if err = w.storage.DeleteInvoices(ctx, invoiceIds); err != nil {
+		context.GetLogger(ctx).
+			WithField("error", err.Error()).
+			Error("worker.testInvoices.cleanupJob.storage.failed")
+		return
+	}
+
+	context.GetLogger(ctx).
+		WithField("invoiceIds", invoiceIds).
+		Error("worker.testInvoices.cleanupJob.done")
 }

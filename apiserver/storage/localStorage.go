@@ -4,6 +4,7 @@ import (
 	goContext "context"
 	"errors"
 	"fmt"
+	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"os"
 
@@ -42,10 +43,10 @@ func (storage *LocalStorage) SaveInvoice(ctx goContext.Context, id int, value []
 func (storage *LocalStorage) DeleteInvoices(ctx goContext.Context, ids []int) error {
 	for _, id := range ids {
 		if err := storage.deleteObject(storage.invoiceFilename(id)); err != nil {
-			context.GetLogger(ctx).
-				WithField("invoiceId", id).
-				WithField("error", err.Error()).
-				Error("localStorage.removeInvoices.failed")
+			context.GetLogger(ctx).WithFields(log.Fields{
+				"invoiceId": id,
+				"error":     err.Error(),
+			}).Error("localStorage.removeInvoices.failed")
 			return err
 		}
 	}
