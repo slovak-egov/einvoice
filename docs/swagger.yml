@@ -5,7 +5,7 @@ info:
   title: E-invoice API
 servers:
   - description: Dev
-    url: https://apiserver.dev.filipsladek.com
+    url: https://dev.api.einvoice.mfsr.sk
 tags:
   - name: Auth
   - name: Users

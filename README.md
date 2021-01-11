@@ -12,7 +12,7 @@ You can view it on this [website](https://generator.swagger.io/?url=https://raw.
 
 ## Try it out
 
-[https://web-app.dev.filipsladek.com](https://web-app.dev.filipsladek.com)
+<https://dev.einvoice.mfsr.sk>
 
 * user: E0000046137
 * password: PopradTa3@
