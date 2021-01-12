@@ -22,7 +22,7 @@ var devConfig = Configuration{
 var prodConfig = Configuration{
 	Port: 80,
 	Urls: Urls{
-		SlovenskoSkLogin: "https://upvs.dev.filipsladek.com/login?callback=https://web-app.dev.filipsladek.com/login-callback",
+		SlovenskoSkLogin: "https://upvs.dev.filipsladek.com/login?callback=https://dev.einvoice.mfsr.sk/login-callback",
 	},
 	ClientBuildDir:     "/client/build",
 	LogLevel:           logrus.InfoLevel,

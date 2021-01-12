@@ -70,7 +70,7 @@ var prodConfig = Configuration{
 	},
 	SlovenskoSk: SlovenskoSkConfiguration{
 		Url:               "https://upvs.dev.filipsladek.com",
-		LogoutCallbackUrl: "https://web-app.dev.filipsladek.com/logout-callback",
+		LogoutCallbackUrl: "https://dev.einvoice.mfsr.sk/logout-callback",
 	},
 	InvoicesLimit: 20,
 	ApiKey: ApiKeyConfiguration{
