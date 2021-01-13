@@ -35,7 +35,7 @@ var devConfig = Configuration{
 		TestInvoiceRateLimiterThreshold:  20,
 	},
 	SlovenskoSk: SlovenskoSkConfiguration{
-		Url:               "https://upvs.dev.filipsladek.com",
+		Url:               "https://dev.upvs.einvoice.mfsr.sk",
 		LogoutCallbackUrl: "http://localhost:3000/logout-callback",
 	},
 	InvoicesLimit: 5,
@@ -69,7 +69,7 @@ var prodConfig = Configuration{
 		TestInvoiceRateLimiterThreshold:  20,
 	},
 	SlovenskoSk: SlovenskoSkConfiguration{
-		Url:               "https://upvs.dev.filipsladek.com",
+		Url:               "https://dev.upvs.einvoice.mfsr.sk",
 		LogoutCallbackUrl: "https://dev.einvoice.mfsr.sk/logout-callback",
 	},
 	InvoicesLimit: 20,

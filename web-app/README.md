@@ -5,7 +5,7 @@
 Set env vars (e.g. in `client/.env`), e.g.
 ```text
 REACT_APP_APISERVER_URL=http://localhost:8081
-REACT_APP_SLOVENSKOSK_LOGIN_URL=https://upvs.dev.filipsladek.com/login?callback=http://localhost:3000/login-callback
+REACT_APP_SLOVENSKOSK_LOGIN_URL=https://dev.upvs.einvoice.mfsr.sk/login?callback=http://localhost:3000/login-callback
 ```
 
 Then run hot server.
