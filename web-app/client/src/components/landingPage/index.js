@@ -6,6 +6,8 @@ export default () => {
   return (
     <div>
       <h1 style={{textAlign: 'center'}}>{t('title')}</h1>
+      {window.location.hostname.startsWith('dev') && <h2 className="text-danger">{t('devVersion')}</h2>}
+      {window.location.hostname.startsWith('fix') && <h2 className="text-danger">{t('fixVersion')}</h2>}
       <div style={{margin: '10px 0'}}>
         <span>{t('introduction')}:</span>
         <ol>

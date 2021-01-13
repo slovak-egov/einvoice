@@ -10,5 +10,7 @@
   "forForeignReceivers": "pre zahraničných prijímateľov",
   "faq": "Najčastejšie otázky a odpovede",
   "announcements": "Oznamy",
-  "announcement1": "Všetky prípady použitia budú podporované postupne, v súčastnosti sú všetky vo vývoji"
+  "announcement1": "Všetky prípady použitia budú podporované postupne, v súčastnosti sú všetky vo vývoji",
+  "devVersion": "Táto webstránka slúži výlučne na vývoj",
+  "fixVersion": "Táto webstránka slúži výlučne na testovanie"
 }
