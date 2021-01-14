@@ -33,6 +33,7 @@ func New() *Worker {
 
 func (w *Worker) Run() {
 	log.Info("worker.started")
+
 	for {
 		w.checkInvoices()
 

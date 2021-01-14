@@ -7,6 +7,8 @@ import (
 	"io/ioutil"
 	"os"
 
+	log "github.com/sirupsen/logrus"
+
 	"github.com/slovak-egov/einvoice/pkg/context"
 )
 
@@ -39,6 +41,18 @@ func (storage *LocalStorage) SaveInvoice(ctx goContext.Context, id int, value []
 	return storage.saveObject(ctx, storage.invoiceFilename(id), value)
 }
 
+func (storage *LocalStorage) DeleteInvoice(ctx goContext.Context, id int) error {
+	if err := storage.deleteObject(storage.invoiceFilename(id)); err != nil {
+		context.GetLogger(ctx).WithFields(log.Fields{
+			"invoiceId": id,
+			"error":     err.Error(),
+		}).Error("localStorage.deleteInvoice.failed")
+		return err
+	}
+
+	return nil
+}
+
 func (storage *LocalStorage) saveObject(ctx goContext.Context, path string, value []byte) error {
 	err := ioutil.WriteFile(path, value, 0644)
 	if err != nil {
@@ -49,4 +63,8 @@ func (storage *LocalStorage) saveObject(ctx goContext.Context, path string, valu
 
 func (storage *LocalStorage) readObject(path string) ([]byte, error) {
 	return ioutil.ReadFile(path)
+}
+
+func (storage *LocalStorage) deleteObject(path string) error {
+	return os.Remove(path)
 }
