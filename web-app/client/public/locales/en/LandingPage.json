@@ -10,5 +10,7 @@
   "forForeignReceivers": "for foreign receivers",
   "faq": "Frequently asked questions",
   "announcements": "Announcements",
-  "announcement1": "All use-cases will be released sequentially, currently all of them are under development"
+  "announcement1": "All use-cases will be released sequentially, currently all of them are under development",
+  "devVersion": "This website is used solely for development",
+  "fixVersion": "This website is used solely for testing"
 }
