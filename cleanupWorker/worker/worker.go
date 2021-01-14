@@ -50,17 +50,8 @@ func (w *Worker) TestInvoicesCleanupJob() {
 		return
 	}
 
-	var storageErr bool
 	for _, invoiceId := range invoiceIds {
-		if err = w.storage.DeleteInvoice(ctx, invoiceId); err != nil {
-			storageErr = true
-		}
-	}
-
-	if storageErr {
-		context.GetLogger(ctx).
-			Error("worker.testInvoices.cleanupJob.storage.failed")
-		return
+		w.storage.DeleteInvoice(ctx, invoiceId)
 	}
 
 	context.GetLogger(ctx).
