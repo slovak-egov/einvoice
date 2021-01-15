@@ -36,5 +36,16 @@
   "supplied": "Supplied",
   "download": "Download",
   "loadMore": "Load more",
-  "invoiceValidation": "Invoice validation"
+  "invoiceValidation": "Invoice validation",
+  "auth": {
+    "title": "Unauthorized access",
+    "description": "You have no permission to view this page"
+  },
+  "notfound": {
+    "title": "Not found",
+    "description": "Page not found"
+  },
+  "loading": {
+    "title": "Processing request"
+  }
 }

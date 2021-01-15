@@ -36,5 +36,16 @@
   "supplied": "Odoslané",
   "download": "Stiahnuť",
   "loadMore": "Načítaj viac",
-  "invoiceValidation": "Validácia faktúr"
+  "invoiceValidation": "Validácia faktúr",
+  "auth": {
+    "title": "Nepovolený prístup",
+    "description": "Nemáte povolenie na prezeranie tejto stránky"
+  },
+  "notfound": {
+    "title": "Nenájdené",
+    "description": "Stránka nebola nájdená"
+  },
+  "loading": {
+    "title": "Procesujem žiadosť"
+  }
 }
