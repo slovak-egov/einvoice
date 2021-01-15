@@ -60,7 +60,7 @@ func TestGetUserEmails(t *testing.T) {
 				t.Error(err)
 			}
 
-			assert.Equal(t, tt.emails, emails)
+			assert.ElementsMatch(t, tt.emails, emails)
 		})
 	}
 }
