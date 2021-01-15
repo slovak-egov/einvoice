@@ -50,6 +50,7 @@ jobs:
       UBL21_XSD_PATH: /home/runner/work/einvoice/einvoice/xml/ubl21/xsd
       LOCAL_STORAGE_BASE_PATH: /home/runner/work/einvoice/einvoice/storage
       APISERVER_ENV: test
+      NOTIFICATION_WORKER_ENV: test
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
