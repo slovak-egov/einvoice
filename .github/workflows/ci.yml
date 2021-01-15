@@ -61,5 +61,7 @@ jobs:
           go run ./migrations up
       - name: Create local storage
         run: mkdir storage
-      - name: Run tests
+      - name: Run apiserver tests
         run: cd apiserver && go test -v ./...
+      - name: Run notification worker tests
+        run: cd notificationWorker && go test -v ./...
