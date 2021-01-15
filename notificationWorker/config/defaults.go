@@ -41,3 +41,18 @@ var prodConfig = Configuration{
 	},
 	LocalStorageBasePath: "/data",
 }
+
+var testConfig = Configuration{
+	SleepTime: 1 * time.Minute,
+	BatchSize: 1,
+	Db: dbutil.Configuration{
+		Host: "localhost",
+		Port: 5432,
+		Name: "test",
+		User: "postgres",
+	},
+	Logger: loggerutil.Configuration{
+		LogLevel: logrus.DebugLevel,
+		Format:   "text",
+	},
+}

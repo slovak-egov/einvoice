@@ -41,6 +41,8 @@ func New() *Configuration {
 		config = prodConfig
 	case "dev":
 		config = devConfig
+	case "test":
+		config = testConfig
 	default:
 		log.WithField("environment", workerEnv).Fatal("config.environment.unknown")
 	}
