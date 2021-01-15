@@ -3,7 +3,7 @@ import {Modal, Spinner} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 
 export default () => {
-  const {t} = useTranslation('helpers')
+  const {t} = useTranslation('common')
   return (
     <div className="static-modal Modal">
       <Modal.Dialog>

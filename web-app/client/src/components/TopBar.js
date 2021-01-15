@@ -1,14 +1,14 @@
 import {useCallback} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {Button, Nav, Navbar, NavDropdown} from 'react-bootstrap'
-import {NavLink} from 'react-router-dom'
+import {LinkContainer} from 'react-router-bootstrap'
 import {useTranslation} from 'react-i18next'
 import {CONFIG} from '../appSettings'
 import {updateRunningRequests} from '../actions/common'
 import {getLoggedUser, isUserLogged} from '../state/users'
 import {getLogoutUrl} from '../utils/constants'
 
-const TopBar = () => {
+export default () => {
   const {i18n, t} = useTranslation('TopBar')
 
   const isLogged = useSelector(isUserLogged)
@@ -20,14 +20,14 @@ const TopBar = () => {
   )
 
   return (
-    <Navbar bg="primary" variant="dark" sticky="top" expand="md">
-      <NavLink to="/">
+    <Navbar bg="primary" variant="dark" sticky="top" expand="md" collapseOnSelect>
+      <LinkContainer to="/">
         <Navbar.Brand>{t('title')}</Navbar.Brand>
-      </NavLink>
+      </LinkContainer>
       <Navbar.Toggle />
       <Navbar.Collapse>
-        <Nav className="mr-auto">
-          <NavDropdown className="nav-link" title={i18n.language.toUpperCase()}>
+        <Nav className="w-100">
+          <NavDropdown title={i18n.language.toUpperCase()}>
             <NavDropdown.Item active={i18n.language === 'sk'} onClick={() => i18n.changeLanguage('sk')}>
               SK
             </NavDropdown.Item>
@@ -35,29 +35,27 @@ const TopBar = () => {
               EN
             </NavDropdown.Item>
           </NavDropdown>
-          <NavLink className="nav-link" to="/invoices">
-            <Navbar.Text>{t('tabs.publicInvoices')}</Navbar.Text>
-          </NavLink>
-        </Nav>
-        <Nav>
+          <LinkContainer to="/invoices">
+            <Nav.Link className="mr-auto">
+              {t('tabs.publicInvoices')}
+            </Nav.Link>
+          </LinkContainer>
           {isLogged ?
             <>
-              <NavLink className="nav-link" to="/create-invoice">
-                <Navbar.Text>{t('tabs.createInvoice')}</Navbar.Text>
-              </NavLink>
-              <NavLink className="nav-link" to="/my-invoices">
-                <Navbar.Text>{t('tabs.myInvoices')}</Navbar.Text>
-              </NavLink>
-              <NavLink className="nav-link" to="/account">
-                <Navbar.Text>{loggedUser.name}</Navbar.Text>
-              </NavLink>
-              <div className="nav-link">
-                <a href={getLogoutUrl()}>
-                  <Button variant="danger" onClick={startLoading}>
-                    {t('logout')}
-                  </Button>
-                </a>
-              </div>
+              <LinkContainer to="/create-invoice">
+                <Nav.Link>{t('tabs.createInvoice')}</Nav.Link>
+              </LinkContainer>
+              <LinkContainer to="/my-invoices">
+                <Nav.Link>{t('tabs.myInvoices')}</Nav.Link>
+              </LinkContainer>
+              <LinkContainer to="/account">
+                <Nav.Link>{loggedUser.name}</Nav.Link>
+              </LinkContainer>
+              <a href={getLogoutUrl()}>
+                <Button variant="danger" onClick={startLoading}>
+                  {t('logout')}
+                </Button>
+              </a>
             </>
             :
             <a href={CONFIG.slovenskoSkLoginUrl}>
@@ -71,5 +69,3 @@ const TopBar = () => {
     </Navbar>
   )
 }
-
-export default TopBar

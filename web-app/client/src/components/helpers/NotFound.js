@@ -1,7 +1,7 @@
 import {useTranslation} from 'react-i18next'
 
 export default () => {
-  const {t} = useTranslation('helpers')
+  const {t} = useTranslation('common')
   return (
     <div>
       <h1>404</h1>
