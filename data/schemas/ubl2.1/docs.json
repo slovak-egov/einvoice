@@ -1,0 +1,51 @@
+{
+  "ubl:Invoice":{
+    "cardinality":{"from":"1","to":"1"},
+    "name":"ubl:Invoice",
+    "description":{"en":"Invoice root element","sk":"Základný tag faktúry"},
+    "children":["cac:InvoicePeriod","cac:AccountingSupplierParty"]
+  },
+  "cac:AccountingSupplierParty":{
+    "cardinality":{"from":"1","to":"1"},
+    "name":"cac:AccountingSupplierParty",
+    "description":{
+      "en":"A group of business terms providing information about the Seller.",
+      "sk":"Skupina obchodných podmienok poskytujúcich informácie o Predávajúcom."
+    },
+    "businessTerms": "BG-4",
+    "children":["cac:Party"]
+  },
+  "cac:Party":{
+    "cardinality":{"from":"1","to":"1"},
+    "name":"cac:Party",
+    "description":{"en":"", "sk":""},
+    "children":["cac:PartyName"],
+    "rules": ["supplier.undefined"]
+  },
+  "cac:PartyName":{
+    "cardinality":{"from":"0","to":"1"},
+    "name":"cac:Party",
+    "description":{"en":"", "sk":""},
+    "rules": ["supplier.name.undefined"]
+  },
+  "cac:InvoicePeriod":{
+    "cardinality":{"from":"0","to":"1"},
+    "name":"cac:InvoicePeriod",
+    "description":{
+      "en":"A group of business terms providing information on the invoice period. Also called delivery period. If the group is used, the invoiceing period start date and/or end date must be used.",
+      "sk":"Skupina obchodných podmienok poskytujúcich informácie o fakturačnom období. Tiež sa nazýva dodacia lehota. Ak sa použije skupina, musí sa použiť dátum začatia alebo koniec dátumu fakturácie."
+    },
+    "businessTerms": "BG-14",
+    "children":["cbc:StartDate"]
+  },
+  "cbc:StartDate":{
+    "cardinality":{"from":"0","to":"1"},
+    "name":"cbc:StartDate",
+    "exampleValue": "2017-10-01",
+    "description":{
+      "en":"The date when the Invoice period starts. Format = \"YYYY-MM-DD\".",
+      "sk":"Dátum začiatku fakturačného obdobia. Formát = \"YYYY-MM-DD\"."
+    },
+    "businessTerms": "BT-73"
+  }
+}

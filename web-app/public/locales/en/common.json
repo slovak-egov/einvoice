@@ -1,4 +1,5 @@
 {
+  "error": "Error",
   "close": "Close",
   "invoice": "Invoice",
   "format": "Format",
@@ -32,7 +33,7 @@
   "supplied": "Supplied",
   "download": "Download",
   "loadMore": "Load more",
-  "invoiceValidation": "Invoice validation",
+  "invoiceDocumentation": "Invoice documentation",
   "auth": {
     "title": "Unauthorized access",
     "description": "You have no permission to view this page"
@@ -43,6 +44,23 @@
   },
   "loading": {
     "title": "Processing request"
+  },
+  "invoiceDocs": {
+    "home": "Home",
+    "cardinality": {
+      "full": "Cardinality",
+      "short": "Card"
+    },
+    "description": "Description",
+    "name": "Name",
+    "childElements": "Child elements",
+    "rules": "Rules",
+    "syntax": "Syntax",
+    "defaultValue": "Default value",
+    "exampleValue": "Example value",
+    "businessTerms": "Business terms",
+    "context": "Context",
+    "usage": "Usage"
   },
   "topBar": {
     "title": "E-invoice",

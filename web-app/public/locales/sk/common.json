@@ -1,4 +1,5 @@
 {
+  "error": "Chyba",
   "close": "Zavrieť",
   "invoice": "Faktúra",
   "format": "Formát",
@@ -32,7 +33,7 @@
   "supplied": "Odoslané",
   "download": "Stiahnuť",
   "loadMore": "Načítaj viac",
-  "invoiceValidation": "Validácia faktúr",
+  "invoiceDocumentation": "Dokumentácia faktúr",
   "auth": {
     "title": "Nepovolený prístup",
     "description": "Nemáte povolenie na prezeranie tejto stránky"
@@ -43,6 +44,23 @@
   },
   "loading": {
     "title": "Procesujem žiadosť"
+  },
+  "invoiceDocs": {
+    "home": "Domov",
+    "cardinality": {
+      "full": "Počet",
+      "short": "Poč"
+    },
+    "description": "Popis",
+    "name": "Názov",
+    "childElements": "Potomkovia",
+    "rules": "Pravidlá",
+    "syntax": "Syntax",
+    "defaultValue": "Predvolená hodnota",
+    "exampleValue": "Ukážková hodnota",
+    "businessTerms": "Obchodné podmienky",
+    "context": "Kontext",
+    "Usage": "Použitie"
   },
   "topBar": {
     "title": "E-faktúra",
