@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns="http://gov.sk/SKTalkMessage" attributeFormDefault="unqualified" elementFormDefault="qualified"
+            targetNamespace="http://gov.sk/SKTalkMessage" version="3.0" id="SKTalkMessage"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:element name="SKTalkMessage">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="EnvelopeVersion" type="xsd:string"/>
+                <xsd:element name="Header" minOccurs="1" maxOccurs="1">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="MessageInfo" minOccurs="1" maxOccurs="1">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="Class" minOccurs="1" maxOccurs="1">
+                                            <xsd:simpleType>
+                                                <xsd:restriction base="UnicodeNameString">
+                                                    <xsd:minLength value="4"/>
+                                                    <xsd:maxLength value="256"/>
+                                                </xsd:restriction>
+                                            </xsd:simpleType>
+                                        </xsd:element>
+                                        <xsd:element name="PospID" minOccurs="0" maxOccurs="1">
+                                            <xsd:simpleType>
+                                                <xsd:restriction base="xsd:string">
+                                                    <xsd:minLength value="1"/>
+                                                    <xsd:maxLength value="256"/>
+                                                </xsd:restriction>
+                                            </xsd:simpleType>
+                                        </xsd:element>
+                                        <xsd:element name="PospVersion" minOccurs="0" maxOccurs="1">
+                                            <xsd:simpleType>
+                                                <xsd:restriction base="xsd:string">
+                                                    <xsd:minLength value="1"/>
+                                                    <xsd:maxLength value="256"/>
+                                                </xsd:restriction>
+                                            </xsd:simpleType>
+                                        </xsd:element>
+                                        <xsd:element name="MessageID" type="GuidString" minOccurs="1" maxOccurs="1"/>
+                                        <xsd:element name="CorrelationID" type="GuidString" minOccurs="1" maxOccurs="1"/>
+                                        <xsd:element name="ReferenceID" type="GuidString" minOccurs="0" maxOccurs="1"/>
+                                        <xsd:element name="BusinessID" minOccurs="0" maxOccurs="1">
+                                            <xsd:simpleType>
+                                                <xsd:restriction base="xsd:string">
+                                                    <xsd:minLength value="0"/>
+                                                    <xsd:maxLength value="256"/>
+                                                </xsd:restriction>
+                                            </xsd:simpleType>
+                                        </xsd:element>
+                                        <xsd:element name="ChannelInfo" type="ChannelInfoType" minOccurs="0" maxOccurs="1"/>
+                                        <xsd:element name="ChannelInfoReply" type="ChannelInfoType" minOccurs="0" maxOccurs="1"/>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                            <xsd:element name="SenderInfo" minOccurs="0" maxOccurs="1">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="SecurityMethod" minOccurs="0" maxOccurs="1">
+                                            <xsd:simpleType>
+                                                <xsd:restriction base="xsd:string"/>
+                                            </xsd:simpleType>
+                                        </xsd:element>
+                                        <xsd:element name="SecurityToken" minOccurs="0" maxOccurs="1">
+                                            <xsd:complexType>
+                                                <xsd:sequence>
+                                                    <xsd:any minOccurs="0" maxOccurs="unbounded"/>
+                                                </xsd:sequence>
+                                            </xsd:complexType>
+                                        </xsd:element>
+                                        <xsd:element name="Identity" minOccurs="0" maxOccurs="1">
+                                            <xsd:complexType>
+                                                <xsd:sequence>
+                                                    <xsd:any minOccurs="0" maxOccurs="unbounded"/>
+                                                </xsd:sequence>
+                                            </xsd:complexType>
+                                        </xsd:element>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                            <xsd:element name="RoutingInfo" minOccurs="0" maxOccurs="1">
+                                <xsd:complexType>
+                                    <xsd:sequence minOccurs="0">
+                                        <xsd:element name="Component" minOccurs="0" maxOccurs="unbounded">
+                                            <xsd:complexType>
+                                                <xsd:sequence>
+                                                    <xsd:element name="URI" type="xsd:anyURI"/>
+                                                    <xsd:element name="Product" type="xsd:string" minOccurs="0"/>
+                                                    <xsd:element name="Version" type="xsd:string" minOccurs="0"/>
+                                                    <xsd:element name="Timestamp" type="xsd:dateTime" minOccurs="0"/>
+                                                    <xsd:element name="ProcessingInfo" minOccurs="0" maxOccurs="unbounded">
+                                                        <xsd:complexType>
+                                                            <xsd:sequence>
+                                                                <xsd:element name="RaisedBy" type="xsd:string"/>
+                                                                <xsd:element name="Number" type="xsd:integer" minOccurs="0"/>
+                                                                <xsd:element name="Type">
+                                                                    <xsd:simpleType>
+                                                                        <xsd:restriction base="xsd:string">
+                                                                            <xsd:enumeration value="debug"/>
+                                                                            <xsd:enumeration value="error"/>
+                                                                            <xsd:enumeration value="fatal"/>
+                                                                            <xsd:enumeration value="info"/>
+                                                                            <xsd:enumeration value="warn"/>
+                                                                        </xsd:restriction>
+                                                                    </xsd:simpleType>
+                                                                </xsd:element>
+                                                                <xsd:element name="Text" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                                                                <xsd:element name="Location" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                                                            </xsd:sequence>
+                                                        </xsd:complexType>
+                                                    </xsd:element>
+                                                    <xsd:element name="ComponentSignature" minOccurs="0" maxOccurs="1">
+                                                        <xsd:complexType>
+                                                            <xsd:sequence/>
+                                                        </xsd:complexType>
+                                                    </xsd:element>
+                                                </xsd:sequence>
+                                            </xsd:complexType>
+                                        </xsd:element>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+                <xsd:element name="Body" minOccurs="0" maxOccurs="1">
+                    <xsd:complexType>
+                        <xsd:sequence><!--Za any objekt sa vklada Msg. Containert ako standardne definovana UPVS sprava-->
+                            <xsd:any minOccurs="0" maxOccurs="unbounded" namespace="##any" processContents="lax"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:simpleType name="UnicodeNameString">
+        <xsd:restriction base="xsd:string">
+            <xsd:pattern value="[\p{L}\p{Nd}_\-\(\)\{\}]*"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="GuidString">
+        <xsd:restriction base="xsd:string">
+            <xsd:pattern value="([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:complexType name="ChannelInfoType">
+        <xsd:sequence minOccurs="0">
+            <xsd:element name="Channel" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="ChannelInfoURI" type="xsd:anyURI"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>

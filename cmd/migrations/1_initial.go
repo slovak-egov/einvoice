@@ -12,10 +12,9 @@ func init() {
 			CREATE TABLE users (
 				id SERIAL PRIMARY KEY,
 				created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-				slovensko_sk_uri VARCHAR (100) NOT NULL UNIQUE,
+				upvs_uri VARCHAR (100) NOT NULL UNIQUE,
 				name VARCHAR (100) NOT NULL,
-				service_account_public_key TEXT NOT NULL DEFAULT '',
-				email VARCHAR (100) NOT NULL DEFAULT ''
+				service_account_public_key TEXT NOT NULL DEFAULT ''
 			);
 		`)
 
@@ -28,6 +27,7 @@ func init() {
 			CREATE TABLE invoices (
 				id SERIAL PRIMARY KEY,
 				created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+				created_by INTEGER NOT NULL references users,
 				issue_date DATE NOT NULL,
 				sender VARCHAR (100) NOT NULL,
 				receiver VARCHAR (100) NOT NULL,
@@ -35,10 +35,9 @@ func init() {
 				price DECIMAL NOT NULL,
 				customer_ico VARCHAR(20) NOT NULL,
 				supplier_ico VARCHAR(20) NOT NULL,
-				created_by INTEGER NOT NULL,
-				CONSTRAINT fk_created_by
-					  FOREIGN KEY(created_by)
-					  REFERENCES users(id)
+				is_public BOOLEAN NOT NULL,
+				test BOOLEAN NOT NULL DEFAULT FALSE,
+				notifications_sent BOOLEAN NOT NULL DEFAULT FALSE
 			);
 		`)
 
@@ -49,24 +48,18 @@ func init() {
 		log.Println("Creating table substitutes")
 		_, err = db.Exec(`
 			CREATE TABLE substitutes (
-				owner_id INTEGER,
-				substitute_id INTEGER,
+				owner_id INTEGER references users,
+				substitute_id INTEGER references users,
 				created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-				CONSTRAINT fk_substitute_id
-					  FOREIGN KEY(substitute_id)
-					  REFERENCES users(id),
-				CONSTRAINT fk_owner_id
-					  FOREIGN KEY(owner_id)
-					  REFERENCES users(id),
 				PRIMARY KEY (owner_id, substitute_id)
 			);
 		`)
 
 		return err
 	}, func(db migrations.DB) error {
-		log.Println("Dropping table invoices & users & substitutes")
+		log.Println("Dropping table substitutes & invoices & users")
 		_, err := db.Exec(`
-			DROP TABLE invoices, users, substitutes;
+			DROP TABLE substitutes, invoices, users;
 		`)
 
 		return err

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://schemas.gov.sk/core/MessageContainer/1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://schemas.gov.sk/core/MessageContainer/1.0" elementFormDefault="qualified">
+    <xs:element name="MessageContainer">
+        <xs:annotation>
+            <xs:documentation>Hlavný element predstavujúci elektronickú správu.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="MessageId" type="guid">
+                    <xs:annotation>
+                        <xs:documentation>Jednoznačný identifikátor elektronickej správy.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="SenderId" type="idIdentity">
+                    <xs:annotation>
+                        <xs:documentation>Jednoznačný identifikátor odosielateľa elektronickej správy.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="RecipientId" type="idIdentity">
+                    <xs:annotation>
+                        <xs:documentation>Jednoznačný identifikátor prijímateľa elektronickej správy.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="MessageType" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation>Typ elektronickej správy. Identifikuje typ podania, rozhodnutia a podobne. Číselníková hodnota.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="MessageSubject" type="xs:string" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>Predmet elektronickej správy, vypĺňa odosielateľ. Môže byť definované podľa MessageType.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="SenderBusinessReference" type="xs:string" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>Spisová značka odosielateľa elektronickej správy.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="RecipientBusinessReference" type="xs:string" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>Spisová značka prijímateľa elektronickej správy.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="Object" type="object" maxOccurs="unbounded">
+                    <xs:annotation>
+                        <xs:documentation>Predstavuje jeden objekt elektronickej správy. Obsahuje metadáta, ktoré bližšie určujú typ objektu a samotné dáta objektu. Dáta objektu sú buď voforme vnoreného XML v inom namespace alebo ako Base64Binary zakódované dáta. Tento formát určuje atribút Encoding. Samotný typ obsah určuje atribút MimeType, ktorý v prípade xml aj bližšie určuje aky formát predstavuje.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="object" mixed="true">
+        <xs:sequence>
+            <xs:annotation>
+                <xs:documentation>Predstavuje jeden objekt elektronickej správy.</xs:documentation>
+            </xs:annotation>
+            <xs:any namespace="##any" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Vnorený formulár vo vlastnom namespace.</xs:documentation>
+                </xs:annotation>
+            </xs:any>
+        </xs:sequence>
+        <xs:attribute name="Id" type="guid" use="required">
+            <xs:annotation>
+                <xs:documentation>Identifikátor objektu (GUID) -generovaná hodnota, kvôli referencovaniu.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="Name" type="xs:string" use="optional">
+            <xs:annotation>
+                <xs:documentation>Názov objektu, obyčajne názov pôvodného súboru.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="Description" type="xs:string" use="optional">
+            <xs:annotation>
+                <xs:documentation>Popis objektu, určený na zobrazenie.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="Class" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>Trieda objektu, slúži na identifikovanie typu, resp. účelu. Je to číselníková hodnota.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="IsSigned" type="xs:boolean" use="optional">
+            <xs:annotation>
+                <xs:documentation>Príznak, či objekt je podpísaný.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="MimeType" type="mimeType" use="required">
+            <xs:annotation>
+                <xs:documentation>Typ obsahu objektu, určuje dátový formát objektu.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="Encoding" type="encoding" use="required">
+            <xs:annotation>
+                <xs:documentation>Kódovanie obsahu a spôsob interpretácie dát. Povolené hodnoty XML a Base64.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:simpleType name="idIdentity">
+        <xs:restriction base="xs:anyURI"/>
+    </xs:simpleType>
+    <xs:simpleType name="messageType">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="guid">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="mimeType">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="encoding">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="XML"/>
+            <xs:enumeration value="Base64"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

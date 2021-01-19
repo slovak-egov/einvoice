@@ -5,10 +5,6 @@
   "cancel": "Zrušiť",
   "save": "Uložiť",
   "edit": "Upraviť",
-  "email": {
-    "label": "E-mail",
-    "tooltip": "Na túto emailovú adresu vám budú zasielané vaše (vystavené a prijaté) faktúry"
-  },
   "accountPublicKey": {
     "label": "Verejny kľúč k vášmu účtu",
     "tooltip": "Kľúč, ktorým overíme vašu totožnosť pri prihlasovaní pomocou API"
@@ -17,7 +13,7 @@
   "submit": "Odovzdaj",
   "filters": "Filtre",
   "search": "Hľadaj",
-  "uploadInvoice": "Nahraj faktúru",
+  "upload": "Nahraj",
   "userId": {
     "label": "Identifikačné číslo používateľa",
     "tooltip": "Identifikačné číslo"

@@ -101,12 +101,6 @@ export default () => {
           />
         </Form.Group>
         <EditableField
-          actualValue={loggedUser.email}
-          label={t('email.label')}
-          tooltipText={t('email.tooltip')}
-          save={(email) => updateUserData({email})}
-        />
-        <EditableField
           actualValue={loggedUser.serviceAccountPublicKey}
           label={t('accountPublicKey.label')}
           tooltipText={t('accountPublicKey.tooltip')}
