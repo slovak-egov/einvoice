@@ -13,6 +13,7 @@
     "bootstrap": "^4.5.2",
     "classnames": "^2.2.6",
     "es6-error": "^4.1.1",
+    "eslint-config-vacuumlabs": "^1.9.0",
     "i18next": "^19.8.4",
     "i18next-browser-languagedetector": "^6.0.1",
     "i18next-http-backend": "^1.0.21",
@@ -50,8 +51,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "eslint-config-vacuumlabs": "^1.9.0"
   }
 }

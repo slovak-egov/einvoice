@@ -1,0 +1,9 @@
+FROM node:14.15-alpine
+
+WORKDIR /app
+
+COPY ./invoice-validator /app
+
+RUN npm i --production
+
+CMD [ "npm", "start" ]

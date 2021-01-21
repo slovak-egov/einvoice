@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/slovak-egov/einvoice/internal/upvsMock"
+	"github.com/slovak-egov/einvoice/internal/upvs/mock"
 )
 
 func main() {

@@ -11,8 +11,5 @@ export JELASTIC_HOME=~/jelastic
 
 deploy applications
 ```shell script
-./dev-scripts/jelastic/apiserver-deploy.sh
-./dev-scripts/jelastic/cleanupworker-deploy.sh
-./dev-scripts/jelastic/notificationworker-deploy.sh
-./dev-scripts/jelastic/web-app-deploy.sh
+./dev-scripts/jelastic/deploy.sh ${service_name}
 ```
