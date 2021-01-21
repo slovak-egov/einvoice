@@ -1,7 +1,8 @@
 import {useCallback} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
-import {NavLink, useLocation} from 'react-router-dom'
-import {Card, Table} from 'react-bootstrap'
+import {useLocation} from 'react-router-dom'
+import {LinkContainer} from 'react-router-bootstrap'
+import {Card, Nav, Table} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import classnames from 'classnames'
 import {get} from 'lodash'
@@ -56,7 +57,9 @@ export default ({
                   <td>{invoices[invoiceId].price}</td>
                   <td>{invoices[invoiceId].format}</td>
                   <td>
-                    <NavLink to={`/invoices/${invoiceId}`}>detail</NavLink>
+                    <LinkContainer to={`/invoices/${invoiceId}`}>
+                      <Nav.Link>detail</Nav.Link>
+                    </LinkContainer>
                   </td>
                 </tr>
               ))}
