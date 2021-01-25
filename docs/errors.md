@@ -32,7 +32,7 @@
 | authorization.apiKey.publicKey.invalid | 401 | Cannot parse stored public key |  |
 | authorization.apiKey.sign.invalid | 401 | Signature is invalid | |
 | authorization.bearer.invalid | 401 | Cannot parse bearer token | |
-| authorization.slovenskoSk.request.failed | 424 | SlovenskoSk login request failed | |
+| authorization.upvs.request.failed | 424 | ÚPVS login request failed | |
 | invoice.payload.invalid | 400 | Cannot parse data | Error message |
 | invoice.file.parsingError | 400 | Cannot parse invoice file | Error message |
 | invoice.test.invalid | 400 | Cannot parse *test* field | Error message |

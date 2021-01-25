@@ -45,11 +45,11 @@ const defaultExtraQuery = new URLSearchParams({
 const filterValidator = (q) => q.get('supplied') === 'true' || q.get('received') === 'true'
 
 export default () => {
-  const {t} = useTranslation('TopBar')
+  const {t} = useTranslation('common')
 
   return (
     <InvoiceList
-      title={t('tabs.myInvoices')}
+      title={t('topBar.myInvoices')}
       path={['myInvoicesScreen']}
       CustomFilter={Filter}
       areCustomFilterFieldsValid={filterValidator}
