@@ -15,9 +15,9 @@ paths:
     get:
       tags:
         - Auth
-      summary: Authenticate user with slovensko.sk token
+      summary: Authenticate user with ÚPVS (slovensko.sk) token
       security:
-        - slovenskoSkOboTokenAuth: []
+        - upvsOboTokenAuth: []
       responses:
         '200':
           $ref: '#/components/responses/Login'
@@ -41,7 +41,7 @@ paths:
     get:
       tags:
         - Auth
-      summary: Redirect to slovensko.sk logout
+      summary: Redirect to ÚPVS (slovensko.sk) logout
       description: |
         Redirect to ÚPVS and invalidate OBO token.
         If OBO token is already invalid redirect to ÚPVS callback directly
@@ -58,9 +58,9 @@ paths:
         '401':
           $ref: '#/components/responses/Error'
 
-  /users/{user_id}:
+  /users/{userId}:
     parameters:
-      - name: user_id
+      - name: userId
         in: path
         description: ID of user to be affected
         required: true
@@ -102,9 +102,9 @@ paths:
           $ref: '#/components/responses/Error'
         '401':
           $ref: '#/components/responses/Error'
-  /users/{user_id}/substitutes:
+  /users/{userId}/substitutes:
     parameters:
-      - name: user_id
+      - name: userId
         in: path
         description: ID of user to be affected
         required: true
@@ -169,14 +169,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SubstituteIds'
-  /users/{user_id}/organizations:
+  /users/{userId}/organizations:
     get:
       tags:
         - Users
       summary: Get substituted organizations
       description: Get list of IČOs that requested user can create invoices on behalf of
       parameters:
-        - name: user_id
+        - name: userId
           in: path
           description: User ID
           required: true
@@ -192,13 +192,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SubstitutedOrganizations'
-  /users/{user_id}/invoices:
+  /users/{userId}/invoices:
     get:
       tags:
         - Users
       summary: Get all invoices requested user can view
       parameters:
-        - name: user_id
+        - name: userId
           in: path
           description: Get invoices of user with this user ID
           required: true
@@ -272,7 +272,7 @@ paths:
           $ref: '#/components/responses/Error'
         '429':
           $ref: '#/components/responses/Error'
-  /invoices/{invoice_id}:
+  /invoices/{invoiceId}:
     get:
       security:
         - sessionAuth: []
@@ -281,7 +281,7 @@ paths:
         - Invoices
       summary: Get invoice meta data
       parameters:
-        - name: invoice_id
+        - name: invoiceId
           in: path
           description: Invoice ID
           required: true
@@ -298,7 +298,7 @@ paths:
           $ref: '#/components/responses/Error'
         '404':
           $ref: '#/components/responses/Error'
-  /invoices/{invoice_id}/detail:
+  /invoices/{invoiceId}/detail:
     get:
       security:
         - sessionAuth: []
@@ -307,7 +307,7 @@ paths:
         - Invoices
       summary: Get invoice content
       parameters:
-        - name: invoice_id
+        - name: invoiceId
           in: path
           description: Invoice ID
           required: true
@@ -324,7 +324,7 @@ paths:
           $ref: '#/components/responses/Error'
         '404':
           $ref: '#/components/responses/Error'
-  /invoices/{invoice_id}/visualization:
+  /invoices/{invoiceId}/visualization:
     get:
       security:
         - sessionAuth: []
@@ -333,7 +333,7 @@ paths:
         - Invoices
       summary: Get invoice visualization
       parameters:
-        - name: invoice_id
+        - name: invoiceId
           in: path
           description: Invoice ID
           required: true
@@ -353,8 +353,8 @@ paths:
           $ref: '#/components/responses/Error'
 components:
   securitySchemes:
-    slovenskoSkOboTokenAuth:
-      description: OBO token received from slovensko.sk
+    upvsOboTokenAuth:
+      description: OBO token received from ÚPVS (slovensko.sk)
       type: http
       scheme: bearer
       bearerFormat: JWT

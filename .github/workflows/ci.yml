@@ -21,8 +21,8 @@ jobs:
           JAVASCRIPT_ES_CONFIG_FILE: ../../../github/workspace/web-app/client/.eslintrc
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  apiserver_tests:
-    name: Apiserver tests
+  tests:
+    name: Tests
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -55,14 +55,12 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
       - name: Download dependencies
-        run: cd apiserver && go get -v -t -d ./...
+        run: go get -v -t -d ./...
       - name: Run migrations
         run: |
-          go run ./migrations init
-          go run ./migrations up
+          go run ./cmd/migrations init
+          go run ./cmd/migrations up
       - name: Create local storage
         run: mkdir storage
-      - name: Run apiserver tests
-        run: cd apiserver && go test -v ./...
-      - name: Run notification worker tests
-        run: cd notificationWorker && go test -v ./...
+      - name: Run einvoice tests
+        run: go test -v ./...

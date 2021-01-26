@@ -54,7 +54,7 @@ const EditableField = ({actualValue, label, save, tooltipText, ...props}) => {
 }
 
 export default () => {
-  const {t} = useTranslation(['common', 'TopBar'])
+  const {t} = useTranslation('common')
 
   const newSubstituteId = useSelector(newSubstituteIdSelector)
   const loggedUser = useSelector(getLoggedUser)
@@ -89,7 +89,7 @@ export default () => {
   return (
     <Card className="m-1">
       <Card.Header className="bg-primary text-white text-center" as="h3">
-        {t('TopBar:tabs.accountSettings')}
+        {t('topBar.accountSettings')}
       </Card.Header>
       <Card.Body>
         <Form.Group>

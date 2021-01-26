@@ -14,17 +14,14 @@ RUN go mod download
 
 COPY . .
 
-# Unit tests
-# RUN CGO_ENABLED=0 go test -v ./apiserver
-
-RUN go build -o /tmp/out/apiserver ./apiserver
+RUN go build -o /tmp/out/apiserver ./cmd/apiserver
 
 # Start fresh from a smaller image
 FROM alpine:3.12
 RUN apk add --no-cache ca-certificates
 RUN apk update && apk add --no-cache libxml2 libxslt-dev
 
-COPY --from=build_base /tmp/out/apiserver /app/apiserver
+COPY --from=build_base /tmp/out/apiserver /app/server
 COPY --from=build_base /tmp/einvoice/xml /xml
 
-CMD ["/app/apiserver"]
+CMD ["/app/server"]

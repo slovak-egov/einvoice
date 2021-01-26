@@ -47,5 +47,14 @@
   },
   "loading": {
     "title": "Processing request"
+  },
+  "topBar": {
+    "title": "E-invoice",
+    "publicInvoices": "Public invoices",
+    "createInvoice": "Create invoice",
+    "accountSettings": "Account settings",
+    "myInvoices": "My invoices",
+    "logout": "Logout",
+    "login": "Login"
   }
 }

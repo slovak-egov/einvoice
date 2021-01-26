@@ -47,5 +47,14 @@
   },
   "loading": {
     "title": "Procesujem žiadosť"
+  },
+  "topBar": {
+    "title": "E-faktúra",
+    "publicInvoices": "Verejné faktúry",
+    "createInvoice": "Vytvoriť faktúru",
+    "accountSettings": "Nastavenia účtu",
+    "myInvoices": "Moje faktúry",
+    "logout": "Odhlásiť",
+    "login": "Prihlásiť"
   }
 }

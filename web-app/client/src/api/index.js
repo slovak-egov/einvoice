@@ -16,7 +16,7 @@ export default class Api {
     }
   }
 
-  loginWithSlovenskoSkToken = (token) =>
+  login = (token) =>
     this.apiRequest({
       route: '/login',
       headers: {

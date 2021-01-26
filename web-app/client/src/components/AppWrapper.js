@@ -5,7 +5,7 @@ import {useDispatch} from 'react-redux'
 import {Route, Switch} from 'react-router-dom'
 import {Spinner} from 'react-bootstrap'
 import App from './App'
-import {loginWithSlovenskoSkToken, logout} from '../actions/users'
+import {login, logout} from '../actions/users'
 
 const CenteredSpinner = () => (
   <div className="Modal">
@@ -19,7 +19,7 @@ const LoginCallback = ({history, location}) => {
   useEffect(() => {
     (async () => {
       const urlParams = new URLSearchParams(location.search)
-      if (await dispatch(loginWithSlovenskoSkToken(urlParams.get('token')))) {
+      if (await dispatch(login(urlParams.get('token')))) {
         history.push('/account')
       } else {
         history.push('/')

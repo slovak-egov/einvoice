@@ -58,10 +58,10 @@ export const updateUser = (data) => loadingWrapper(
   }
 )
 
-export const loginWithSlovenskoSkToken = (token) => (
+export const login = (token) => (
   async (dispatch, getState, {api}) => {
     try {
-      const userData = await api.loginWithSlovenskoSkToken(token)
+      const userData = await api.login(token)
       localStorage.setItem('sessionToken', userData.token)
       localStorage.setItem('userId', userData.id)
       localStorage.setItem('oboToken', token)
