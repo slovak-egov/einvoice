@@ -3,8 +3,11 @@ package upvs
 import (
 	goContext "context"
 	"encoding/json"
+	"io"
 	"io/ioutil"
 	"net/http"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/slovak-egov/einvoice/pkg/context"
 )
@@ -23,9 +26,9 @@ func (c *Connector) GetUser(ctx goContext.Context, oboToken string) (*User, erro
 	response, err := c.sendRequest(
 		ctx,
 		&Request{
-			"GET",
-			"/api/upvs/user/info",
-			map[string]string{"Authorization": "Bearer "+signedOboToken},
+			method:  "GET",
+			url:     "/api/upvs/user/info",
+			headers: map[string]string{"Authorization": "Bearer "+signedOboToken},
 		},
 	)
 	if err != nil {
@@ -44,10 +47,11 @@ type Request struct {
 	method  string
 	url     string
 	headers map[string]string
+	body    io.Reader
 }
 
 func (c *Connector) sendRequest(ctx goContext.Context, request *Request) ([]byte, error) {
-	upvsReq, err := http.NewRequest(request.method, c.baseUrl + request.url, nil)
+	upvsReq, err := http.NewRequest(request.method, c.baseUrl + request.url, request.body)
 	if err != nil {
 		context.GetLogger(ctx).WithField("error", err.Error()).Error("upvs.sendRequest.preparation.failed")
 		return nil, err
@@ -59,16 +63,11 @@ func (c *Connector) sendRequest(ctx goContext.Context, request *Request) ([]byte
 
 	upvsRes, err := c.client.Do(upvsReq)
 	if err != nil {
-		context.GetLogger(ctx).WithField("error", err.Error()).Error("upvs.sendRequest.failed")
+		context.GetLogger(ctx).WithFields(log.Fields{
+			"error":      err.Error(),
+			"requestUrl": request.url,
+		}).Error("upvs.sendRequest.failed")
 		return nil, &UpvsError{err.Error()}
-	}
-
-	if upvsRes.StatusCode != http.StatusOK {
-		context.GetLogger(ctx).
-			WithField("status", upvsRes.StatusCode).
-			Error("upvs.sendRequest.errorStatusCode")
-
-		return nil, &UpvsError{"UPVS responded with: " + upvsRes.Status}
 	}
 
 	defer upvsRes.Body.Close()
@@ -77,6 +76,18 @@ func (c *Connector) sendRequest(ctx goContext.Context, request *Request) ([]byte
 	if err != nil {
 		context.GetLogger(ctx).WithField("error", err.Error()).Error("upvs.sendRequest.readResponse.failed")
 		return nil, err
+	}
+
+	if upvsRes.StatusCode != http.StatusOK {
+		context.GetLogger(ctx).
+			WithFields(log.Fields{
+				"requestUrl": request.url,
+				"status":     upvsRes.StatusCode,
+				"body":       string(body),
+			}).
+			Error("upvs.sendRequest.errorStatusCode")
+
+		return nil, &UpvsError{"ÚPVS responded with: " + upvsRes.Status}
 	}
 
 	return body, nil

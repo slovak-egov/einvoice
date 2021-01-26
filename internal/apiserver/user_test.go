@@ -59,18 +59,16 @@ func TestPatchUser(t *testing.T) {
 
 	expectedUserResponse := map[string]interface{}{
 		"name":                    user.Name,
-		"slovenskoSkUri":          user.SlovenskoSkUri,
+		"upvsUri":                 user.UpvsUri,
 		"serviceAccountPublicKey": *user.ServiceAccountPublicKey,
-		"email":                   *user.Email,
 	}
 
 	var flagtests = []struct {
 		name        string
 		requestBody map[string]string
 	}{
-		{"Set email", map[string]string{"email": "a@mfsr.sk"}},
-		{"Delete email", map[string]string{"email": ""}},
-		{"Set more props", map[string]string{"email": "a@mfsr.sk", "serviceAccountPublicKey": "1"}},
+		{"Set public key", map[string]string{"serviceAccountPublicKey": "1"}},
+		{"Delete public key", map[string]string{"serviceAccountPublicKey": ""}},
 	}
 	for _, tt := range flagtests {
 		t.Run(tt.name, func(t *testing.T) {

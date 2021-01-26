@@ -5,6 +5,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 
+	"github.com/slovak-egov/einvoice/internal/upvs"
 	"github.com/slovak-egov/einvoice/pkg/dbutil"
 	"github.com/slovak-egov/einvoice/pkg/loggerutil"
 )
@@ -22,6 +23,9 @@ var devConfig = Configuration{
 		LogLevel: logrus.DebugLevel,
 		Format:   "text",
 	},
+	Upvs: upvs.Configuration{
+		Url: "https://dev.upvs.einvoice.mfsr.sk",
+	},
 }
 
 var prodConfig = Configuration{
@@ -31,15 +35,15 @@ var prodConfig = Configuration{
 		Port: 5432,
 		Name: "einvoice",
 	},
-	Mail: MailConfiguration{
-		Email: "einvoice.dev@gmail.com",
-	},
 	Logger: loggerutil.Configuration{
 		LogLevel:     logrus.InfoLevel,
 		ElasticIndex: "notification-worker",
 		Format:       "json",
 	},
 	LocalStorageBasePath: "/data",
+	Upvs: upvs.Configuration{
+		Url: "https://dev.upvs.einvoice.mfsr.sk",
+	},
 }
 
 var testConfig = Configuration{

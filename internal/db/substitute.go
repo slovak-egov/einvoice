@@ -89,7 +89,7 @@ func (c *Connector) GetUserSubstitutes(ctx goContext.Context, ownerId int) ([]in
 func (c *Connector) IsValidSubstitute(ctx goContext.Context, userId int, ico string) error {
 	count, err := c.GetDb(ctx).Model(&entity.User{}).
 		Join("LEFT JOIN substitutes ON owner_id = id").
-		Where("slovensko_sk_uri = ?", entity.IcoToUri(ico)).
+		Where("upvs_uri = ?", entity.IcoToUri(ico)).
 		WhereGroup(func(q *orm.Query) (*orm.Query, error) {
 			return q.WhereOr("substitute_id = ?", userId).WhereOr("id = ?", userId), nil
 		}).

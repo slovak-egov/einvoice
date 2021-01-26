@@ -6,8 +6,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/go-ozzo/ozzo-validation/v4"
-	"github.com/go-ozzo/ozzo-validation/v4/is"
 	"github.com/gorilla/mux"
 
 	"github.com/slovak-egov/einvoice/internal/entity"
@@ -51,16 +49,9 @@ func (a *App) getUser(res http.ResponseWriter, req *http.Request) error {
 
 type PatchUserRequest struct {
 	ServiceAccountPublicKey *string `json:"serviceAccountPublicKey"`
-	Email                   *string `json:"email"`
 }
 
 func (u *PatchUserRequest) Validate() error {
-	err := validation.ValidateStruct(u,
-		validation.Field(&u.Email, is.Email),
-	)
-	if err != nil {
-		return err
-	}
 	if *u == (PatchUserRequest{}) {
 		return errors.New("Body should not be empty")
 	}
@@ -89,7 +80,6 @@ func (a *App) updateUser(res http.ResponseWriter, req *http.Request) error {
 	user, err := a.db.UpdateUser(req.Context(), &entity.User{
 		Id:                      requestedUserId,
 		ServiceAccountPublicKey: requestBody.ServiceAccountPublicKey,
-		Email:                   requestBody.Email,
 	})
 	if err != nil {
 		return err

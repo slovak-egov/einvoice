@@ -74,7 +74,7 @@ export default () => {
                     <FileUploader
                       accept=".xml"
                       buttonStyle={{margin: 0}}
-                      buttonText={t('uploadInvoice')}
+                      buttonText={t('upload')}
                       onChange={updateInvoiceData}
                     />}
                 </div>

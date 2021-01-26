@@ -5,7 +5,6 @@ go 1.15
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/elastic/go-elasticsearch/v7 v7.10.0
-	github.com/go-ozzo/ozzo-validation/v4 v4.3.0
 	github.com/go-pg/migrations/v8 v8.0.1
 	github.com/go-pg/pg/v10 v10.7.3
 	github.com/go-redis/redis/v8 v8.4.0
@@ -14,7 +13,6 @@ require (
 	github.com/gorilla/mux v1.7.2
 	github.com/jung-kurt/gofpdf v1.16.2
 	github.com/lestrrat-go/libxml2 v0.0.0-20200828014403-a52d2c78ffc6
-	github.com/mailjet/mailjet-apiv3-go v0.0.0-20201009050126-c24bc15a9394
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/sirupsen/logrus v1.7.0
 	github.com/stretchr/testify v1.6.1

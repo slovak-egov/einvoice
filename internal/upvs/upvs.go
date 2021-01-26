@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	log "github.com/sirupsen/logrus"
@@ -42,18 +43,25 @@ func getPrivateKey(privateKey string) *rsa.PrivateKey {
 	signKey, err := jwt.ParseRSAPrivateKeyFromPEM([]byte(signBytes))
 	if err != nil {
 		log.WithField("error", err.Error()).Fatal("upvs.keys.parsePrivate")
+		return nil
 	}
 
 	return signKey
 }
 
 func getPublicKey(publicKey string) *rsa.PublicKey {
+	if publicKey == "" {
+		log.Warn("upvs.keys.parsePublic.undefined")
+		return nil
+	}
+
 	verifyBytes := "-----BEGIN RSA PUBLIC KEY-----\n" +
 		strings.ReplaceAll(publicKey, " ", string(byte(10))) +
 		"\n-----END RSA PUBLIC KEY-----\n"
 	verifyKey, err := jwt.ParseRSAPublicKeyFromPEM([]byte(verifyBytes))
 	if err != nil {
 		log.WithField("error", err).Fatal("upvs.keys.parsePublic")
+		return nil
 	}
 
 	return verifyKey
@@ -79,6 +87,7 @@ func (c *Connector) signOboToken(ctx goContext.Context, oboToken string) (string
 
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
+		context.GetLogger(ctx).WithField("error", err.Error()).Debug("upvs.signOboToken.parseClaims.failed")
 		return "", &InvalidTokenError{"Cannot parse claims"}
 	}
 
@@ -92,4 +101,14 @@ func (c *Connector) signOboToken(ctx goContext.Context, oboToken string) (string
 	delete(upvsToken.Header, "typ")
 
 	return upvsToken.SignedString(c.apiTokenPrivate)
+}
+
+func (c *Connector) signApiToken() (string, error) {
+	token := jwt.NewWithClaims(jwt.SigningMethodRS256, jwt.MapClaims{
+		"exp": time.Now().Add(time.Hour).Unix(),
+		"jti": random.String(32),
+	})
+	token.Header["alg"] = "RS256"
+
+	return token.SignedString(c.apiTokenPrivate)
 }

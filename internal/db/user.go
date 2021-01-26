@@ -39,17 +39,17 @@ func (c *Connector) UpdateUser(ctx goContext.Context, updatedData *entity.User) 
 	return updatedData, nil
 }
 
-func (c *Connector) GetOrCreateUser(ctx goContext.Context, slovenskoSkUri, name string) (*entity.User, error) {
-	user := &entity.User{SlovenskoSkUri: slovenskoSkUri, Name: name}
+func (c *Connector) GetOrCreateUser(ctx goContext.Context, upvsUri, name string) (*entity.User, error) {
+	user := &entity.User{UpvsUri: upvsUri, Name: name}
 	_, err := c.GetDb(ctx).Model(user).
-		Where("slovensko_sk_uri = ?", slovenskoSkUri).
+		Where("upvs_uri = ?", upvsUri).
 		SelectOrInsert()
 
 	if err != nil {
 		context.GetLogger(ctx).WithFields(log.Fields{
-			"error":          err.Error(),
-			"name":           name,
-			"slovenskoSkUri": slovenskoSkUri,
+			"error":   err.Error(),
+			"name":    name,
+			"upvsUri": upvsUri,
 		}).Error("db.createUser")
 
 		return nil, err
@@ -64,8 +64,8 @@ func (c *Connector) accessibleUrisQuery(ctx goContext.Context, userId int) *orm.
 		WhereGroup(func(q *orm.Query) (*orm.Query, error) {
 			return q.WhereOr("substitute_id = ?", userId).WhereOr("id = ?", userId), nil
 		}).
-		Where("slovensko_sk_uri LIKE 'ico://sk/%'").
-		Column("slovensko_sk_uri")
+		Where("upvs_uri LIKE 'ico://sk/%'").
+		Column("upvs_uri")
 }
 
 func (c *Connector) GetUserOrganizationIds(ctx goContext.Context, userId int) ([]string, error) {
@@ -91,29 +91,30 @@ func (c *Connector) GetUserOrganizationIds(ctx goContext.Context, userId int) ([
 	return icos, nil
 }
 
-func (c *Connector) GetUserEmails(ctx goContext.Context, icos []string) ([]string, error) {
-	uris := entity.IcosToUris(icos)
+func (c *Connector) GetUserUris(ctx goContext.Context, icos []string) ([]string, error) {
+	requestedUris := entity.IcosToUris(icos)
 
-	organizationIds := c.GetDb(ctx).Model((*entity.User)(nil)).
-		Where("slovensko_sk_uri IN (?)", pg.In(uris)).
-		Column("id").
-		Distinct()
+	userIds := c.GetDb(ctx).Model((*entity.User)(nil)).
+		Where("upvs_uri IN (?)", pg.In(requestedUris)).
+		Column("id")
 
-	emails := []string{}
+	allUris := []string{}
 	err := c.GetDb(ctx).Model((*entity.User)(nil)).
-		Column("email").
-		Where("email <> ''").
+		Column("upvs_uri").
 		Distinct().
-		With("organizations", organizationIds).
+		With("user_ids", userIds).
 		Join("LEFT JOIN substitutes ON substitute_id = id").
 		WhereGroup(func(q *orm.Query) (*orm.Query, error) {
-			return q.WhereOr("owner_id IN (SELECT * FROM organizations)").WhereOr("id IN (SELECT * FROM organizations)"), nil
+			return q.WhereOr("owner_id IN (SELECT * FROM user_ids)").WhereOr("id IN (SELECT * FROM user_ids)"), nil
 		}).
-		Select(&emails)
+		Select(&allUris)
 
 	if err != nil {
-		context.GetLogger(ctx).WithField("error", err.Error()).Error("db.getUserEmails.failed")
+		context.GetLogger(ctx).WithFields(log.Fields{
+			"error":         err.Error(),
+			"requestedUris": requestedUris,
+		}).Error("db.getUserUris.failed")
 		return nil, err
 	}
-	return emails, nil
+	return allUris, nil
 }

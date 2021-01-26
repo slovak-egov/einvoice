@@ -8,6 +8,8 @@ import (
 const charset = "abcdefghijklmnopqrstuvwxyz" +
 	"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
+const digits = "0123456789"
+
 var seededRand = rand.New(
 	rand.NewSource(time.Now().UnixNano()))
 
@@ -21,4 +23,8 @@ func stringWithCharset(length int, charset string) string {
 
 func String(length int) string {
 	return stringWithCharset(length, charset)
+}
+
+func Digits(length int) string {
+	return stringWithCharset(length, digits)
 }

@@ -401,12 +401,9 @@ components:
         id:
           type: integer
           example: 8498081
-        slovenskoSkUri:
+        upvsUri:
           type: string
           example: rc://sk/8314451298_tisici_janko
-        email:
-          type: string
-          example: test@test.example.com
         name:
           type: string
         serviceAccountPublicKey:
@@ -541,9 +538,6 @@ components:
           schema:
             type: object
             properties:
-              email:
-                type: string
-                example: test@test.com
               serviceAccountPublicKey:
                 type: string
     CreateInvoice:

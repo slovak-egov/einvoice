@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SKTalkMessage xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchemainstance" xmlns="http://gov.sk/SKTalkMessage">
+    <EnvelopeVersion>3.0</EnvelopeVersion>
+    <Header>
+        <MessageInfo>
+            <Class>EGOV_NOTIFICATION</Class>
+            <PospID>Doc.GeneralAgenda</PospID>
+            <PospVersion>1.2</PospVersion>
+            <MessageID>1994bd70-0021-485b-9dd4-9c9010a12f6a</MessageID>
+            <CorrelationID>77b7ad42-4fcb-44db-8d01-684ffbdb6906</CorrelationID>
+            <ChannelInfoReply>
+                <Channel>
+                    <ChannelInfoURI>ico://sk/11248756</ChannelInfoURI>
+                </Channel>
+            </ChannelInfoReply>
+        </MessageInfo>
+    </Header>
+    <Body>
+        <MessageContainer xmlns="http://schemas.gov.sk/core/MessageContainer/1.0">
+            <MessageId>1994bd70-0021-485b-9dd4-9c9010a12f6a</MessageId>
+            <SenderId>ico://sk/11248756</SenderId>
+            <RecipientId>ico://sk/11190993</RecipientId>
+            <MessageType>Doc.GeneralAgenda</MessageType>
+            <MessageSubject>Notifikacna sprava</MessageSubject>
+            <Object Id="18168846-3167-4e43-8312-222c5d109b8f" Name="" Description="" Class="FORM" IsSigned="false" MimeType="application/x-eform-xml" Encoding="XML">
+                <GeneralAgenda xmlns="http://schemas.gov.sk/form/Doc.GeneralAgenda/1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <subject>Invoice 45668764</subject>
+                    <text>Prijata faktura c. 45668764</text>
+                </GeneralAgenda>
+            </Object>
+            <Object Id="e706743c-0000-401c-ad73-06e593cb769f"
+                    Name="invoice-45668764.xml"
+                    Class="ATTACHMENT"
+                    IsSigned="false"
+                    MimeType="application/xml"
+                    Encoding="Base64">
+                PEludm9pY2UgeG1sbnM9InVybjpvYXNpczpuYW1lczpzcGVjaWZpY2F0aW9uOnVibDpzY2hlbWE6eHNkOkludm9pY2UtMiIKICAgICAgICAgeG1sbnM6Y2JjPSJ1cm46b2FzaXM6bmFtZXM6c3BlY2lmaWNhdGlvbjp1Ymw6c2NoZW1hOnhzZDpDb21tb25CYXNpY0NvbXBvbmVudHMtMiIKICAgICAgICAgeG1sbnM6Y2FjPSJ1cm46b2FzaXM6bmFtZXM6c3BlY2lmaWNhdGlvbjp1Ymw6c2NoZW1hOnhzZDpDb21tb25BZ2dyZWdhdGVDb21wb25lbnRzLTIiPgogICAgPGNiYzpJRD4xMjM8L2NiYzpJRD4KICAgIDxjYmM6SXNzdWVEYXRlPjIwMTEtMDktMjI8L2NiYzpJc3N1ZURhdGU+CiAgICA8Y2FjOkludm9pY2VQZXJpb2Q+CiAgICAgICAgPGNiYzpTdGFydERhdGU+MjAxMS0wOC0wMTwvY2JjOlN0YXJ0RGF0ZT4KICAgICAgICA8Y2JjOkVuZERhdGU+MjAxMS0wOC0zMTwvY2JjOkVuZERhdGU+CiAgICA8L2NhYzpJbnZvaWNlUGVyaW9kPgogICAgPGNhYzpBY2NvdW50aW5nU3VwcGxpZXJQYXJ0eT4KICAgICAgICA8Y2FjOlBhcnR5PgogICAgICAgICAgICA8Y2FjOlBhcnR5SWRlbnRpZmljYXRpb24+CiAgICAgICAgICAgICAgICA8Y2JjOklEIHNjaGVtZUlEPSIwMTU4Ij4xMTE5MDk5MzwvY2JjOklEPgogICAgICAgICAgICA8L2NhYzpQYXJ0eUlkZW50aWZpY2F0aW9uPgogICAgICAgICAgICA8Y2FjOlBhcnR5TmFtZT4KICAgICAgICAgICAgICAgIDxjYmM6TmFtZT5DdXN0b20gQ290dGVyIFBpbnM8L2NiYzpOYW1lPgogICAgICAgICAgICA8L2NhYzpQYXJ0eU5hbWU+CiAgICAgICAgICAgIDxjYWM6UG9zdGFsQWRkcmVzcz4KICAgICAgICAgICAgICAgIDxjYmM6U3RyZWV0TmFtZT5NYWluIHN0cmVldCAyLCBCdWlsZGluZyA0PC9jYmM6U3RyZWV0TmFtZT4KICAgICAgICAgICAgICAgIDxjYmM6QnVpbGRpbmdOdW1iZXI+NDwvY2JjOkJ1aWxkaW5nTnVtYmVyPgogICAgICAgICAgICAgICAgPGNiYzpDaXR5TmFtZT5CaWcgY2l0eTwvY2JjOkNpdHlOYW1lPgogICAgICAgICAgICAgICAgPGNiYzpQb3N0YWxab25lPjU0MzIxPC9jYmM6UG9zdGFsWm9uZT4KICAgICAgICAgICAgICAgIDxjYWM6Q291bnRyeT4KICAgICAgICAgICAgICAgICAgICA8Y2JjOklkZW50aWZpY2F0aW9uQ29kZT5TSzwvY2JjOklkZW50aWZpY2F0aW9uQ29kZT4KICAgICAgICAgICAgICAgIDwvY2FjOkNvdW50cnk+CiAgICAgICAgICAgIDwvY2FjOlBvc3RhbEFkZHJlc3M+CiAgICAgICAgPC9jYWM6UGFydHk+CiAgICA8L2NhYzpBY2NvdW50aW5nU3VwcGxpZXJQYXJ0eT4KICAgIDxjYWM6QWNjb3VudGluZ0N1c3RvbWVyUGFydHk+CiAgICAgICAgPGNhYzpQYXJ0eT4KICAgICAgICAgICAgPGNhYzpQYXJ0eUlkZW50aWZpY2F0aW9uPgogICAgICAgICAgICAgICAgPGNiYzpJRCBzY2hlbWVJRD0iMDE1OCI+MjIyMjIyMjI8L2NiYzpJRD4KICAgICAgICAgICAgPC9jYWM6UGFydHlJZGVudGlmaWNhdGlvbj4KICAgICAgICAgICAgPGNhYzpQYXJ0eU5hbWU+CiAgICAgICAgICAgICAgICA8Y2JjOk5hbWU+Tm9ydGggQW1lcmljYW4gVmVlYmxlZmV0emVyPC9jYmM6TmFtZT4KICAgICAgICAgICAgPC9jYWM6UGFydHlOYW1lPgogICAgICAgICAgICA8Y2FjOlBvc3RhbEFkZHJlc3M+CiAgICAgICAgICAgICAgICA8Y2JjOlN0cmVldE5hbWU+TWFpbiBzdHJlZXQgMiwgQnVpbGRpbmcgMTwvY2JjOlN0cmVldE5hbWU+CiAgICAgICAgICAgICAgICA8Y2JjOkJ1aWxkaW5nTnVtYmVyPjE8L2NiYzpCdWlsZGluZ051bWJlcj4KICAgICAgICAgICAgICAgIDxjYmM6Q2l0eU5hbWU+QmlnIGNpdHk8L2NiYzpDaXR5TmFtZT4KICAgICAgICAgICAgICAgIDxjYmM6UG9zdGFsWm9uZT41NDMyMTwvY2JjOlBvc3RhbFpvbmU+CiAgICAgICAgICAgICAgICA8Y2FjOkNvdW50cnk+CiAgICAgICAgICAgICAgICAgICAgPGNiYzpJZGVudGlmaWNhdGlvbkNvZGU+U0s8L2NiYzpJZGVudGlmaWNhdGlvbkNvZGU+CiAgICAgICAgICAgICAgICA8L2NhYzpDb3VudHJ5PgogICAgICAgICAgICA8L2NhYzpQb3N0YWxBZGRyZXNzPgogICAgICAgIDwvY2FjOlBhcnR5PgogICAgPC9jYWM6QWNjb3VudGluZ0N1c3RvbWVyUGFydHk+CiAgICA8Y2FjOkxlZ2FsTW9uZXRhcnlUb3RhbD4KICAgICAgICA8Y2JjOlBheWFibGVBbW91bnQgY3VycmVuY3lJRD0iQ0FEIj4xMDAuMDA8L2NiYzpQYXlhYmxlQW1vdW50PgogICAgPC9jYWM6TGVnYWxNb25ldGFyeVRvdGFsPgogICAgPGNhYzpJbnZvaWNlTGluZT4KICAgICAgICA8Y2JjOklEPjE8L2NiYzpJRD4KICAgICAgICA8Y2JjOkxpbmVFeHRlbnNpb25BbW91bnQgY3VycmVuY3lJRD0iQ0FEIj4xMDAuMDA8L2NiYzpMaW5lRXh0ZW5zaW9uQW1vdW50PgogICAgICAgIDxjYWM6SXRlbT4KICAgICAgICAgICAgPGNiYzpEZXNjcmlwdGlvbj5Db3R0ZXIgcGluLCBNSUwtU1BFQzwvY2JjOkRlc2NyaXB0aW9uPgogICAgICAgIDwvY2FjOkl0ZW0+CiAgICA8L2NhYzpJbnZvaWNlTGluZT4KPC9JbnZvaWNlPgo=
+            </Object>
+            <Object Id="e706743c-0001-401c-ad73-06e593cb769f"
+                    Name="invoice-45668764.pdf"
+                    Class="ATTACHMENT"
+                    IsSigned="false"
+                    MimeType="application/pdf"
+                    Encoding="Base64">
+                JVBERi0xLjMKMyAwIG9iago8PC9UeXBlIC9QYWdlCi9QYXJlbnQgMSAwIFIKL1Jlc291cmNlcyAyIDAgUgovQ29udGVudHMgNCAwIFI+PgplbmRvYmoKNCAwIG9iago8PC9GaWx0ZXIgL0ZsYXRlRGVjb2RlIC9MZW5ndGggMjczPj4Kc3RyZWFtCngBrJAxT8MwEIX3/Io30sXc2bETd4OqIBhKJSz2NLlAqrap0hQkfj2iSaVQsRDhxcvdu/d9hMeIsI5I2QQfESkiwn3/v0a3Add3pS10IbY0WcLO+0zilS5Sw4kXpwvy4so8Zu1gSBEhlJiH783UKoqRWKdSi1Dg6mH3Xle5gGmCsEY39Yd8dmqYP36za+Zio2J3avZ83O83lTQje/3G7dgq1qf0RbaVKWbHQ1tvMavbVhosq91hcK1vRKR872r2NAUze/LeDAbHQxtmlfKQumv0T9Tn+EvsRd20b7jZSlPl2Q4vIquNlNJ+/rh73r4QoPs3ENCZsoYUpSe7y6bKZQommiCsMQ/RVwAAAP//bha2JQplbmRzdHJlYW0KZW5kb2JqCjEgMCBvYmoKPDwvVHlwZSAvUGFnZXMKL0tpZHMgWzMgMCBSIF0KL0NvdW50IDEKL01lZGlhQm94IFswIDAgNTk1LjI4IDg0MS44OV0KPj4KZW5kb2JqCjUgMCBvYmoKPDwvVHlwZSAvRm9udAovQmFzZUZvbnQgL0hlbHZldGljYS1Cb2xkCi9TdWJ0eXBlIC9UeXBlMQovRW5jb2RpbmcgL1dpbkFuc2lFbmNvZGluZwo+PgplbmRvYmoKMiAwIG9iago8PAovUHJvY1NldCBbL1BERiAvVGV4dCAvSW1hZ2VCIC9JbWFnZUMgL0ltYWdlSV0KL0ZvbnQgPDwKL0ZmNWQyZGU1ZjNhNzE2OTlhZTRiMmQ4MzE3OWU2MmQwOWU2ZmM0MTI2IDUgMCBSCj4+Ci9YT2JqZWN0IDw8Cj4+Ci9Db2xvclNwYWNlIDw8Cj4+Cj4+CmVuZG9iago2IDAgb2JqCjw8Ci9Qcm9kdWNlciAo/v8ARgBQAEQARgAgADEALgA3KQovQ3JlYXRpb25EYXRlIChEOjIwMjEwMTIyMTEyNzM4KQovTW9kRGF0ZSAoRDoyMDIxMDEyMjExMjczOCkKPj4KZW5kb2JqCjcgMCBvYmoKPDwKL1R5cGUgL0NhdGFsb2cKL1BhZ2VzIDEgMCBSCi9OYW1lcyA8PAovRW1iZWRkZWRGaWxlcyA8PCAvTmFtZXMgWwogIApdID4+Cj4+Cj4+CmVuZG9iagp4cmVmCjAgOAowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDA0MzAgMDAwMDAgbiAKMDAwMDAwMDYxOCAwMDAwMCBuIAowMDAwMDAwMDA5IDAwMDAwIG4gCjAwMDAwMDAwODcgMDAwMDAgbiAKMDAwMDAwMDUxNyAwMDAwMCBuIAowMDAwMDAwNzc5IDAwMDAwIG4gCjAwMDAwMDA4OTIgMDAwMDAgbiAKdHJhaWxlcgo8PAovU2l6ZSA4Ci9Sb290IDcgMCBSCi9JbmZvIDYgMCBSCj4+CnN0YXJ0eHJlZgo5ODkKJSVFT0YK
+            </Object>
+        </MessageContainer>
+    </Body>
+</SKTalkMessage>
