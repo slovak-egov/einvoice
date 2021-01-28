@@ -1,7 +1,6 @@
 package visualization
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/jung-kurt/gofpdf"
@@ -10,44 +9,69 @@ import (
 	"github.com/lestrrat-go/libxml2/types"
 )
 
-var pageHeight float64 = 297
 var lineHeight float64 = 5
 var tab = "|   "
-var topMargin float64 = 20
-var bottomMargin float64 = 20
-var leftMargin float64 = 20
+var font = "Arial"
 
-type Lines struct {
-	lines []string
+type Line struct {
+	level  int
+	name   string
+	value  string
+	isAttr bool
 }
 
-func (ls *Lines) add(l string) {
+type Lines struct {
+	lines []Line
+}
+
+func (ls *Lines) add(l Line) {
 	ls.lines = append(ls.lines, l)
 }
 
 func writeLines(pdf *gofpdf.Fpdf, lines *Lines) {
-	var linesPerPage = int((pageHeight - topMargin - bottomMargin) / lineHeight)
-	var lineNumber = 0
+	_, pageHeight := pdf.GetPageSize()
+	pdf.AddPage()
 
-	for i, line := range lines.lines {
-		if i%linesPerPage == 0 {
-			lineNumber = 0
+	for _, line := range lines.lines {
+
+		if pdf.GetX() > pageHeight {
 			pdf.AddPage()
 		}
 
-		pdf.Text(leftMargin, topMargin+lineHeight*float64(lineNumber), line)
-		lineNumber += 1
+		pdf.SetTextColor(255, 196, 196)
+		for i := 0; i < line.level-1; i++ {
+			pdf.Write(lineHeight, tab)
+		}
+
+		if line.isAttr {
+			pdf.SetTextColor(191, 143, 31)
+		} else {
+			pdf.SetTextColor(186, 24, 24)
+		}
+		pdf.SetFontStyle("B")
+		if line.isAttr {
+			pdf.Write(lineHeight, "@")
+		}
+		pdf.Write(lineHeight, line.name)
+		pdf.SetFontStyle("")
+
+		pdf.SetTextColor(0, 0, 0)
+		if line.value != "" {
+			pdf.Write(lineHeight, ": ")
+			pdf.Write(lineHeight, line.value)
+		}
+
+		pdf.Write(lineHeight, "\n")
 	}
 }
 
 func generateLines(n types.Node, lines *Lines, level int) error {
 	if n.NodeType() == clib.ElementNode {
-		baseLine := strings.Repeat(tab, level-1)
-		line := baseLine + n.NodeName()
+		line := Line{level, n.NodeName(), "", false}
 		if child, err := n.FirstChild(); err == nil && child.NodeType() == clib.TextNode {
 			value := strings.TrimSpace(child.TextContent())
 			if value != "" {
-				line = line + ": " + value
+				line.value = value
 			}
 		}
 
@@ -60,7 +84,7 @@ func generateLines(n types.Node, lines *Lines, level int) error {
 			}
 			for _, attr := range attrs {
 				if !strings.HasPrefix(attr.NodeName(), "xsi:") {
-					lines.add(fmt.Sprintf("%s%sattr:%s: %s", baseLine, tab, attr.NodeName(), attr.TextContent()))
+					lines.add(Line{level + 1, attr.NodeName(), attr.TextContent(), true})
 				}
 			}
 		}
@@ -93,7 +117,7 @@ func GeneratePdf(invoiceBytes []byte) (*File, error) {
 	}
 
 	pdf := gofpdf.New("P", "mm", "A4", "")
-	pdf.SetFont("Arial", "", lineHeight)
+	pdf.SetFont(font, "", lineHeight)
 	pdf.SetFontUnitSize(lineHeight)
 
 	writeLines(pdf, lines)
