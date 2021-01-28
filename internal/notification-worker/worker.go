@@ -97,7 +97,15 @@ func (w *Worker) notifyInvoiceParties(ctx goContext.Context, invoice entity.Invo
 		return err
 	}
 
-	invoicePdfFile := visualization.GeneratePdf(&invoice)
+	invoicePdfFile, err := visualization.GeneratePdf(invoiceXml)
+	if err != nil {
+		context.GetLogger(ctx).
+			WithField("invoiceId", invoice.Id).
+			Error("worker.checkInvoices.notifyInvoiceParties.generatePdf.failed")
+
+		return err
+	}
+
 	var b bytes.Buffer
 	err = invoicePdfFile.Write(&b)
 	if err != nil {
