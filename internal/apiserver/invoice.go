@@ -175,7 +175,7 @@ func (a *App) getInvoiceVisualization(res http.ResponseWriter, req *http.Request
 
 	invoiceFile, err := a.storage.GetInvoice(req.Context(), id)
 	if err != nil {
-		if _, ok := err.(*dbutil.NotFoundError); ok {
+		if _, ok := err.(*storage.NotFoundError); ok {
 			return handlerutil.NewNotFoundError("invoice.notFound")
 		}
 		return err
