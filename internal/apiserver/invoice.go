@@ -173,11 +173,22 @@ func (a *App) getInvoiceVisualization(res http.ResponseWriter, req *http.Request
 		return err
 	}
 
+	invoiceFile, err := a.storage.GetInvoice(req.Context(), id)
+	if err != nil {
+		if _, ok := err.(*dbutil.NotFoundError); ok {
+			return handlerutil.NewNotFoundError("invoice.notFound")
+		}
+		return err
+	}
+
 	if err := a.canUserViewInvoice(req.Context(), invoice); err != nil {
 		return err
 	}
 
-	pdfFile := visualization.Generate(invoice)
+	pdfFile, err := visualization.GeneratePdf(invoiceFile)
+	if err != nil {
+		return err
+	}
 
 	res.Header().Set("Content-Type", "application/pdf")
 	res.Header().Set("Content-Disposition", "attachment; filename=invoice-"+vars["id"]+".pdf")

@@ -2,36 +2,101 @@ package visualization
 
 import (
 	"fmt"
-	"strconv"
+	"strings"
 
 	"github.com/jung-kurt/gofpdf"
-
-	"github.com/slovak-egov/einvoice/internal/entity"
+	"github.com/lestrrat-go/libxml2"
+	"github.com/lestrrat-go/libxml2/clib"
+	"github.com/lestrrat-go/libxml2/types"
 )
 
-func Generate(inv *entity.Invoice) *File {
+var pageHeight float64 = 297
+var lineHeight float64 = 5
+var tab = "|   "
+var topMargin float64 = 20
+var bottomMargin float64 = 20
+var leftMargin float64 = 20
+
+type Lines struct {
+	lines []string
+}
+
+func (ls *Lines) add(l string) {
+	ls.lines = append(ls.lines, l)
+}
+
+func writeLines(pdf *gofpdf.Fpdf, lines *Lines) {
+	var linesPerPage = int((pageHeight - topMargin - bottomMargin) / lineHeight)
+	var lineNumber = 0
+
+	for i, line := range lines.lines {
+		if i%linesPerPage == 0 {
+			lineNumber = 0
+			pdf.AddPage()
+		}
+
+		pdf.Text(leftMargin, topMargin+lineHeight*float64(lineNumber), line)
+		lineNumber += 1
+	}
+}
+
+func generateLines(n types.Node, lines *Lines, level int) error {
+	if n.NodeType() == clib.ElementNode {
+		baseLine := strings.Repeat(tab, level-1)
+		line := baseLine + n.NodeName()
+		if child, err := n.FirstChild(); err == nil && child.NodeType() == clib.TextNode {
+			value := strings.TrimSpace(child.TextContent())
+			if value != "" {
+				line = line + ": " + value
+			}
+		}
+
+		lines.add(line)
+
+		if e, ok := n.(types.Element); ok {
+			attrs, err := e.Attributes()
+			if err != nil {
+				return err
+			}
+			for _, attr := range attrs {
+				if !strings.HasPrefix(attr.NodeName(), "xsi:") {
+					lines.add(fmt.Sprintf("%s%sattr:%s: %s", baseLine, tab, attr.NodeName(), attr.TextContent()))
+				}
+			}
+		}
+	}
+
+	children, err := n.ChildNodes()
+	if err != nil {
+		return err
+	}
+	for _, child := range children {
+		if err = generateLines(child, lines, level+1); err != nil {
+			return nil
+		}
+	}
+
+	return nil
+}
+
+func GeneratePdf(invoiceBytes []byte) (*File, error) {
+	xml, err := libxml2.Parse(invoiceBytes)
+	if err != nil {
+		return nil, err
+	}
+
+	lines := &Lines{}
+	err = generateLines(xml, lines, 0)
+
+	if err != nil {
+		return nil, err
+	}
+
 	pdf := gofpdf.New("P", "mm", "A4", "")
+	pdf.SetFont("Arial", "", lineHeight)
+	pdf.SetFontUnitSize(lineHeight)
 
-	pdf.AddPage()
+	writeLines(pdf, lines)
 
-	pdf.SetFont("Arial", "B", 30)
-	pdf.Text(30, 30, "Invoice "+strconv.Itoa(inv.Id))
-
-	pdf.SetFont("Arial", "B", 16)
-
-	pdf.SetFont("Arial", "B", 16)
-	pdf.Text(30, 70, "Supplier")
-	pdf.SetFont("Arial", "B", 10)
-	pdf.Text(30, 80, "Name: "+inv.Sender)
-	pdf.Text(30, 85, "ICO: "+inv.SupplierIco)
-
-	pdf.SetFont("Arial", "B", 16)
-	pdf.Text(110, 70, "Customer")
-	pdf.SetFont("Arial", "B", 10)
-	pdf.Text(110, 80, "Name: "+inv.Receiver)
-	pdf.Text(110, 85, "ICO: "+inv.CustomerIco)
-
-	pdf.Text(30, 110, fmt.Sprintf("Price: %v", inv.Price))
-
-	return &File{pdf}
+	return &File{pdf}, nil
 }

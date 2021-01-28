@@ -97,7 +97,7 @@ func (w *Worker) notifyInvoiceParties(ctx goContext.Context, invoice entity.Invo
 		return err
 	}
 
-	invoicePdfFile := visualization.Generate(&invoice)
+	invoicePdfFile := visualization.GeneratePdf(&invoice)
 	var b bytes.Buffer
 	err = invoicePdfFile.Write(&b)
 	if err != nil {
