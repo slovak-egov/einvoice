@@ -15,6 +15,7 @@ const getInitialState = () => ({
       format: invoiceFormats.UBL,
       test: false,
     },
+    form: null,
   },
   publicInvoicesScreen: {},
   myInvoicesScreen: {},

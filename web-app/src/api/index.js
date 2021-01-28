@@ -21,7 +21,6 @@ export default class Api {
   logout = () => this.apiRequest({route: '/logout'})
 
   getUbl21Docs = () => this.apiRequest({route: '/data/schemas/ubl2.1/docs.json'})
-  getInvoiceRulesDocs = () => this.apiRequest({route: '/data/rules/rules.json'})
 
   apiRequest = (params) => {
     // Add authorization header if logged in

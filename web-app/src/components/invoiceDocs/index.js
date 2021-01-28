@@ -2,8 +2,6 @@ import {Link, Redirect, Route, Switch, useLocation, useRouteMatch} from 'react-r
 import {Breadcrumb} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import Tag from './Tag'
-import RulesPage from './RulesPage'
-import RuleDetail from './RuleDetail'
 import Home from './Home'
 
 const UrlBreadcrumbItems = () => {
@@ -51,8 +49,6 @@ export default ({location, match}) => {
       </Breadcrumb>
       <Switch>
         <Route path={`${match.url}/syntax`} component={Tag} />
-        <Route exact path={`${match.url}/rules`} component={RulesPage} />
-        <Route exact path={`${match.url}/rules/:rule`} component={RuleDetail} />
         <Route component={Home} />
       </Switch>
     </div>

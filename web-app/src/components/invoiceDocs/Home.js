@@ -22,13 +22,6 @@ export default ({match}) => {
             </Button>
           </Link>
         </Row>
-        <Row className="justify-content-center">
-          <Link to={`${match.url}/rules`}>
-            <Button variant="secondary">
-              Rules
-            </Button>
-          </Link>
-        </Row>
       </Card.Body>
     </Card>
   )

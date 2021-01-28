@@ -28,3 +28,9 @@ export const getLogoutUrl = () =>
 
 export const exampleInvoiceUrl = (format, name) =>
   `${CONFIG.apiServerUrl}/data/examples/${format}/${name}.xml`
+
+export const rootAttributes = {
+  'xmlns': [{text: 'urn:oasis:names:specification:ubl:schema:xsd:Invoice-2'}],
+  'xmlns:cac': [{text: 'urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2'}],
+  'xmlns:cbc': [{text: 'urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2'}],
+}

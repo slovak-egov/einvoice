@@ -1,4 +1,6 @@
 {
+  "add": "Pridať",
+  "delete": "Odstrániť",
   "error": "Chyba",
   "close": "Zavrieť",
   "invoice": "Faktúra",
@@ -60,7 +62,9 @@
     "exampleValue": "Ukážková hodnota",
     "businessTerms": "Obchodné podmienky",
     "context": "Kontext",
-    "Usage": "Použitie"
+    "Usage": "Použitie",
+    "attributes": "Atribúty",
+    "dataType": "Dátový typ"
   },
   "topBar": {
     "title": "E-faktúra",
@@ -73,5 +77,7 @@
     "login": "Prihlásiť"
   },
   "submission": "Podanie",
-  "downloadVisualization": "Stiahni vizualizáciu"
+  "downloadVisualization": "Stiahni vizualizáciu",
+  "form": "Formulár",
+  "generateInvoice": "Vygeneruj faktúru"
 }

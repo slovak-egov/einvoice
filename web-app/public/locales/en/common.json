@@ -1,4 +1,6 @@
 {
+  "add": "Add",
+  "delete": "Delete",
   "error": "Error",
   "close": "Close",
   "invoice": "Invoice",
@@ -60,7 +62,9 @@
     "exampleValue": "Example value",
     "businessTerms": "Business terms",
     "context": "Context",
-    "usage": "Usage"
+    "usage": "Usage",
+    "attributes": "Attributes",
+    "dataType": "Data type"
   },
   "topBar": {
     "title": "E-invoice",
@@ -73,5 +77,7 @@
     "login": "Login"
   },
   "submission": "Submission",
-  "downloadVisualization": "Download visualization"
+  "downloadVisualization": "Download visualization",
+  "form": "Form",
+  "generateInvoice": "Generate invoice"
 }

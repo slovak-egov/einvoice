@@ -2,6 +2,8 @@ import './App.css'
 import {Suspense, useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {Redirect, Route, Switch} from 'react-router-dom'
+import {registerLocale} from 'react-datepicker'
+import sk from 'date-fns/locale/sk'
 import PublicInvoices from './PublicInvoices'
 import MyInvoices from './MyInvoices'
 import LandingPage from './landingPage'
@@ -18,6 +20,9 @@ import LoadingModal from './helpers/LoadingModal'
 import NotFound from './helpers/NotFound'
 import InvoiceDocumentation from './invoiceDocs'
 import {isLoadingSelector, isLoggingSelector} from '../state/common'
+
+// Load slovak translations for time
+registerLocale('sk', sk)
 
 export default () => {
   const isLoading = useSelector(isLoadingSelector)
