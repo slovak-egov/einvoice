@@ -15,56 +15,63 @@ var tabSize = 4
 var font = "Arial"
 var pageHeight float64
 
-func generateLines(n types.Node, level int, pdf *gofpdf.Fpdf) error {
-	if n.NodeType() == clib.ElementNode {
+func generateLines(currentNode types.Node, level int, pdf *gofpdf.Fpdf) error {
+	if currentNode.NodeType() == clib.ElementNode {
 		if pdf.GetX() > pageHeight {
 			pdf.AddPage()
 		}
 
+		// write padding
 		for i := 0; i < tabSize*(level-1); i++ {
 			pdf.Write(lineHeight, " ")
 		}
 
-		nodeNameParts := strings.Split(n.NodeName(), ":")
+		// write node name
+		nodeNameParts := strings.Split(currentNode.NodeName(), ":")
 		name := nodeNameParts[len(nodeNameParts)-1]
-		value := ""
-		if child, err := n.FirstChild(); err == nil && child.NodeType() == clib.TextNode {
-			value = strings.TrimSpace(child.TextContent())
-		}
-
+		// use red color
 		pdf.SetTextColor(186, 24, 24)
+		// use bold
 		pdf.SetFontStyle("B")
 		pdf.Write(lineHeight, name)
 		pdf.SetFontStyle("")
 		pdf.SetTextColor(0, 0, 0)
 
-		if value != "" {
-			pdf.Write(lineHeight, ": "+value)
+		// write value
+		// check if node contains value and write it
+		if child, err := currentNode.FirstChild(); err == nil && child.NodeType() == clib.TextNode {
+			pdf.Write(lineHeight, ": "+strings.TrimSpace(child.TextContent()))
 		}
 
+		// write attributes
+		// use yellow color
 		pdf.SetTextColor(191, 143, 31)
-		if e, ok := n.(types.Element); ok {
+		if e, ok := currentNode.(types.Element); ok {
 			attrs, err := e.Attributes()
 			if err != nil {
 				return err
 			}
 			for _, attr := range attrs {
-				if !strings.HasPrefix(attr.NodeName(), "xsi:") {
-					pdf.Write(lineHeight, fmt.Sprintf(" (%s=%s)", attr.NodeName(), attr.TextContent()))
+				// skip xsi attributes
+				if strings.HasPrefix(attr.NodeName(), "xsi:") {
+					continue
 				}
+				pdf.Write(lineHeight, fmt.Sprintf(" (%s=%s)", attr.NodeName(), attr.TextContent()))
 			}
 		}
+		pdf.SetTextColor(0, 0, 0)
 
+		// break line
 		pdf.Write(lineHeight, "\n")
 	}
 
-	children, err := n.ChildNodes()
+	children, err := currentNode.ChildNodes()
 	if err != nil {
 		return err
 	}
 	for _, child := range children {
 		if err = generateLines(child, level+1, pdf); err != nil {
-			return nil
+			return err
 		}
 	}
 
