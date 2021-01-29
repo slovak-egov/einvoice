@@ -1,6 +1,7 @@
 package visualization
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/jung-kurt/gofpdf"
@@ -10,73 +11,38 @@ import (
 )
 
 var lineHeight float64 = 5
-var tab = "|   "
+var tabSize = 4
 var font = "Arial"
+var pageHeight float64
 
-type Line struct {
-	level  int
-	name   string
-	value  string
-	isAttr bool
-}
-
-type Lines struct {
-	lines []Line
-}
-
-func (ls *Lines) add(l Line) {
-	ls.lines = append(ls.lines, l)
-}
-
-func writeLines(pdf *gofpdf.Fpdf, lines *Lines) {
-	_, pageHeight := pdf.GetPageSize()
-	pdf.AddPage()
-
-	for _, line := range lines.lines {
-
+func generateLines(n types.Node, level int, pdf *gofpdf.Fpdf) error {
+	if n.NodeType() == clib.ElementNode {
 		if pdf.GetX() > pageHeight {
 			pdf.AddPage()
 		}
 
-		pdf.SetTextColor(255, 196, 196)
-		for i := 0; i < line.level-1; i++ {
-			pdf.Write(lineHeight, tab)
+		for i := 0; i < tabSize*(level-1); i++ {
+			pdf.Write(lineHeight, " ")
 		}
 
-		if line.isAttr {
-			pdf.SetTextColor(191, 143, 31)
-		} else {
-			pdf.SetTextColor(186, 24, 24)
-		}
-		pdf.SetFontStyle("B")
-		if line.isAttr {
-			pdf.Write(lineHeight, "@")
-		}
-		pdf.Write(lineHeight, line.name)
-		pdf.SetFontStyle("")
-
-		pdf.SetTextColor(0, 0, 0)
-		if line.value != "" {
-			pdf.Write(lineHeight, ": ")
-			pdf.Write(lineHeight, line.value)
-		}
-
-		pdf.Write(lineHeight, "\n")
-	}
-}
-
-func generateLines(n types.Node, lines *Lines, level int) error {
-	if n.NodeType() == clib.ElementNode {
-		line := Line{level, n.NodeName(), "", false}
+		nodeNameParts := strings.Split(n.NodeName(), ":")
+		name := nodeNameParts[len(nodeNameParts)-1]
+		value := ""
 		if child, err := n.FirstChild(); err == nil && child.NodeType() == clib.TextNode {
-			value := strings.TrimSpace(child.TextContent())
-			if value != "" {
-				line.value = value
-			}
+			value = strings.TrimSpace(child.TextContent())
 		}
 
-		lines.add(line)
+		pdf.SetTextColor(186, 24, 24)
+		pdf.SetFontStyle("B")
+		pdf.Write(lineHeight, name)
+		pdf.SetFontStyle("")
+		pdf.SetTextColor(0, 0, 0)
 
+		if value != "" {
+			pdf.Write(lineHeight, ": "+value)
+		}
+
+		pdf.SetTextColor(191, 143, 31)
 		if e, ok := n.(types.Element); ok {
 			attrs, err := e.Attributes()
 			if err != nil {
@@ -84,10 +50,12 @@ func generateLines(n types.Node, lines *Lines, level int) error {
 			}
 			for _, attr := range attrs {
 				if !strings.HasPrefix(attr.NodeName(), "xsi:") {
-					lines.add(Line{level + 1, attr.NodeName(), attr.TextContent(), true})
+					pdf.Write(lineHeight, fmt.Sprintf(" (%s=%s)", attr.NodeName(), attr.TextContent()))
 				}
 			}
 		}
+
+		pdf.Write(lineHeight, "\n")
 	}
 
 	children, err := n.ChildNodes()
@@ -95,7 +63,7 @@ func generateLines(n types.Node, lines *Lines, level int) error {
 		return err
 	}
 	for _, child := range children {
-		if err = generateLines(child, lines, level+1); err != nil {
+		if err = generateLines(child, level+1, pdf); err != nil {
 			return nil
 		}
 	}
@@ -109,18 +77,17 @@ func GeneratePdf(invoiceBytes []byte) (*File, error) {
 		return nil, err
 	}
 
-	lines := &Lines{}
-	err = generateLines(xml, lines, 0)
-
-	if err != nil {
-		return nil, err
-	}
-
 	pdf := gofpdf.New("P", "mm", "A4", "")
 	pdf.SetFont(font, "", lineHeight)
 	pdf.SetFontUnitSize(lineHeight)
+	_, pageHeight = pdf.GetPageSize()
 
-	writeLines(pdf, lines)
+	pdf.AddPage()
+
+	err = generateLines(xml, 0, pdf)
+	if err != nil {
+		return nil, err
+	}
 
 	return &File{pdf}, nil
 }
