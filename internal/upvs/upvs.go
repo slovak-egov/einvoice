@@ -5,13 +5,13 @@ import (
 	"crypto/rsa"
 	"fmt"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/slovak-egov/einvoice/pkg/context"
+	"github.com/slovak-egov/einvoice/pkg/keys"
 	"github.com/slovak-egov/einvoice/pkg/random"
 )
 
@@ -24,47 +24,23 @@ type Connector struct {
 }
 
 func New(config Configuration) *Connector {
-	if config.ApiTokenPrivateKey == "" {
-		return nil
+	apiTokenPrivate, err := keys.GetPrivateKey(config.ApiTokenPrivateKey)
+	if err != nil {
+		log.WithField("error", err).Fatal("upvs.keys.apiTokenPrivate")
 	}
+
+	oboTokenPublic, err := keys.GetPublicKey(config.OboTokenPublicKey)
+	if err != nil {
+		log.WithField("error", err).Fatal("upvs.keys.oboTokenPublic")
+	}
+
 	return &Connector{
 		baseUrl:           config.Url,
-		apiTokenPrivate:   getPrivateKey(config.ApiTokenPrivateKey),
-		oboTokenPublic:    getPublicKey(config.OboTokenPublicKey),
+		apiTokenPrivate:   apiTokenPrivate,
+		oboTokenPublic:    oboTokenPublic,
 		client:            &http.Client{},
 		logoutCallbackUrl: config.LogoutCallbackUrl,
 	}
-}
-
-func getPrivateKey(privateKey string) *rsa.PrivateKey {
-	signBytes := "-----BEGIN RSA PRIVATE KEY-----\n" +
-		strings.ReplaceAll(privateKey, " ", string(byte(10))) +
-		"\n-----END RSA PRIVATE KEY-----\n"
-	signKey, err := jwt.ParseRSAPrivateKeyFromPEM([]byte(signBytes))
-	if err != nil {
-		log.WithField("error", err.Error()).Fatal("upvs.keys.parsePrivate")
-		return nil
-	}
-
-	return signKey
-}
-
-func getPublicKey(publicKey string) *rsa.PublicKey {
-	if publicKey == "" {
-		log.Warn("upvs.keys.parsePublic.undefined")
-		return nil
-	}
-
-	verifyBytes := "-----BEGIN RSA PUBLIC KEY-----\n" +
-		strings.ReplaceAll(publicKey, " ", string(byte(10))) +
-		"\n-----END RSA PUBLIC KEY-----\n"
-	verifyKey, err := jwt.ParseRSAPublicKeyFromPEM([]byte(verifyBytes))
-	if err != nil {
-		log.WithField("error", err).Fatal("upvs.keys.parsePublic")
-		return nil
-	}
-
-	return verifyKey
 }
 
 func (c *Connector) signOboToken(ctx goContext.Context, oboToken string) (string, error) {

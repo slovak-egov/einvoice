@@ -1,4 +1,4 @@
-package app
+package upvsMock
 
 import (
 	"fmt"

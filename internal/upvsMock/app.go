@@ -1,4 +1,4 @@
-package app
+package upvsMock
 
 import (
 	"crypto/rsa"
@@ -10,7 +10,7 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
-	"github.com/slovak-egov/einvoice/upvsDev/config"
+	"github.com/slovak-egov/einvoice/pkg/keys"
 )
 
 var corsOptions = []muxHandlers.CORSOption{
@@ -20,7 +20,7 @@ var corsOptions = []muxHandlers.CORSOption{
 }
 
 type App struct {
-	config          *config.Configuration
+	config          *Configuration
 	router          *mux.Router
 	OboTokenPrivate *rsa.PrivateKey
 	OboTokenPublic  *rsa.PublicKey
@@ -28,14 +28,29 @@ type App struct {
 }
 
 func NewApp() *App {
-	appConfig := config.New()
+	appConfig := New()
+
+	oboTokenPrivate, err := keys.GetPrivateKey(appConfig.OboTokenPrivateKey)
+	if err != nil {
+		log.WithField("error", err).Fatal("upvs.keys.oboTokenPrivate")
+	}
+
+	oboTokenPublic, err := keys.GetPublicKey(appConfig.OboTokenPublicKey)
+	if err != nil {
+		log.WithField("error", err).Fatal("upvs.keys.oboTokenPublic")
+	}
+
+	apiTokenPublic, err := keys.GetPublicKey(appConfig.ApiTokenPublicKey)
+	if err != nil {
+		log.WithField("error", err).Fatal("upvs.keys.apiTokenPublic")
+	}
 
 	a := &App{
 		config:          appConfig,
 		router:          mux.NewRouter(),
-		OboTokenPrivate: getPrivateKey(appConfig.OboTokenPrivateKey),
-		OboTokenPublic:  getPublicKey(appConfig.OboTokenPublicKey),
-		ApiTokenPublic:  getPublicKey(appConfig.ApiTokenPublicKey),
+		OboTokenPrivate: oboTokenPrivate,
+		OboTokenPublic:  oboTokenPublic,
+		ApiTokenPublic:  apiTokenPublic,
 	}
 
 	a.initializeHandlers()
@@ -55,6 +70,7 @@ func (a *App) initializeHandlers() {
 	registerHandler(a.router, "GET", "/login", a.handleLogin)
 	registerHandler(a.router, "GET", "/logout", a.handleLogout)
 	registerHandler(a.router, "GET", "/api/upvs/user/info", a.handleUserInfo)
+	registerHandler(a.router, "POST", "/api/sktalk/receive", a.handleSkTalkReceive)
 }
 
 func (a *App) Run() {
