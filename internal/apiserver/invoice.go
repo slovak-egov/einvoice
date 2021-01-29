@@ -101,6 +101,28 @@ func (a *App) canUserViewInvoice(ctx goContext.Context, invoice *entity.Invoice)
 	return handlerutil.NewForbiddenError("invoice.view.permission.missing")
 }
 
+func (a *App) getInvoiceFromDb(ctx goContext.Context, id int) (*entity.Invoice, error) {
+	invoice, err := a.db.GetInvoice(ctx, id)
+	if err != nil {
+		if _, ok := err.(*dbutil.NotFoundError); ok {
+			return nil, handlerutil.NewNotFoundError("invoice.notFound")
+		}
+		return nil, err
+	}
+	return invoice, nil
+}
+
+func (a *App) getInvoiceFromStorage(ctx goContext.Context, id int) ([]byte, error) {
+	invoice, err := a.storage.GetInvoice(ctx, id)
+	if err != nil {
+		if _, ok := err.(*storage.NotFoundError); ok {
+			return nil, handlerutil.NewNotFoundError("invoice.notFound")
+		}
+		return nil, err
+	}
+	return invoice, nil
+}
+
 func (a *App) getInvoice(res http.ResponseWriter, req *http.Request) error {
 	vars := mux.Vars(req)
 	id, err := strconv.Atoi(vars["id"])
@@ -108,11 +130,8 @@ func (a *App) getInvoice(res http.ResponseWriter, req *http.Request) error {
 		return InvoiceError("param.id.invalid").WithCause(err)
 	}
 
-	invoice, err := a.db.GetInvoice(req.Context(), id)
+	invoice, err := a.getInvoiceFromDb(req.Context(), id)
 	if err != nil {
-		if _, ok := err.(*dbutil.NotFoundError); ok {
-			return handlerutil.NewNotFoundError("invoice.notFound")
-		}
 		return err
 	}
 
@@ -131,11 +150,8 @@ func (a *App) getInvoiceXml(res http.ResponseWriter, req *http.Request) error {
 		return InvoiceError("params.id.invalid")
 	}
 
-	invoiceMeta, err := a.db.GetInvoice(req.Context(), id)
+	invoiceMeta, err := a.getInvoiceFromDb(req.Context(), id)
 	if err != nil {
-		if _, ok := err.(*dbutil.NotFoundError); ok {
-			return handlerutil.NewNotFoundError("invoice.notFound")
-		}
 		return err
 	}
 
@@ -143,19 +159,16 @@ func (a *App) getInvoiceXml(res http.ResponseWriter, req *http.Request) error {
 		return err
 	}
 
-	invoice, err := a.storage.GetInvoice(req.Context(), id)
+	invoice, err := a.getInvoiceFromStorage(req.Context(), id)
 	if err != nil {
-		if _, ok := err.(*storage.NotFoundError); ok {
-			return handlerutil.NewNotFoundError("invoice.notFound")
-		}
 		return err
 	}
 
 	res.Header().Set("Content-Type", "application/xml")
 	res.Header().Set("Content-Disposition", "attachment; filename=invoice-"+vars["id"]+".xml")
 	res.WriteHeader(http.StatusOK)
-	res.Write(invoice)
-	return nil
+	_, err = res.Write(invoice)
+	return err
 }
 
 func (a *App) getInvoiceVisualization(res http.ResponseWriter, req *http.Request) error {
@@ -165,19 +178,13 @@ func (a *App) getInvoiceVisualization(res http.ResponseWriter, req *http.Request
 		return InvoiceError("params.id.invalid")
 	}
 
-	invoice, err := a.db.GetInvoice(req.Context(), id)
+	invoice, err := a.getInvoiceFromDb(req.Context(), id)
 	if err != nil {
-		if _, ok := err.(*dbutil.NotFoundError); ok {
-			return handlerutil.NewNotFoundError("invoice.notFound")
-		}
 		return err
 	}
 
-	invoiceFile, err := a.storage.GetInvoice(req.Context(), id)
+	invoiceFile, err := a.getInvoiceFromStorage(req.Context(), id)
 	if err != nil {
-		if _, ok := err.(*storage.NotFoundError); ok {
-			return handlerutil.NewNotFoundError("invoice.notFound")
-		}
 		return err
 	}
 
