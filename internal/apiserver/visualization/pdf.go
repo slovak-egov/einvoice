@@ -10,9 +10,12 @@ import (
 	"github.com/lestrrat-go/libxml2/types"
 )
 
-var lineHeight float64 = 5
-var tabSize = 4
-var font = "Arial"
+const (
+	lineHeight = 5
+	tabSize    = 4
+	font       = "Arial"
+)
+
 var pageHeight float64
 
 func generateLines(currentNode types.Node, level int, pdf *gofpdf.Fpdf) error {
@@ -21,30 +24,29 @@ func generateLines(currentNode types.Node, level int, pdf *gofpdf.Fpdf) error {
 			pdf.AddPage()
 		}
 
-		// write padding
+		// Write padding
 		for i := 0; i < tabSize*(level-1); i++ {
 			pdf.Write(lineHeight, " ")
 		}
 
-		// write node name
+		// Write node name in bold red
 		nodeNameParts := strings.Split(currentNode.NodeName(), ":")
 		name := nodeNameParts[len(nodeNameParts)-1]
-		// use red color
 		pdf.SetTextColor(186, 24, 24)
-		// use bold
 		pdf.SetFontStyle("B")
 		pdf.Write(lineHeight, name)
+
+		// Reset font and text color for writing tag value
 		pdf.SetFontStyle("")
 		pdf.SetTextColor(0, 0, 0)
 
-		// write value
-		// check if node contains value and write it
+		// Write value
+		// Check if node contains value and write it
 		if child, err := currentNode.FirstChild(); err == nil && child.NodeType() == clib.TextNode {
 			pdf.Write(lineHeight, ": "+strings.TrimSpace(child.TextContent()))
 		}
 
-		// write attributes
-		// use yellow color
+		// Write tag attributes in yellow
 		pdf.SetTextColor(191, 143, 31)
 		if e, ok := currentNode.(types.Element); ok {
 			attrs, err := e.Attributes()
@@ -52,7 +54,7 @@ func generateLines(currentNode types.Node, level int, pdf *gofpdf.Fpdf) error {
 				return err
 			}
 			for _, attr := range attrs {
-				// skip xsi attributes
+				// Skip xsi attributes
 				if strings.HasPrefix(attr.NodeName(), "xsi:") {
 					continue
 				}
@@ -61,7 +63,7 @@ func generateLines(currentNode types.Node, level int, pdf *gofpdf.Fpdf) error {
 		}
 		pdf.SetTextColor(0, 0, 0)
 
-		// break line
+		// Break line
 		pdf.Write(lineHeight, "\n")
 	}
 
