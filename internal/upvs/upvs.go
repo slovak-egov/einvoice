@@ -24,6 +24,9 @@ type Connector struct {
 }
 
 func New(config Configuration) *Connector {
+	if config.ApiTokenPrivateKey == "" {
+		return nil
+	}
 	apiTokenPrivate, err := keys.GetPrivateKey(config.ApiTokenPrivateKey)
 	if err != nil {
 		log.WithField("error", err).Fatal("upvs.keys.apiTokenPrivate")
