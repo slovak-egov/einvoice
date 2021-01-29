@@ -12,7 +12,7 @@ import {formatSelector, invoiceSelector, isTestSelector} from '../state/createIn
 import {invoiceFormats} from '../utils/constants'
 
 export default () => {
-  const {t} = useTranslation(['common', 'TopBar', 'invoices'])
+  const {t} = useTranslation(['common', 'invoices'])
   const history = useHistory()
 
   const format = useSelector(formatSelector)
@@ -51,7 +51,7 @@ export default () => {
   return (
     <Card className="m-1">
       <Card.Header className="bg-primary text-white text-center" as="h3">
-        {t('TopBar:tabs.createInvoice')}
+        {t('topBar.createInvoice')}
       </Card.Header>
       <Card.Body>
         <Form>
@@ -74,7 +74,7 @@ export default () => {
                     <FileUploader
                       accept=".xml"
                       buttonStyle={{margin: 0}}
-                      buttonText={t('uploadInvoice')}
+                      buttonText={t('upload')}
                       onChange={updateInvoiceData}
                     />}
                 </div>
@@ -108,7 +108,7 @@ export default () => {
           <Row className="justify-content-center">
             <ConfirmationButton
               onClick={submitInvoice}
-              confirmationTitle={t('TopBar:tabs.createInvoice')}
+              confirmationTitle={t('topBar.createInvoice')}
               confirmationText={t('invoices:confirmationQuestion')}
               disabled={!invoice}
             >

@@ -5,10 +5,6 @@
   "cancel": "Cancel",
   "save": "Save",
   "edit": "Edit",
-  "email": {
-    "label": "E-mail",
-    "tooltip": "We will be sending your (received & supplied) invoices to this email"
-  },
   "accountPublicKey": {
     "label": "Account public key",
     "tooltip": "We will verify your identity using this key, when connecting via API"
@@ -17,7 +13,7 @@
   "submit": "Submit",
   "filters": "Filters",
   "search": "Search",
-  "uploadInvoice": "Upload an invoice",
+  "upload": "Upload",
   "userId": {
     "label": "User ID",
     "tooltip": "Identification number"
@@ -47,5 +43,14 @@
   },
   "loading": {
     "title": "Processing request"
+  },
+  "topBar": {
+    "title": "E-invoice",
+    "publicInvoices": "Public invoices",
+    "createInvoice": "Create invoice",
+    "accountSettings": "Account settings",
+    "myInvoices": "My invoices",
+    "logout": "Logout",
+    "login": "Login"
   }
 }

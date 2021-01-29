@@ -1,10 +1,14 @@
-# EInvoice
+# E-Invoice
 
-## OpenAPI 3 / Swagger
+## Documentation
+
+### OpenAPI 3 / Swagger
 
 [OpenAPI 3 definition](docs/swagger.yml).
 
 You can view it on this [website](https://generator.swagger.io/?url=https://raw.githubusercontent.com/slovak-egov/einvoice/main/docs/swagger.yml).
+
+### Error messages
 
 [Invoice validations](docs/validations.md)
 
@@ -30,8 +34,8 @@ You can view it on this [website](https://generator.swagger.io/?url=https://raw.
     Set proper env variables and run:
 
 ```shell script
-./dev-scripts/start_service.sh migrations init
-./dev-scripts/start_service.sh migrations up
+./dev-scripts/start_service.sh cmd/migrations init
+./dev-scripts/start_service.sh cmd/migrations up
  ```
 
 * Export proper env variables for every service in `${server-name}/.env`.
@@ -51,7 +55,7 @@ APISERVER_ENV=dev
 
 ## Deployment
 
-[VNet](dev-scripts/vnet/README.md)
+[Jelastic](dev-scripts/jelastic/README.md)
 
 ## XML
 

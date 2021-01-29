@@ -3,11 +3,11 @@ import InvoiceList from './invoiceList'
 import {getPublicInvoices} from '../actions/invoices'
 
 export default () => {
-  const {t} = useTranslation('TopBar')
+  const {t} = useTranslation('common')
 
   return (
     <InvoiceList
-      title={t('tabs.publicInvoices')}
+      title={t('topBar.publicInvoices')}
       path={['publicInvoicesScreen']}
       areCustomFilterFieldsValid={() => true}
       getInvoicesAction={getPublicInvoices}

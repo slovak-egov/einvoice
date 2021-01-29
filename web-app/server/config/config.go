@@ -9,8 +9,8 @@ import (
 )
 
 type Urls struct {
-	ApiServer        string
-	SlovenskoSkLogin string
+	ApiServer    string
+	UpvsLoginUrl string
 }
 
 type Configuration struct {
@@ -47,8 +47,8 @@ func New() *Configuration {
 	config.Port = environment.ParseInt("PORT", config.Port)
 	config.ClientBuildDir = environment.Getenv("CLIENT_BUILD_DIR", config.ClientBuildDir)
 	config.Urls = Urls{
-		ApiServer: environment.Getenv("API_SERVER_URL", config.Urls.ApiServer),
-		SlovenskoSkLogin: environment.Getenv("SLOVENSKO_SK_LOGIN_URL", config.Urls.SlovenskoSkLogin),
+		ApiServer:    environment.Getenv("API_SERVER_URL", config.Urls.ApiServer),
+		UpvsLoginUrl: environment.Getenv("UPVS_LOGIN_URL", config.Urls.UpvsLoginUrl),
 	}
 
 	config.ServerReadTimeout = environment.ParseDuration("SERVER_READ_TIMEOUT", config.ServerReadTimeout)

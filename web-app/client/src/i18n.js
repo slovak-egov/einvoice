@@ -26,7 +26,7 @@ i18n
     },
     defaultNS: 'common',
     // TODO: Load namespaces lazily
-    ns: ['common', 'invoices', 'TopBar'],
+    ns: ['common', 'invoices'],
   })
 
 export default i18n

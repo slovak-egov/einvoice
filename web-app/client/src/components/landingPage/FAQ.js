@@ -44,8 +44,7 @@ const Version1 = ({eventKey}) => (
           <a href={swaggerUrl} target="_blank" rel="noreferrer noopener">API</a>
         </li>
         <li>
-          If you set the email address in your account settings, all invoices issued by you or
-          sent to you will be sent to your email.
+          All invoices in which you are one of contracting parties are sent to your ÚPVS mailbox.
         </li>
         <li>
           All of these may be done by accounts of your accountants as explained later.
@@ -153,7 +152,7 @@ const Version1 = ({eventKey}) => (
       Issuer, since whoever inserted invoices to the system (you, your accountant)
       was allowed in the allowed list by the entity itself.
       Moreover you have non-stop control over all invoices issued by you through WebUI,
-      API and email.
+      API and ÚPVS mailbox.
       If the invoice is found to be incorrect but already inserted to the system,
       a new corrected invoice has to be inserted to the system.
     </Section>

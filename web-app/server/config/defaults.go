@@ -9,8 +9,8 @@ import (
 var devConfig = Configuration{
 	Port: 8080,
 	Urls: Urls{
-		ApiServer: "http://localhost:8081",
-		SlovenskoSkLogin: "https://dev.upvs.einvoice.mfsr.sk/login?callback=http://localhost:3000/login-callback",
+		ApiServer:    "http://localhost:8081",
+		UpvsLoginUrl: "https://dev.upvs.einvoice.mfsr.sk/login?callback=http://localhost:3000/login-callback",
 	},
 	ClientBuildDir:     "web-app/client/build",
 	LogLevel:           logrus.DebugLevel,
@@ -22,7 +22,7 @@ var devConfig = Configuration{
 var prodConfig = Configuration{
 	Port: 80,
 	Urls: Urls{
-		SlovenskoSkLogin: "https://dev.upvs.einvoice.mfsr.sk/login?callback=https://dev.einvoice.mfsr.sk/login-callback",
+		UpvsLoginUrl: "https://dev.upvs.einvoice.mfsr.sk/login?callback=https://dev.einvoice.mfsr.sk/login-callback",
 	},
 	ClientBuildDir:     "/client/build",
 	LogLevel:           logrus.InfoLevel,

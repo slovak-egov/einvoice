@@ -1,7 +1,7 @@
 import {useCallback} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {Button, Nav, Navbar, NavDropdown} from 'react-bootstrap'
-import {LinkContainer} from 'react-router-bootstrap'
+import {IndexLinkContainer} from 'react-router-bootstrap'
 import {useTranslation} from 'react-i18next'
 import {CONFIG} from '../appSettings'
 import {updateRunningRequests} from '../actions/common'
@@ -9,7 +9,7 @@ import {getLoggedUser, isUserLogged} from '../state/users'
 import {getLogoutUrl} from '../utils/constants'
 
 export default () => {
-  const {i18n, t} = useTranslation('TopBar')
+  const {i18n, t} = useTranslation('common')
 
   const isLogged = useSelector(isUserLogged)
   const loggedUser = useSelector(getLoggedUser)
@@ -21,9 +21,9 @@ export default () => {
 
   return (
     <Navbar bg="primary" variant="dark" sticky="top" expand="md" collapseOnSelect>
-      <LinkContainer to="/">
-        <Navbar.Brand>{t('title')}</Navbar.Brand>
-      </LinkContainer>
+      <IndexLinkContainer to="/">
+        <Navbar.Brand>{t('topBar.title')}</Navbar.Brand>
+      </IndexLinkContainer>
       <Navbar.Toggle />
       <Navbar.Collapse>
         <Nav className="w-100">
@@ -35,32 +35,32 @@ export default () => {
               EN
             </NavDropdown.Item>
           </NavDropdown>
-          <LinkContainer to="/invoices">
+          <IndexLinkContainer to="/invoices">
             <Nav.Link className="mr-auto">
-              {t('tabs.publicInvoices')}
+              {t('topBar.publicInvoices')}
             </Nav.Link>
-          </LinkContainer>
+          </IndexLinkContainer>
           {isLogged ?
             <>
-              <LinkContainer to="/create-invoice">
-                <Nav.Link>{t('tabs.createInvoice')}</Nav.Link>
-              </LinkContainer>
-              <LinkContainer to="/my-invoices">
-                <Nav.Link>{t('tabs.myInvoices')}</Nav.Link>
-              </LinkContainer>
-              <LinkContainer to="/account">
+              <IndexLinkContainer to="/create-invoice">
+                <Nav.Link>{t('topBar.createInvoice')}</Nav.Link>
+              </IndexLinkContainer>
+              <IndexLinkContainer to="/my-invoices">
+                <Nav.Link>{t('topBar.myInvoices')}</Nav.Link>
+              </IndexLinkContainer>
+              <IndexLinkContainer to="/account">
                 <Nav.Link>{loggedUser.name}</Nav.Link>
-              </LinkContainer>
+              </IndexLinkContainer>
               <a href={getLogoutUrl()}>
                 <Button variant="danger" onClick={startLoading}>
-                  {t('logout')}
+                  {t('topBar.logout')}
                 </Button>
               </a>
             </>
             :
-            <a href={CONFIG.slovenskoSkLoginUrl}>
+            <a href={CONFIG.upvsLoginUrl}>
               <Button variant="success" onClick={startLoading}>
-                {t('login')}
+                {t('topBar.login')}
               </Button>
             </a>
           }

@@ -1,8 +1,5 @@
 FROM golang:1.15-alpine AS build_base
 
-RUN apk add --no-cache git
-RUN apk update && apk add --no-cache g++ gcc libxml2 libxslt-dev
-
 # Set the Current Working Directory inside the container
 WORKDIR /tmp/einvoice
 
@@ -14,13 +11,12 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o /tmp/out/cleanupWorker ./cleanupWorker
+RUN go build -o /tmp/out/cleanup-worker ./cmd/cleanup-worker
 
 # Start fresh from a smaller image
 FROM alpine:3.12
 RUN apk add --no-cache ca-certificates
-RUN apk update && apk add --no-cache libxml2 libxslt-dev
 
-COPY --from=build_base /tmp/out/cleanupWorker /worker/cleanupWorker
+COPY --from=build_base /tmp/out/cleanup-worker /worker/cleanup-worker
 
-CMD ["/worker/cleanupWorker"]
+CMD ["/worker/cleanup-worker"]

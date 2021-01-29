@@ -1,8 +1,5 @@
 FROM golang:1.15-alpine AS build_base
 
-RUN apk add --no-cache git
-RUN apk update && apk add --no-cache g++ gcc libxml2 libxslt-dev
-
 # Set the Current Working Directory inside the container
 WORKDIR /tmp/einvoice
 
@@ -14,13 +11,12 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o /tmp/out/notificationWorker ./notificationWorker
+RUN go build -o /tmp/out/notification-worker ./cmd/notification-worker
 
 # Start fresh from a smaller image
 FROM alpine:3.12
 RUN apk add --no-cache ca-certificates
-RUN apk update && apk add --no-cache libxml2 libxslt-dev
 
-COPY --from=build_base /tmp/out/notificationWorker /worker/notificationWorker
+COPY --from=build_base /tmp/out/notification-worker /worker/notification-worker
 
-CMD ["/worker/notificationWorker"]
+CMD ["/worker/notification-worker"]
