@@ -3,3 +3,5 @@
 /.github/*
 
 Dockerfile*
+
+**/node_modules

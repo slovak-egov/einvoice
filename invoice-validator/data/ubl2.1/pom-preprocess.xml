@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed under European Union Public Licence (EUPL) version 1.2.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.helger</groupId>
+    <artifactId>parent-pom</artifactId>
+    <version>1.10.8</version>
+  </parent>
+  <artifactId>centc434-validation-rules</artifactId>
+  <version>1.0.0</version>
+  <name>centc434-validation-rules</name>
+  <description>EN16931 - CEN/TC 434 validation rules</description>
+  <url>https://github.com/CenPC434/validation</url>
+  <inceptionYear>2016</inceptionYear>
+  <licenses>
+    <license>
+      <name>Apache 2</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.helger.maven</groupId>
+        <artifactId>ph-schematron-maven-plugin</artifactId>
+        <version>5.6.4</version>
+        <executions>
+          <execution>
+            <id>ubl</id>
+            <goals>
+              <goal>preprocess</goal>
+            </goals>
+            <configuration>
+              <sourceFile>${basedir}/schematron/EN16931-UBL-validation.sch</sourceFile>
+              <targetFile>${basedir}/schematron/EN16931-UBL-validation-preprocessed.sch</targetFile>
+            </configuration>
+          </execution>
+        </executions>
+        <configuration>
+          <keepTitles>false</keepTitles>
+          <keepDiagnostics>false</keepDiagnostics>
+          <keepReports>false</keepReports>
+          <keepEmptyPatterns>false</keepEmptyPatterns>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
