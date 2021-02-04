@@ -55,13 +55,18 @@ export default ({history, match: {params: {id}}}) => {
     <Card className="m-1">
       <Card.Header className="bg-primary text-white text-center d-sm-flex" as="h3">
         <Col />
-        <Col>{t('invoiceTypes.invoice')} {id}</Col>
+        <Col>{t('invoiceTypes.invoice')}</Col>
         <Col className="d-sm-flex">
           <Button className="ml-auto" variant="danger" onClick={history.goBack}>{t('close')}</Button>
         </Col>
       </Card.Header>
       <Card.Body>
         <div>
+          <Row>
+            <Col>
+              <TextField label="ID" value={id} />
+            </Col>
+          </Row>
           <Row>
             <Col sm>
               <TextField label={t('invoice.supplier')} value={sender} />
@@ -81,7 +86,7 @@ export default ({history, match: {params: {id}}}) => {
           <Row>
             <Col sm>
               <TextField
-                label={t('invoice.createdAt')}
+                label={t('invoice.uploadedAt')}
                 value={formatDate(parseISO(createdAt), 'yyyy-MM-dd HH:mm')}
               />
             </Col>

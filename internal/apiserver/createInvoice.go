@@ -4,6 +4,7 @@ import (
 	goContext "context"
 	"io"
 	"net/http"
+	"time"
 
 	"github.com/slovak-egov/einvoice/internal/apiserver/invoiceValidator"
 	"github.com/slovak-egov/einvoice/internal/apiserver/metadataExtractor"
@@ -12,6 +13,7 @@ import (
 	"github.com/slovak-egov/einvoice/pkg/context"
 	"github.com/slovak-egov/einvoice/pkg/dbutil"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
+	"github.com/slovak-egov/einvoice/pkg/ulid"
 )
 
 func (a *App) parseAndValidateInvoice(res http.ResponseWriter, req *http.Request) ([]byte, string, error) {
@@ -74,7 +76,9 @@ func (a *App) createInvoice(test bool) func(res http.ResponseWriter, req *http.R
 
 		userId := context.GetUserId(req.Context())
 
-		// Add creator Id, test flag
+		// Add id, creator Id, test flag
+		metadata.Id = ulid.New(time.Now().UTC()).String()
+		metadata.CalculateCreatedAt()
 		metadata.CreatedBy = userId
 		metadata.Test = test
 
@@ -98,15 +102,11 @@ func (a *App) createInvoice(test bool) func(res http.ResponseWriter, req *http.R
 			}
 		}
 
-		if err := a.db.RunInTransaction(req.Context(), func(ctx goContext.Context) error {
-			if e := a.db.CreateInvoice(ctx, metadata); e != nil {
-				return e
-			}
-			if e := a.storage.SaveInvoice(ctx, metadata.Id, invoice); e != nil {
-				return e
-			}
-			return nil
-		}); err != nil {
+		// DB is source of truth, so we have to save invoice to DB at the end
+		if err = a.storage.SaveInvoice(req.Context(), metadata.Id, invoice); err != nil {
+			return err
+		}
+		if err = a.db.CreateInvoice(req.Context(), metadata); err != nil {
 			return err
 		}
 

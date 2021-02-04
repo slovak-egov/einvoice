@@ -12,63 +12,83 @@ import (
 	"github.com/slovak-egov/einvoice/internal/entity"
 	"github.com/slovak-egov/einvoice/internal/testutil"
 	"github.com/slovak-egov/einvoice/pkg/timeutil"
+	"github.com/slovak-egov/einvoice/pkg/ulid"
 )
 
 func TestGetInvoices(t *testing.T) {
 	// Fill DB
 	t.Cleanup(testutil.CleanDb(ctx, t, a.db.Connector))
-	firstInvoiceId := testutil.CreateInvoice(
-		ctx, t, a.db.Connector,
+
+	ids := []string{
+		ulid.New(time.Date(2021, 2, 1, 10, 0, 0, 0, time.UTC)).String(),
+		ulid.New(time.Date(2021, 2, 2, 10, 0, 0, 0, time.UTC)).String(),
+		ulid.New(time.Date(2021, 2, 3, 10, 0, 0, 0, time.UTC)).String(),
+	}
+
+	testutil.CreateInvoice(
+		ctx, t, a.db.Connector, ids[0],
 		testutil.WithAmount(100),
 		testutil.WithAmountWithoutTax(50),
 		testutil.WithIssueDate(timeutil.Date{time.Date(2021, 1, 1, 0, 0, 0, 0, time.UTC)}),
-		testutil.WithCreatedAt(time.Date(2021, 2, 1, 10, 0, 0, 0, time.UTC)),
-	).Id
-	secondInvoiceId := testutil.CreateInvoice(
-		ctx, t, a.db.Connector,
+	)
+	testutil.CreateInvoice(
+		ctx, t, a.db.Connector, ids[1],
 		testutil.WithTest,
 		testutil.WithAmount(200),
 		testutil.WithAmountWithoutTax(150),
 		testutil.WithIssueDate(timeutil.Date{time.Date(2021, 1, 2, 0, 0, 0, 0, time.UTC)}),
-		testutil.WithCreatedAt(time.Date(2021, 2, 2, 10, 0, 0, 0, time.UTC)),
-	).Id
-	thirdInvoiceId := testutil.CreateInvoice(
-		ctx, t, a.db.Connector,
+	)
+	testutil.CreateInvoice(
+		ctx, t, a.db.Connector, ids[2],
 		testutil.WithAmount(300),
 		testutil.WithAmountWithoutTax(250),
 		testutil.WithIssueDate(timeutil.Date{time.Date(2021, 1, 3, 0, 0, 0, 0, time.UTC)}),
-		testutil.WithCreatedAt(time.Date(2021, 2, 3, 10, 0, 0, 0, time.UTC)),
-	).Id
+	)
 
 	var flagtests = []struct {
 		query            string
-		responseInvoices []int
-		responseNextId   *int
+		responseInvoices []string
+		responseNextId   *string
 	}{
-		{"", []int{thirdInvoiceId, firstInvoiceId}, nil},
-		{"?test=true&ico=11111111", []int{thirdInvoiceId, secondInvoiceId, firstInvoiceId}, nil},
+		{"", []string{ids[2], ids[0]}, nil},
+		{"?test=true&ico=11111111", []string{ids[2], ids[1], ids[0]}, nil},
 		{"?format=d16b", nil, nil},
 		{"?ico=11111112", nil, nil},
-		{fmt.Sprintf("?startId=%d&limit=1", thirdInvoiceId), []int{thirdInvoiceId}, &firstInvoiceId},
-		{fmt.Sprintf("?startId=%d", firstInvoiceId), []int{firstInvoiceId}, nil},
-		{fmt.Sprintf("?startId=%d&order=asc", firstInvoiceId), []int{firstInvoiceId, thirdInvoiceId}, nil},
-		{"?test=true&amountFrom=190", []int{thirdInvoiceId, secondInvoiceId}, nil},
-		{"?test=true&amountTo=210", []int{secondInvoiceId, firstInvoiceId}, nil},
-		{"?test=true&amountFrom=190&amountTo=210", []int{secondInvoiceId}, nil},
-		{"?test=true&amountWithoutVatFrom=140", []int{thirdInvoiceId, secondInvoiceId}, nil},
-		{"?test=true&amountWithoutVatTo=160", []int{secondInvoiceId, firstInvoiceId}, nil},
-		{"?test=true&amountWithoutVatFrom=140&amountWithoutVatTo=160", []int{secondInvoiceId}, nil},
-		{"?test=true&issueDateFrom=2021-01-02", []int{thirdInvoiceId, secondInvoiceId}, nil},
-		{"?test=true&issueDateTo=2021-01-02", []int{secondInvoiceId, firstInvoiceId}, nil},
-		{"?test=true&issueDateFrom=2021-01-02&issueDateTo=2021-01-02", []int{secondInvoiceId}, nil},
-		{"?test=true&uploadTimeFrom=2021-02-02T00:00:00.000%2B00:00", []int{thirdInvoiceId, secondInvoiceId}, nil},
-		{"?test=true&uploadTimeTo=2021-02-02T20:00:00.000%2B00:00", []int{secondInvoiceId, firstInvoiceId}, nil},
-		{"?test=true&uploadTimeFrom=2021-02-02T00:00:00.000%2B00:00&uploadTimeTo=2021-02-02T20:00:00.000%2B00:00", []int{secondInvoiceId}, nil},
+		{fmt.Sprintf("?startId=%s&limit=1", ids[2]), []string{ids[2]}, &ids[0]},
+		{fmt.Sprintf("?startId=%s", ids[0]), []string{ids[0]}, nil},
+		{fmt.Sprintf("?startId=%s&order=asc", ids[0]), []string{ids[0], ids[2]}, nil},
+		{"?test=true&amountFrom=190", []string{ids[2], ids[1]}, nil},
+		{"?test=true&amountTo=210", []string{ids[1], ids[0]}, nil},
+		{"?test=true&amountFrom=190&amountTo=210", []string{ids[1]}, nil},
+		{"?test=true&amountWithoutVatFrom=140", []string{ids[2], ids[1]}, nil},
+		{"?test=true&amountWithoutVatTo=160", []string{ids[1], ids[0]}, nil},
+		{"?test=true&amountWithoutVatFrom=140&amountWithoutVatTo=160", []string{ids[1]}, nil},
+		{"?test=true&issueDateFrom=2021-01-02", []string{ids[2], ids[1]}, nil},
+		{"?test=true&issueDateTo=2021-01-02", []string{ids[1], ids[0]}, nil},
+		{"?test=true&issueDateFrom=2021-01-02&issueDateTo=2021-01-02", []string{ids[1]}, nil},
+		{
+			"?test=true&uploadTimeFrom=2021-02-02T00:00:00.000%2B00:00",
+			[]string{ids[2], ids[1]},
+			nil,
+		},
+		{
+			"?test=true&uploadTimeTo=2021-02-02T20:00:00.000%2B00:00",
+			[]string{ids[1], ids[0]},
+			nil,
+		},
+		{
+			"?test=true&uploadTimeFrom=2021-02-02T00:00:00.000%2B00:00&uploadTimeTo=2021-02-02T20:00:00.000%2B00:00",
+			[]string{ids[1]},
+			nil,
+		},
 	}
 	// Run tests
 	for _, tt := range flagtests {
 		t.Run(tt.query, func(t *testing.T) {
-			req, _ := http.NewRequest("GET", "/invoices"+tt.query, nil)
+			req, err := http.NewRequest("GET", "/invoices"+tt.query, nil)
+			if err != nil {
+				t.Error(err)
+			}
 			response := testutil.ExecuteRequest(a, req)
 
 			assert.Equal(t, http.StatusOK, response.Code)
@@ -79,7 +99,7 @@ func TestGetInvoices(t *testing.T) {
 			assert.Equal(t, len(tt.responseInvoices), len(parsedResponse.Invoices))
 
 			if len(tt.responseInvoices) > 0 {
-				var ids []int
+				var ids []string
 				for _, invoice := range parsedResponse.Invoices {
 					ids = append(ids, invoice.Id)
 				}
@@ -93,19 +113,26 @@ func TestGetInvoices(t *testing.T) {
 
 func TestGetInvoice(t *testing.T) {
 	t.Cleanup(testutil.CleanDb(ctx, t, a.db.Connector))
-	id := testutil.CreateInvoice(ctx, t, a.db.Connector).Id
+	ids := []string{"01776d7e-4661-138a-26e3-437102097b13", "01776d7e-4661-138a-26e3-437102097b14"}
+	testutil.CreateInvoice(ctx, t, a.db.Connector, ids[0])
 
-	req, _ := http.NewRequest("GET", fmt.Sprintf("/invoices/%d", id), nil)
+	req, err := http.NewRequest("GET", fmt.Sprintf("/invoices/%s", ids[0]), nil)
+	if err != nil {
+		t.Error(err)
+	}
 	response := testutil.ExecuteRequest(a, req)
 
 	assert.Equal(t, http.StatusOK, response.Code)
 	var parsedResponse entity.Invoice
 	json.Unmarshal(response.Body.Bytes(), &parsedResponse)
 
-	assert.Equal(t, id, parsedResponse.Id)
+	assert.Equal(t, ids[0], parsedResponse.Id)
 
 	// Try to get nonexistent invoice
-	req, _ = http.NewRequest("GET", fmt.Sprintf("/invoices/%d", id+1), nil)
+	req, err = http.NewRequest("GET", fmt.Sprintf("/invoices/%s", ids[1]), nil)
+	if err != nil {
+		t.Error(err)
+	}
 	response = testutil.ExecuteRequest(a, req)
 
 	assert.Equal(t, http.StatusNotFound, response.Code)

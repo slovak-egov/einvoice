@@ -66,7 +66,7 @@ func TestCreateInvoice(t *testing.T) {
 	}
 
 	// Try to get invoice metadata through API
-	req, err = http.NewRequest("GET", fmt.Sprintf("/invoices/%d", createdResponse.Id), nil)
+	req, err = http.NewRequest("GET", fmt.Sprintf("/invoices/%s", createdResponse.Id), nil)
 	if err != nil {
 		t.Error(err)
 	}
@@ -82,7 +82,7 @@ func TestCreateInvoice(t *testing.T) {
 	}
 
 	// Try to get actual invoice through API
-	req, err = http.NewRequest("GET", fmt.Sprintf("/invoices/%d/detail", createdResponse.Id), nil)
+	req, err = http.NewRequest("GET", fmt.Sprintf("/invoices/%s/detail", createdResponse.Id), nil)
 	if err != nil {
 		t.Error(err)
 	}

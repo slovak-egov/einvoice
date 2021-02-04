@@ -19,15 +19,15 @@ func New(basePath string) *LocalStorage {
 	return &LocalStorage{basePath}
 }
 
-func (storage *LocalStorage) invoiceFilename(id int) string {
-	return fmt.Sprintf("%s/invoice-%d.xml", storage.basePath, id)
+func (storage *LocalStorage) invoiceFilename(id string) string {
+	return fmt.Sprintf("%s/invoice:%s.xml", storage.basePath, id)
 }
 
-func (storage *LocalStorage) GetInvoice(ctx goContext.Context, id int) ([]byte, error) {
+func (storage *LocalStorage) GetInvoice(ctx goContext.Context, id string) ([]byte, error) {
 	bytes, err := storage.readObject(storage.invoiceFilename(id))
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
-			return nil, &NotFoundError{fmt.Sprintf("Invoice %d not found", id)}
+			return nil, &NotFoundError{fmt.Sprintf("Invoice %s not found", id)}
 		} else {
 			context.GetLogger(ctx).WithField("error", err.Error()).Error("localStorage.getInvoice.failed")
 			return nil, err
@@ -36,11 +36,11 @@ func (storage *LocalStorage) GetInvoice(ctx goContext.Context, id int) ([]byte, 
 	return bytes, nil
 }
 
-func (storage *LocalStorage) SaveInvoice(ctx goContext.Context, id int, value []byte) error {
+func (storage *LocalStorage) SaveInvoice(ctx goContext.Context, id string, value []byte) error {
 	return storage.saveObject(ctx, storage.invoiceFilename(id), value)
 }
 
-func (storage *LocalStorage) DeleteInvoice(ctx goContext.Context, id int) error {
+func (storage *LocalStorage) DeleteInvoice(ctx goContext.Context, id string) error {
 	if err := storage.deleteObject(storage.invoiceFilename(id)); err != nil {
 		context.GetLogger(ctx).WithFields(log.Fields{
 			"invoiceId": id,

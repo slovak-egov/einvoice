@@ -34,6 +34,7 @@
 | authorization.bearer.invalid | 401 | Cannot parse bearer token | |
 | authorization.upvs.request.failed | 424 | ÚPVS login request failed | |
 | invoice.payload.invalid | 400 | Cannot parse data | Error message |
+| invoice.id.invalid | 400 | ID should be in UUID format | Error message |
 | invoice.parsingError | 400 | Cannot parse invoice XML | Error message |
 | invoice.format.invalid | 400 | *format* of submitted invoice must be either ubl2.1 or d16b | |
 | invoice.language.unknown | 400 | *language* must be en or sk | |

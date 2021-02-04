@@ -71,18 +71,18 @@ type GeneralAgenda struct {
 	Text    string   `xml:"text"`
 }
 
-func getFileName(invoiceId int, extension string) string {
-	return fmt.Sprintf("invoice-%d.%s", invoiceId, extension)
+func getFileName(invoiceId, extension string) string {
+	return fmt.Sprintf("invoice:%s.%s", invoiceId, extension)
 }
 
 func CreateInvoiceNotificationMessage(
-	ctx goContext.Context, senderUri, recipientUri string, invoiceId int, xmlFile, zip []byte,
+	ctx goContext.Context, senderUri, recipientUri, invoiceId string, xmlFile, zip []byte,
 ) (string, error) {
 	msgId := uuid.New().String()
-	subject := fmt.Sprintf("Faktúra %[1]d / Invoice %[1]d", invoiceId)
+	subject := fmt.Sprintf("Faktúra %[1]s / Invoice %[1]s", invoiceId)
 	text := fmt.Sprintf(
 		msgTemplate,
-		fmt.Sprintf("https://dev.einvoice.mfsr.sk/invoices/%d", invoiceId),
+		fmt.Sprintf("https://dev.einvoice.mfsr.sk/invoices/%s", invoiceId),
 	)
 	encodedXmlFile := base64.StdEncoding.EncodeToString(xmlFile)
 	encodedZipFile := base64.StdEncoding.EncodeToString(zip)

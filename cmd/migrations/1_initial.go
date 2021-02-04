@@ -25,8 +25,7 @@ func init() {
 		log.Println("Creating table invoices")
 		_, err = db.Exec(`
 			CREATE TABLE invoices (
-				id SERIAL PRIMARY KEY,
-				created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+				id UUID PRIMARY KEY,
 				created_by INTEGER NOT NULL references users,
 				issue_date DATE NOT NULL,
 				sender VARCHAR (100) NOT NULL,

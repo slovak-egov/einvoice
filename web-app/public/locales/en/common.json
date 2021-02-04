@@ -11,7 +11,7 @@
     "uploadTime": "Upload time",
     "amount": "Amount",
     "amountWithoutVat": "Amount without VAT",
-    "createdAt": "Created at",
+    "uploadedAt": "Uploaded at",
     "supplierIco": "Supplier IČO",
     "customerIco": "Customer IČO",
     "notificationsSent": "Notifications sent",

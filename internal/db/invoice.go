@@ -14,11 +14,12 @@ import (
 	"github.com/slovak-egov/einvoice/pkg/context"
 	"github.com/slovak-egov/einvoice/pkg/dbutil"
 	"github.com/slovak-egov/einvoice/pkg/timeutil"
+	"github.com/slovak-egov/einvoice/pkg/ulid"
 )
 
 type PublicInvoicesOptions struct {
 	Formats          []string
-	StartId          int
+	StartId          string
 	Limit            int
 	Test             bool
 	Ico              string
@@ -62,7 +63,7 @@ func (o *PublicInvoicesOptions) buildQuery(query *orm.Query) *orm.Query {
 	}
 
 	// If start id is not provided, do not search by id
-	if o.StartId != 0 {
+	if o.StartId != "" {
 		// If ascending order was requested, start id is the lowest id
 		// otherwise it is the largest one
 		if o.Order == dbutil.AscOrder {
@@ -119,11 +120,11 @@ func (o *PublicInvoicesOptions) buildQuery(query *orm.Query) *orm.Query {
 	}
 
 	if o.CreatedAt.From != nil {
-		query = query.Where("created_at >= ?", o.CreatedAt.From)
+		query = query.Where("id >= ?", ulid.NewFirst(*o.CreatedAt.From).String())
 	}
 
 	if o.CreatedAt.To != nil {
-		query = query.Where("created_at <= ?", o.CreatedAt.To)
+		query = query.Where("id <= ?", ulid.NewLast(*o.CreatedAt.To).String())
 	}
 
 	return query.Limit(o.Limit + 1)
@@ -149,11 +150,11 @@ func (c *Connector) GetPublicInvoices(ctx goContext.Context, options *PublicInvo
 	return invoices, nil
 }
 
-func (c *Connector) GetInvoice(ctx goContext.Context, id int) (*entity.Invoice, error) {
+func (c *Connector) GetInvoice(ctx goContext.Context, id string) (*entity.Invoice, error) {
 	invoice := &entity.Invoice{}
 	err := c.GetDb(ctx).Model(invoice).Where("id = ?", id).Select(invoice)
 	if errors.Is(err, pg.ErrNoRows) {
-		return nil, &dbutil.NotFoundError{fmt.Sprintf("Invoice %d not found", id)}
+		return nil, &dbutil.NotFoundError{fmt.Sprintf("Invoice %s not found", id)}
 	} else if err != nil {
 		context.GetLogger(ctx).WithField("error", err.Error()).Error("db.getInvoice.failed")
 		return nil, err
@@ -191,11 +192,11 @@ func (c *Connector) GetUserInvoices(ctx goContext.Context, options *UserInvoices
 	return invoices, nil
 }
 
-func (c *Connector) DeleteOldTestInvoices(ctx goContext.Context, expiration time.Duration) ([]int, error) {
-	invoiceIds := []int{}
+func (c *Connector) DeleteOldTestInvoices(ctx goContext.Context, expiration time.Duration) ([]string, error) {
+	invoiceIds := []string{}
 	query := c.GetDb(ctx).Model(&entity.Invoice{}).
 		Where("test = TRUE").
-		Where("created_at < ?", time.Now().Add(-expiration)).
+		Where("id < ?", ulid.New(time.Now().UTC().Add(-expiration)).String()).
 		Returning("id")
 
 	if _, err := query.Delete(&invoiceIds); err != nil {
