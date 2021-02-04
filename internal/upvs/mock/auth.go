@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/google/uuid"
 
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
-	"github.com/slovak-egov/einvoice/pkg/random"
 )
 
 func (a *App) handleLogin(res http.ResponseWriter, req *http.Request) error {
@@ -20,7 +20,7 @@ func (a *App) handleLogin(res http.ResponseWriter, req *http.Request) error {
 	userClaims := jwt.MapClaims{
 		"sub":  "rc://sk/8314451298_tisici_janko",
 		"name": "Janko Tisíci",
-		"jti":  random.String(32),
+		"jti":  uuid.New().String(),
 		"exp":  time.Now().Unix() + 120*60*1000,
 		"scopes": []string{
 			"sktalk/receive",
@@ -40,7 +40,7 @@ func (a *App) handleLogin(res http.ResponseWriter, req *http.Request) error {
 	orgClaims := jwt.MapClaims{
 		"sub":  "ico://sk/11190993",
 		"name": "PO 190993",
-		"jti":  random.String(32),
+		"jti":  uuid.New().String(),
 		"exp":  time.Now().Unix() + 120*60*1000,
 		"scopes": []string{
 			"sktalk/receive",

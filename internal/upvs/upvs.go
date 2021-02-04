@@ -8,11 +8,11 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/google/uuid"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/slovak-egov/einvoice/pkg/context"
 	"github.com/slovak-egov/einvoice/pkg/keys"
-	"github.com/slovak-egov/einvoice/pkg/random"
 )
 
 type Connector struct {
@@ -72,7 +72,7 @@ func (c *Connector) signOboToken(ctx goContext.Context, oboToken string) (string
 
 	upvsToken := jwt.NewWithClaims(jwt.SigningMethodRS256, jwt.MapClaims{
 		"exp": claims["exp"],
-		"jti": random.String(32),
+		"jti": uuid.New().String(),
 		"obo": oboToken,
 	})
 	upvsToken.Header["alg"] = "RS256"
@@ -85,7 +85,7 @@ func (c *Connector) signOboToken(ctx goContext.Context, oboToken string) (string
 func (c *Connector) signApiToken() (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodRS256, jwt.MapClaims{
 		"exp": time.Now().Add(time.Hour).Unix(),
-		"jti": random.String(32),
+		"jti": uuid.New().String(),
 	})
 	token.Header["alg"] = "RS256"
 
