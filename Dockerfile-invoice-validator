@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY ./invoice-validator /app
 
-RUN apk add maven
+RUN apk add maven --no-cache
 
 WORKDIR /app/data/ubl2.1/
 RUN mvn -f pom-preprocess.xml generate-resources
