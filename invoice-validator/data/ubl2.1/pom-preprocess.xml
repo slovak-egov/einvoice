@@ -38,7 +38,7 @@
             </goals>
             <configuration>
               <sourceFile>${basedir}/schematron/EN16931-UBL-validation.sch</sourceFile>
-              <targetFile>${basedir}/schematron/EN16931-UBL-validation-preprocessed.sch</targetFile>
+              <targetFile>${basedir}/schematron/preprocessed/EN16931-UBL-validation-preprocessed.sch</targetFile>
             </configuration>
           </execution>
         </executions>

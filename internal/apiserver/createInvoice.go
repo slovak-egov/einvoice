@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"github.com/slovak-egov/einvoice/internal/apiserver/validator"
 	"github.com/slovak-egov/einvoice/internal/apiserver/xml/d16b"
 	"github.com/slovak-egov/einvoice/internal/apiserver/xml/ubl21"
 	"github.com/slovak-egov/einvoice/internal/db"
@@ -15,15 +16,18 @@ import (
 )
 
 var formatToParsers = map[string]struct {
-	GetValidator      func(*App) func([]byte) error
-	MetadataExtractor func([]byte) (*entity.Invoice, error)
+	GetXsdValidator     func(*App) func([]byte) error
+	GetInvoiceValidator func(*App) func(goContext.Context, []byte) error
+	MetadataExtractor   func([]byte) (*entity.Invoice, error)
 }{
 	entity.UblFormat: {
 		func(a *App) func([]byte) error { return a.validator.ValidateUBL21 },
+		func(a *App) func(goContext.Context, []byte) error { return a.invoiceValidator.ValidateUBL21 },
 		ubl21.Create,
 	},
 	entity.D16bFormat: {
 		func(a *App) func([]byte) error { return a.validator.ValidateD16B },
+		func(a *App) func(goContext.Context, []byte) error { return a.invoiceValidator.ValidateD16B },
 		d16b.Create,
 	},
 }
@@ -97,8 +101,17 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 	// Validate invoice format
 	var metadata *entity.Invoice
 
-	if err = parsers.GetValidator(a)(invoice); err != nil {
+	if err = parsers.GetXsdValidator(a)(invoice); err != nil {
 		return InvoiceError("xsd.validation.failed").WithCause(err)
+	}
+	if err = parsers.GetInvoiceValidator(a)(req.Context(), invoice); err != nil {
+		if errors, ok := err.(*validator.InvoiceValidationError); ok {
+			return handlerutil.NewBadRequestError("invoice.validation.failed").WithField("rules", errors.Errors)
+		} else if _, ok := err.(*validator.InvoiceValidationRequestError); ok {
+			return handlerutil.NewFailedDependencyError("invoice.validator.request.failed")
+		} else {
+			return err
+		}
 	}
 	metadata, err = parsers.MetadataExtractor(invoice)
 	if err != nil {

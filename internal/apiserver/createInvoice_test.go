@@ -58,9 +58,9 @@ func TestCreateInvoice(t *testing.T) {
 	expectedResponse := entity.Invoice{
 		Id:          createdResponse.Id,        // No need to assert this param,
 		CreatedAt:   createdResponse.CreatedAt, // No need to assert this param
-		Sender:      "Custom Cotter Pins",
-		Receiver:    "North American Veeblefetzer",
-		Price:       100,
+		Sender:      "Global Trade Chain",
+		Receiver:    "Project Services",
+		Price:       12500,
 		SupplierIco: "11190993",
 		CustomerIco: "22222222",
 		Format:      entity.UblFormat,

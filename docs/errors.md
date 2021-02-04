@@ -39,7 +39,8 @@
 | invoice.format.missing | 400 | Missing *format* field | |
 | invoice.format.unknown | 400 | *format* must be ubl2.1 or d16b | |
 | invoice.xsd.validation.failed | 400 | Xml file must follow XSD schema | Error message |
-| invoice.validation.failed | 400 | Invoice must contain all required fields | Comma separated error codes from [Validation errors](validations.md) |
+| invoice.validation.failed | 400 | Invoice must contain all required fields | All violated rules in extra field "rules" |
+| invoice.validator.request.failed | 424 | Request to invoice validation server failed | |
 | invoice.create.permission.missing | 403 | Missing permissions for creating invoices with posted IČO | |
 | invoice.view.permission.missing | 403 | Missing permissions for requested invoice | |
 | invoice.param.parsingError | 400 | Cannot parse params | Error message |

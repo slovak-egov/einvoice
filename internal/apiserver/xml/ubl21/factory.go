@@ -2,7 +2,6 @@ package ubl21
 
 import (
 	"encoding/xml"
-	"errors"
 	"strconv"
 	"strings"
 
@@ -17,30 +16,17 @@ func Create(value []byte) (*entity.Invoice, error) {
 		return nil, err
 	}
 
-	var errs []string
-
-	customer, validationErrs := parseParty("customer", inv.AccountingCustomerParty.Party)
-	if len(validationErrs) != 0 {
-		errs = append(errs, validationErrs...)
-	}
-
-	supplier, validationErrs := parseParty("supplier", inv.AccountingSupplierParty.Party)
-	if len(validationErrs) != 0 {
-		errs = append(errs, validationErrs...)
-	}
+	customer := parseParty(inv.AccountingCustomerParty.Party)
+	supplier := parseParty(inv.AccountingSupplierParty.Party)
 
 	price, err := strconv.ParseFloat(inv.LegalMonetaryTotal.PayableAmount.Value, 64)
 	if err != nil {
-		errs = append(errs, "price.value.parsingError")
+		return nil, err
 	}
 
 	issueDate, err := timeutil.ParseDate(inv.IssueDate)
 	if err != nil {
-		errs = append(errs, "issueDate.parsingError")
-	}
-
-	if len(errs) > 0 {
-		return nil, errors.New(strings.Join(errs, ", "))
+		return nil, err
 	}
 
 	return &entity.Invoice{
@@ -58,44 +44,12 @@ type partyInfo struct {
 	ico, name string
 }
 
-func parseParty(partyName string, party *Party) (res partyInfo, errs []string) {
+func parseParty(party *Party) partyInfo {
 	if party == nil {
-		errs = []string{partyName + ".undefined"}
-		return
+		return partyInfo{}
 	}
 
-	if name := getPartyName(party); name == "" {
-		errs = append(errs, "name.undefined")
-	} else {
-		res.name = name
-	}
-
-	if ico, icoErr := getIco(party); icoErr != "" {
-		errs = append(errs, icoErr)
-	} else {
-		res.ico = ico
-	}
-
-	if address := party.PostalAddress; address == nil {
-		errs = append(errs, "address.undefined")
-	} else {
-		if address.Country == nil {
-			errs = append(errs, "address.country.undefined")
-		}
-
-		if address.CityName == nil {
-			errs = append(errs, "address.city.undefined")
-		}
-
-		if address.BuildingNumber == nil {
-			errs = append(errs, "address.building.number.undefined")
-		}
-	}
-
-	for i := range errs {
-		errs[i] = partyName + "." + errs[i]
-	}
-	return
+	return partyInfo{ico: getIco(party), name: getPartyName(party)}
 }
 
 func getPartyName(party *Party) string {
@@ -114,22 +68,16 @@ func getPartyName(party *Party) string {
 	return builder.String()
 }
 
-func getIco(party *Party) (ico string, err string) {
+func getIco(party *Party) (ico string) {
 	for _, identification := range party.PartyIdentification {
 		if identification.ID.SchemeID == nil || *identification.ID.SchemeID != "0158" {
 			continue
 		}
 		if ico != "" {
-			err = "ico.multiple"
-			return
+			return ""
 		}
 		ico = identification.ID.Value
 	}
 
-	if ico == "" {
-		err = "ico.undefined"
-		return
-	}
-
-	return ico, ""
+	return ico
 }

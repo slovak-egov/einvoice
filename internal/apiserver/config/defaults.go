@@ -45,6 +45,7 @@ var devConfig = Configuration{
 		MaxExpiration: 10 * time.Minute,
 		JtiExpiration: 15 * time.Minute,
 	},
+	ValidationServerUrl: "http://localhost:8082",
 }
 
 var prodConfig = Configuration{
@@ -80,6 +81,7 @@ var prodConfig = Configuration{
 		JtiExpiration: 15 * time.Minute,
 	},
 	LocalStorageBasePath: "/data",
+	ValidationServerUrl:  "https://dev-einvoice-validator.mypaas.vnet.sk",
 }
 
 var testConfig = Configuration{

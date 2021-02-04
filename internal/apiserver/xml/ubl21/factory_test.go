@@ -24,12 +24,12 @@ func TestFactory(t *testing.T) {
 	}
 
 	exp := &entity.Invoice{
-		Sender:      "Custom Cotter Pins",
-		Receiver:    "North American Veeblefetzer",
+		Sender:      "Global Trade Chain",
+		Receiver:    "Project Services",
 		Format:      "ubl2.1",
 		SupplierIco: "11190993",
 		CustomerIco: "22222222",
-		Price:       100,
+		Price:       12500,
 		IssueDate:   timeutil.Date{time.Date(2011, 9, 22, 0, 0, 0, 0, time.UTC)},
 	}
 

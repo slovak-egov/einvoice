@@ -13,10 +13,10 @@ func RespondWithJSON(res http.ResponseWriter, code int, payload interface{}) {
 	res.Write(response)
 }
 
-func respondWithError(res http.ResponseWriter, code int, message string, cause error) {
-	body := map[string]string{"error": message}
-	if cause != nil {
-		body["cause"] = cause.Error()
+func respondWithError(res http.ResponseWriter, code int, message string, fields map[string]interface{}) {
+	body := map[string]interface{}{"error": message}
+	for name, value := range fields {
+		body[name] = value
 	}
 	RespondWithJSON(res, code, body)
 }

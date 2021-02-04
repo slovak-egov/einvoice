@@ -6,9 +6,9 @@ import (
 )
 
 type HttpError struct {
-	Code  int
-	Err   error
-	Cause error
+	Code   int
+	Err    error
+	Fields map[string]interface{}
 }
 
 func (e *HttpError) Error() string {
@@ -20,7 +20,18 @@ func (e *HttpError) Status() int {
 }
 
 func (e *HttpError) WithCause(cause error) *HttpError {
-	e.Cause = cause
+	if e.Fields == nil {
+		e.Fields = make(map[string]interface{})
+	}
+	e.Fields["cause"] = cause.Error()
+	return e
+}
+
+func (e *HttpError) WithField(name string, value interface{}) *HttpError {
+	if e.Fields == nil {
+		e.Fields = make(map[string]interface{})
+	}
+	e.Fields[name] = value
 	return e
 }
 

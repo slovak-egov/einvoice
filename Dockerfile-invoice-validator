@@ -4,6 +4,14 @@ WORKDIR /app
 
 COPY ./invoice-validator /app
 
+RUN apk add maven
+
+WORKDIR /app/data/ubl2.1/
+RUN mvn -f pom-preprocess.xml generate-resources
+RUN mvn -f pom-xslt.xml process-resources
+RUN npx xslt3 -xsl:xslt/EN16931-UBL-validation-preprocessed.xslt -export:en16931-schema.sef.json -t -nogo
+
+WORKDIR /app
 RUN npm i --production
 
 CMD [ "npm", "start" ]
