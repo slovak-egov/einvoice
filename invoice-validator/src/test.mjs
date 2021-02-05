@@ -4,7 +4,7 @@ import {promises as fs} from 'fs'
 const port = process.env.PORT || 8082;
 
 (async () => {
-  const xml = await fs.readFile('../xml/ubl21/example/ubl21_invoice.xml', 'utf-8')
+  const xml = await fs.readFile('../xml/ubl2.1/example/invoice.xml', 'utf-8')
   const res = await fetch(`http://localhost:${port}`, {
     headers: {"Content-Type": "application/json"},
     method: 'POST',

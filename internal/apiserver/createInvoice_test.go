@@ -27,11 +27,11 @@ func TestCreateInvoice(t *testing.T) {
 		t.Error(err)
 	}
 
-	invoiceWriter, err := multipartWriter.CreateFormFile("invoice", "ubl21_invoice.xml")
+	invoiceWriter, err := multipartWriter.CreateFormFile("invoice", "invoice.xml")
 	if err != nil {
 		t.Error(err)
 	}
-	invoice, err := ioutil.ReadFile("../../xml/ubl21/example/ubl21_invoice.xml")
+	invoice, err := ioutil.ReadFile("../../xml/ubl2.1/example/invoice.xml")
 	if err != nil {
 		t.Error(err)
 	}
@@ -113,11 +113,11 @@ func TestRateLimiter(t *testing.T) {
 		t.Error(err)
 	}
 
-	invoiceWriter, err := multipartWriter.CreateFormFile("invoice", "ubl21_invoice.xml")
+	invoiceWriter, err := multipartWriter.CreateFormFile("invoice", "invoice.xml")
 	if err != nil {
 		t.Error(err)
 	}
-	invoice, err := ioutil.ReadFile("../../xml/ubl21/example/ubl21_invoice.xml")
+	invoice, err := ioutil.ReadFile("../../xml/ubl2.1/example/invoice.xml")
 	if err != nil {
 		t.Error(err)
 	}

@@ -21,12 +21,12 @@ var formatToParsers = map[string]struct {
 	MetadataExtractor   func([]byte) (*entity.Invoice, error)
 }{
 	entity.UblFormat: {
-		func(a *App) func([]byte) error { return a.validator.ValidateUBL21 },
+		func(a *App) func([]byte) error { return a.xsdValidator.ValidateUBL21 },
 		func(a *App) func(goContext.Context, []byte) error { return a.invoiceValidator.ValidateUBL21 },
 		ubl21.Create,
 	},
 	entity.D16bFormat: {
-		func(a *App) func([]byte) error { return a.validator.ValidateD16B },
+		func(a *App) func([]byte) error { return a.xsdValidator.ValidateD16B },
 		func(a *App) func(goContext.Context, []byte) error { return a.invoiceValidator.ValidateD16B },
 		d16b.Create,
 	},
@@ -108,7 +108,7 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 		if errors, ok := err.(*validator.InvoiceValidationError); ok {
 			return handlerutil.NewBadRequestError("invoice.validation.failed").WithField("rules", errors.Errors)
 		} else if _, ok := err.(*validator.InvoiceValidationRequestError); ok {
-			return handlerutil.NewFailedDependencyError("invoice.validator.request.failed")
+			return handlerutil.NewFailedDependencyError("invoice.validation.request.failed")
 		} else {
 			return err
 		}

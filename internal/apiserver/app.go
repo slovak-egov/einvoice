@@ -9,7 +9,7 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	"github.com/slovak-egov/einvoice/internal/apiserver/config"
-	invoicevalidator "github.com/slovak-egov/einvoice/internal/apiserver/validator"
+	invoiceValidator "github.com/slovak-egov/einvoice/internal/apiserver/validator"
 	"github.com/slovak-egov/einvoice/internal/apiserver/xml"
 	"github.com/slovak-egov/einvoice/internal/cache"
 	"github.com/slovak-egov/einvoice/internal/db"
@@ -29,10 +29,10 @@ type App struct {
 	router           *mux.Router
 	db               *db.Connector
 	storage          *storage.LocalStorage
-	validator        xml.Validator
+	xsdValidator     xml.Validator
 	cache            *cache.Cache
 	upvs             *upvs.Connector
-	invoiceValidator invoicevalidator.InvoiceValidator
+	invoiceValidator invoiceValidator.InvoiceValidator
 }
 
 func NewApp() *App {
@@ -43,10 +43,10 @@ func NewApp() *App {
 		router:           mux.NewRouter(),
 		db:               db.NewConnector(appConfig.Db),
 		storage:          storage.New(appConfig.LocalStorageBasePath),
-		validator:        xml.NewValidator(appConfig.Ubl21XsdPath, appConfig.D16bXsdPath),
+		xsdValidator:     xml.NewValidator(appConfig.Ubl21XsdPath, appConfig.D16bXsdPath),
 		cache:            cache.NewRedis(appConfig.Cache),
 		upvs:             upvs.New(appConfig.Upvs),
-		invoiceValidator: invoicevalidator.New(appConfig.ValidationServerUrl),
+		invoiceValidator: invoiceValidator.New(appConfig.ValidationServerUrl),
 	}
 
 	a.initializeHandlers()

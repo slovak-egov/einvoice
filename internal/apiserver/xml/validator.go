@@ -36,7 +36,7 @@ func NewValidator(ubl21XsdPath, d16bXsdPath string) Validator {
 	ubl21MainFile := ubl21XsdPath + "/maindoc/UBL-Invoice-2.1.xsd"
 	ubl21Schema, err := xsd.ParseFromFile(ubl21MainFile)
 	if err != nil {
-		log.WithField("error", err.Error()).Fatal("validator.parseSchema.ubl21.failed")
+		log.WithField("error", err.Error()).Fatal("validator.parseSchema.ubl2.1.failed")
 	}
 
 	return &validator{d16bSchema, ubl21Schema}
