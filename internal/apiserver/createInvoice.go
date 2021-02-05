@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/slovak-egov/einvoice/internal/apiserver/validator"
+	"github.com/slovak-egov/einvoice/internal/apiserver/invoiceValidator"
 	"github.com/slovak-egov/einvoice/internal/apiserver/xml/d16b"
 	"github.com/slovak-egov/einvoice/internal/apiserver/xml/ubl21"
 	"github.com/slovak-egov/einvoice/internal/db"
@@ -105,9 +105,9 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 		return InvoiceError("xsd.validation.failed").WithCause(err)
 	}
 	if err = parsers.GetInvoiceValidator(a)(req.Context(), invoice); err != nil {
-		if errors, ok := err.(*validator.InvoiceValidationError); ok {
+		if errors, ok := err.(*invoiceValidator.ValidationError); ok {
 			return handlerutil.NewBadRequestError("invoice.validation.failed").WithField("rules", errors.Errors)
-		} else if _, ok := err.(*validator.InvoiceValidationRequestError); ok {
+		} else if _, ok := err.(*invoiceValidator.RequestError); ok {
 			return handlerutil.NewFailedDependencyError("invoice.validation.request.failed")
 		} else {
 			return err

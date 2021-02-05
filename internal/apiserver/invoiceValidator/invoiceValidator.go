@@ -1,4 +1,4 @@
-package validator
+package invoiceValidator
 
 import (
 	"bytes"
@@ -63,7 +63,7 @@ func (v *invoiceValidator) ValidateUBL21(ctx goContext.Context, xml []byte) erro
 	}
 
 	if res.StatusCode == http.StatusBadRequest {
-		msg := &InvoiceValidationError{}
+		msg := &ValidationError{}
 		if err = json.Unmarshal(body, msg); err != nil {
 			context.GetLogger(ctx).WithField("error", err.Error()).Error("invoiceValidator.response.body.parse.failed")
 			return err
@@ -75,7 +75,7 @@ func (v *invoiceValidator) ValidateUBL21(ctx goContext.Context, xml []byte) erro
 		"error":  string(body),
 		"status": res.StatusCode,
 	}).Error("invoiceValidator.request.failed")
-	return &InvoiceValidationRequestError{}
+	return &RequestError{}
 }
 
 func (v *invoiceValidator) ValidateD16B(ctx goContext.Context, xml []byte) error {

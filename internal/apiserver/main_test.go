@@ -3,6 +3,8 @@ package apiserver
 import (
 	"os"
 	"testing"
+
+	invoiceValidator "github.com/slovak-egov/einvoice/internal/apiserver/invoiceValidator/mock"
 )
 
 var a *App
@@ -10,7 +12,7 @@ var a *App
 func TestMain(m *testing.M) {
 	a = NewApp()
 
-	a.invoiceValidator = &TestInvoiceValidator{}
+	a.invoiceValidator = &invoiceValidator.TestInvoiceValidator{}
 
 	result := m.Run()
 
