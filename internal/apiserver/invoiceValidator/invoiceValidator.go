@@ -10,6 +10,7 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
+	"github.com/slovak-egov/einvoice/internal/apiserver/invoiceValidator/mock"
 	"github.com/slovak-egov/einvoice/pkg/context"
 )
 
@@ -19,6 +20,9 @@ type InvoiceValidator interface {
 }
 
 func New(url string) InvoiceValidator {
+	if url == "" {
+		return &mock.InvoiceValidator{}
+	}
 	return &invoiceValidator{
 		url:    url,
 		client: &http.Client{},
