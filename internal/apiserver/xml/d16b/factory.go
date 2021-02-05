@@ -2,9 +2,7 @@ package d16b
 
 import (
 	"encoding/xml"
-	"errors"
 	"strconv"
-	"strings"
 
 	"github.com/slovak-egov/einvoice/internal/entity"
 	"github.com/slovak-egov/einvoice/pkg/timeutil"
@@ -17,37 +15,19 @@ func Create(value []byte) (*entity.Invoice, error) {
 		return nil, err
 	}
 
-	var errs []string
+	customer := parseParty(inv.SupplyChainTradeTransaction.ApplicableHeaderTradeAgreement.BuyerTradeParty)
+	supplier := parseParty(inv.SupplyChainTradeTransaction.ApplicableHeaderTradeAgreement.SellerTradeParty)
 
-	customer, validationErrs := parseParty("customer", inv.SupplyChainTradeTransaction.ApplicableHeaderTradeAgreement.BuyerTradeParty)
-	if len(validationErrs) != 0 {
-		errs = append(errs, validationErrs...)
-	}
-
-	supplier, validationErrs := parseParty("supplier", inv.SupplyChainTradeTransaction.ApplicableHeaderTradeAgreement.SellerTradeParty)
-	if len(validationErrs) != 0 {
-		errs = append(errs, validationErrs...)
-	}
-
-	price, validationErr := getPrice(inv)
-	if validationErr != "" {
-		errs = append(errs, validationErr)
-	}
-
-	issueDate, validationErr := getIssueDate(inv.ExchangedDocument.IssueDateTime)
-	if validationErr != "" {
-		errs = append(errs, validationErr)
-	}
-
-	if len(errs) > 0 {
-		return nil, errors.New(strings.Join(errs, ", "))
+	issueDate, err := getIssueDate(inv.ExchangedDocument.IssueDateTime)
+	if err != nil {
+		return nil, err
 	}
 
 	return &entity.Invoice{
 		Sender:      supplier.name,
 		Receiver:    customer.name,
 		Format:      entity.D16bFormat,
-		Price:       price,
+		Price:       getPrice(inv),
 		CustomerIco: customer.ico,
 		SupplierIco: supplier.ico,
 		IssueDate:   *issueDate,
@@ -58,62 +38,30 @@ type partyInfo struct {
 	ico, name string
 }
 
-func parseParty(partyName string, party *TradePartyType) (res partyInfo, errs []string) {
+func parseParty(party *TradePartyType) partyInfo {
 	if party == nil {
-		errs = []string{partyName + ".undefined"}
-		return
+		return partyInfo{}
 	}
 
-	if party.Name == nil {
-		errs = append(errs, "name.undefined")
-	} else {
-		res.name = *party.Name
+	return partyInfo{
+		ico:  getIco(party),
+		name: *party.Name,
 	}
-
-	if address := party.PostalTradeAddress; address == nil {
-		errs = append(errs, "address.undefined")
-	} else {
-		if address.CountryID == nil && len(address.CountryName) == 0 {
-			errs = append(errs, "address.country.undefined")
-		}
-
-		if address.CityName == nil {
-			errs = append(errs, "address.city.undefined")
-		}
-
-		if address.BuildingNumber == nil {
-			errs = append(errs, "address.building.number.undefined")
-		}
-	}
-
-	ico, icoErr := getIco(party)
-	if icoErr != "" {
-		errs = append(errs, icoErr)
-	} else {
-		res.ico = ico
-	}
-
-	for i := range errs {
-		errs[i] = partyName + "." + errs[i]
-	}
-	return
 }
 
-func getPrice(inv *CrossIndustryInvoice) (sum float64, err string) {
+func getPrice(inv *CrossIndustryInvoice) (sum float64) {
 	if inv == nil {
 		return
 	}
 
 	summation := inv.SupplyChainTradeTransaction.ApplicableHeaderTradeSettlement.SpecifiedTradeSettlementHeaderMonetarySummation
 	if summation == nil {
-		err = "price.undefined"
 		return
 	}
 
 	for _, l := range summation.LineTotalAmount {
 		price, parsingErr := strconv.ParseFloat(l.Value, 64)
 		if parsingErr != nil {
-			err = "price.value.parsingError"
 			return
 		}
 		sum += price
@@ -122,40 +70,36 @@ func getPrice(inv *CrossIndustryInvoice) (sum float64, err string) {
 	return
 }
 
-func getIco(party *TradePartyType) (ico string, err string) {
+func getIco(party *TradePartyType) (ico string) {
 	for _, id := range party.ID {
 
 		if id.SchemeID == nil || *id.SchemeID != "0158" {
 			continue
 		}
 		if ico != "" {
-			return "", "ico.multiple"
+			return ""
 		}
 		ico = id.Value
 	}
 
-	if ico == "" {
-		return "", "ico.undefined"
-	}
-
-	return ico, ""
+	return ico
 }
 
-func getIssueDate(date DateTimeType) (*timeutil.Date, string) {
+func getIssueDate(date DateTimeType) (*timeutil.Date, error) {
 	// TODO: parse other formats
 	if d := date.DateTime; d != nil {
 		t, err := timeutil.ParseDate(d.Value)
 		if err != nil {
-			return nil, "issueDate.parsingError"
+			return nil, err
 		}
-		return t, ""
+		return t, nil
 	}
 	if d := date.DateTimeString; d != nil {
 		t, err := timeutil.ParseDate(d.Value)
 		if err != nil {
-			return nil, "issueDate.parsingError"
+			return nil, err
 		}
-		return t, ""
+		return t, nil
 	}
-	return nil, "issueDate.undefined"
+	return nil, nil
 }

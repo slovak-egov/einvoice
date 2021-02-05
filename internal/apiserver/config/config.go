@@ -32,6 +32,7 @@ type Configuration struct {
 	InvoicesLimit        int
 	ApiKey               ApiKeyConfiguration
 	Logger               loggerutil.Configuration
+	ValidationServerUrl  string
 }
 
 func New() *Configuration {
@@ -71,6 +72,8 @@ func New() *Configuration {
 	config.InvoicesLimit = environment.ParseInt("INVOICES_LIMIT", config.InvoicesLimit)
 	config.ApiKey.MaxExpiration = environment.ParseDuration("API_KEY_MAX_EXPIRATION", config.ApiKey.MaxExpiration)
 	config.ApiKey.JtiExpiration = environment.ParseDuration("API_KEY_JTI_EXPIRATION", config.ApiKey.JtiExpiration)
+
+	config.ValidationServerUrl = environment.Getenv("VALIDATION_SERVER_URL", config.ValidationServerUrl)
 
 	log.Info("config.loaded")
 

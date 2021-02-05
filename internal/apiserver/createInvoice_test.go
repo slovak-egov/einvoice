@@ -27,11 +27,11 @@ func TestCreateInvoice(t *testing.T) {
 		t.Error(err)
 	}
 
-	invoiceWriter, err := multipartWriter.CreateFormFile("invoice", "ubl21_invoice.xml")
+	invoiceWriter, err := multipartWriter.CreateFormFile("invoice", "invoice.xml")
 	if err != nil {
 		t.Error(err)
 	}
-	invoice, err := ioutil.ReadFile("../../xml/ubl21/example/ubl21_invoice.xml")
+	invoice, err := ioutil.ReadFile("../../xml/ubl2.1/example/invoice.xml")
 	if err != nil {
 		t.Error(err)
 	}
@@ -58,9 +58,9 @@ func TestCreateInvoice(t *testing.T) {
 	expectedResponse := entity.Invoice{
 		Id:          createdResponse.Id,        // No need to assert this param,
 		CreatedAt:   createdResponse.CreatedAt, // No need to assert this param
-		Sender:      "Custom Cotter Pins",
-		Receiver:    "North American Veeblefetzer",
-		Price:       100,
+		Sender:      "Global Trade Chain",
+		Receiver:    "Project Services",
+		Price:       12500,
 		SupplierIco: "11190993",
 		CustomerIco: "22222222",
 		Format:      entity.UblFormat,
@@ -113,11 +113,11 @@ func TestRateLimiter(t *testing.T) {
 		t.Error(err)
 	}
 
-	invoiceWriter, err := multipartWriter.CreateFormFile("invoice", "ubl21_invoice.xml")
+	invoiceWriter, err := multipartWriter.CreateFormFile("invoice", "invoice.xml")
 	if err != nil {
 		t.Error(err)
 	}
-	invoice, err := ioutil.ReadFile("../../xml/ubl21/example/ubl21_invoice.xml")
+	invoice, err := ioutil.ReadFile("../../xml/ubl2.1/example/invoice.xml")
 	if err != nil {
 		t.Error(err)
 	}

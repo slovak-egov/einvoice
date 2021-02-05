@@ -10,7 +10,7 @@ import (
 var validator xml.Validator
 
 func TestMain(m *testing.M) {
-	validator = xml.NewValidator("../../../xml/ubl21/xsd", "../../../xml/d16b/xsd")
+	validator = xml.NewValidator("../../../xml/ubl2.1/xsd", "../../../xml/d16b/xsd")
 
 	result := m.Run()
 

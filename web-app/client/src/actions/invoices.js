@@ -69,9 +69,15 @@ export const createInvoice = (data) => loadingWrapper(
         redirect,
       }
     } catch (error) {
+      let text = error.message
+      if (error.message === 'invoice.validation.failed') {
+        text = `${error.message}
+        Violated rules:
+        ${error.response.rules.join('\n')}`
+      }
       await swal({
         title: 'Invoice could not be created',
-        text: error.message,
+        text,
         icon: 'error',
       })
       return {

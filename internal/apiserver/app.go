@@ -9,11 +9,12 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	"github.com/slovak-egov/einvoice/internal/apiserver/config"
+	"github.com/slovak-egov/einvoice/internal/apiserver/invoiceValidator"
 	"github.com/slovak-egov/einvoice/internal/apiserver/xml"
 	"github.com/slovak-egov/einvoice/internal/cache"
 	"github.com/slovak-egov/einvoice/internal/db"
-	"github.com/slovak-egov/einvoice/internal/upvs"
 	"github.com/slovak-egov/einvoice/internal/storage"
+	"github.com/slovak-egov/einvoice/internal/upvs"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
@@ -24,26 +25,28 @@ var corsOptions = []muxHandlers.CORSOption{
 }
 
 type App struct {
-	config    *config.Configuration
-	router    *mux.Router
-	db        *db.Connector
-	storage   *storage.LocalStorage
-	validator xml.Validator
-	cache     *cache.Cache
-	upvs      *upvs.Connector
+	config           *config.Configuration
+	router           *mux.Router
+	db               *db.Connector
+	storage          *storage.LocalStorage
+	xsdValidator     xml.Validator
+	cache            *cache.Cache
+	upvs             *upvs.Connector
+	invoiceValidator invoiceValidator.InvoiceValidator
 }
 
 func NewApp() *App {
 	appConfig := config.New()
 
 	a := &App{
-		config:    appConfig,
-		router:    mux.NewRouter(),
-		db:        db.NewConnector(appConfig.Db),
-		storage:   storage.New(appConfig.LocalStorageBasePath),
-		validator: xml.NewValidator(appConfig.Ubl21XsdPath, appConfig.D16bXsdPath),
-		cache:     cache.NewRedis(appConfig.Cache),
-		upvs:      upvs.New(appConfig.Upvs),
+		config:           appConfig,
+		router:           mux.NewRouter(),
+		db:               db.NewConnector(appConfig.Db),
+		storage:          storage.New(appConfig.LocalStorageBasePath),
+		xsdValidator:     xml.NewValidator(appConfig.Ubl21XsdPath, appConfig.D16bXsdPath),
+		cache:            cache.NewRedis(appConfig.Cache),
+		upvs:             upvs.New(appConfig.Upvs),
+		invoiceValidator: invoiceValidator.New(appConfig.ValidationServerUrl),
 	}
 
 	a.initializeHandlers()

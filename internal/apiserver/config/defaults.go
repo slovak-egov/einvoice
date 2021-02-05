@@ -21,7 +21,7 @@ var devConfig = Configuration{
 	Host:         "0.0.0.0",
 	Port:         8081,
 	D16bXsdPath:  "xml/d16b/xsd",
-	Ubl21XsdPath: "xml/ubl21/xsd",
+	Ubl21XsdPath: "xml/ubl2.1/xsd",
 	Logger: loggerutil.Configuration{
 		LogLevel: logrus.DebugLevel,
 		Format:   "text",
@@ -45,6 +45,7 @@ var devConfig = Configuration{
 		MaxExpiration: 10 * time.Minute,
 		JtiExpiration: 15 * time.Minute,
 	},
+	ValidationServerUrl: "http://localhost:8082",
 }
 
 var prodConfig = Configuration{
@@ -55,7 +56,7 @@ var prodConfig = Configuration{
 	Host:         "0.0.0.0",
 	Port:         80,
 	D16bXsdPath:  "xml/d16b/xsd",
-	Ubl21XsdPath: "xml/ubl21/xsd",
+	Ubl21XsdPath: "xml/ubl2.1/xsd",
 	Logger: loggerutil.Configuration{
 		LogLevel:     logrus.InfoLevel,
 		ElasticIndex: "apiserver",
@@ -90,7 +91,7 @@ var testConfig = Configuration{
 		User: "postgres",
 	},
 	D16bXsdPath:  "../../xml/d16b/xsd",
-	Ubl21XsdPath: "../../xml/ubl21/xsd",
+	Ubl21XsdPath: "../../xml/ubl2.1/xsd",
 	Logger: loggerutil.Configuration{
 		LogLevel: logrus.ErrorLevel,
 		Format:   "text",
