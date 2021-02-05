@@ -8,6 +8,15 @@ import {updateRunningRequests} from '../actions/common'
 import {getLoggedUser, isUserLogged} from '../state/users'
 import {getLogoutUrl} from '../utils/constants'
 
+const defaultInvoiceQuery = new URLSearchParams([
+  ['format', 'ubl2.1'], ['format', 'd16b'],
+])
+
+const defaultMyInvoiceQuery = new URLSearchParams({
+  supplied: true,
+  received: true,
+})
+
 export default () => {
   const {i18n, t} = useTranslation('common')
 
@@ -35,7 +44,7 @@ export default () => {
               EN
             </NavDropdown.Item>
           </NavDropdown>
-          <IndexLinkContainer to="/invoices">
+          <IndexLinkContainer to={`/invoices?${defaultInvoiceQuery}`}>
             <Nav.Link className="mr-auto">
               {t('topBar.publicInvoices')}
             </Nav.Link>
@@ -45,7 +54,7 @@ export default () => {
               <IndexLinkContainer to="/create-invoice">
                 <Nav.Link>{t('topBar.createInvoice')}</Nav.Link>
               </IndexLinkContainer>
-              <IndexLinkContainer to="/my-invoices">
+              <IndexLinkContainer to={`/my-invoices?${defaultInvoiceQuery}&${defaultMyInvoiceQuery}`}>
                 <Nav.Link>{t('topBar.myInvoices')}</Nav.Link>
               </IndexLinkContainer>
               <IndexLinkContainer to="/account">

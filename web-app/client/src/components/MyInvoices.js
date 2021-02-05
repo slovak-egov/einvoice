@@ -37,11 +37,6 @@ const Filter = ({extraQuery, setExtraQuery}) => {
   )
 }
 
-const defaultExtraQuery = new URLSearchParams({
-  supplied: true,
-  received: true,
-})
-
 const filterValidator = (q) => q.get('supplied') === 'true' || q.get('received') === 'true'
 
 export default () => {
@@ -54,7 +49,6 @@ export default () => {
       CustomFilter={Filter}
       areCustomFilterFieldsValid={filterValidator}
       getInvoicesAction={getMyInvoices}
-      defaultExtraQuery={defaultExtraQuery}
     />
   )
 }
