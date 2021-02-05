@@ -6,7 +6,7 @@ import {useTranslation} from 'react-i18next'
 import {invoiceFormats} from '../../utils/constants'
 import {isInvoicesFilterValid, keepDigitsOnly} from '../../utils/validations'
 
-export default ({areCustomFilterFieldsValid, CustomFilter, defaultExtraQuery, getInvoices}) => {
+export default ({areCustomFilterFieldsValid, CustomFilter, getInvoices}) => {
   const {t} = useTranslation('common')
   const history = useHistory()
   const {pathname, search} = useLocation()
@@ -48,27 +48,8 @@ export default ({areCustomFilterFieldsValid, CustomFilter, defaultExtraQuery, ge
     areCustomFilterFieldsValid(extraQuery)
 
   // When query URL parameters change try to fetch proper data
-  // If query is invalid redirect to default search
   useEffect(() => {
-    if (searchEnabled) {
-      getInvoices(search)
-    } else {
-      // Redirect to default view if query params are corrupted
-      // Synchronize state accordingly
-      const defaultQueryParams = new URLSearchParams(defaultExtraQuery)
-      setExtraQuery(defaultExtraQuery)
-
-      for (const format of Object.values(invoiceFormats)) {
-        defaultQueryParams.append('format', format)
-        formats[format].setter(true)
-      }
-
-      setTest(false)
-      setIco(null)
-
-      history.push(`${pathname}?${defaultQueryParams}`)
-    }
-
+    getInvoices(search)
   }, [search])
 
   return (

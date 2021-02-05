@@ -9,7 +9,7 @@ import Filters from './Filters'
 import {invoicesSelector} from '../../state/invoices'
 
 export default ({
-  areCustomFilterFieldsValid, CustomFilter, defaultExtraQuery, getInvoicesAction, path, title,
+  areCustomFilterFieldsValid, CustomFilter, getInvoicesAction, path, title,
 }) => {
   const {t} = useTranslation(['common', 'invoices'])
   const {search} = useLocation()
@@ -31,7 +31,6 @@ export default ({
           getInvoices={getInvoices}
           CustomFilter={CustomFilter}
           areCustomFilterFieldsValid={areCustomFilterFieldsValid}
-          defaultExtraQuery={defaultExtraQuery}
         />
         {invoiceIds && <>
           <Table striped hover responsive size="sm">
