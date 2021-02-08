@@ -8,8 +8,7 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-
-	"github.com/slovak-egov/einvoice/pkg/random"
+	"github.com/google/uuid"
 )
 
 func TestApiKey(t *testing.T) {
@@ -32,7 +31,7 @@ func TestApiKey(t *testing.T) {
 
 	currentTime := time.Now()
 	exp := currentTime.Add(5 * time.Minute).Unix()
-	jti := random.String(32)
+	jti := uuid.New().String()
 
 	var flagtests = []struct {
 		name           string
@@ -43,16 +42,16 @@ func TestApiKey(t *testing.T) {
 		error          string
 	}{
 		{"correct token", user.Id, exp, jti, http.StatusOK, ""},
-		{"missing sub", nil, exp, random.String(32), http.StatusUnauthorized, "authorization.apiKey.sub.missing"},
-		{"wrong sub type", strconv.Itoa(user.Id), exp, random.String(32), http.StatusUnauthorized, "authorization.apiKey.sub.wrongType"},
-		{"unknown sub", user.Id + 1, exp, random.String(32), http.StatusUnauthorized, "authorization.apiKey.sub.notFound"},
-		{"missing exp", user.Id, nil, random.String(32), http.StatusUnauthorized, "authorization.apiKey.exp.missing"},
-		{"wrong exp type", user.Id, strconv.FormatInt(exp, 10), random.String(32), http.StatusUnauthorized, "authorization.apiKey.exp.wrongType"},
-		{"old exp", user.Id, currentTime.Add(-5 * time.Minute).Unix(), random.String(32), http.StatusUnauthorized, "authorization.apiKey.exp.expired"},
-		{"too long exp", user.Id, currentTime.Add(60 * time.Minute).Unix(), random.String(32), http.StatusUnauthorized, "authorization.apiKey.exp.tooLong"},
+		{"missing sub", nil, exp, uuid.New().String(), http.StatusUnauthorized, "authorization.apiKey.sub.missing"},
+		{"wrong sub type", strconv.Itoa(user.Id), exp, uuid.New().String(), http.StatusUnauthorized, "authorization.apiKey.sub.wrongType"},
+		{"unknown sub", user.Id + 1, exp, uuid.New().String(), http.StatusUnauthorized, "authorization.apiKey.sub.notFound"},
+		{"missing exp", user.Id, nil, uuid.New().String(), http.StatusUnauthorized, "authorization.apiKey.exp.missing"},
+		{"wrong exp type", user.Id, strconv.FormatInt(exp, 10), uuid.New().String(), http.StatusUnauthorized, "authorization.apiKey.exp.wrongType"},
+		{"old exp", user.Id, currentTime.Add(-5 * time.Minute).Unix(), uuid.New().String(), http.StatusUnauthorized, "authorization.apiKey.exp.expired"},
+		{"too long exp", user.Id, currentTime.Add(60 * time.Minute).Unix(), uuid.New().String(), http.StatusUnauthorized, "authorization.apiKey.exp.tooLong"},
 		{"missing jti", user.Id, exp, nil, http.StatusUnauthorized, "authorization.apiKey.jti.missing"},
 		{"wrong jti type", user.Id, exp, 12345, http.StatusUnauthorized, "authorization.apiKey.jti.wrongType"},
-		{"wrong jti format", user.Id, exp, random.String(20), http.StatusUnauthorized, "authorization.apiKey.jti.invalid"},
+		{"wrong jti format", user.Id, exp, "12345", http.StatusUnauthorized, "authorization.apiKey.jti.invalid"},
 		{"reused jti", user.Id, exp, jti, http.StatusUnauthorized, "authorization.apiKey.jti.reused"},
 	}
 	for _, tt := range flagtests {

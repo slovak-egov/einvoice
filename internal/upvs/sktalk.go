@@ -6,8 +6,9 @@ import (
 	"encoding/xml"
 	"fmt"
 
+	"github.com/google/uuid"
+
 	"github.com/slovak-egov/einvoice/pkg/context"
-	"github.com/slovak-egov/einvoice/pkg/random"
 )
 
 const msgTemplate = `V e-fakturačnom systéme bola vytvorená faktúra.
@@ -70,10 +71,6 @@ type GeneralAgenda struct {
 	Text    string   `xml:"text"`
 }
 
-func generateId() string {
-	return fmt.Sprintf("%s-%s-%s-%s-%s", random.Digits(8), random.Digits(4), random.Digits(4), random.Digits(4), random.Digits(12))
-}
-
 func getFileName(invoiceId int, extension string) string {
 	return fmt.Sprintf("invoice-%d.%s", invoiceId, extension)
 }
@@ -81,7 +78,7 @@ func getFileName(invoiceId int, extension string) string {
 func CreateInvoiceNotificationMessage(
 	ctx goContext.Context, senderUri, recipientUri string, invoiceId int, xmlFile, pdfFile []byte,
 ) (string, error) {
-	msgId := generateId()
+	msgId := uuid.New().String()
 	subject := fmt.Sprintf("Faktúra %[1]d / Invoice %[1]d", invoiceId)
 	text := fmt.Sprintf(
 		msgTemplate,
@@ -110,7 +107,7 @@ func CreateInvoiceNotificationMessage(
 				MessageSubject: subject,
 				Objects: []Object{
 					{
-						Id:       generateId(),
+						Id:       uuid.New().String(),
 						Class:    "FORM",
 						MimeType: "application/x-eform-xml",
 						Encoding: "XML",
@@ -120,7 +117,7 @@ func CreateInvoiceNotificationMessage(
 						},
 					},
 					{
-						Id:       generateId(),
+						Id:       uuid.New().String(),
 						Name:     getFileName(invoiceId, "xml"),
 						Class:    "ATTACHMENT",
 						MimeType: "application/xml",
@@ -128,7 +125,7 @@ func CreateInvoiceNotificationMessage(
 						Value:    &encodedXmlFile,
 					},
 					{
-						Id:       generateId(),
+						Id:       uuid.New().String(),
 						Name:     getFileName(invoiceId, "pdf"),
 						Class:    "ATTACHMENT",
 						MimeType: "application/pdf",
