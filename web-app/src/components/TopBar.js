@@ -47,7 +47,7 @@ export default () => {
           <Nav.Link as={NavLink} to={`/invoices?${defaultInvoiceQuery}`}>
             {t('topBar.publicInvoices')}
           </Nav.Link>
-          {!isLogged && <Nav.Link as={NavLink} to="/invoice-visualization">{t('topBar.invoiceVisualization')}</Nav.Link>}
+          {!isLogged && <Nav.Link as={NavLink} to="/invoice-tools">{t('topBar.invoiceTools')}</Nav.Link>}
           <div className="d-flex ml-auto">
             {isLogged ?
               <>

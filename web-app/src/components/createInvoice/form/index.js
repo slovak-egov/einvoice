@@ -4,34 +4,46 @@ import {useHistory} from 'react-router-dom'
 import {useTranslation} from 'react-i18next'
 import {Button, Card} from 'react-bootstrap'
 import TagGroup from './TagGroup'
-import {isUblDocsLoadedSelector, ubl21DocsSelector} from '../../../state/docs'
+import {areCodeListsLoadedSelector, isUblDocsLoadedSelector, ubl21DocsSelector} from '../../../state/docs'
 import {isFormInitialized, invoiceFormSelector} from '../../../state/invoiceForm'
-import {getUblDocs} from '../../../actions/docs'
+import {getCodeLists, getUblDocs} from '../../../actions/docs'
 import {initializeFormState, submitInvoiceForm} from '../../../actions/invoiceForm'
 
 export default ({match}) => {
   const {t} = useTranslation('common')
   const history = useHistory()
   const isDocsLoaded = useSelector(isUblDocsLoadedSelector)
+  const areCodeListsLoaded = useSelector(areCodeListsLoadedSelector)
   const isFormLoaded = useSelector(isFormInitialized)
   const invoiceDocs = useSelector(ubl21DocsSelector)
   const invoiceForm = useSelector(invoiceFormSelector)
   const dispatch = useDispatch()
 
+  // We need to have separate useEffects, so requests can be done in parallel
   useEffect(() => {
     if (!isDocsLoaded) {
       dispatch(getUblDocs())
     }
-    if (isDocsLoaded && !isFormLoaded) {
+  }, [dispatch, isDocsLoaded])
+
+  useEffect(() => {
+    if (!areCodeListsLoaded) {
+      dispatch(getCodeLists())
+    }
+  }, [areCodeListsLoaded, dispatch])
+
+  useEffect(() => {
+    if (areCodeListsLoaded && isDocsLoaded && !isFormLoaded) {
       dispatch(initializeFormState())
     }
-  }, [dispatch, isDocsLoaded, isFormLoaded])
+  }, [areCodeListsLoaded, dispatch, isDocsLoaded, isFormLoaded])
 
   const submit = useCallback(
     async () => {
       await dispatch(submitInvoiceForm())
-      history.push('/create-invoice/submission')
-    }, [dispatch])
+      const parentUrl = match.url.split('/').slice(0, -1).join('/')
+      history.push(`${parentUrl}/submission`)
+    }, [dispatch, match])
 
   // Data is loading
   if (!isFormLoaded) return null

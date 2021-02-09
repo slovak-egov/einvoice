@@ -3,6 +3,7 @@ import {Breadcrumb} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import Tag from './Tag'
 import Home from './Home'
+import CodeLists from './CodeLists'
 
 const UrlBreadcrumbItems = () => {
   const {t} = useTranslation('common')
@@ -49,6 +50,7 @@ export default ({location, match}) => {
       </Breadcrumb>
       <Switch>
         <Route path={`${match.url}/syntax`} component={Tag} />
+        <Route path={`${match.url}/codeLists`} component={CodeLists} />
         <Route component={Home} />
       </Switch>
     </div>

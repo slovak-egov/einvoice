@@ -64,12 +64,17 @@
     "context": "Context",
     "usage": "Usage",
     "attributes": "Attributes",
-    "dataType": "Data type"
+    "dataType": "Data type",
+    "codeLists": "Code lists",
+    "agency": "Agency",
+    "version": "Version",
+    "identifier": "Identifier",
+    "codes": "Codes"
   },
   "topBar": {
     "title": "E-invoice",
     "publicInvoices": "Public invoices",
-    "invoiceVisualization": "Invoice visualization",
+    "invoiceTools": "Invoice tools",
     "createInvoice": "Create invoice",
     "accountSettings": "Account settings",
     "myInvoices": "My invoices",
@@ -77,6 +82,7 @@
     "login": "Login"
   },
   "submission": "Submission",
+  "visualization": "Visualization",
   "downloadVisualization": "Download visualization",
   "form": "Form",
   "generateInvoice": "Generate invoice"

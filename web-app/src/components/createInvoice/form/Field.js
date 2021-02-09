@@ -6,6 +6,7 @@ import DatePicker from '../../helpers/DatePicker'
 import FileUploader from '../../helpers/FileUploader'
 import Tooltip from '../../helpers/Tooltip'
 import {invoiceFormFieldSelector} from '../../../state/invoiceForm'
+import {codeListsSelector} from '../../../state/docs'
 import {setInvoiceFormField} from '../../../actions/invoiceForm'
 
 export default ({canDelete, dropField, docs, path}) => {
@@ -27,6 +28,7 @@ export default ({canDelete, dropField, docs, path}) => {
         </Button>}
       </Form.Label>
       <FieldInput
+        codeListIds={docs.codeLists}
         dataType={docs.dataType}
         updateField={updateField}
         value={value}
@@ -35,7 +37,7 @@ export default ({canDelete, dropField, docs, path}) => {
   )
 }
 
-const FieldInput = ({dataType, updateField, value}) => {
+const FieldInput = ({codeListIds, dataType, updateField, value}) => {
   const {t} = useTranslation()
   const getValue = useCallback(
     (e) => {
@@ -77,6 +79,7 @@ const FieldInput = ({dataType, updateField, value}) => {
   const onChange = useCallback(
     (e) => updateField(getValue(e)), [getValue, updateField],
   )
+  const codeLists = useSelector(codeListsSelector)
 
   switch (dataType) {
     case 'Date':
@@ -108,6 +111,23 @@ const FieldInput = ({dataType, updateField, value}) => {
           />
           <span className="my-auto ml-1">%</span>
         </div>
+      )
+    case 'Code':
+      return (
+        <Form.Control
+          as="select"
+          style={{maxWidth: '100px'}}
+          onChange={onChange}
+          value={value}
+        >
+          {codeListIds.map((id, i) => (
+            <optgroup key={i} label={id}>
+              {Object.keys(codeLists[id].codes).map((code, index) => (
+                <option key={index} value={code}>{code}</option>
+              ))}
+            </optgroup>
+          ))}
+        </Form.Control>
       )
     default:
       return (

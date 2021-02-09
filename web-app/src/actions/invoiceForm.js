@@ -1,9 +1,10 @@
 import {dropRight} from 'lodash'
 import {loadingWrapper, setData} from './common'
-import {setInvoiceSubmissionData} from './createInvoiceScreen'
+import {setInvoiceSubmissionData, setInvoiceSubmissionFormat} from './createInvoiceScreen'
 import {ubl21DocsSelector} from '../state/docs'
 import {getFormInitialState, invoiceFormSelector} from '../state/invoiceForm'
 import {generateInvoice} from '../utils/invoiceGenerator'
+import {invoiceFormats} from '../utils/constants'
 
 export const setInvoiceFormField = (path) => setData(['createInvoiceScreen', 'form', ...path])
 
@@ -34,5 +35,6 @@ export const submitInvoiceForm = () => loadingWrapper(
     const xml = await generateInvoice(invoiceForm['ubl:Invoice'][0])
     const invoiceFile = new File([xml], 'invoice.xml', {type: 'application/xml'})
     dispatch(setInvoiceSubmissionData(invoiceFile))
+    dispatch(setInvoiceSubmissionFormat(invoiceFormats.UBL))
   }
 )

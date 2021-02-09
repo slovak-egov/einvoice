@@ -64,12 +64,17 @@
     "context": "Kontext",
     "Usage": "Použitie",
     "attributes": "Atribúty",
-    "dataType": "Dátový typ"
+    "dataType": "Dátový typ",
+    "codeLists": "Zoznamy kódov",
+    "agency": "Agentúra",
+    "version": "Verzia",
+    "identifier": "Identifikátor",
+    "codes": "Kódy"
   },
   "topBar": {
     "title": "E-faktúra",
     "publicInvoices": "Verejné faktúry",
-    "invoiceVisualization": "Vizualizácia faktúr",
+    "invoiceTools": "Fakturačné nástroje",
     "createInvoice": "Vytvoriť faktúru",
     "accountSettings": "Nastavenia účtu",
     "myInvoices": "Moje faktúry",
@@ -77,7 +82,8 @@
     "login": "Prihlásiť"
   },
   "submission": "Podanie",
-  "downloadVisualization": "Stiahni vizualizáciu",
+  "visualization": "Vizualizácia",
+  "downloadVisualization": "Stiahnuť vizualizáciu",
   "form": "Formulár",
   "generateInvoice": "Vygeneruj faktúru"
 }

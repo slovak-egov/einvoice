@@ -15,7 +15,5 @@ export const tagDocsSelector = (tagPath) => (state) => {
   return get(ubl21DocsSelector(state), path)
 }
 
-export const invoiceRulesDocsSelector = (state) => state.docs.rules
-export const areRulesLoadedSelector = (state) => invoiceRulesDocsSelector(state) != null
-export const invoiceRuleDocsSelector = (name) =>
-  (state) => get(invoiceRulesDocsSelector(state), name)
+export const codeListsSelector = (state) => state.docs.codeLists
+export const areCodeListsLoadedSelector = (state) => codeListsSelector(state) != null

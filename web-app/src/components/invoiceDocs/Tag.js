@@ -89,6 +89,17 @@ export default ({location}) => {
           <Col className="font-weight-bold" sm="3">{t('invoiceDocs.businessTerms')}</Col>
           <Col sm="9">{docs.businessTerms}</Col>
         </Row>}
+        {docs.codeLists && <Row>
+          <Col className="font-weight-bold" sm="3">{t('invoiceDocs.codeLists')}</Col>
+          <Col sm="9">
+            {docs.codeLists.map((codeList, i) => (
+              <>
+                {i !== 0 && <span>, </span>}
+                <Link key={i} to={`/invoice-documentation/codeLists/${codeList}`}>{codeList}</Link>
+              </>
+            ))}
+          </Col>
+        </Row>}
         {docs.attributes && <Row>
           <Col className="font-weight-bold" sm="3">{t('invoiceDocs.attributes')}</Col>
           <Col sm="9">

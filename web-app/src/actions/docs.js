@@ -2,7 +2,7 @@ import {loadingWrapper, setData} from './common'
 import swal from 'sweetalert'
 
 export const setUblDocs = setData(['docs', 'ubl2.1'])
-export const setInvoiceRulesDocs = setData(['docs', 'rules'])
+export const setCodeLists = setData(['docs', 'codeLists'])
 
 export const getUblDocs = () => loadingWrapper(
   async (dispatch, getState, {api}) => {
@@ -19,14 +19,14 @@ export const getUblDocs = () => loadingWrapper(
   }
 )
 
-export const getInvoiceRulesDocs = () => loadingWrapper(
+export const getCodeLists = () => loadingWrapper(
   async (dispatch, getState, {api}) => {
     try {
-      const rules = await api.getInvoiceRulesDocs()
-      dispatch(setInvoiceRulesDocs(rules))
+      const codeLists = await api.getCodeLists()
+      dispatch(setCodeLists(codeLists))
     } catch (error) {
       await swal({
-        title: 'Invoice rules docs could not be fetched',
+        title: 'Code lists could not be fetched',
         text: error.message,
         icon: 'error',
       })

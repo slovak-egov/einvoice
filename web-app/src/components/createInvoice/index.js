@@ -4,7 +4,7 @@ import {useTranslation} from 'react-i18next'
 import InvoiceSubmission from './InvoiceSubmission'
 import Form from './form'
 
-export default ({showSubmission}) => {
+export default ({showSubmission, title}) => {
   const {t} = useTranslation('common')
   const match = useRouteMatch()
   return (
@@ -14,13 +14,13 @@ export default ({showSubmission}) => {
           <Button variant="primary" size="lg">{t('form')}</Button>
         </NavLink>
         <NavLink to={`${match.url}/submission`} activeClassName="selected">
-          <Button variant="primary" size="lg">{t('submission')}</Button>
+          <Button variant="primary" size="lg">{t(title)}</Button>
         </NavLink>
       </div>
       <Switch>
         <Route path={`${match.url}/form`} component={Form} />
         <Route path={`${match.url}/submission`}>
-          <InvoiceSubmission showSubmission={showSubmission} />
+          <InvoiceSubmission showSubmission={showSubmission} title={title} />
         </Route>
       </Switch>
     </div>
