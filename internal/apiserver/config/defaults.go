@@ -20,8 +20,9 @@ var devConfig = Configuration{
 	},
 	Host:         "0.0.0.0",
 	Port:         8081,
-	D16bXsdPath:  "xml/d16b/xsd",
-	Ubl21XsdPath: "xml/ubl2.1/xsd",
+	D16bXsdPath:  "data/schemas/d16b/xsd",
+	Ubl21XsdPath: "data/schemas/ubl2.1/xsd",
+	DataPath:     "data",
 	Logger: loggerutil.Configuration{
 		LogLevel: logrus.DebugLevel,
 		Format:   "text",
@@ -37,8 +38,7 @@ var devConfig = Configuration{
 		TestInvoiceRateLimiterThreshold:  20,
 	},
 	Upvs: upvs.Configuration{
-		Url:               "https://dev.upvs.einvoice.mfsr.sk",
-		LogoutCallbackUrl: "http://localhost:3000/logout-callback",
+		Url: "https://dev.upvs.einvoice.mfsr.sk",
 	},
 	InvoicesLimit: 5,
 	ApiKey: ApiKeyConfiguration{
@@ -55,8 +55,9 @@ var prodConfig = Configuration{
 	},
 	Host:         "0.0.0.0",
 	Port:         80,
-	D16bXsdPath:  "xml/d16b/xsd",
-	Ubl21XsdPath: "xml/ubl2.1/xsd",
+	D16bXsdPath:  "app/data/schemas/d16b/xsd",
+	Ubl21XsdPath: "app/data/schemas/ubl2.1/xsd",
+	DataPath:     "app/data",
 	Logger: loggerutil.Configuration{
 		LogLevel:     logrus.InfoLevel,
 		ElasticIndex: "apiserver",
@@ -72,15 +73,14 @@ var prodConfig = Configuration{
 		TestInvoiceRateLimiterThreshold:  20,
 	},
 	Upvs: upvs.Configuration{
-		Url:               "https://dev.upvs.einvoice.mfsr.sk",
-		LogoutCallbackUrl: "https://dev.einvoice.mfsr.sk/logout-callback",
+		Url: "https://dev.upvs.einvoice.mfsr.sk",
 	},
 	InvoicesLimit: 20,
 	ApiKey: ApiKeyConfiguration{
 		MaxExpiration: 10 * time.Minute,
 		JtiExpiration: 15 * time.Minute,
 	},
-	LocalStorageBasePath: "/data",
+	LocalStorageBasePath: "/storage",
 }
 
 var testConfig = Configuration{
@@ -90,8 +90,8 @@ var testConfig = Configuration{
 		Name: "test",
 		User: "postgres",
 	},
-	D16bXsdPath:  "../../xml/d16b/xsd",
-	Ubl21XsdPath: "../../xml/ubl2.1/xsd",
+	D16bXsdPath:  "../../data/schemas/d16b/xsd",
+	Ubl21XsdPath: "../../data/schemas/ubl2.1/xsd",
 	Logger: loggerutil.Configuration{
 		LogLevel: logrus.ErrorLevel,
 		Format:   "text",

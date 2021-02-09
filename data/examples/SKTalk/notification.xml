@@ -8,11 +8,6 @@
             <PospVersion>1.2</PospVersion>
             <MessageID>1994bd70-0021-485b-9dd4-9c9010a12f6a</MessageID>
             <CorrelationID>77b7ad42-4fcb-44db-8d01-684ffbdb6906</CorrelationID>
-            <ChannelInfoReply>
-                <Channel>
-                    <ChannelInfoURI>ico://sk/11248756</ChannelInfoURI>
-                </Channel>
-            </ChannelInfoReply>
         </MessageInfo>
     </Header>
     <Body>
@@ -21,11 +16,21 @@
             <SenderId>ico://sk/11248756</SenderId>
             <RecipientId>ico://sk/11190993</RecipientId>
             <MessageType>Doc.GeneralAgenda</MessageType>
-            <MessageSubject>Notifikacna sprava</MessageSubject>
+            <MessageSubject>Faktúra 1 / Invoice 1</MessageSubject>
             <Object Id="18168846-3167-4e43-8312-222c5d109b8f" Name="" Description="" Class="FORM" IsSigned="false" MimeType="application/x-eform-xml" Encoding="XML">
                 <GeneralAgenda xmlns="http://schemas.gov.sk/form/Doc.GeneralAgenda/1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-                    <subject>Invoice 45668764</subject>
-                    <text>Prijata faktura c. 45668764</text>
+                    <subject>Faktúra 1 / Invoice 1</subject>
+                    <text>
+                        V e-fakturačnom systéme bola vytvorená faktúra.
+                        Ste jednou zo zmluvných strán (alebo jednu zastupujete).
+                        Faktúru môžete nájsť v prílohe alebo na stránke systému https://dev.einvoice.mfsr.sk/invoices/1.
+
+                        -----------------------------------------------------
+
+                        An invoice has been created in the e-invoicing system.
+                        You are one of the contracting parties (or you substitute one of them).
+                        You can find the invoice in the attachment or on the https://dev.einvoice.mfsr.sk/invoices/%1 system page.
+                    </text>
                 </GeneralAgenda>
             </Object>
             <Object Id="e706743c-0000-401c-ad73-06e593cb769f"

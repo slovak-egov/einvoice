@@ -7,11 +7,11 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-func (c *Connector) GetLogoutUrl(ctx goContext.Context, oboToken string) (string, error) {
+func (c *Connector) GetLogoutUrl(ctx goContext.Context, callbackUrl, oboToken string) (string, error) {
 	signedOboToken, err := c.signOboToken(ctx, oboToken)
 	if jwtError, ok := err.(*jwt.ValidationError); ok && jwtError.Errors == jwt.ValidationErrorExpired {
 		// Skip úpvs logout if token is already invalid
-		return c.logoutCallbackUrl, nil
+		return callbackUrl, nil
 	} else if err != nil {
 		return "", err
 	}
@@ -19,6 +19,6 @@ func (c *Connector) GetLogoutUrl(ctx goContext.Context, oboToken string) (string
 	return fmt.Sprintf(
 		c.baseUrl +"/logout?token=%s&callback=%s",
 		signedOboToken,
-		c.logoutCallbackUrl,
+		callbackUrl,
 	), nil
 }

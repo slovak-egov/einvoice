@@ -31,7 +31,7 @@ func TestCreateInvoice(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	invoice, err := ioutil.ReadFile("../../xml/ubl2.1/example/invoice.xml")
+	invoice, err := ioutil.ReadFile("../../data/examples/ubl2.1/invoice.xml")
 	if err != nil {
 		t.Error(err)
 	}
@@ -117,7 +117,7 @@ func TestRateLimiter(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	invoice, err := ioutil.ReadFile("../../xml/ubl2.1/example/invoice.xml")
+	invoice, err := ioutil.ReadFile("../../data/examples/ubl2.1/invoice.xml")
 	if err != nil {
 		t.Error(err)
 	}

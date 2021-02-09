@@ -46,8 +46,8 @@ jobs:
     env:
       DB_PASSWORD: postgres
       DB_NAME: github_actions
-      D16B_XSD_PATH: /home/runner/work/einvoice/einvoice/xml/d16b/xsd
-      UBL21_XSD_PATH: /home/runner/work/einvoice/einvoice/xml/ubl2.1/xsd
+      D16B_XSD_PATH: /home/runner/work/einvoice/einvoice/data/schemas/d16b/xsd
+      UBL21_XSD_PATH: /home/runner/work/einvoice/einvoice/data/schemas/ubl2.1/xsd
       LOCAL_STORAGE_BASE_PATH: /home/runner/work/einvoice/einvoice/storage
       APISERVER_ENV: test
       NOTIFICATION_WORKER_ENV: test

@@ -52,6 +52,15 @@ paths:
           schema:
             type: string
           required: true
+        - name: callback
+          in: query
+          description: |
+            Callback URL, to which user will be redirected once logout is successful.
+            Callback URL has to be same as one of the addresses set at the component API level,
+            or it has to be an extension of one of these addresses.
+          schema:
+            type: string
+          required: true
       responses:
         '302':
           description: Redirect user to ÚPVS logout

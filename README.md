@@ -10,8 +10,6 @@ You can view it on this [website](https://generator.swagger.io/?url=https://raw.
 
 ### Error messages
 
-[Invoice validations](docs/validations.md)
-
 [Api errors](docs/errors.md)
 
 ## Try it out
@@ -59,7 +57,7 @@ APISERVER_ENV=dev
 
 [Jelastic](dev-scripts/jelastic/README.md)
 
-## XML
+## Invoice format
 
 Useful resources:
 
