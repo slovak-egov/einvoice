@@ -53,7 +53,7 @@ func (a *App) handleUpvsLogout(res http.ResponseWriter, req *http.Request) error
 		return AuthInvalidTypeError
 	}
 
-	logoutUrl, err := a.upvs.GetLogoutUrl(req.Context(), oboToken.Value)
+	logoutUrl, err := a.upvs.GetLogoutUrl(req.Context(), req.URL.Query().Get("callback"), oboToken.Value)
 	if err != nil {
 		return UnauthorizedError
 	}

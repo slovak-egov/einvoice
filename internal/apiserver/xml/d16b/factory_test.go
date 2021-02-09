@@ -13,7 +13,7 @@ import (
 )
 
 func TestFactory(t *testing.T) {
-	bytes, err := ioutil.ReadFile("../../../../xml/d16b/example/d16b_invoice.xml")
+	bytes, err := ioutil.ReadFile("../../../../data/examples/d16b/invoice.xml")
 	if err != nil {
 		t.Error(err.Error())
 	}

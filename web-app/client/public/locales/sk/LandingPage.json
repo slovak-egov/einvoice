@@ -9,8 +9,23 @@
   "forForeignIssuers": "pre zahraničných vydávateľov",
   "forForeignReceivers": "pre zahraničných prijímateľov",
   "faq": "Najčastejšie otázky a odpovede",
-  "announcements": "Oznamy",
-  "announcement1": "Všetky prípady použitia budú podporované postupne, v súčastnosti sú všetky vo vývoji",
+  "announcements": {
+    "title": "Oznamy",
+    "1": {
+      "title": "Vývoj",
+      "body": "Všetky prípady použitia budú podporované postupne, v súčastnosti sú všetky vo vývoji"
+    },
+    "2": {
+      "title": "Vyskúšajte si to",
+      "body": ["Skúste sa prihlásiť s údajmi", "Skúste zadať vlastnú faktúru alebo niektorý z nasledovných"],
+      "links": [
+        "korektná D16B faktúra", "korektná UBL2.1 faktúra", "UBL2.1 faktúra porušujúca sémantické pravidlá",
+        "UBL2.1 faktúra porušujúca syntaktické pravidlá"
+      ],
+      "user": "Používateľ",
+      "password": "Heslo"
+    }
+  },
   "devVersion": "Táto webstránka slúži výlučne na vývoj",
   "fixVersion": "Táto webstránka slúži výlučne na testovanie"
 }

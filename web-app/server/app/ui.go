@@ -12,9 +12,24 @@ import (
 )
 
 type UiHandler struct {
-	StaticPath     string
-	IndexPath      string
-	reactAppConfig config.Urls
+	StaticPath        string
+	reactAppConfig    config.Urls
+	staticFilesServer http.Handler
+	htmlTemplate      *template.Template
+}
+
+func NewUiHandler(staticPath, indexPath string, reactAppConfig config.Urls) UiHandler {
+	htmlTemplate, err := template.ParseFiles(filepath.Join(staticPath, indexPath))
+	if err != nil {
+		log.WithField("error", err.Error()).Fatal("uiHandler.htmlParse.failed")
+	}
+
+	return UiHandler{
+		staticPath,
+		reactAppConfig,
+		http.FileServer(http.Dir(staticPath)),
+		htmlTemplate,
+	}
 }
 
 // Let client do the routing.
@@ -31,19 +46,12 @@ func (h UiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	// Check if file exists at the given path
 	_, err = os.Stat(path)
-	if path == h.StaticPath || os.IsNotExist(err) {
+	if r.URL.Path == "/" || os.IsNotExist(err) {
 		// File does not exist, serve index.html
-		t, err := template.ParseFiles(filepath.Join(h.StaticPath, h.IndexPath))
-		if err != nil {
-			log.WithField("error", err.Error()).Error("uiHandler.htmlParse.failed")
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		t.Execute(w, h.reactAppConfig)
+		h.htmlTemplate.Execute(w, h.reactAppConfig)
 	} else if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	} else {
-		http.FileServer(http.Dir(h.StaticPath)).ServeHTTP(w, r)
+		h.staticFilesServer.ServeHTTP(w, r)
 	}
 }

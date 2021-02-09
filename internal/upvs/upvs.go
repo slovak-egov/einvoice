@@ -16,11 +16,10 @@ import (
 )
 
 type Connector struct {
-	baseUrl           string
-	apiTokenPrivate   *rsa.PrivateKey
-	oboTokenPublic    *rsa.PublicKey
-	client            *http.Client
-	logoutCallbackUrl string
+	baseUrl         string
+	apiTokenPrivate *rsa.PrivateKey
+	oboTokenPublic  *rsa.PublicKey
+	client          *http.Client
 }
 
 func New(config Configuration) *Connector {
@@ -42,7 +41,6 @@ func New(config Configuration) *Connector {
 		apiTokenPrivate:   apiTokenPrivate,
 		oboTokenPublic:    oboTokenPublic,
 		client:            &http.Client{},
-		logoutCallbackUrl: config.LogoutCallbackUrl,
 	}
 }
 

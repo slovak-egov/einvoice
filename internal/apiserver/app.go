@@ -63,6 +63,11 @@ func (a *App) initializeHandlers() {
 	a.router.Use(handlerutil.LoggingMiddleware)
 	a.router.Use(handlerutil.ErrorRecovery)
 
+	// Share static data files
+	a.router.PathPrefix("/data").Methods("GET").Handler(
+		http.StripPrefix("/data/", http.FileServer(http.Dir(a.config.DataPath))),
+	)
+
 	registerHandler(a.router, "GET", "/login", a.handleLogin)
 	registerHandler(a.router, "GET", "/logout", a.handleLogout)
 	registerHandler(a.router, "GET", "/upvs/logout", a.handleUpvsLogout)

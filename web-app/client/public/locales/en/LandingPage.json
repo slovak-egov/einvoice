@@ -9,8 +9,23 @@
   "forForeignIssuers": "for foreign issuers",
   "forForeignReceivers": "for foreign receivers",
   "faq": "Frequently asked questions",
-  "announcements": "Announcements",
-  "announcement1": "All use-cases will be released sequentially, currently all of them are under development",
+  "announcements": {
+    "title": "Announcements",
+    "1": {
+      "title": "Development",
+      "body": "All use-cases will be released sequentially, currently all of them are under development"
+    },
+    "2": {
+      "title": "Try it out",
+      "body": ["Try to log in using", "Try submitting your own invoice or one of these examples"],
+      "links": [
+        "valid D16B invoice", "valid UBL2.1 invoice", "UBL2.1 invoice violating semantic rules",
+        "UBL2.1 invoice violating syntactic rules"
+      ],
+      "user": "User",
+      "password": "Password"
+    }
+  },
   "devVersion": "This website is used solely for development",
   "fixVersion": "This website is used solely for testing"
 }

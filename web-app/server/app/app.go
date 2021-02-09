@@ -25,11 +25,11 @@ func NewApp() *App {
 	a.router.Use(handlerutil.LoggingMiddleware)
 
 	a.router.PathPrefix("/").Handler(
-		UiHandler{
-			StaticPath:     a.config.ClientBuildDir,
-			IndexPath:      "index.html",
-			reactAppConfig: a.config.Urls,
-		},
+		NewUiHandler(
+			a.config.ClientBuildDir,
+			"index.html",
+			a.config.Urls,
+		),
 	)
 
 	return a

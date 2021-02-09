@@ -22,6 +22,6 @@ RUN apk add --no-cache ca-certificates
 RUN apk update && apk add --no-cache libxml2 libxslt-dev
 
 COPY --from=build_base /tmp/out/apiserver /app/server
-COPY --from=build_base /tmp/einvoice/xml /xml
+COPY --from=build_base /tmp/einvoice/data /app/data
 
 CMD ["/app/server"]
