@@ -12,7 +12,7 @@ export default class Api {
 
   validateResponse = ({status, body}) => {
     if (status < 200 || status >= 300) {
-      throw new ApiError({statusCode: status, message: body && body.error, response: body})
+      throw new ApiError({statusCode: status, message: body && body.error, detail: body && body.detail})
     }
   }
 

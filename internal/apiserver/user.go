@@ -20,7 +20,7 @@ func getRequestedUserId(req *http.Request) (int, error) {
 
 	requestedUserId, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		return 0, UserError("id.invalid").WithCause(err)
+		return 0, UserError("id.invalid").WithDetail(err)
 	}
 	// Currently everyone can request only own data
 	if requestedUserId != requesterUserId {
@@ -70,11 +70,11 @@ func (a *App) updateUser(res http.ResponseWriter, req *http.Request) error {
 	decoder.DisallowUnknownFields()
 
 	if err := decoder.Decode(&requestBody); err != nil {
-		return UserError("parsingError").WithCause(err)
+		return UserError("parsingError").WithDetail(err)
 	}
 
 	if err := requestBody.Validate(); err != nil {
-		return UserError("validation.failed").WithCause(err)
+		return UserError("validation.failed").WithDetail(err)
 	}
 
 	user, err := a.db.UpdateUser(req.Context(), &entity.User{

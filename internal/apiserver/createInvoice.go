@@ -7,7 +7,7 @@ import (
 
 	"github.com/slovak-egov/einvoice/internal/apiserver/invoiceValidator"
 	"github.com/slovak-egov/einvoice/internal/apiserver/xml/d16b"
-	"github.com/slovak-egov/einvoice/internal/apiserver/xml/ubl21"
+	"github.com/slovak-egov/einvoice/internal/apiserver/xml/ubl2.1"
 	"github.com/slovak-egov/einvoice/internal/db"
 	"github.com/slovak-egov/einvoice/internal/entity"
 	"github.com/slovak-egov/einvoice/pkg/context"
@@ -36,18 +36,18 @@ func parseRequestBody(req *http.Request) (invoice []byte, format string, test bo
 	// TODO: return 413 if request is too large
 	err = req.ParseMultipartForm(10 << 20)
 	if err != nil {
-		err = InvoiceError("payload.invalid").WithCause(err)
+		err = InvoiceError("payload.invalid").WithDetail(err)
 		return
 	}
 
 	invoice, err = parseInvoice(req)
 	if err != nil {
-		err = InvoiceError("file.parsingError").WithCause(err)
+		err = InvoiceError("file.parsingError").WithDetail(err)
 		return
 	}
 	test, err = getOptionalBool(req.PostFormValue("test"), false)
 	if err != nil {
-		err = InvoiceError("test.invalid").WithCause(err)
+		err = InvoiceError("test.invalid").WithDetail(err)
 		return
 	}
 
@@ -102,11 +102,11 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 	var metadata *entity.Invoice
 
 	if err = parsers.GetXsdValidator(a)(invoice); err != nil {
-		return InvoiceError("xsd.validation.failed").WithCause(err)
+		return InvoiceError("xsd.validation.failed").WithDetail(err)
 	}
 	if err = parsers.GetInvoiceValidator(a)(req.Context(), invoice); err != nil {
-		if errors, ok := err.(*invoiceValidator.ValidationError); ok {
-			return handlerutil.NewBadRequestError("invoice.validation.failed").WithField("rules", errors.Errors)
+		if _, ok := err.(*invoiceValidator.ValidationError); ok {
+			return handlerutil.NewBadRequestError("invoice.validation.failed").WithDetail(err)
 		} else if _, ok := err.(*invoiceValidator.RequestError); ok {
 			return handlerutil.NewFailedDependencyError("invoice.validation.request.failed")
 		} else {
@@ -115,7 +115,7 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 	}
 	metadata, err = parsers.MetadataExtractor(invoice)
 	if err != nil {
-		return InvoiceError("validation.failed").WithCause(err)
+		return InvoiceError("validation.failed").WithDetail(err)
 	}
 
 	// Add creator Id, test flag, isPublic flag

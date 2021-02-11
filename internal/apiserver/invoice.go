@@ -61,11 +61,11 @@ func NewPublicInvoicesOptions(params url.Values, maxLimit int) (*db.PublicInvoic
 func (a *App) getPublicInvoices(res http.ResponseWriter, req *http.Request) error {
 	requestOptions, err := NewPublicInvoicesOptions(req.URL.Query(), a.config.InvoicesLimit)
 	if err != nil {
-		return InvoiceError("params.parsingError").WithCause(err)
+		return InvoiceError("params.parsingError").WithDetail(err)
 	}
 
 	if err := requestOptions.Validate(a.config.InvoicesLimit); err != nil {
-		return InvoiceError("params.invalid").WithCause(err)
+		return InvoiceError("params.invalid").WithDetail(err)
 	}
 
 	invoices, err := a.db.GetPublicInvoices(req.Context(), requestOptions)
@@ -127,7 +127,7 @@ func (a *App) getInvoice(res http.ResponseWriter, req *http.Request) error {
 	vars := mux.Vars(req)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		return InvoiceError("param.id.invalid").WithCause(err)
+		return InvoiceError("param.id.invalid").WithDetail(err)
 	}
 
 	invoice, err := a.getInvoiceFromDb(req.Context(), id)
@@ -224,11 +224,11 @@ func (a *App) getUserInvoices(res http.ResponseWriter, req *http.Request) error 
 
 	requestOptions, err := NewUserInvoicesOptions(requestedUserId, req.URL.Query(), a.config.InvoicesLimit)
 	if err != nil {
-		return InvoiceError("params.invalid").WithCause(err)
+		return InvoiceError("params.invalid").WithDetail(err)
 	}
 
 	if err := requestOptions.Validate(a.config.InvoicesLimit); err != nil {
-		return InvoiceError("params.invalid").WithCause(err)
+		return InvoiceError("params.invalid").WithDetail(err)
 	}
 
 	invoices, err := a.db.GetUserInvoices(req.Context(), requestOptions)

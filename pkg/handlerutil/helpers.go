@@ -13,10 +13,10 @@ func RespondWithJSON(res http.ResponseWriter, code int, payload interface{}) {
 	res.Write(response)
 }
 
-func respondWithError(res http.ResponseWriter, code int, message string, fields map[string]interface{}) {
+func respondWithError(res http.ResponseWriter, code int, message, detail string) {
 	body := map[string]interface{}{"error": message}
-	for name, value := range fields {
-		body[name] = value
+	if detail != "" {
+		body["detail"] = detail
 	}
 	RespondWithJSON(res, code, body)
 }
@@ -25,7 +25,7 @@ func ErrorRecovery(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 		defer func() {
 			if err := recover(); err != nil {
-				respondWithError(res, http.StatusInternalServerError, "Something went wrong", nil)
+				respondWithError(res, http.StatusInternalServerError, "Something went wrong","")
 			}
 		}()
 		next.ServeHTTP(res, req)

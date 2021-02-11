@@ -5,13 +5,13 @@
 ```json
 {
   "error": "error code",
-  "cause": "optional error message"
+  "detail": "optional more detailed error message"
 }
 ```
 
 ## Error codes
 
-| Code | Status | Description | Cause |
+| Code | Status | Description | Detail |
 | :--- | :----- | :---------- | :---- |
 | authorization.unauthorized | 401 | Unauthorized | |
 | authorization.missing | 401 | Authorization missing | |

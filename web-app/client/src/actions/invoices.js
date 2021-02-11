@@ -70,11 +70,7 @@ export const createInvoice = (data) => loadingWrapper(
       }
     } catch (error) {
       let text = error.message
-      if (error.message === 'invoice.validation.failed') {
-        text = `${error.message}
-        Violated rules:
-        ${error.response.rules.join('\n')}`
-      }
+      if (error.detail) text += `\n${error.detail}`
       await swal({
         title: 'Invoice could not be created',
         text,

@@ -7,7 +7,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/slovak-egov/einvoice/internal/apiserver/xml/ubl21"
+	"github.com/slovak-egov/einvoice/internal/apiserver/xml/ubl2.1"
 	"github.com/slovak-egov/einvoice/internal/entity"
 	"github.com/slovak-egov/einvoice/pkg/timeutil"
 )

@@ -11,10 +11,10 @@ func ErrorHandler(handler func(http.ResponseWriter, *http.Request) error) func(h
 		if err != nil {
 			var e *HttpError
 			if errors.As(err, &e) {
-				respondWithError(res, e.Status(), e.Error(), e.Fields)
+				respondWithError(res, e.StatusCode, e.Message, e.Error())
 			} else {
 				// Return 500 on other errors
-				respondWithError(res, http.StatusInternalServerError, "Something went wrong", nil)
+				respondWithError(res, http.StatusInternalServerError, "Something went wrong", "")
 			}
 		}
 	}

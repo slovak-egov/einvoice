@@ -1,7 +1,7 @@
 package xml
 
 import (
-	"fmt"
+	"strings"
 
 	"github.com/lestrrat-go/libxml2"
 	"github.com/lestrrat-go/libxml2/xsd"
@@ -18,7 +18,11 @@ type ValidationError struct {
 }
 
 func (e ValidationError) Error() string {
-	return fmt.Sprintf("Validation errors: %v", e.Errors)
+	errorMessages := []string{}
+	for _, err := range e.Errors {
+		errorMessages = append(errorMessages, err.Error())
+	}
+	return strings.Join(errorMessages, "\n")
 }
 
 type validator struct {

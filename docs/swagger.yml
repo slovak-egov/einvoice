@@ -490,7 +490,7 @@ components:
       properties:
         error:
           type: string
-        cause:
+        detail:
           type: string
       required:
         - error

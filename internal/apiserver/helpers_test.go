@@ -108,9 +108,7 @@ type ErrorResponse struct {
 func checkError(t *testing.T, response *httptest.ResponseRecorder, expectedCode int, msg string) {
 	t.Helper()
 
-	if expectedCode != response.Code {
-		t.Errorf("Expected response code %d. Got %d\n", expectedCode, response.Code)
-	}
+	assert.Equal(t, expectedCode, response.Code)
 
 	if msg != "" {
 		var e ErrorResponse
@@ -119,8 +117,6 @@ func checkError(t *testing.T, response *httptest.ResponseRecorder, expectedCode 
 			t.Error(err.Error())
 		}
 
-		if e.Error != msg {
-			assert.Equal(t, msg, e.Error)
-		}
+		assert.Equal(t, msg, e.Error)
 	}
 }
