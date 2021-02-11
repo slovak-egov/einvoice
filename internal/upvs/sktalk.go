@@ -85,7 +85,7 @@ func CreateInvoiceNotificationMessage(
 		fmt.Sprintf("https://dev.einvoice.mfsr.sk/invoices/%d", invoiceId),
 	)
 	encodedXmlFile := base64.StdEncoding.EncodeToString(xmlFile)
-	encodedPdfFile := base64.StdEncoding.EncodeToString(zip)
+	encodedZipFile := base64.StdEncoding.EncodeToString(zip)
 
 	msg := &SKTalkMessage{
 		EnvelopeVersion: "3.0",
@@ -126,11 +126,11 @@ func CreateInvoiceNotificationMessage(
 					},
 					{
 						Id:       uuid.New().String(),
-						Name:     getFileName(invoiceId, "pdf"),
+						Name:     getFileName(invoiceId, "zip"),
 						Class:    "ATTACHMENT",
-						MimeType: "application/pdf",
+						MimeType: "application/zip",
 						Encoding: "Base64",
-						Value:    &encodedPdfFile,
+						Value:    &encodedZipFile,
 					},
 				},
 			},
