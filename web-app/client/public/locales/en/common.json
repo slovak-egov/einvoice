@@ -47,10 +47,14 @@
   "topBar": {
     "title": "E-invoice",
     "publicInvoices": "Public invoices",
+    "invoiceVisualization": "Invoice visualization",
     "createInvoice": "Create invoice",
     "accountSettings": "Account settings",
     "myInvoices": "My invoices",
     "logout": "Logout",
     "login": "Login"
-  }
+  },
+  "submission": "Submission",
+  "visualization": "Visualization",
+  "createVisualization": "Create visualization"
 }

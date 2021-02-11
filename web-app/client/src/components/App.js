@@ -1,14 +1,15 @@
 import './App.css'
 import {Suspense, useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
-import {Route, Switch} from 'react-router-dom'
+import {Redirect, Route, Switch} from 'react-router-dom'
 import PublicInvoices from './PublicInvoices'
 import MyInvoices from './MyInvoices'
 import LandingPage from './landingPage'
 import FAQ from './landingPage/FAQ'
 import TopBar from './TopBar'
 import Footer from './Footer'
-import CreateInvoice from './CreateInvoice'
+import CreateInvoice from './createInvoice'
+import InvoiceVisualization from './createInvoice/Visualization'
 import InvoiceView from './InvoiceView'
 import AccountSettings from './AccountSettings'
 import {getMyInfo} from '../actions/users'
@@ -51,9 +52,11 @@ export default () => {
           <AuthRoute exact path="/my-invoices">
             <MyInvoices />
           </AuthRoute>
-          <AuthRoute exact path="/create-invoice">
+          <Redirect exact from="/create-invoice" to="/create-invoice/submission" />
+          <AuthRoute path="/create-invoice">
             <CreateInvoice />
           </AuthRoute>
+          <Route exact path="/invoice-visualization" component={InvoiceVisualization} />
           <Route exact path="/invoices" component={PublicInvoices} />
           <Route exact path="/invoices/:id([0-9]+)" component={InvoiceView} />
           <Route component={NotFound} />

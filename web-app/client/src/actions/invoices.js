@@ -1,10 +1,6 @@
 import swal from 'sweetalert'
 import {loadingWrapper, setData} from './common'
 
-export const setCreateInvoiceFormat = setData(['createInvoiceScreen', 'format'])
-export const setCreateInvoiceData = setData(['createInvoiceScreen', 'invoice'])
-export const setCreateInvoiceTest = setData(['createInvoiceScreen', 'test'])
-
 const setInvoiceIds = (path, data) => ({
   type: 'SET INVOICE IDS',
   path,
@@ -22,7 +18,7 @@ const savePagedIds = ({path, ids, nextId, setOrUpdate}) =>
 const setInvoice = (id) => setData(['invoices', id])
 const setInvoiceNotFound = (id) => setInvoice(id)({notFound: true})
 
-const setInvoices = (data) => ({
+export const setInvoices = (data) => ({
   type: 'SET INVOICES',
   path: ['invoices'],
   payload: data,
@@ -46,39 +42,6 @@ export const getInvoiceMeta = (id) => loadingWrapper(
           text: error.message,
           icon: 'error',
         })
-      }
-    }
-  }
-)
-
-export const createInvoice = (data) => loadingWrapper(
-  async (dispatch, getState, {api}) => {
-    try {
-      const invoice = await api.invoices.create(data)
-      dispatch(setInvoices({
-        [invoice.id]: invoice,
-      }))
-
-      const redirect = await swal({
-        title: 'Invoice was created',
-        icon: 'success',
-        buttons: ['Create another', 'Check detail'],
-      })
-      return {
-        invoiceId: invoice.id,
-        redirect,
-      }
-    } catch (error) {
-      let text = error.message
-      if (error.detail) text += `\n${error.detail}`
-      await swal({
-        title: 'Invoice could not be created',
-        text,
-        icon: 'error',
-      })
-      return {
-        invoiceId: null,
-        redirect: false,
       }
     }
   }

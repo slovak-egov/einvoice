@@ -281,6 +281,33 @@ paths:
           $ref: '#/components/responses/Error'
         '429':
           $ref: '#/components/responses/Error'
+  /invoices/visualization:
+    post:
+      tags:
+        - Invoices
+      summary: Get visualization of sent invoice
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                format:
+                  $ref: '#/components/schemas/InvoiceFormat'
+                invoice:
+                  type: string
+                  format: binary
+              required:
+                - format
+                - invoice
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
   /invoices/{invoiceId}:
     get:
       security:
