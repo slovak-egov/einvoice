@@ -33,11 +33,11 @@ type Header struct {
 }
 
 type MessageInfo struct {
-	Class            string
-	PospID           string
-	PospVersion      string
-	MessageID        string
-	CorrelationID    string
+	Class         string
+	PospID        string
+	PospVersion   string
+	MessageID     string
+	CorrelationID string
 }
 
 type Body struct {
@@ -76,7 +76,7 @@ func getFileName(invoiceId int, extension string) string {
 }
 
 func CreateInvoiceNotificationMessage(
-	ctx goContext.Context, senderUri, recipientUri string, invoiceId int, xmlFile, pdfFile []byte,
+	ctx goContext.Context, senderUri, recipientUri string, invoiceId int, xmlFile, zip []byte,
 ) (string, error) {
 	msgId := uuid.New().String()
 	subject := fmt.Sprintf("Faktúra %[1]d / Invoice %[1]d", invoiceId)
@@ -85,7 +85,7 @@ func CreateInvoiceNotificationMessage(
 		fmt.Sprintf("https://dev.einvoice.mfsr.sk/invoices/%d", invoiceId),
 	)
 	encodedXmlFile := base64.StdEncoding.EncodeToString(xmlFile)
-	encodedPdfFile := base64.StdEncoding.EncodeToString(pdfFile)
+	encodedPdfFile := base64.StdEncoding.EncodeToString(zip)
 
 	msg := &SKTalkMessage{
 		EnvelopeVersion: "3.0",

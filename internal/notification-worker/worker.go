@@ -1,8 +1,8 @@
 package worker
 
 import (
-	"bytes"
 	goContext "context"
+	"io/ioutil"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -97,7 +97,7 @@ func (w *Worker) notifyInvoiceParties(ctx goContext.Context, invoice entity.Invo
 		return err
 	}
 
-	invoicePdfFile, err := visualization.GeneratePdf(invoiceXml)
+	invoiceZip, err := visualization.GenerateZip(invoiceXml, invoice.Id)
 	if err != nil {
 		context.GetLogger(ctx).
 			WithField("invoiceId", invoice.Id).
@@ -106,8 +106,7 @@ func (w *Worker) notifyInvoiceParties(ctx goContext.Context, invoice entity.Invo
 		return err
 	}
 
-	var b bytes.Buffer
-	err = invoicePdfFile.Write(&b)
+	invoiceZipBytes, err := ioutil.ReadAll(invoiceZip)
 	if err != nil {
 		context.GetLogger(ctx).
 			WithField("invoiceId", invoice.Id).
@@ -115,7 +114,6 @@ func (w *Worker) notifyInvoiceParties(ctx goContext.Context, invoice entity.Invo
 
 		return err
 	}
-	invoicePdf := b.Bytes()
 
 	for _, uri := range uris {
 		skTalkMessage, err := upvs.CreateInvoiceNotificationMessage(
@@ -124,7 +122,7 @@ func (w *Worker) notifyInvoiceParties(ctx goContext.Context, invoice entity.Invo
 			uri,
 			invoice.Id,
 			invoiceXml,
-			invoicePdf,
+			invoiceZipBytes,
 		)
 		if err != nil {
 			context.GetLogger(ctx).
