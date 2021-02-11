@@ -3,6 +3,7 @@ package apiserver
 import (
 	goContext "context"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -192,15 +193,16 @@ func (a *App) getInvoiceVisualization(res http.ResponseWriter, req *http.Request
 		return err
 	}
 
-	pdfFile, err := visualization.GeneratePdf(invoiceFile)
+	data, err := visualization.Generate(invoiceFile, id)
 	if err != nil {
 		return err
 	}
 
-	res.Header().Set("Content-Type", "application/pdf")
-	res.Header().Set("Content-Disposition", "attachment; filename=invoice-"+vars["id"]+".pdf")
+	res.Header().Set("Content-Type", "application/zip")
+	res.Header().Set("Content-Disposition", "attachment; filename=invoice-"+vars["id"]+".zip")
 	res.WriteHeader(http.StatusOK)
-	return pdfFile.Write(res)
+	_, err = io.Copy(res, data)
+	return err
 }
 
 func NewUserInvoicesOptions(userId int, params url.Values, maxLimit int) (*db.UserInvoicesOptions, error) {

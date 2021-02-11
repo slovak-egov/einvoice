@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/jung-kurt/gofpdf"
-	"github.com/lestrrat-go/libxml2"
 	"github.com/lestrrat-go/libxml2/clib"
 	"github.com/lestrrat-go/libxml2/types"
 )
@@ -43,7 +42,9 @@ func generateLines(currentNode types.Node, level int, pdf *gofpdf.Fpdf) error {
 		// Write value
 		// Check if node contains value and write it
 		if child, err := currentNode.FirstChild(); err == nil && child.NodeType() == clib.TextNode {
-			pdf.Write(lineHeight, ": "+strings.TrimSpace(child.TextContent()))
+			if name != "EmbeddedDocumentBinaryObject" {
+				pdf.Write(lineHeight, ": "+strings.TrimSpace(child.TextContent()))
+			}
 		}
 
 		// Write tag attributes in yellow
@@ -80,11 +81,7 @@ func generateLines(currentNode types.Node, level int, pdf *gofpdf.Fpdf) error {
 	return nil
 }
 
-func GeneratePdf(invoiceBytes []byte) (*File, error) {
-	xml, err := libxml2.Parse(invoiceBytes)
-	if err != nil {
-		return nil, err
-	}
+func GeneratePdf(xml types.Document) (*gofpdf.Fpdf, error) {
 
 	pdf := gofpdf.New("P", "mm", "A4", "")
 	pdf.SetFont(font, "", lineHeight)
@@ -93,10 +90,10 @@ func GeneratePdf(invoiceBytes []byte) (*File, error) {
 
 	pdf.AddPage()
 
-	err = generateLines(xml, 0, pdf)
+	err := generateLines(xml, 0, pdf)
 	if err != nil {
 		return nil, err
 	}
 
-	return &File{pdf}, nil
+	return pdf, nil
 }
