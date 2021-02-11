@@ -36,10 +36,9 @@ func TestGetAndUpdateNotNotifiedInvoices(t *testing.T) {
 				return err
 			}
 
-			assert.Equal(t, 2, len(invoices))
 			inv1.NotificationsStatus = "sending"
 			inv2.NotificationsStatus = "sending"
-			assert.Equal(t, []entity.Invoice{*inv1, *inv2}, invoices)
+			assert.ElementsMatch(t, []entity.Invoice{*inv1, *inv2}, invoices)
 
 			startTx2 <- true
 			<-stopTx1
@@ -64,10 +63,9 @@ func TestGetAndUpdateNotNotifiedInvoices(t *testing.T) {
 				return err
 			}
 
-			assert.Equal(t, 2, len(invoices))
 			inv3.NotificationsStatus = "sending"
 			inv4.NotificationsStatus = "sending"
-			assert.Equal(t, []entity.Invoice{*inv3, *inv4}, invoices)
+			assert.ElementsMatch(t, []entity.Invoice{*inv3, *inv4}, invoices)
 
 			<-stopTx2
 			return nil
