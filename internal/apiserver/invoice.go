@@ -193,7 +193,7 @@ func (a *App) getInvoiceVisualization(res http.ResponseWriter, req *http.Request
 		return err
 	}
 
-	data, err := visualization.Generate(invoiceFile, id)
+	data, err := visualization.GenerateZip(invoiceFile, id)
 	if err != nil {
 		return err
 	}

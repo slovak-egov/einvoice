@@ -13,7 +13,7 @@ import (
 	"github.com/lestrrat-go/libxml2/types"
 )
 
-func Generate(invoiceBytes []byte, id int) (io.Reader, error) {
+func GenerateZip(invoiceBytes []byte, id int) (io.Reader, error) {
 	xml, err := libxml2.Parse(invoiceBytes)
 	if err != nil {
 		return nil, err
