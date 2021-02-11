@@ -15,7 +15,7 @@ func (c *Connector) GetAndUpdateNotNotifiedInvoices(ctx goContext.Context, limit
 		Model(&entity.Invoice{}).
 		Column("id").
 		Where("notifications_status = 'not_sent'").
-		Order("id").
+		Order("id ASC").
 		Limit(limit).
 		For("UPDATE SKIP LOCKED")
 
