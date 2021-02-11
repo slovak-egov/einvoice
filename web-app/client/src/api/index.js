@@ -10,16 +10,6 @@ export default class Api {
     this.invoices = createInvoicesApi(this)
   }
 
-  validateResponse = ({status, body}) => {
-    if (status < 200 || status >= 300) {
-      throw new ApiError({
-        statusCode: status,
-        message: body && body.error,
-        detail: body && body.detail
-      })
-    }
-  }
-
   login = (token) =>
     this.apiRequest({
       route: '/login',
@@ -54,6 +44,14 @@ export default class Api {
     route: `${prefix}${requestParams.route}`,
   })
 
+  getResponseParser = (response) => {
+    switch (response.headers.get('Content-Type')) {
+      case 'application/json': return response.json()
+      case 'application/pdf': return response.blob()
+      default: return response.text()
+    }
+  }
+
   async standardRequest({method, data, route, jsonResponse = true, jsonBody = true, ...opts}) {
     const response = await fetch(route, {
       method,
@@ -61,8 +59,15 @@ export default class Api {
       ...opts,
     })
 
-    const body = await response.json()
-    this.validateResponse({status: response.status, body})
+    const body = await this.getResponseParser(response)
+
+    if (!response.ok) {
+      throw new ApiError({
+        statusCode: response.status,
+        message: body && body.error,
+        detail: body && body.detail,
+      })
+    }
     return body
   }
 }

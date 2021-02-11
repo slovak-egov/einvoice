@@ -32,31 +32,30 @@ var formatToParsers = map[string]struct {
 	},
 }
 
-func parseRequestBody(req *http.Request) (invoice []byte, format string, test bool, err error) {
-	// TODO: return 413 if request is too large
-	err = req.ParseMultipartForm(10 << 20)
-	if err != nil {
-		err = InvoiceError("payload.invalid").WithDetail(err)
-		return
+type CreateInvoiceRequestBody struct {
+	invoice []byte
+	test    bool
+	format  string
+}
+
+func (b *CreateInvoiceRequestBody) parse(req *http.Request) error {
+	b.format = req.PostFormValue("format")
+	if b.format == "" {
+		return InvoiceError("format.missing")
+	} else if b.format != entity.UblFormat && b.format != entity.D16bFormat {
+		return InvoiceError("format.unknown")
 	}
 
-	invoice, err = parseInvoice(req)
+	var err error
+	b.test, err = getOptionalBool(req.PostFormValue("test"), false)
 	if err != nil {
-		err = InvoiceError("file.parsingError").WithDetail(err)
-		return
+		return InvoiceError("test.invalid").WithDetail(err)
 	}
-	test, err = getOptionalBool(req.PostFormValue("test"), false)
+	b.invoice, err = parseInvoice(req)
 	if err != nil {
-		err = InvoiceError("test.invalid").WithDetail(err)
-		return
+		return InvoiceError("file.parsingError").WithDetail(err)
 	}
-
-	format = req.PostFormValue("format")
-	if format == "" {
-		err = InvoiceError("format.missing")
-		return
-	}
-	return
+	return nil
 }
 
 func parseInvoice(req *http.Request) ([]byte, error) {
@@ -65,7 +64,7 @@ func parseInvoice(req *http.Request) ([]byte, error) {
 	if err != nil {
 		context.GetLogger(req.Context()).
 			WithField("error", err.Error()).
-			Debug("app.createInvoice.getFormFile.failed")
+			Debug("app.parseInvoice.getFormFile.failed")
 
 		return nil, err
 	}
@@ -74,7 +73,7 @@ func parseInvoice(req *http.Request) ([]byte, error) {
 	if err != nil {
 		context.GetLogger(req.Context()).
 			WithField("error", err.Error()).
-			Debug("app.createInvoice.parseInvoice.failed")
+			Debug("app.parseInvoice.failed")
 
 		return nil, err
 	}
@@ -87,24 +86,22 @@ func validateInvoice(ctx goContext.Context, db *db.Connector, inv *entity.Invoic
 }
 
 func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
-	invoice, format, test, err := parseRequestBody(req)
+	requestBody := CreateInvoiceRequestBody{}
+	err := requestBody.parse(req)
 	if err != nil {
 		return err
 	}
 	userId := context.GetUserId(req.Context())
 
-	parsers, ok := formatToParsers[format]
-	if !ok {
-		return InvoiceError("format.unknown")
-	}
+	parsers := formatToParsers[requestBody.format]
 
 	// Validate invoice format
 	var metadata *entity.Invoice
 
-	if err = parsers.GetXsdValidator(a)(invoice); err != nil {
+	if err = parsers.GetXsdValidator(a)(requestBody.invoice); err != nil {
 		return InvoiceError("xsd.validation.failed").WithDetail(err)
 	}
-	if err = parsers.GetInvoiceValidator(a)(req.Context(), invoice); err != nil {
+	if err = parsers.GetInvoiceValidator(a)(req.Context(), requestBody.invoice); err != nil {
 		if _, ok := err.(*invoiceValidator.ValidationError); ok {
 			return handlerutil.NewBadRequestError("invoice.validation.failed").WithDetail(err)
 		} else if _, ok := err.(*invoiceValidator.RequestError); ok {
@@ -113,14 +110,14 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 			return err
 		}
 	}
-	metadata, err = parsers.MetadataExtractor(invoice)
+	metadata, err = parsers.MetadataExtractor(requestBody.invoice)
 	if err != nil {
 		return InvoiceError("validation.failed").WithDetail(err)
 	}
 
 	// Add creator Id, test flag, isPublic flag
 	metadata.CreatedBy = userId
-	metadata.Test = test
+	metadata.Test = requestBody.test
 	// TODO: add public ICO list
 	metadata.IsPublic = true
 
@@ -132,7 +129,7 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 	}
 
 	// Limit number of created test invoices
-	if test {
+	if requestBody.test {
 		counter, err := a.cache.IncrementTestInvoiceCounter(req.Context(), userId)
 		if err != nil {
 			return err
@@ -146,7 +143,7 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 		if e := a.db.CreateInvoice(ctx, metadata); e != nil {
 			return e
 		}
-		if e := a.storage.SaveInvoice(ctx, metadata.Id, invoice); e != nil {
+		if e := a.storage.SaveInvoice(ctx, metadata.Id, requestBody.invoice); e != nil {
 			return e
 		}
 		return nil

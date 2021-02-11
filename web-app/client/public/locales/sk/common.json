@@ -47,10 +47,14 @@
   "topBar": {
     "title": "E-faktúra",
     "publicInvoices": "Verejné faktúry",
+    "invoiceVisualization": "Vizualizácia faktúr",
     "createInvoice": "Vytvoriť faktúru",
     "accountSettings": "Nastavenia účtu",
     "myInvoices": "Moje faktúry",
     "logout": "Odhlásiť",
     "login": "Prihlásiť"
-  }
+  },
+  "submission": "Podanie",
+  "visualization": "Vizualizácia",
+  "createVisualization": "Vytvor vizualizáciu"
 }

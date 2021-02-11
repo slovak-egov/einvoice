@@ -44,29 +44,32 @@ export default () => {
               EN
             </NavDropdown.Item>
           </NavDropdown>
-          <Nav.Link as={NavLink} className="mr-auto" to={`/invoices?${defaultInvoiceQuery}`}>
+          <Nav.Link as={NavLink} to={`/invoices?${defaultInvoiceQuery}`}>
             {t('topBar.publicInvoices')}
           </Nav.Link>
-          {isLogged ?
-            <>
-              <Nav.Link as={NavLink} to="/create-invoice">{t('topBar.createInvoice')}</Nav.Link>
-              <Nav.Link as={NavLink} to={`/my-invoices?${defaultInvoiceQuery}&${defaultMyInvoiceQuery}`}>
-                {t('topBar.myInvoices')}
-              </Nav.Link>
-              <Nav.Link as={NavLink} to="/account">{loggedUser.name}</Nav.Link>
-              <a href={getLogoutUrl()}>
-                <Button variant="danger" onClick={startLoading}>
-                  {t('topBar.logout')}
+          {!isLogged && <Nav.Link as={NavLink} to="/invoice-visualization">{t('topBar.invoiceVisualization')}</Nav.Link>}
+          <div className="d-flex ml-auto">
+            {isLogged ?
+              <>
+                <Nav.Link as={NavLink} to="/create-invoice">{t('topBar.createInvoice')}</Nav.Link>
+                <Nav.Link as={NavLink} to={`/my-invoices?${defaultInvoiceQuery}&${defaultMyInvoiceQuery}`}>
+                  {t('topBar.myInvoices')}
+                </Nav.Link>
+                <Nav.Link as={NavLink} to="/account">{loggedUser.name}</Nav.Link>
+                <a href={getLogoutUrl()}>
+                  <Button variant="danger" onClick={startLoading}>
+                    {t('topBar.logout')}
+                  </Button>
+                </a>
+              </>
+              :
+              <a href={CONFIG.upvsLoginUrl}>
+                <Button variant="success" onClick={startLoading}>
+                  {t('topBar.login')}
                 </Button>
               </a>
-            </>
-            :
-            <a href={CONFIG.upvsLoginUrl}>
-              <Button variant="success" onClick={startLoading}>
-                {t('topBar.login')}
-              </Button>
-            </a>
-          }
+            }
+          </div>
         </Nav>
       </Navbar.Collapse>
     </Navbar>

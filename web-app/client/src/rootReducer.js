@@ -11,8 +11,13 @@ const getInitialState = () => ({
   // If there is at least one running request show Loading Modal
   loadingRequests: 0,
   createInvoiceScreen: {
-    format: invoiceFormats.UBL,
-    test: false,
+    submission: {
+      format: invoiceFormats.UBL,
+      test: false,
+    },
+    visualization: {
+      format: invoiceFormats.UBL,
+    },
   },
   publicInvoicesScreen: {},
   myInvoicesScreen: {},

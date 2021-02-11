@@ -19,8 +19,17 @@ export default (api) => {
       jsonBody: false,
     })
 
+  const createVisualization = (formData) =>
+    prepareRequest({
+      method: 'POST',
+      route: '/visualization',
+      data: formData,
+      jsonBody: false,
+    })
+
   return {
     create,
+    createVisualization,
     getMeta,
     getPublic,
   }

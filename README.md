@@ -49,7 +49,7 @@ APISERVER_ENV=dev
 ./dev-scripts/start_service.sh ${service-name}
 ```
 
-* If UPVS server is unavailable run also [upvs mock server](docs/upvsMock).
+* If UPVS server is unavailable run also [upvs mock server](docs/upvsMock.md).
 
 * Finally run [web-app](web-app/README.md)
 
