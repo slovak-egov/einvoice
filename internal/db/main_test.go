@@ -22,6 +22,10 @@ func cleanDb(t *testing.T) func() {
 		if _, err := connector.GetDb(ctx).Model(&entity.User{}).Where("TRUE").Delete(); err != nil {
 			t.Error(err)
 		}
+
+		if _, err := connector.GetDb(ctx).Model(&entity.Invoice{}).Where("TRUE").Delete(); err != nil {
+			t.Error(err)
+		}
 	}
 }
 

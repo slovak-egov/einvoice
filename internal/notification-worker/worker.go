@@ -50,36 +50,53 @@ func (w *Worker) CloseResources() {
 
 func (w *Worker) checkInvoices() {
 	ctx := goContext.Background()
-	// Get invoices parties were not notified yet
-	invoices, err := w.db.GetNotNotifiedInvoices(ctx, w.config.BatchSize)
-	if err != nil {
-		return
-	}
 
-	if len(invoices) == 0 {
-		context.GetLogger(ctx).Info("worker.checkInvoices.noNewInvoices")
-		return
-	}
+	_ = w.db.RunInTransaction(ctx, func(ctx goContext.Context) error {
 
-	notifiedInvoiceIds := []int{}
-
-	// send invoices notifications
-	for _, invoice := range invoices {
-		err := w.notifyInvoiceParties(ctx, invoice)
-		if err == nil {
-			notifiedInvoiceIds = append(notifiedInvoiceIds, invoice.Id)
+		// Get invoices parties were not notified yet
+		invoices, err := w.db.GetAndUpdateNotNotifiedInvoices(ctx, w.config.BatchSize)
+		if err != nil {
+			return err
 		}
-	}
 
-	// Mark notified invoices
-	if len(notifiedInvoiceIds) > 0 {
-		err := w.db.MarkNotifiedInvoices(ctx, notifiedInvoiceIds)
-		if err == nil {
-			context.GetLogger(ctx).WithField("invoiceIds", notifiedInvoiceIds).Info("worker.checkInvoices.notified")
+		if len(invoices) == 0 {
+			context.GetLogger(ctx).Info("worker.checkInvoices.noNewInvoices")
+			return nil
 		}
-	} else {
-		context.GetLogger(ctx).Warn("worker.checkInvoices.noNotification")
-	}
+
+		notifiedInvoiceIds := []int{}
+		notNotifiedInvoiceIds := []int{}
+
+		// send invoices notifications
+		for _, invoice := range invoices {
+			err := w.notifyInvoiceParties(ctx, invoice)
+			if err == nil {
+				notifiedInvoiceIds = append(notifiedInvoiceIds, invoice.Id)
+			} else {
+				notNotifiedInvoiceIds = append(notNotifiedInvoiceIds, invoice.Id)
+			}
+		}
+
+		// Mark notified invoices
+		if len(notifiedInvoiceIds) > 0 {
+			err := w.db.UpdateNotificationStatus(ctx, notifiedInvoiceIds, entity.NotificationStatusSent)
+			if err == nil {
+				context.GetLogger(ctx).WithField("invoiceIds", notifiedInvoiceIds).Info("worker.checkInvoices.notified")
+			}
+		} else {
+			context.GetLogger(ctx).Warn("worker.checkInvoices.noNotification")
+		}
+
+		// Mark not notified invoices
+		if len(notNotifiedInvoiceIds) > 0 {
+			err := w.db.UpdateNotificationStatus(ctx, notNotifiedInvoiceIds, entity.NotificationStatusNotSent)
+			if err == nil {
+				context.GetLogger(ctx).WithField("invoiceIds", notifiedInvoiceIds).Warn("worker.checkInvoices.notNotified")
+			}
+		}
+
+		return nil
+	})
 }
 
 func (w *Worker) notifyInvoiceParties(ctx goContext.Context, invoice entity.Invoice) error {

@@ -8,6 +8,20 @@ import (
 	"github.com/slovak-egov/einvoice/internal/entity"
 )
 
+func createTestUser(t *testing.T, ico string) *entity.User {
+	t.Helper()
+
+	if ico == "" {
+		ico = "11190993"
+	}
+	user, err := connector.GetOrCreateUser(ctx, "ico://sk/"+ico, "Frantisek")
+	if err != nil {
+		t.Error(err)
+	}
+
+	return user
+}
+
 func TestGetUserUris(t *testing.T) {
 	user1 := entity.User{Id: 1, UpvsUri: "ico://sk/10000001", Name: "user1"}
 	user2 := entity.User{Id: 2, UpvsUri: "ico://sk/10000002", Name: "user2"}
