@@ -2,6 +2,7 @@ package apiserver
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 
 	"github.com/slovak-egov/einvoice/pkg/dbutil"
@@ -50,7 +51,7 @@ func (a *App) addUserSubstitutes(res http.ResponseWriter, req *http.Request) err
 	decoder.DisallowUnknownFields()
 
 	if err := decoder.Decode(&requestBody); err != nil {
-		return SubstituteError("body.parsingError").WithCause(err)
+		return SubstituteError("body.parsingError").WithDetail(err)
 	}
 
 	if len(requestBody) == 0 {
@@ -59,7 +60,7 @@ func (a *App) addUserSubstitutes(res http.ResponseWriter, req *http.Request) err
 
 	substituteIds, err := a.db.AddUserSubstitutes(req.Context(), requestedUserId, requestBody)
 	if _, ok := err.(*dbutil.IntegrityViolationError); ok {
-		return SubstituteError("create.failed").WithCause(err)
+		return SubstituteError("create.failed").WithDetail(errors.New("Substitute already set"))
 	} else if err != nil {
 		return err
 	}
@@ -80,7 +81,7 @@ func (a *App) removeUserSubstitutes(res http.ResponseWriter, req *http.Request) 
 	decoder.DisallowUnknownFields()
 
 	if err := decoder.Decode(&requestBody); err != nil {
-		return SubstituteError("body.parsingError").WithCause(err)
+		return SubstituteError("body.parsingError").WithDetail(err)
 	}
 
 	if len(requestBody) == 0 {

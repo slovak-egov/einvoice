@@ -35,23 +35,16 @@ type invoiceValidator struct {
 }
 
 func (v *invoiceValidator) ValidateUBL21(ctx goContext.Context, xml []byte) error {
-	xmlString, err := json.Marshal(string(xml))
+	requestBody, err := json.Marshal(map[string]string{"xml": string(xml)})
 	if err != nil {
 		context.GetLogger(ctx).WithField("error", err.Error()).Error("invoiceValidator.request.body.preparation.failed")
 		return err
 	}
-	requestBody := fmt.Sprintf("{\"xml\": %s}", string(xmlString))
-	req, err := http.NewRequest("POST", v.url, bytes.NewReader([]byte(requestBody)))
-	if err != nil {
-		context.GetLogger(ctx).WithField("error", err.Error()).Error("invoiceValidator.request.preparation.failed")
-		return err
-	}
-	req.Header.Set("Content-Type", "application/json")
 
-	res, err := v.client.Do(req)
+	res, err := v.client.Post(v.url, "application/json", bytes.NewReader([]byte(requestBody)))
 	if err != nil {
 		context.GetLogger(ctx).WithField("error", err.Error()).Error("invoiceValidator.request.failed")
-		return err
+		return &RequestError{err}
 	}
 
 	defer res.Body.Close()
@@ -79,7 +72,7 @@ func (v *invoiceValidator) ValidateUBL21(ctx goContext.Context, xml []byte) erro
 		"error":  string(body),
 		"status": res.StatusCode,
 	}).Error("invoiceValidator.request.failed")
-	return &RequestError{}
+	return &RequestError{fmt.Errorf("response status %d", res.StatusCode)}
 }
 
 func (v *invoiceValidator) ValidateD16B(ctx goContext.Context, xml []byte) error {

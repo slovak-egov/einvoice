@@ -45,7 +45,6 @@ var devConfig = Configuration{
 		MaxExpiration: 10 * time.Minute,
 		JtiExpiration: 15 * time.Minute,
 	},
-	ValidationServerUrl: "http://localhost:8082",
 }
 
 var prodConfig = Configuration{

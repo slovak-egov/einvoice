@@ -7,10 +7,12 @@ type ValidationError struct {
 }
 
 func (err *ValidationError) Error() string {
-	return strings.Join(err.Errors, ", ")
+	return strings.Join(err.Errors, "\n")
 }
 
-type RequestError struct{}
+type RequestError struct{
+	Detail error
+}
 
 func (err *RequestError) Error() string {
 	return "Invoice validation request failed"

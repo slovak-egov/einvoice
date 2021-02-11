@@ -72,10 +72,13 @@ func TestApiKey(t *testing.T) {
 
 			tokenString, err := token.SignedString(signKey)
 			if err != nil {
-				t.Errorf("Signing twt token failed with error %s", err.Error())
+				t.Errorf("Signing jwt token failed with error %s", err.Error())
 			}
 
-			req, _ := http.NewRequest("GET", fmt.Sprintf("/users/%d", user.Id), nil)
+			req, err := http.NewRequest("GET", fmt.Sprintf("/users/%d", user.Id), nil)
+			if err != nil {
+				t.Error(err.Error())
+			}
 			response := executeApiKeyRequest(req, tokenString)
 
 			checkError(t, response, tt.responseStatus, tt.error)
