@@ -18,6 +18,7 @@ func assertInvoiceNotificationStatus(t *testing.T, id int, status string) {
 	assert.Equal(t, status, inv.NotificationsStatus)
 }
 
+// Test if two parallel invoice updates update different invoices
 func TestGetAndUpdateNotNotifiedInvoices(t *testing.T) {
 	t.Cleanup(testutil.CleanDb(t, connector.Connector, ctx))
 
@@ -97,7 +98,7 @@ func TestUpdateNotificationStatus(t *testing.T) {
 	inv2 := testutil.CreateInvoice(t, connector.Connector, ctx, false, true)
 	inv3 := testutil.CreateInvoice(t, connector.Connector, ctx, false, true)
 
-	err := connector.UpdateNotificationStatus(ctx, []int{inv1.Id, inv2.Id}, "sent")
+	err := connector.UpdateNotificationStatus(ctx, []int{inv1.Id, inv2.Id}, entity.NotificationStatusSent)
 	if err != nil {
 		t.Fatal(err)
 	}
