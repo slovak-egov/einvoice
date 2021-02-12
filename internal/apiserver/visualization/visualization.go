@@ -4,7 +4,6 @@ import (
 	"archive/zip"
 	"bytes"
 	"encoding/base64"
-	"fmt"
 	"io"
 	"strings"
 
@@ -13,7 +12,7 @@ import (
 	"github.com/lestrrat-go/libxml2/types"
 )
 
-func GenerateZip(invoiceBytes []byte, id int) (io.Reader, error) {
+func GenerateZip(invoiceBytes []byte) (io.Reader, error) {
 	xml, err := libxml2.Parse(invoiceBytes)
 	if err != nil {
 		return nil, err
@@ -29,7 +28,7 @@ func GenerateZip(invoiceBytes []byte, id int) (io.Reader, error) {
 		return nil, err
 	}
 
-	pdfWriter, err := w.Create(fmt.Sprintf("invoice-%d.pdf", id))
+	pdfWriter, err := w.Create("invoice.pdf")
 	if err != nil {
 		return nil, err
 	}

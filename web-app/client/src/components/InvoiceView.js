@@ -6,7 +6,7 @@ import NotFound from './helpers/NotFound'
 import BoolIcon from './helpers/BoolIcon'
 import {getInvoiceMeta} from '../actions/invoices'
 import {getInvoiceSelector} from '../state/invoices'
-import {invoiceDownloadXmlUrl, invoiceDownloadPdfUrl} from '../utils/constants'
+import {invoiceDownloadXmlUrl, invoiceDownloadZipUrl} from '../utils/constants'
 
 const TextField = ({label, value}) => (
   <Form.Group>
@@ -107,8 +107,8 @@ export default ({history, match: {params: {id}}}) => {
           <Button variant="primary" href={invoiceDownloadXmlUrl(id)}>
             {`${t('download')} XML`}
           </Button>
-          <Button variant="success" href={invoiceDownloadPdfUrl(id)}>
-            {`${t('download')} PDF`}
+          <Button variant="success" href={invoiceDownloadZipUrl(id)}>
+            {`${t('download')} ZIP`}
           </Button>
         </Row>
       </Card.Body>

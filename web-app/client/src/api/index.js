@@ -47,7 +47,7 @@ export default class Api {
   getResponseParser = (response) => {
     switch (response.headers.get('Content-Type')) {
       case 'application/json': return response.json()
-      case 'application/pdf': return response.blob()
+      case 'application/zip': return response.blob()
       default: return response.text()
     }
   }

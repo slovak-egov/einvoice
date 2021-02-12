@@ -42,6 +42,7 @@ func generateLines(currentNode types.Node, level int, pdf *gofpdf.Fpdf) error {
 		// Write value
 		// Check if node contains value and write it
 		if child, err := currentNode.FirstChild(); err == nil && child.NodeType() == clib.TextNode {
+			// Skip visualizing binary objects as they will be added to ZIP separately
 			if name != "EmbeddedDocumentBinaryObject" {
 				pdf.Write(lineHeight, ": "+strings.TrimSpace(child.TextContent()))
 			}

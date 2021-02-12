@@ -36,7 +36,7 @@ export default () => {
 
       const visualization = await dispatch(getInvoiceVisualization(formData))
       if (visualization) {
-        await save(visualization, 'invoice.pdf')
+        await save(visualization, 'invoice.zip')
         dispatch(resetInvoiceVisualization())
       }
     },

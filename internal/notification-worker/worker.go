@@ -97,7 +97,7 @@ func (w *Worker) notifyInvoiceParties(ctx goContext.Context, invoice entity.Invo
 		return err
 	}
 
-	invoiceZip, err := visualization.GenerateZip(invoiceXml, invoice.Id)
+	invoiceZip, err := visualization.GenerateZip(invoiceXml)
 	if err != nil {
 		context.GetLogger(ctx).
 			WithField("invoiceId", invoice.Id).

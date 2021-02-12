@@ -1,6 +1,7 @@
 package apiserver
 
 import (
+	"io"
 	"net/http"
 
 	"github.com/slovak-egov/einvoice/internal/apiserver/visualization"
@@ -40,12 +41,13 @@ func (a *App) createVisualization(res http.ResponseWriter, req *http.Request) er
 		return InvoiceError("xsd.validation.failed").WithDetail(err)
 	}
 
-	pdfFile, err := visualization.GeneratePdf(requestBody.invoice)
+	data, err := visualization.GenerateZip(requestBody.invoice)
 	if err != nil {
 		return err
 	}
 
-	res.Header().Set("Content-Type", "application/pdf")
+	res.Header().Set("Content-Type", "application/zip")
 	res.WriteHeader(http.StatusOK)
-	return pdfFile.Write(res)
+	_, err = io.Copy(res, data)
+	return err
 }

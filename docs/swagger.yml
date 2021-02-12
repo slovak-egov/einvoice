@@ -304,7 +304,7 @@ paths:
         '200':
           description: Successful response
           content:
-            application/pdf:
+            application/zip:
               schema:
                 type: string
                 format: binary
@@ -379,7 +379,7 @@ paths:
         '200':
           description: Successful response
           content:
-            application/pdf:
+            application/zip:
               schema:
                 type: string
                 format: binary

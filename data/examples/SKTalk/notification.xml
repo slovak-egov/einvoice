@@ -29,7 +29,7 @@
 
                         An invoice has been created in the e-invoicing system.
                         You are one of the contracting parties (or you substitute one of them).
-                        You can find the invoice in the attachment or on the https://dev.einvoice.mfsr.sk/invoices/%1 system page.
+                        You can find the invoice in the attachment or on the https://dev.einvoice.mfsr.sk/invoices/1 system page.
                     </text>
                 </GeneralAgenda>
             </Object>
