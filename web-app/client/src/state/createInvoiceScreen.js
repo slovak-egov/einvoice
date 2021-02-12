@@ -7,6 +7,8 @@ export const submissionInvoiceSelector = (state) => invoiceSubmissionScreenSelec
 
 export const submissionTestSelector = (state) => invoiceSubmissionScreenSelector(state).test
 
-export const visualizationFormatSelector = (state) => invoiceVisualizationScreenSelector(state).format
+export const visualizationFormatSelector = (state) =>
+  invoiceVisualizationScreenSelector(state).format
 
-export const visualizationInvoiceSelector = (state) => invoiceVisualizationScreenSelector(state).invoice
+export const visualizationInvoiceSelector = (state) =>
+  invoiceVisualizationScreenSelector(state).invoice

@@ -17,7 +17,12 @@
     },
     "2": {
       "title": "Vyskúšajte si to",
-      "body": ["Skúste sa prihlásiť s údajmi", "Skúste zadať vlastnú faktúru alebo niektorý z nasledovných"],
+      "body": [
+        "Skúste sa prihlásiť s údajmi",
+        "Skúste zadať vlastnú faktúru alebo niektorý z nasledovných",
+        "Notifikácie o vytvorení faktúr sú posielané do",
+        "ÚPVS schránok"
+      ],
       "links": [
         "korektná D16B faktúra", "korektná UBL2.1 faktúra", "UBL2.1 faktúra porušujúca sémantické pravidlá",
         "UBL2.1 faktúra porušujúca syntaktické pravidlá"
