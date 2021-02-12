@@ -15,7 +15,7 @@ export const invoiceDownloadXmlUrl = (id) => {
   return url
 }
 
-export const invoiceDownloadPdfUrl = (id) => {
+export const invoiceDownloadZipUrl = (id) => {
   let url = `${CONFIG.apiServerUrl}/invoices/${id}/visualization`
   const token = localStorage.getItem('sessionToken')
   if (token != null) url += `?token=${token}`
