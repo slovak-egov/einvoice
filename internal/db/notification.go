@@ -11,20 +11,11 @@ import (
 
 func (c *Connector) GetAndUpdateNotNotifiedInvoices(ctx goContext.Context, limit int) ([]entity.Invoice, error) {
 	invoices := []entity.Invoice{}
-	notUpdatedInvoices := c.GetDb(ctx).
-		Model(&entity.Invoice{}).
-		Column("id").
-		Where("notifications_status = 'not_sent'").
-		Order("id ASC").
-		Limit(limit).
-		For("UPDATE SKIP LOCKED")
-
 	query := c.GetDb(ctx).
 		Model(&invoices).
 		Set("notifications_status = 'sending'").
-		With("ids", notUpdatedInvoices).
-		Where("id IN (SELECT * FROM ids)").
-		Returning("*")
+		Where("id IN (SELECT id FROM invoices WHERE notifications_status = 'not_sent' ORDER BY id ASC LIMIT ? FOR UPDATE SKIP LOCKED)", limit).
+		Returning("id, customer_ico, supplier_ico")
 
 	if _, err := query.Update(); err != nil {
 		context.GetLogger(ctx).WithField("error", err.Error()).Error("db.getNotNotifiedInvoices.failed")

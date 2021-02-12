@@ -9,7 +9,7 @@ import (
 	"github.com/slovak-egov/einvoice/internal/entity"
 )
 
-func testInvoiceStatus(t *testing.T, id int, status string) {
+func assertInvoiceNotificationStatus(t *testing.T, id int, status string) {
 	inv, err := connector.GetInvoice(ctx, id)
 	if err != nil {
 		t.Fatal(err)
@@ -36,9 +36,8 @@ func TestGetAndUpdateNotNotifiedInvoices(t *testing.T) {
 				return err
 			}
 
-			inv1.NotificationsStatus = "sending"
-			inv2.NotificationsStatus = "sending"
-			assert.ElementsMatch(t, []entity.Invoice{*inv1, *inv2}, invoices)
+			assert.Equal(t, 2, len(invoices))
+			assert.ElementsMatch(t, []int{inv1.Id, inv2.Id}, []int{invoices[0].Id, invoices[1].Id})
 
 			startTx2 <- true
 			<-stopTx1
@@ -63,9 +62,8 @@ func TestGetAndUpdateNotNotifiedInvoices(t *testing.T) {
 				return err
 			}
 
-			inv3.NotificationsStatus = "sending"
-			inv4.NotificationsStatus = "sending"
-			assert.ElementsMatch(t, []entity.Invoice{*inv3, *inv4}, invoices)
+			assert.Equal(t, 2, len(invoices))
+			assert.ElementsMatch(t, []int{inv3.Id, inv4.Id}, []int{invoices[0].Id, invoices[1].Id})
 
 			<-stopTx2
 			return nil
@@ -84,11 +82,11 @@ func TestGetAndUpdateNotNotifiedInvoices(t *testing.T) {
 	<-finishedTx1
 	<-finishedTx2
 
-	testInvoiceStatus(t, inv1.Id, "sending")
-	testInvoiceStatus(t, inv2.Id, "sending")
-	testInvoiceStatus(t, inv3.Id, "sending")
-	testInvoiceStatus(t, inv4.Id, "sending")
-	testInvoiceStatus(t, inv5.Id, "not_sent")
+	assertInvoiceNotificationStatus(t, inv1.Id, entity.NotificationStatusSending)
+	assertInvoiceNotificationStatus(t, inv2.Id, entity.NotificationStatusSending)
+	assertInvoiceNotificationStatus(t, inv3.Id, entity.NotificationStatusSending)
+	assertInvoiceNotificationStatus(t, inv4.Id, entity.NotificationStatusSending)
+	assertInvoiceNotificationStatus(t, inv5.Id, entity.NotificationStatusNotSent)
 }
 
 func TestUpdateNotificationStatus(t *testing.T) {
@@ -103,7 +101,7 @@ func TestUpdateNotificationStatus(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	testInvoiceStatus(t, inv1.Id, "sent")
-	testInvoiceStatus(t, inv2.Id, "sent")
-	testInvoiceStatus(t, inv3.Id, "not_sent")
+	assertInvoiceNotificationStatus(t, inv1.Id, entity.NotificationStatusSent)
+	assertInvoiceNotificationStatus(t, inv2.Id, entity.NotificationStatusSent)
+	assertInvoiceNotificationStatus(t, inv3.Id, entity.NotificationStatusNotSent)
 }
