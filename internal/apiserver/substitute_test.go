@@ -9,6 +9,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"github.com/slovak-egov/einvoice/internal/testutil"
 )
 
 func substituteReqUrl(userId int) string {
@@ -20,11 +22,15 @@ func organizationReqUrl(userId int) string {
 }
 
 func TestSubstitute(t *testing.T) {
-	t.Cleanup(cleanDb(t))
+	t.Cleanup(testutil.CleanDb(t, a.db.Connector, ctx))
+	t.Cleanup(testutil.CleanCache(t, a.cache, ctx))
+
 	ico1 := "10000001"
 	ico2 := "10000002"
-	user1, token1 := createTestUser(t, ico1)
-	user2, token2 := createTestUser(t, ico2)
+	user1 := testutil.CreateUser(t, a.db.Connector, ctx, ico1)
+	token1 := testutil.CreateToken(t, a.cache, ctx, user1)
+	user2 := testutil.CreateUser(t, a.db.Connector, ctx, ico2)
+	token2 := testutil.CreateToken(t, a.cache, ctx, user2)
 
 	var flagtests = []struct {
 		name     string
@@ -57,7 +63,7 @@ func TestSubstitute(t *testing.T) {
 			if err != nil {
 				t.Error(err.Error())
 			}
-			response := executeAuthRequest(req, tt.token)
+			response := testutil.ExecuteAuthRequest(a, req, tt.token)
 
 			assert.Equal(t, http.StatusOK, response.Code)
 			expBytes, err := json.Marshal(tt.response)

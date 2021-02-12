@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/slovak-egov/einvoice/internal/entity"
+	"github.com/slovak-egov/einvoice/internal/testutil"
 )
 
 func assertInvoiceNotificationStatus(t *testing.T, id int, status string) {
@@ -18,13 +19,13 @@ func assertInvoiceNotificationStatus(t *testing.T, id int, status string) {
 }
 
 func TestGetAndUpdateNotNotifiedInvoices(t *testing.T) {
-	t.Cleanup(cleanDb(t))
+	t.Cleanup(testutil.CleanDb(t, connector.Connector, ctx))
 
-	inv1 := createTestInvoice(t, false, true)
-	inv2 := createTestInvoice(t, false, true)
-	inv3 := createTestInvoice(t, false, true)
-	inv4 := createTestInvoice(t, false, true)
-	inv5 := createTestInvoice(t, false, true)
+	inv1 := testutil.CreateInvoice(t, connector.Connector, ctx, false, true)
+	inv2 := testutil.CreateInvoice(t, connector.Connector, ctx, false, true)
+	inv3 := testutil.CreateInvoice(t, connector.Connector, ctx, false, true)
+	inv4 := testutil.CreateInvoice(t, connector.Connector, ctx, false, true)
+	inv5 := testutil.CreateInvoice(t, connector.Connector, ctx, false, true)
 
 	stopTx1 := make(chan bool, 1)
 	startTx2 := make(chan bool, 1)
@@ -90,11 +91,11 @@ func TestGetAndUpdateNotNotifiedInvoices(t *testing.T) {
 }
 
 func TestUpdateNotificationStatus(t *testing.T) {
-	t.Cleanup(cleanDb(t))
+	t.Cleanup(testutil.CleanDb(t, connector.Connector, ctx))
 
-	inv1 := createTestInvoice(t, false, true)
-	inv2 := createTestInvoice(t, false, true)
-	inv3 := createTestInvoice(t, false, true)
+	inv1 := testutil.CreateInvoice(t, connector.Connector, ctx, false, true)
+	inv2 := testutil.CreateInvoice(t, connector.Connector, ctx, false, true)
+	inv3 := testutil.CreateInvoice(t, connector.Connector, ctx, false, true)
 
 	err := connector.UpdateNotificationStatus(ctx, []int{inv1.Id, inv2.Id}, "sent")
 	if err != nil {

@@ -6,21 +6,8 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/slovak-egov/einvoice/internal/entity"
+	"github.com/slovak-egov/einvoice/internal/testutil"
 )
-
-func createTestUser(t *testing.T, ico string) *entity.User {
-	t.Helper()
-
-	if ico == "" {
-		ico = "11190993"
-	}
-	user, err := connector.GetOrCreateUser(ctx, "ico://sk/"+ico, "Frantisek")
-	if err != nil {
-		t.Error(err)
-	}
-
-	return user
-}
 
 func TestGetUserUris(t *testing.T) {
 	user1 := entity.User{Id: 1, UpvsUri: "ico://sk/10000001", Name: "user1"}
@@ -48,7 +35,7 @@ func TestGetUserUris(t *testing.T) {
 	}
 	for _, tt := range flagtests {
 		t.Run(tt.name, func(t *testing.T) {
-			t.Cleanup(cleanDb(t))
+			t.Cleanup(testutil.CleanDb(t, connector.Connector, ctx))
 
 			_, err := connector.GetDb(ctx).Model(&[]entity.User{user1, user2, user3, user4, user5}).Insert()
 			if err != nil {

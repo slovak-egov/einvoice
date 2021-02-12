@@ -9,15 +9,16 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/slovak-egov/einvoice/internal/entity"
+	"github.com/slovak-egov/einvoice/internal/testutil"
 )
 
 func TestGetInvoices(t *testing.T) {
 	// Fill DB
-	t.Cleanup(cleanDb(t))
-	firstInvoiceId := createTestInvoice(t, false, true)
-	createTestInvoice(t, true, true)
-	thirdInvoiceId := createTestInvoice(t, false, true)
-	createTestInvoice(t, false, false)
+	t.Cleanup(testutil.CleanDb(t, a.db.Connector, ctx))
+	firstInvoiceId := testutil.CreateInvoice(t, a.db.Connector, ctx, false, true).Id
+	testutil.CreateInvoice(t, a.db.Connector, ctx, true, true)
+	thirdInvoiceId := testutil.CreateInvoice(t, a.db.Connector, ctx, false, true).Id
+	testutil.CreateInvoice(t, a.db.Connector, ctx, false, false)
 
 	var flagtests = []struct {
 		query          string
@@ -36,7 +37,7 @@ func TestGetInvoices(t *testing.T) {
 	for _, tt := range flagtests {
 		t.Run(tt.query, func(t *testing.T) {
 			req, _ := http.NewRequest("GET", "/invoices"+tt.query, nil)
-			response := executeRequest(req)
+			response := testutil.ExecuteRequest(a, req)
 
 			assert.Equal(t, http.StatusOK, response.Code)
 
@@ -51,12 +52,12 @@ func TestGetInvoices(t *testing.T) {
 }
 
 func TestGetInvoice(t *testing.T) {
-	t.Cleanup(cleanDb(t))
-	id1 := createTestInvoice(t, false, true)
-	id2 := createTestInvoice(t, false, false)
+	t.Cleanup(testutil.CleanDb(t, a.db.Connector, ctx))
+	id1 := testutil.CreateInvoice(t, a.db.Connector, ctx, false, true).Id
+	id2 := testutil.CreateInvoice(t, a.db.Connector, ctx, false, false).Id
 
 	req, _ := http.NewRequest("GET", fmt.Sprintf("/invoices/%d", id1), nil)
-	response := executeRequest(req)
+	response := testutil.ExecuteRequest(a, req)
 
 	assert.Equal(t, http.StatusOK, response.Code)
 	var parsedResponse entity.Invoice
@@ -66,13 +67,13 @@ func TestGetInvoice(t *testing.T) {
 
 	// Try to get private invoice
 	req, _ = http.NewRequest("GET", fmt.Sprintf("/invoices/%d", id2), nil)
-	response = executeRequest(req)
+	response = testutil.ExecuteRequest(a, req)
 
 	assert.Equal(t, http.StatusUnauthorized, response.Code)
 
 	// Try to get nonexistent invoice
 	req, _ = http.NewRequest("GET", fmt.Sprintf("/invoices/%d", id2+1), nil)
-	response = executeRequest(req)
+	response = testutil.ExecuteRequest(a, req)
 
 	assert.Equal(t, http.StatusNotFound, response.Code)
 }

@@ -1,9 +1,12 @@
 package apiserver
 
 import (
+	"context"
 	"os"
 	"testing"
 )
+
+var ctx = context.Background()
 
 var a *App
 

@@ -1,16 +1,19 @@
-package db
+package testutil
 
 import (
+	goContext "context"
 	"testing"
 	"time"
 
 	"github.com/slovak-egov/einvoice/internal/entity"
+	"github.com/slovak-egov/einvoice/pkg/dbutil"
 	"github.com/slovak-egov/einvoice/pkg/timeutil"
 )
 
-func createTestInvoice(t *testing.T, test, isPublic bool) *entity.Invoice {
+func CreateInvoice(t *testing.T, connector *dbutil.Connector, ctx goContext.Context, test, isPublic bool) *entity.Invoice {
 	t.Helper()
-	user := createTestUser(t, "")
+
+	user := CreateUser(t, connector, ctx, "")
 	invoice := &entity.Invoice{
 		Sender:      "sender",
 		Receiver:    "receiver",
@@ -24,7 +27,7 @@ func createTestInvoice(t *testing.T, test, isPublic bool) *entity.Invoice {
 		IsPublic:    isPublic,
 	}
 
-	if err := connector.CreateInvoice(ctx, invoice); err != nil {
+	if _, err := connector.GetDb(ctx).Model(invoice).Insert(invoice); err != nil {
 		t.Fatal(err)
 	}
 
