@@ -17,7 +17,12 @@
     },
     "2": {
       "title": "Try it out",
-      "body": ["Try to log in using", "Try submitting your own invoice or one of these examples"],
+      "body": [
+        "Try to log in using",
+        "Try submitting your own invoice or one of these examples",
+        "Notifications about invoice creation are sent to",
+        "ÚPVS mailboxes"
+      ],
       "links": [
         "valid D16B invoice", "valid UBL2.1 invoice", "UBL2.1 invoice violating semantic rules",
         "UBL2.1 invoice violating syntactic rules"

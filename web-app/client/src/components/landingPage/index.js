@@ -73,6 +73,10 @@ export default () => {
                 </a>
               </li>
             </ul>
+            <div>
+              {t('announcements.2.body.2')}&nbsp;
+              <a href="https://edesk.vyvoj.upvs.globaltel.sk" target="_blank">{t('announcements.2.body.3')}</a>
+            </div>
           </Announcement>
         </Card.Body>
       </Card>
