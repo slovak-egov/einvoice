@@ -1,4 +1,4 @@
-package app
+package webserver
 
 import (
 	"fmt"
@@ -7,8 +7,8 @@ import (
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 
+	"github.com/slovak-egov/einvoice/internal/webserver/config"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
-	"github.com/slovak-egov/einvoice/web-app/server/config"
 )
 
 type App struct {
