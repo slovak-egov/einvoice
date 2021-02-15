@@ -1,6 +1,6 @@
 FROM node:14-alpine AS ui_builder
 
-COPY web-app/client /client
+COPY web-app /client
 
 WORKDIR /client
 RUN npm install --production
@@ -21,13 +21,13 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o /out/server ./web-app/server
+RUN go build -o /out/server ./cmd/webserver
 
 # Start fresh from a smaller image
 FROM alpine:3.12
 RUN apk add --no-cache ca-certificates
 
-COPY --from=server_builder /out/server /server/server
-COPY --from=ui_builder /client/build /client/build
+COPY --from=server_builder /out/server /app/server
+COPY --from=ui_builder /client/build /app/build
 
-CMD ["/server/server"]
+CMD ["/app/server"]

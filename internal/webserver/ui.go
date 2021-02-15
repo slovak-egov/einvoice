@@ -1,4 +1,4 @@
-package app
+package webserver
 
 import (
 	"html/template"
@@ -8,7 +8,7 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/slovak-egov/einvoice/web-app/server/config"
+	"github.com/slovak-egov/einvoice/internal/webserver/config"
 )
 
 type UiHandler struct {
