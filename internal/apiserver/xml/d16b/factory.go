@@ -86,16 +86,8 @@ func getIco(party *TradePartyType) (ico string) {
 }
 
 func getIssueDate(date DateTimeType) (*timeutil.Date, error) {
-	// TODO: parse other formats
-	if d := date.DateTime; d != nil {
-		t, err := timeutil.ParseDate(d.Value)
-		if err != nil {
-			return nil, err
-		}
-		return t, nil
-	}
 	if d := date.DateTimeString; d != nil {
-		t, err := timeutil.ParseDate(d.Value)
+		t, err := timeutil.ParseDate(d.Value, timeutil.D16bDateLayout)
 		if err != nil {
 			return nil, err
 		}

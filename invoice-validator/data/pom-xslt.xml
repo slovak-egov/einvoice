@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-
     Licensed under European Union Public Licence (EUPL) version 1.2.
-
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.helger</groupId>
         <artifactId>parent-pom</artifactId>
-        <version>1.10.8</version>
+        <version>1.11.3</version>
     </parent>
     <artifactId>centc434-validation-rules</artifactId>
     <version>1.0.0</version>
@@ -29,16 +27,26 @@
             <plugin>
                 <groupId>com.helger.maven</groupId>
                 <artifactId>ph-schematron-maven-plugin</artifactId>
-                <version>5.6.4</version>
+                <version>6.0.2</version>
                 <executions>
+                    <execution>
+                        <id>d16b</id>
+                        <goals>
+                            <goal>convert</goal>
+                        </goals>
+                        <configuration>
+                            <schematronDirectory>${basedir}/d16b/schematron/preprocessed</schematronDirectory>
+                            <xsltDirectory>${basedir}/d16b/xslt</xsltDirectory>
+                        </configuration>
+                    </execution>
                     <execution>
                         <id>ubl</id>
                         <goals>
                             <goal>convert</goal>
                         </goals>
                         <configuration>
-                            <schematronDirectory>${basedir}/schematron/preprocessed</schematronDirectory>
-                            <xsltDirectory>${basedir}/xslt</xsltDirectory>
+                            <schematronDirectory>${basedir}/ubl2.1/schematron/preprocessed</schematronDirectory>
+                            <xsltDirectory>${basedir}/ubl2.1/xslt</xsltDirectory>
                         </configuration>
                     </execution>
                 </executions>

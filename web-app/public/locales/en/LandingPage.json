@@ -24,8 +24,8 @@
         "ÚPVS mailboxes"
       ],
       "links": [
-        "valid D16B invoice", "valid UBL2.1 invoice", "UBL2.1 invoice violating semantic rules",
-        "UBL2.1 invoice violating syntactic rules"
+        "valid D16B invoice", "D16B invoice violating semantic rules", "valid UBL2.1 invoice",
+        "UBL2.1 invoice violating semantic rules", "UBL2.1 invoice violating syntactic rules"
       ],
       "user": "User",
       "password": "Password"

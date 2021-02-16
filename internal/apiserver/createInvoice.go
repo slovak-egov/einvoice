@@ -17,17 +17,14 @@ import (
 
 var formatToParsers = map[string]struct {
 	GetXsdValidator     func(*App) func([]byte) error
-	GetInvoiceValidator func(*App) func(goContext.Context, []byte) error
 	MetadataExtractor   func([]byte) (*entity.Invoice, error)
 }{
 	entity.UblFormat: {
 		func(a *App) func([]byte) error { return a.xsdValidator.ValidateUBL21 },
-		func(a *App) func(goContext.Context, []byte) error { return a.invoiceValidator.ValidateUBL21 },
 		ubl21.Create,
 	},
 	entity.D16bFormat: {
 		func(a *App) func([]byte) error { return a.xsdValidator.ValidateD16B },
-		func(a *App) func(goContext.Context, []byte) error { return a.invoiceValidator.ValidateD16B },
 		d16b.Create,
 	},
 }
@@ -101,7 +98,7 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 	if err = parsers.GetXsdValidator(a)(requestBody.invoice); err != nil {
 		return InvoiceError("xsd.validation.failed").WithDetail(err)
 	}
-	if err = parsers.GetInvoiceValidator(a)(req.Context(), requestBody.invoice); err != nil {
+	if err = a.invoiceValidator.Validate(req.Context(), requestBody.invoice, requestBody.format); err != nil {
 		if _, ok := err.(*invoiceValidator.ValidationError); ok {
 			return handlerutil.NewBadRequestError("invoice.validation.failed").WithDetail(err)
 		} else if _, ok := err.(*invoiceValidator.RequestError); ok {

@@ -7,14 +7,17 @@ import (
 	"github.com/go-pg/pg/v10/types"
 )
 
-const DateLayoutISO = "2006-01-02"
+const (
+	DateLayoutISO = "2006-01-02"
+	D16bDateLayout = "20060102"
+)
 
 type Date struct {
 	time.Time
 }
 
-func ParseDate(s string) (*Date, error) {
-	t, err := time.Parse(DateLayoutISO, s)
+func ParseDate(s, format string) (*Date, error) {
+	t, err := time.Parse(format, s)
 	if err != nil {
 		return nil, err
 	}

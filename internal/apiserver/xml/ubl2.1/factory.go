@@ -24,7 +24,7 @@ func Create(value []byte) (*entity.Invoice, error) {
 		return nil, err
 	}
 
-	issueDate, err := timeutil.ParseDate(inv.IssueDate)
+	issueDate, err := timeutil.ParseDate(inv.IssueDate, timeutil.DateLayoutISO)
 	if err != nil {
 		return nil, err
 	}

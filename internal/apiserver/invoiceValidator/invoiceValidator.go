@@ -15,8 +15,12 @@ import (
 )
 
 type InvoiceValidator interface {
-	ValidateD16B(ctx goContext.Context, xml []byte) error
-	ValidateUBL21(ctx goContext.Context, xml []byte) error
+	Validate(ctx goContext.Context, xml []byte, format string) error
+}
+
+type invoiceValidator struct {
+	url    string
+	client *http.Client
 }
 
 func New(url string) InvoiceValidator {
@@ -29,19 +33,18 @@ func New(url string) InvoiceValidator {
 	}
 }
 
-type invoiceValidator struct {
-	url    string
-	client *http.Client
-}
-
-func (v *invoiceValidator) ValidateUBL21(ctx goContext.Context, xml []byte) error {
+func (v *invoiceValidator) Validate(ctx goContext.Context, xml []byte, format string) error {
 	requestBody, err := json.Marshal(map[string]string{"xml": string(xml)})
 	if err != nil {
 		context.GetLogger(ctx).WithField("error", err.Error()).Error("invoiceValidator.request.body.preparation.failed")
 		return err
 	}
 
-	res, err := v.client.Post(v.url, "application/json", bytes.NewReader([]byte(requestBody)))
+	res, err := v.client.Post(
+		fmt.Sprintf("%s?format=%s", v.url, format),
+		"application/json",
+		bytes.NewReader([]byte(requestBody)),
+	)
 	if err != nil {
 		context.GetLogger(ctx).WithField("error", err.Error()).Error("invoiceValidator.request.failed")
 		return &RequestError{err}
@@ -73,8 +76,4 @@ func (v *invoiceValidator) ValidateUBL21(ctx goContext.Context, xml []byte) erro
 		"status": res.StatusCode,
 	}).Error("invoiceValidator.request.failed")
 	return &RequestError{fmt.Errorf("response status %d", res.StatusCode)}
-}
-
-func (v *invoiceValidator) ValidateD16B(ctx goContext.Context, xml []byte) error {
-	return nil
 }
