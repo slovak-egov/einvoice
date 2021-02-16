@@ -55,6 +55,5 @@
     "login": "Login"
   },
   "submission": "Submission",
-  "visualization": "Visualization",
-  "createVisualization": "Create visualization"
+  "downloadVisualization": "Download visualization"
 }

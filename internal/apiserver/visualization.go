@@ -4,8 +4,10 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/slovak-egov/einvoice/internal/apiserver/invoiceValidator"
 	"github.com/slovak-egov/einvoice/internal/apiserver/visualization"
 	"github.com/slovak-egov/einvoice/internal/entity"
+	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
 type VisualizationRequestBody struct {
@@ -37,8 +39,19 @@ func (a *App) createVisualization(res http.ResponseWriter, req *http.Request) er
 		return err
 	}
 
-	if err = formatToParsers[requestBody.format].GetXsdValidator(a)(requestBody.invoice); err != nil {
+	parsers := formatToParsers[requestBody.format]
+
+	if err = parsers.GetXsdValidator(a)(requestBody.invoice); err != nil {
 		return InvoiceError("xsd.validation.failed").WithDetail(err)
+	}
+	if err = parsers.GetInvoiceValidator(a)(req.Context(), requestBody.invoice); err != nil {
+		if _, ok := err.(*invoiceValidator.ValidationError); ok {
+			return handlerutil.NewBadRequestError("invoice.validation.failed").WithDetail(err)
+		} else if _, ok := err.(*invoiceValidator.RequestError); ok {
+			return handlerutil.NewFailedDependencyError("invoice.validation.request.failed")
+		} else {
+			return err
+		}
 	}
 
 	data, err := visualization.GenerateZip(requestBody.invoice)
