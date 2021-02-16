@@ -4,37 +4,27 @@ import (
 	"io/ioutil"
 	"testing"
 
-	"github.com/lestrrat-go/libxml2/xsd"
+	"github.com/stretchr/testify/assert"
+
+	"github.com/slovak-egov/einvoice/internal/entity"
 )
 
-func TestD16BValidation(t *testing.T) {
-	bytes, err := ioutil.ReadFile("../../../data/examples/d16b/invoice.xml")
-	if err != nil {
-		t.Fatal(err)
+func TestValidation(t *testing.T) {
+	var flagtests = []struct {
+		format          string
+		testInvoicePath string
+	}{
+		{entity.UblFormat, "../../../data/examples/ubl2.1/invoice.xml"},
+		{entity.D16bFormat, "../../../data/examples/d16b/invoice.xml"},
 	}
+	for _, tt := range flagtests {
+		t.Run(tt.format, func(t *testing.T) {
+			bytes, err := ioutil.ReadFile(tt.testInvoicePath)
+			if err != nil {
+				t.Fatal(err)
+			}
 
-	if err = validator.ValidateD16B(bytes); err != nil {
-		switch v := err.(type) {
-		case xsd.SchemaValidationError:
-			t.Error(v.Errors())
-		default:
-			t.Error(err)
-		}
-	}
-}
-
-func TestUBL21Validation(t *testing.T) {
-	bytes, err := ioutil.ReadFile("../../../data/examples/ubl2.1/invoice.xml")
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	if err = validator.ValidateUBL21(bytes); err != nil {
-		switch v := err.(type) {
-		case xsd.SchemaValidationError:
-			t.Error(v.Errors())
-		default:
-			t.Error(err)
-		}
+			assert.Nil(t, validator.Validate(bytes, tt.format))
+		})
 	}
 }

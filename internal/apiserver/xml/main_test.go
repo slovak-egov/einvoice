@@ -7,10 +7,10 @@ import (
 	"github.com/slovak-egov/einvoice/internal/apiserver/xml"
 )
 
-var validator xml.Validator
+var validator *xml.XsdValidator
 
 func TestMain(m *testing.M) {
-	validator = xml.NewValidator("../../../data/schemas/ubl2.1/xsd", "../../../data/schemas/d16b/xsd")
+	validator = xml.NewXsdValidator("../../../data/schemas/ubl2.1/xsd", "../../../data/schemas/d16b/xsd")
 
 	result := m.Run()
 

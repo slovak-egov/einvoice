@@ -15,18 +15,9 @@ import (
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
-var formatToParsers = map[string]struct {
-	GetXsdValidator     func(*App) func([]byte) error
-	MetadataExtractor   func([]byte) (*entity.Invoice, error)
-}{
-	entity.UblFormat: {
-		func(a *App) func([]byte) error { return a.xsdValidator.ValidateUBL21 },
-		ubl21.Create,
-	},
-	entity.D16bFormat: {
-		func(a *App) func([]byte) error { return a.xsdValidator.ValidateD16B },
-		d16b.Create,
-	},
+var metadataExtractors = map[string]func([]byte) (*entity.Invoice, error) {
+	entity.UblFormat: ubl21.Create,
+	entity.D16bFormat: d16b.Create,
 }
 
 type CreateInvoiceRequestBody struct {
@@ -90,12 +81,10 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 	}
 	userId := context.GetUserId(req.Context())
 
-	parsers := formatToParsers[requestBody.format]
-
 	// Validate invoice format
 	var metadata *entity.Invoice
 
-	if err = parsers.GetXsdValidator(a)(requestBody.invoice); err != nil {
+	if err = a.xsdValidator.Validate(requestBody.invoice, requestBody.format); err != nil {
 		return InvoiceError("xsd.validation.failed").WithDetail(err)
 	}
 	if err = a.invoiceValidator.Validate(req.Context(), requestBody.invoice, requestBody.format); err != nil {
@@ -107,7 +96,7 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 			return err
 		}
 	}
-	metadata, err = parsers.MetadataExtractor(requestBody.invoice)
+	metadata, err = metadataExtractors[requestBody.format](requestBody.invoice)
 	if err != nil {
 		return InvoiceError("validation.failed").WithDetail(err)
 	}
