@@ -20,6 +20,9 @@ export default class Api {
 
   logout = () => this.apiRequest({route: '/logout'})
 
+  getUbl21Docs = () => this.apiRequest({route: '/data/schemas/ubl2.1/docs.json'})
+  getCodeLists = () => this.apiRequest({route: '/data/codeLists.json'})
+
   apiRequest = (params) => {
     // Add authorization header if logged in
     const sessionToken = localStorage.getItem('sessionToken')

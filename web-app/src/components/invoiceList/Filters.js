@@ -53,79 +53,77 @@ export default ({areCustomFilterFieldsValid, CustomFilter, getInvoices}) => {
   }, [search])
 
   return (
-    <Accordion>
-      <Card>
-        <Accordion.Toggle
-          as={Card.Header}
-          eventKey="0"
-          className="bg-primary text-white d-flex align-items-center"
-          style={{cursor: 'pointer'}}
-        >
-          <span>{t('filters')}</span>
-          <i className="fas fa-plus ml-auto" />
-        </Accordion.Toggle>
-        <Accordion.Collapse eventKey="0">
-          <Card.Body>
-            <div>
-              <div className="d-flex">
-                <div style={{flex: 1}}>
-                  <strong className="filter-heading">{t('format')}</strong>
-                  <div className="d-flex">
-                    {Object.values(invoiceFormats).map((format) => (
-                      <FormCheck
-                        type="checkbox"
-                        key={format}
-                        checked={formats[format].value}
-                        onChange={formats[format].toggleFormat}
-                        label={format}
-                        className="mr-3"
-                      />
-                    ))}
-                  </div>
-                </div>
-                <div style={{flex: 1}}>
-                  <strong className="filter-heading">Test</strong>
-                  <FormCheck
-                    type="checkbox"
-                    checked={test}
-                    onChange={() => setTest((v) => !v)}
-                    label="Test"
-                  />
-                </div>
-              </div>
-              <div>
-                <strong className="filter-heading">IČO</strong>
-                <InputGroup style={{width: '140px'}}>
-                  <Form.Control
-                    value={ico || ''}
-                    onChange={(e) => setIco(keepDigitsOnly(e.target.value))}
-                    readOnly={ico == null}
-                  />
-                  <InputGroup.Append>
-                    <InputGroup.Checkbox
-                      checked={ico != null}
-                      onChange={() => setIco(ico == null ? '' : null)}
-                    />
-                  </InputGroup.Append>
-                </InputGroup>
-              </div>
-              {CustomFilter &&
-                <CustomFilter extraQuery={extraQuery} setExtraQuery={setExtraQuery} />
-              }
-            </div>
+    <Accordion as={Card}>
+      <Accordion.Toggle
+        as={Card.Header}
+        eventKey="0"
+        className="bg-primary text-white d-flex align-items-center"
+        style={{cursor: 'pointer'}}
+      >
+        <span>{t('filters')}</span>
+        <i className="fas fa-plus ml-auto" />
+      </Accordion.Toggle>
+      <Accordion.Collapse eventKey="0">
+        <Card.Body>
+          <div>
             <div className="d-flex">
-              <Button
-                variant="primary"
-                className="ml-auto"
-                onClick={filterRedirect}
-                disabled={!searchEnabled}
-              >
-                {t('search')}
-              </Button>
+              <div style={{flex: 1}}>
+                <strong className="filter-heading">{t('format')}</strong>
+                <div className="d-flex">
+                  {Object.values(invoiceFormats).map((format) => (
+                    <FormCheck
+                      type="checkbox"
+                      key={format}
+                      checked={formats[format].value}
+                      onChange={formats[format].toggleFormat}
+                      label={format}
+                      className="mr-3"
+                    />
+                  ))}
+                </div>
+              </div>
+              <div style={{flex: 1}}>
+                <strong className="filter-heading">Test</strong>
+                <FormCheck
+                  type="checkbox"
+                  checked={test}
+                  onChange={() => setTest((v) => !v)}
+                  label="Test"
+                />
+              </div>
             </div>
-          </Card.Body>
-        </Accordion.Collapse>
-      </Card>
+            <div>
+              <strong className="filter-heading">IČO</strong>
+              <InputGroup style={{width: '140px'}}>
+                <Form.Control
+                  value={ico || ''}
+                  onChange={(e) => setIco(keepDigitsOnly(e.target.value))}
+                  readOnly={ico == null}
+                />
+                <InputGroup.Append>
+                  <InputGroup.Checkbox
+                    checked={ico != null}
+                    onChange={() => setIco(ico == null ? '' : null)}
+                  />
+                </InputGroup.Append>
+              </InputGroup>
+            </div>
+            {CustomFilter &&
+              <CustomFilter extraQuery={extraQuery} setExtraQuery={setExtraQuery} />
+            }
+          </div>
+          <div className="d-flex">
+            <Button
+              variant="primary"
+              className="ml-auto"
+              onClick={filterRedirect}
+              disabled={!searchEnabled}
+            >
+              {t('search')}
+            </Button>
+          </div>
+        </Card.Body>
+      </Accordion.Collapse>
     </Accordion>
   )
 }

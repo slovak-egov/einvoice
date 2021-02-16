@@ -1,0 +1,4484 @@
+{
+  "ubl:Invoice": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "description": {
+      "en": "Invoice root element",
+      "sk": "TBD"
+    },
+    "name": {
+      "en": "Invoice",
+      "sk": "Faktúra"
+    },
+    "children": {
+      "cbc:CustomizationID": {
+        "cardinality": {
+          "from": "1",
+          "to": "1"
+        },
+        "description": {
+          "en": "An identification of the specification containing the total set of rules regarding semantic content, cardinalities and business rules to which the data contained in the instance document conforms.",
+          "sk": "TBD"
+        },
+        "name": {
+          "en": "Specification identifier",
+          "sk": "TBD"
+        },
+        "dataType": "Identifier"
+      },
+      "cbc:ProfileID": {
+        "cardinality": {
+          "from": "1",
+          "to": "1"
+        },
+        "description": {
+          "en": "Identifies the business process context in which the transaction appears, to enable the Buyer to process the Invoice in an appropriate way.",
+          "sk": "TBD"
+        },
+        "name": {
+          "en": "Business process type",
+          "sk": "TBD"
+        },
+        "dataType": "Text"
+      },
+      "cbc:ID": {
+        "cardinality": {
+          "from": "1",
+          "to": "1"
+        },
+        "description": {
+          "en": "A unique identification of the Invoice. The sequential number required in Article 226(2) of the directive 2006/112/EC [2], to uniquely identify the Invoice within the business context, time-frame, operating systems and records of the Seller. No identification scheme is to be used.",
+          "sk": "TBD"
+        },
+        "name": {
+          "en": "Invoice number",
+          "sk": "TBD"
+        },
+        "dataType": "Identifier"
+      },
+      "cbc:IssueDate": {
+        "cardinality": {
+          "from": "1",
+          "to": "1"
+        },
+        "description": {
+          "en": "The date when the Invoice was issued. Format \"YYYY-MM-DD\"",
+          "sk": "TBD"
+        },
+        "name": {
+          "en": "Invoice issue date",
+          "sk": "TBD"
+        },
+        "dataType": "Date"
+      },
+      "cbc:DueDate": {
+        "cardinality": {
+          "from": "0",
+          "to": "1"
+        },
+        "description": {
+          "en": "The date when the payment is due.Format \"YYYY-MM-DD\". In case the Amount due for payment (BT-115) is positive, either the Payment due date (BT-9) or the Payment terms (BT-20) shall be present.",
+          "sk": "TBD"
+        },
+        "name": {
+          "en": "Payment due date",
+          "sk": "TBD"
+        },
+        "dataType": "Date"
+      },
+      "cbc:InvoiceTypeCode": {
+        "cardinality": {
+          "from": "1",
+          "to": "1"
+        },
+        "description": {
+          "en": "A code specifying the functional type of the Invoice.",
+          "sk": "TBD"
+        },
+        "name": {
+          "en": "Invoice type code",
+          "sk": "TBD"
+        },
+        "dataType": "Code",
+        "codeLists": [
+          "UNCL1001-inv"
+        ]
+      },
+      "cbc:Note": {
+        "cardinality": {
+          "from": "0",
+          "to": "1"
+        },
+        "description": {
+          "en": "A textual note that gives unstructured information that is relevant to the Invoice as a whole.Such as the reason for any correction or assignment note in case the invoice has been factored.",
+          "sk": "TBD"
+        },
+        "name": {
+          "en": "Invoice note",
+          "sk": "TBD"
+        },
+        "dataType": "Text"
+      },
+      "cbc:TaxPointDate": {
+        "cardinality": {
+          "from": "0",
+          "to": "1"
+        },
+        "description": {
+          "en": "The date when the VAT becomes accountable for the Seller and for the Buyer in so far as that date can be determined and differs from the date of issue of the invoice, according to the VAT directive.This element is required if the Value added tax point date is different from the Invoice issue date.",
+          "sk": "TBD"
+        },
+        "name": {
+          "en": "Value added tax point date",
+          "sk": "TBD"
+        },
+        "dataType": "Date"
+      },
+      "cbc:DocumentCurrencyCode": {
+        "cardinality": {
+          "from": "1",
+          "to": "1"
+        },
+        "description": {
+          "en": "The currency in which all Invoice amounts are given, except for the Total VAT amount in accounting currency. Only one currency shall be used in the Invoice, except for the VAT accounting currency code (BT-6) and the invoice total VAT amount in accounting currency (BT-111).",
+          "sk": "TBD"
+        },
+        "name": {
+          "en": "Invoice currency code",
+          "sk": "TBD"
+        },
+        "dataType": "Code",
+        "codeLists": [
+          "ISO4217"
+        ]
+      },
+      "cbc:TaxCurrencyCode": {
+        "cardinality": {
+          "from": "0",
+          "to": "1"
+        },
+        "description": {
+          "en": "The currency used for VAT accounting and reporting purposes as accepted or required in the country of the Seller. Shall be used in combination with the Invoice total VAT amount in accounting currency (BT-111), when the VAT accounting currency code differs from the Invoice currency code.",
+          "sk": "TBD"
+        },
+        "name": {
+          "en": "VAT accounting currency code",
+          "sk": "TBD"
+        },
+        "dataType": "Code",
+        "codeLists": [
+          "ISO4217"
+        ]
+      },
+      "cbc:AccountingCost": {
+        "cardinality": {
+          "from": "0",
+          "to": "1"
+        },
+        "description": {
+          "en": "A textual value that specifies where to book the relevant data into the Buyer's financial accounts.",
+          "sk": "TBD"
+        },
+        "name": {
+          "en": "Buyer accounting reference",
+          "sk": "TBD"
+        },
+        "dataType": "Text"
+      },
+      "cbc:BuyerReference": {
+        "cardinality": {
+          "from": "0",
+          "to": "1"
+        },
+        "description": {
+          "en": "An identifier assigned by the Buyer used for internal routing purposes. An invoice must have buyer reference or purchase order reference (BT-13).",
+          "sk": "TBD"
+        },
+        "name": {
+          "en": "Buyer reference",
+          "sk": "TBD"
+        },
+        "dataType": "Text"
+      },
+      "cac:InvoicePeriod": {
+        "cardinality": {
+          "from": "0",
+          "to": "1"
+        },
+        "description": {
+          "en": "A group of business terms providing information on the invoice period. Also called delivery period. If the group is used, the invoiceing period start date and/or end date must be used.",
+          "sk": "TBD"
+        },
+        "name": {
+          "en": "DELIVERY OR INVOICE PERIOD",
+          "sk": "TBD"
+        },
+        "children": {
+          "cbc:StartDate": {
+            "cardinality": {
+              "from": "0",
+              "to": "1"
+            },
+            "description": {
+              "en": "The date when the Invoice period starts. Format = \"YYYY-MM-DD\".",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Invoicing period start date",
+              "sk": "TBD"
+            },
+            "dataType": "Date"
+          },
+          "cbc:EndDate": {
+            "cardinality": {
+              "from": "0",
+              "to": "1"
+            },
+            "description": {
+              "en": "The date when the Invoice period ends. Format = \"YYYY-MM-DD\".",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Invoicing period end date",
+              "sk": "TBD"
+            },
+            "dataType": "Date"
+          },
+          "cbc:DescriptionCode": {
+            "cardinality": {
+              "from": "0",
+              "to": "1"
+            },
+            "description": {
+              "en": "The code of the date when the VAT becomes accountable for the Seller and for the Buyer.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Value added tax point date code",
+              "sk": "TBD"
+            },
+            "dataType": "Code",
+            "codeLists": [
+              "UNCL2005"
+            ]
+          }
+        }
+      },
+      "cac:OrderReference": {
+        "cardinality": {
+          "from": "0",
+          "to": "1"
+        },
+        "description": {
+          "en": "NOT DEFINED",
+          "sk": "TBD"
+        },
+        "name": {
+          "en": "ORDER AND SALES ORDER REFERENCE",
+          "sk": "TBD"
+        },
+        "children": {
+          "cbc:ID": {
+            "cardinality": {
+              "from": "1",
+              "to": "1"
+            },
+            "description": {
+              "en": "An identifier of a referenced purchase order, issued by the Buyer.An invoice must have buyer reference (BT-10) or purchase order reference.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Purchase order reference",
+              "sk": "TBD"
+            },
+            "dataType": "Document Reference"
+          },
+          "cbc:SalesOrderID": {
+            "cardinality": {
+              "from": "0",
+              "to": "1"
+            },
+            "description": {
+              "en": "An identifier of a referenced sales order, issued by the Seller.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Sales order reference",
+              "sk": "TBD"
+            },
+            "dataType": "Document Reference"
+          }
+        }
+      },
+      "cac:BillingReference": {
+        "cardinality": {
+          "from": "0",
+          "to": "n"
+        },
+        "description": {
+          "en": "A group of business terms providing information on one or more preceding Invoices.",
+          "sk": "TBD"
+        },
+        "name": {
+          "en": "PRECEDING INVOICE REFERENCE",
+          "sk": "TBD"
+        },
+        "children": {
+          "cac:InvoiceDocumentReference": {
+            "cardinality": {
+              "from": "1",
+              "to": "1"
+            },
+            "description": {
+              "en": "NOT DEFINED",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "INVOICE DOCUMENT REFERENCE",
+              "sk": "TBD"
+            },
+            "children": {
+              "cbc:ID": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "The identification of an Invoice that was previously sent by the Seller.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Preceding Invoice number",
+                  "sk": "TBD"
+                },
+                "dataType": "Document Reference"
+              },
+              "cbc:IssueDate": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "The date when the Preceding Invoice was issued.Shall be provided in case the Preceding Invoice identifier is not unique. Format = \"YYYY-MM-DD\".",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Preceding Invoice issue date",
+                  "sk": "TBD"
+                },
+                "dataType": "Date"
+              }
+            }
+          }
+        }
+      },
+      "cac:DespatchDocumentReference": {
+        "cardinality": {
+          "from": "0",
+          "to": "1"
+        },
+        "description": {
+          "en": "NOT DEFINED",
+          "sk": "TBD"
+        },
+        "name": {
+          "en": "DESPATCH ADVICE REFERENCE",
+          "sk": "TBD"
+        },
+        "children": {
+          "cbc:ID": {
+            "cardinality": {
+              "from": "1",
+              "to": "1"
+            },
+            "description": {
+              "en": "An identifier of a referenced despatch advice.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Despatch advice reference",
+              "sk": "TBD"
+            },
+            "dataType": "Document Reference"
+          }
+        }
+      },
+      "cac:ReceiptDocumentReference": {
+        "cardinality": {
+          "from": "0",
+          "to": "1"
+        },
+        "description": {
+          "en": "NOT DEFINED",
+          "sk": "TBD"
+        },
+        "name": {
+          "en": "RECEIPT ADVICE REFERENCE",
+          "sk": "TBD"
+        },
+        "children": {
+          "cbc:ID": {
+            "cardinality": {
+              "from": "1",
+              "to": "1"
+            },
+            "description": {
+              "en": "An identifier of a referenced receiving advice.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Receiving advice reference",
+              "sk": "TBD"
+            },
+            "dataType": "Document Reference"
+          }
+        }
+      },
+      "cac:OriginatorDocumentReference": {
+        "cardinality": {
+          "from": "0",
+          "to": "1"
+        },
+        "description": {
+          "en": "NOT DEFINED",
+          "sk": "TBD"
+        },
+        "name": {
+          "en": "TENDER OR LOT REFERENCE",
+          "sk": "TBD"
+        },
+        "children": {
+          "cbc:ID": {
+            "cardinality": {
+              "from": "1",
+              "to": "1"
+            },
+            "description": {
+              "en": "The identification of the call for tender or lot the invoice relates to.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Tender or lot reference",
+              "sk": "TBD"
+            },
+            "dataType": "Document Reference"
+          }
+        }
+      },
+      "cac:ContractDocumentReference": {
+        "cardinality": {
+          "from": "0",
+          "to": "1"
+        },
+        "description": {
+          "en": "NOT DEFINED",
+          "sk": "TBD"
+        },
+        "name": {
+          "en": "CONTRACT REFERENCE",
+          "sk": "TBD"
+        },
+        "children": {
+          "cbc:ID": {
+            "cardinality": {
+              "from": "1",
+              "to": "1"
+            },
+            "description": {
+              "en": "The identification of a contract.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Contract reference",
+              "sk": "TBD"
+            },
+            "dataType": "Document Reference"
+          }
+        }
+      },
+      "cac:ProjectReference": {
+        "cardinality": {
+          "from": "0",
+          "to": "1"
+        },
+        "description": {
+          "en": "NOT DEFINED",
+          "sk": "TBD"
+        },
+        "name": {
+          "en": "PROJECT REFERENCE",
+          "sk": "TBD"
+        },
+        "children": {
+          "cbc:ID": {
+            "cardinality": {
+              "from": "1",
+              "to": "1"
+            },
+            "description": {
+              "en": "The identification of the project the invoice refers to.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Project reference",
+              "sk": "TBD"
+            },
+            "dataType": "Document Reference"
+          }
+        }
+      },
+      "cac:PaymentMeans": {
+        "cardinality": {
+          "from": "0",
+          "to": "n"
+        },
+        "description": {
+          "en": "A group of business terms providing information about the payment.",
+          "sk": "TBD"
+        },
+        "name": {
+          "en": "PAYMENT INSTRUCTIONS",
+          "sk": "TBD"
+        },
+        "children": {
+          "cbc:PaymentMeansCode": {
+            "cardinality": {
+              "from": "1",
+              "to": "1"
+            },
+            "description": {
+              "en": "The means, expressed as code, for how a payment is expected to be or has been settled.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Payment means type code",
+              "sk": "TBD"
+            },
+            "dataType": "Code",
+            "codeLists": [
+              "UNCL4461"
+            ],
+            "attributes": {
+              "name": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "The means, expressed as text, for how a payment is expected to be or has been settled.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Payment means text",
+                  "sk": "TBD"
+                },
+                "dataType": "Text"
+              }
+            }
+          },
+          "cbc:PaymentID": {
+            "cardinality": {
+              "from": "0",
+              "to": "1"
+            },
+            "description": {
+              "en": "A textual value used to establish a link between the payment and the Invoice, issued by the Seller. Used for creditor's critical reconciliation information. This information element helps the Seller to assign an incoming payment to the relevant payment process.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Remittance information",
+              "sk": "TBD"
+            },
+            "dataType": "Text"
+          },
+          "cac:CardAccount": {
+            "cardinality": {
+              "from": "0",
+              "to": "1"
+            },
+            "description": {
+              "en": "A group of business terms providing information about card used for payment contemporaneous with invoice issuance.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "PAYMENT CARD INFORMATION",
+              "sk": "TBD"
+            },
+            "children": {
+              "cbc:PrimaryAccountNumberID": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "The Primary Account Number (PAN) of the card used for payment.In accordance with card payments security standards, an invoice should never include a full card primary account number.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Payment card primary account number",
+                  "sk": "TBD"
+                },
+                "dataType": "Text"
+              },
+              "cbc:NetworkID": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "Card Network identifier, such as VISA, American Express, Master Card.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "dataType": "Text"
+              },
+              "cbc:HolderName": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "The name of the payment card holder.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Payment card holder name",
+                  "sk": "TBD"
+                },
+                "dataType": "Text"
+              }
+            }
+          },
+          "cac:PayeeFinancialAccount": {
+            "cardinality": {
+              "from": "0",
+              "to": "1"
+            },
+            "description": {
+              "en": "A group of business terms to specify credit transfer payments.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "CREDIT TRANSFER",
+              "sk": "TBD"
+            },
+            "children": {
+              "cbc:ID": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "A unique identifier of the financial payment account, at a payment service provider, to which payment should be made. Such as IBAN or BBAN.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Payment account identifier",
+                  "sk": "TBD"
+                },
+                "dataType": "Identifier"
+              },
+              "cbc:Name": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "The name of the payment account, at a payment service provider, to which payment should be made.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Payment account name",
+                  "sk": "TBD"
+                },
+                "dataType": "Text"
+              },
+              "cac:FinancialInstitutionBranch": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "FINANCIAL INSTITUTION BRANCH",
+                  "sk": "TBD"
+                },
+                "children": {
+                  "cbc:ID": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "An identifier for the payment service provider where a payment account is located. Such as a BIC or a national clearing code where required. No identification scheme Identifier to be used.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Payment service provider identifier",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Identifier"
+                  }
+                }
+              }
+            }
+          },
+          "cac:PaymentMandate": {
+            "cardinality": {
+              "from": "0",
+              "to": "1"
+            },
+            "description": {
+              "en": "A group of business terms to specify a direct debit.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "DIRECT DEBIT",
+              "sk": "TBD"
+            },
+            "children": {
+              "cbc:ID": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "Unique identifier assigned by the Payee for referencing the direct debit mandate. Used in order to pre-notify the Buyer of a SEPA direct debit.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Mandate reference identifier",
+                  "sk": "TBD"
+                },
+                "dataType": "Identifier"
+              },
+              "cac:PayerFinancialAccount": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "PAYER FINANCIAL ACCOUNT",
+                  "sk": "TBD"
+                },
+                "children": {
+                  "cbc:ID": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The account to be debited by the direct debit.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Debited account identifier",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Identifier"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "cac:PaymentTerms": {
+        "cardinality": {
+          "from": "0",
+          "to": "1"
+        },
+        "description": {
+          "en": "NOT DEFINED",
+          "sk": "TBD"
+        },
+        "name": {
+          "en": "PAYMENT TERMS",
+          "sk": "TBD"
+        },
+        "children": {
+          "cbc:Note": {
+            "cardinality": {
+              "from": "1",
+              "to": "1"
+            },
+            "description": {
+              "en": "A textual description of the payment terms that apply to the amount due for payment (Including description of possible penalties). In case the Amount due for payment (BT-115) is positive, either the Payment due date (BT-9) or the Payment terms (BT-20) shall be present.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Payment terms",
+              "sk": "TBD"
+            },
+            "dataType": "Text"
+          }
+        }
+      },
+      "cac:InvoiceLine": {
+        "cardinality": {
+          "from": "1",
+          "to": "n"
+        },
+        "description": {
+          "en": "A group of business terms providing information on individual Invoice lines.",
+          "sk": "TBD"
+        },
+        "name": {
+          "en": "INVOICE LINE",
+          "sk": "TBD"
+        },
+        "children": {
+          "cbc:ID": {
+            "cardinality": {
+              "from": "1",
+              "to": "1"
+            },
+            "description": {
+              "en": "A unique identifier for the individual line within the Invoice.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Invoice line identifier",
+              "sk": "TBD"
+            },
+            "dataType": "Identifier"
+          },
+          "cbc:Note": {
+            "cardinality": {
+              "from": "0",
+              "to": "1"
+            },
+            "description": {
+              "en": "A textual note that gives unstructured information that is relevant to the Invoice line.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Invoice line note",
+              "sk": "TBD"
+            },
+            "dataType": "Text"
+          },
+          "cbc:InvoicedQuantity": {
+            "cardinality": {
+              "from": "1",
+              "to": "1"
+            },
+            "description": {
+              "en": "The quantity of items (goods or services) that is charged in the Invoice line.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Invoiced quantity",
+              "sk": "TBD"
+            },
+            "dataType": "Quantity",
+            "attributes": {
+              "unitCode": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "The unit of measure that applies to the invoiced quantity. Codes for unit of packaging from UNECE Recommendation No. 21 can be used in accordance with the descriptions in the \"Intro\" section of UN/ECE Recommendation 20, Revision 11 (2015): The 2 character alphanumeric code values in UNECE Recommendation 21 shall be used. To avoid duplication with existing code values in UNECE Recommendation No. 20, each code value from UNECE Recommendation 21 shall be prefixed with an “X”, resulting in a 3 alphanumeric code when used as a unit of measure.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Invoiced quantity unit of measure",
+                  "sk": "TBD"
+                },
+                "dataType": "Code",
+                "codeLists": [
+                  "UNECERec20",
+                  "UNECERec21"
+                ]
+              }
+            }
+          },
+          "cbc:LineExtensionAmount": {
+            "cardinality": {
+              "from": "1",
+              "to": "1"
+            },
+            "description": {
+              "en": "The total amount of the Invoice line. The amount is “net” without VAT, i.e. inclusive of line level allowances and charges as well as other relevant taxes. Must be rounded to maximum 2 decimals.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Invoice line net amount",
+              "sk": "TBD"
+            },
+            "dataType": "Amount",
+            "attributes": {
+              "currencyID": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "Mandatory attribute. Use BT-5",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "dataType": null,
+                "codeLists": [
+                  "ISO4217"
+                ]
+              }
+            }
+          },
+          "cbc:AccountingCost": {
+            "cardinality": {
+              "from": "0",
+              "to": "1"
+            },
+            "description": {
+              "en": "A textual value that specifies where to book the relevant data into the Buyer's financial accounts.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Invoice line Buyer accounting reference",
+              "sk": "TBD"
+            },
+            "dataType": "Identifier"
+          },
+          "cac:OrderLineReference": {
+            "cardinality": {
+              "from": "0",
+              "to": "1"
+            },
+            "description": {
+              "en": "NOT DEFINED",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "ORDER LINE REFERENCE",
+              "sk": "TBD"
+            },
+            "children": {
+              "cbc:LineID": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "An identifier for a referenced line within a purchase order, issued by the Buyer.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Referenced purchase order line reference",
+                  "sk": "TBD"
+                },
+                "dataType": "Identifier"
+              }
+            }
+          },
+          "cac:DocumentReference": {
+            "cardinality": {
+              "from": "0",
+              "to": "1"
+            },
+            "description": {
+              "en": "NOT DEFINED",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "LINE OBJECT IDENTIFIER",
+              "sk": "TBD"
+            },
+            "children": {
+              "cbc:ID": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "An identifier for an object on which the invoice line is based, given by the Seller.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Invoice line object identifier",
+                  "sk": "TBD"
+                },
+                "dataType": "Identifier",
+                "attributes": {
+                  "schemeID": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The identification scheme identifier of the Invoice line object identifier.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Invoice line object identifier identification scheme identifier",
+                      "sk": "TBD"
+                    },
+                    "dataType": null,
+                    "codeLists": [
+                      "UNCL1153"
+                    ]
+                  }
+                }
+              },
+              "cbc:DocumentTypeCode": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "Code \"130\" MUST be used to indicate an invoice object reference. Not used for other additional documents",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Document type code",
+                  "sk": "TBD"
+                },
+                "dataType": "Code"
+              }
+            }
+          },
+          "cac:InvoicePeriod": {
+            "cardinality": {
+              "from": "0",
+              "to": "1"
+            },
+            "description": {
+              "en": "A group of business terms providing information about the period relevant for the Invoice line.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "INVOICE LINE PERIOD",
+              "sk": "TBD"
+            },
+            "children": {
+              "cbc:StartDate": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "The date when the Invoice period for this Invoice line starts. Format =\"YYYY-MM-DD\"",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Invoice line period start date",
+                  "sk": "TBD"
+                },
+                "dataType": "Date"
+              },
+              "cbc:EndDate": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "The date when the Invoice period for this Invoice line ends. Format =\"YYYY-MM-DD\"",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Invoice line period end date",
+                  "sk": "TBD"
+                },
+                "dataType": "Date"
+              }
+            }
+          },
+          "cac:AllowanceCharge": {
+            "cardinality": {
+              "from": "0",
+              "to": "n"
+            },
+            "description": {
+              "en": "A group of business terms providing information about allowances or charges applicable to the individual Invoice line.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "INVOICE LINE ALLOWANCES OR CHARGES",
+              "sk": "TBD"
+            },
+            "children": {
+              "cbc:ChargeIndicator": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "Use “true” when informing about Charges and “false” when informing about Allowances",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "dataType": null
+              },
+              "cbc:AllowanceChargeReasonCode": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "The reason for the line level allowance or charge, expressed as a code.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Line level allowance or charge reason code",
+                  "sk": "TBD"
+                },
+                "dataType": "Code",
+                "codeLists": [
+                  "UNCL5189",
+                  "UNCL7161"
+                ]
+              },
+              "cbc:AllowanceChargeReason": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "The reason for the line level allowance or charge, expressed as text.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Line level allowance or charge reason",
+                  "sk": "TBD"
+                },
+                "dataType": "Text"
+              },
+              "cbc:MultiplierFactorNumeric": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "The percentage that may be used, in conjunction with the line level allowance base amount, to calculate the line level allowance or charge amount.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Line level allowance or charge percentage",
+                  "sk": "TBD"
+                },
+                "dataType": "Percentage"
+              },
+              "cbc:Amount": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "The amount of an allowance or a charge, without VAT. Must be rounded to maximum 2 decimals",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Line level allowance or charge amount",
+                  "sk": "TBD"
+                },
+                "dataType": "Amount",
+                "attributes": {
+                  "currencyID": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "Mandatory attribute. Use BT-5",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "NOT DEFINED",
+                      "sk": "TBD"
+                    },
+                    "dataType": null,
+                    "codeLists": [
+                      "ISO4217"
+                    ]
+                  }
+                }
+              },
+              "cbc:BaseAmount": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "The base amount that may be used, in conjunction with the line level allowance or charge percentage, to calculate the line level allowance or charge amount. Must be rounded to maximum 2 decimals",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Line level allowance or charge base amount",
+                  "sk": "TBD"
+                },
+                "dataType": "Amount",
+                "attributes": {
+                  "currencyID": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "Mandatory attribute. Use BT-5",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "NOT DEFINED",
+                      "sk": "TBD"
+                    },
+                    "dataType": null,
+                    "codeLists": [
+                      "ISO4217"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "cac:Item": {
+            "cardinality": {
+              "from": "1",
+              "to": "1"
+            },
+            "description": {
+              "en": "A group of business terms providing information about the goods and services invoiced.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "ITEM INFORMATION",
+              "sk": "TBD"
+            },
+            "children": {
+              "cbc:Description": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "A description for an item.The item description allows for describing the item and its features in more detail than the Item name.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Item description",
+                  "sk": "TBD"
+                },
+                "dataType": "Text"
+              },
+              "cbc:Name": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "A name for an item.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Item name",
+                  "sk": "TBD"
+                },
+                "dataType": "Text"
+              },
+              "cac:BuyersItemIdentification": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "BUYERS ITEM IDENTIFICATION",
+                  "sk": "TBD"
+                },
+                "children": {
+                  "cbc:ID": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "An identifier, assigned by the Buyer, for the item.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Item Buyer's identifier",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Identifier"
+                  }
+                }
+              },
+              "cac:SellersItemIdentification": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "SELLERS ITEM IDENTIFICATION",
+                  "sk": "TBD"
+                },
+                "children": {
+                  "cbc:ID": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "An identifier, assigned by the Seller, for the item.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Item Seller's identifier",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Identifier"
+                  }
+                }
+              },
+              "cac:StandardItemIdentification": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "STANDARD ITEM IDENTIFICATION",
+                  "sk": "TBD"
+                },
+                "children": {
+                  "cbc:ID": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "An item identifier based on a registered scheme.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Item standard identifier",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Identifier",
+                    "attributes": {
+                      "schemeID": {
+                        "cardinality": {
+                          "from": "1",
+                          "to": "1"
+                        },
+                        "description": {
+                          "en": "The identification scheme identifier of the Item standard identifier",
+                          "sk": "TBD"
+                        },
+                        "name": {
+                          "en": "Item standard identifier identification scheme identifier",
+                          "sk": "TBD"
+                        },
+                        "dataType": null,
+                        "codeLists": [
+                          "ICD"
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              "cac:OriginCountry": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "ORIGIN COUNTRY",
+                  "sk": "TBD"
+                },
+                "children": {
+                  "cbc:IdentificationCode": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The code identifying the country from which the item originates.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Item country of origin",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Code",
+                    "codeLists": [
+                      "ISO3166"
+                    ]
+                  }
+                }
+              },
+              "cac:CommodityClassification": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "n"
+                },
+                "description": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "COMMODITY CLASSIFICATION",
+                  "sk": "TBD"
+                },
+                "children": {
+                  "cbc:ItemClassificationCode": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "A code for classifying the item by its type or nature.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Item classification identifier",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Identifier",
+                    "attributes": {
+                      "listID": {
+                        "cardinality": {
+                          "from": "1",
+                          "to": "1"
+                        },
+                        "description": {
+                          "en": "The identification scheme identifier of the Item classification identifier",
+                          "sk": "TBD"
+                        },
+                        "name": {
+                          "en": "Item classification identifier identification scheme identifier",
+                          "sk": "TBD"
+                        },
+                        "dataType": null,
+                        "codeLists": [
+                          "UNCL7143"
+                        ]
+                      },
+                      "listVersionID": {
+                        "cardinality": {
+                          "from": "0",
+                          "to": "1"
+                        },
+                        "description": {
+                          "en": "The identification scheme version identifier of the Item classification identifier",
+                          "sk": "TBD"
+                        },
+                        "name": {
+                          "en": "Item classification identifier version identification scheme identifier",
+                          "sk": "TBD"
+                        },
+                        "dataType": null
+                      }
+                    }
+                  }
+                }
+              },
+              "cac:ClassifiedTaxCategory": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "A group of business terms providing information about the VAT applicable for the goods and services invoiced on the Invoice line.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "LINE VAT INFORMATION",
+                  "sk": "TBD"
+                },
+                "children": {
+                  "cbc:ID": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The VAT category code for the invoiced item.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Invoiced item VAT category code",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Code",
+                    "codeLists": [
+                      "UNCL5305"
+                    ]
+                  },
+                  "cbc:Percent": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The VAT rate, represented as percentage that applies to the invoiced item.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Invoiced item VAT rate",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Percentage"
+                  },
+                  "cac:TaxScheme": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "NOT DEFINED",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "TAX SCHEME",
+                      "sk": "TBD"
+                    },
+                    "children": {
+                      "cbc:ID": {
+                        "cardinality": {
+                          "from": "1",
+                          "to": "1"
+                        },
+                        "description": {
+                          "en": "Mandatory element. Use “VAT”",
+                          "sk": "TBD"
+                        },
+                        "name": {
+                          "en": "NOT DEFINED",
+                          "sk": "TBD"
+                        },
+                        "dataType": null
+                      }
+                    }
+                  }
+                }
+              },
+              "cac:AdditionalItemProperty": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "n"
+                },
+                "description": {
+                  "en": "A group of business terms providing information about properties of the goods and services invoiced.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "ITEM ATTRIBUTES",
+                  "sk": "TBD"
+                },
+                "children": {
+                  "cbc:Name": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The name of the attribute or property of the item.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Item attribute name",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  },
+                  "cbc:Value": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The value of the attribute or property of the item.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Item attribute value",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  }
+                }
+              }
+            }
+          },
+          "cac:Price": {
+            "cardinality": {
+              "from": "1",
+              "to": "1"
+            },
+            "description": {
+              "en": "A group of business terms providing information about the price applied for the goods and services invoiced on the Invoice line.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "PRICE DETAILS",
+              "sk": "TBD"
+            },
+            "children": {
+              "cbc:PriceAmount": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "The price of an item, exclusive of VAT, after subtracting item price discount. The Item net price has to be equal with the Item gross price less the Item price discount, if they are both provided. Item price can not be negative.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Item net price",
+                  "sk": "TBD"
+                },
+                "dataType": "Amount",
+                "attributes": {
+                  "currencyID": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "Mandatory attribute. Use BT-5",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "NOT DEFINED",
+                      "sk": "TBD"
+                    },
+                    "dataType": null,
+                    "codeLists": [
+                      "ISO4217"
+                    ]
+                  }
+                }
+              },
+              "cbc:BaseQuantity": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "The number of item units to which the price applies.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Item price base quantity",
+                  "sk": "TBD"
+                },
+                "dataType": "Quantity",
+                "attributes": {
+                  "unitCode": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The unit of measure that applies to the Item price base quantity, must be the same as the unit code of the Invoiced/credited quantity. Codes for unit of packaging from UNECE Recommendation No. 21 can be used in accordance with the descriptions in the \"Intro\" section of UN/ECE Recommendation 20, Revision 11 (2015): The 2 character alphanumeric code values in UNECE Recommendation 21 shall be used. To avoid duplication with existing code values in UNECE Recommendation No. 20, each code value from UNECE Recommendation 21 shall be prefixed with an “X”, resulting in a 3 alphanumeric code when used as a unit of measure.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Item price base quantity unit of measure code",
+                      "sk": "TBD"
+                    },
+                    "dataType": null,
+                    "codeLists": [
+                      "UNECERec20",
+                      "UNECERec21"
+                    ]
+                  }
+                }
+              },
+              "cac:AllowanceCharge": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "ALLOWANCE",
+                  "sk": "TBD"
+                },
+                "children": {
+                  "cbc:ChargeIndicator": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "Mandatory element. Value must be “false”",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "NOT DEFINED",
+                      "sk": "TBD"
+                    },
+                    "dataType": null
+                  },
+                  "cbc:Amount": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The total discount subtracted from the Item gross price to calculate the Item net price.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Item price discount",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Amount",
+                    "attributes": {
+                      "currencyID": {
+                        "cardinality": {
+                          "from": "1",
+                          "to": "1"
+                        },
+                        "description": {
+                          "en": "Mandatory attribute. Use BT-5",
+                          "sk": "TBD"
+                        },
+                        "name": {
+                          "en": "NOT DEFINED",
+                          "sk": "TBD"
+                        },
+                        "dataType": null,
+                        "codeLists": [
+                          "ISO4217"
+                        ]
+                      }
+                    }
+                  },
+                  "cbc:BaseAmount": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The unit price, exclusive of VAT, before subtracting Item price discount, can not be negative",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Item gross price",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Amount",
+                    "attributes": {
+                      "currencyID": {
+                        "cardinality": {
+                          "from": "1",
+                          "to": "1"
+                        },
+                        "description": {
+                          "en": "Mandatory attribute. Use BT-5",
+                          "sk": "TBD"
+                        },
+                        "name": {
+                          "en": "NOT DEFINED",
+                          "sk": "TBD"
+                        },
+                        "dataType": null,
+                        "codeLists": [
+                          "ISO4217"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "cac:AdditionalDocumentReference": {
+        "cardinality": {
+          "from": "0",
+          "to": "n"
+        },
+        "description": {
+          "en": "A group of business terms providing information about additional supporting documents substantiating the claims made in the Invoice. The additional supporting documents can be used for both referencing a document number which is expected to be known by the receiver, an external document (referenced by a URL) or as an embedded document, Base64 encoded (such as a time report).",
+          "sk": "TBD"
+        },
+        "name": {
+          "en": "ADDITIONAL SUPPORTING DOCUMENTS",
+          "sk": "TBD"
+        },
+        "children": {
+          "cbc:ID": {
+            "cardinality": {
+              "from": "1",
+              "to": "1"
+            },
+            "description": {
+              "en": "An identifier for an object on which the invoice is based, given by the Seller, or the identifier for the supporting document.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Invoiced object identifier, Supporting document reference",
+              "sk": "TBD"
+            },
+            "dataType": "Identifier",
+            "attributes": {
+              "schemeID": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "The identification scheme identifier of the Invoiced object identifier.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Scheme identifier",
+                  "sk": "TBD"
+                },
+                "dataType": null,
+                "codeLists": [
+                  "UNCL1153"
+                ]
+              }
+            }
+          },
+          "cbc:DocumentTypeCode": {
+            "cardinality": {
+              "from": "0",
+              "to": "1"
+            },
+            "description": {
+              "en": "Code \"130\" MUST be used to indicate an invoice object reference. Not used for other additional documents",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Document type code",
+              "sk": "TBD"
+            },
+            "dataType": "Code"
+          },
+          "cbc:DocumentDescription": {
+            "cardinality": {
+              "from": "0",
+              "to": "1"
+            },
+            "description": {
+              "en": "A description of the supporting document, such as: timesheet, usage report etc.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Supporting document description",
+              "sk": "TBD"
+            },
+            "dataType": "Text"
+          },
+          "cac:Attachment": {
+            "cardinality": {
+              "from": "0",
+              "to": "1"
+            },
+            "description": {
+              "en": "NOT DEFINED",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "ATTACHMENT",
+              "sk": "TBD"
+            },
+            "children": {
+              "cbc:EmbeddedDocumentBinaryObject": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "An attached document embedded as binary object (Base64) or sent together with the invoice.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Attached document",
+                  "sk": "TBD"
+                },
+                "dataType": "Binary object",
+                "attributes": {
+                  "mimeCode": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The mime code of the attached document.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Attached document Mime code",
+                      "sk": "TBD"
+                    },
+                    "dataType": null,
+                    "codeLists": [
+                      "MimeCode"
+                    ]
+                  },
+                  "filename": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The file name of the attached document",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Attached document Filename",
+                      "sk": "TBD"
+                    },
+                    "dataType": null
+                  }
+                }
+              },
+              "cac:ExternalReference": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "EXTERNAL REFERENCE",
+                  "sk": "TBD"
+                },
+                "children": {
+                  "cbc:URI": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The URL (Uniform Resource Locator) that identifies where the external document is located. A means of locating the resource, including its primary access mechanism, e.g. http:// or ftp://.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "External document location",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "cac:AccountingSupplierParty": {
+        "cardinality": {
+          "from": "1",
+          "to": "1"
+        },
+        "description": {
+          "en": "A group of business terms providing information about the Seller.",
+          "sk": "TBD"
+        },
+        "name": {
+          "en": "SELLER",
+          "sk": "TBD"
+        },
+        "children": {
+          "cac:Party": {
+            "cardinality": {
+              "from": "1",
+              "to": "1"
+            },
+            "description": {
+              "en": "NOT DEFINED",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "PARTY",
+              "sk": "TBD"
+            },
+            "children": {
+              "cbc:EndpointID": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "Identifies the Seller's electronic address to which the application level response to the invoice may be delivered.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Seller electronic address",
+                  "sk": "TBD"
+                },
+                "dataType": "Identifier",
+                "attributes": {
+                  "schemeID": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The identification scheme identifier of the Seller electronic address",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Seller electronic address identification scheme identifier",
+                      "sk": "TBD"
+                    },
+                    "dataType": null,
+                    "codeLists": [
+                      "eas"
+                    ]
+                  }
+                }
+              },
+              "cac:PartyIdentification": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "n"
+                },
+                "description": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "PARTY IDENTIFICATION",
+                  "sk": "TBD"
+                },
+                "children": {
+                  "cbc:ID": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "This element is used for both the identification of the Seller, or the unique banking reference identifier of Seller (assigned by the Seller bank.). For seller identification use ICD code list, for SEPA bank assigned creditor reference, use SEPA. In order for the buyer to automatically identify a supplier, the Seller identifier (BT-29), the Seller legal registration identifier (BT-30) and/or the Seller VAT identifier (BT-31) shall be present",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Seller identifier or bank assigned creditor identifier",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Identifier",
+                    "attributes": {
+                      "schemeID": {
+                        "cardinality": {
+                          "from": "0",
+                          "to": "1"
+                        },
+                        "description": {
+                          "en": "The identification scheme identifier of the Seller identifier. For bank assigned creditor identifier (BT-90), value MUST be \"SEPA\"",
+                          "sk": "TBD"
+                        },
+                        "name": {
+                          "en": "Seller or bank assigned creditor identifier identification scheme identifier",
+                          "sk": "TBD"
+                        },
+                        "dataType": null,
+                        "codeLists": [
+                          "ICD",
+                          "SEPA"
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              "cac:PartyName": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "PARTY NAME",
+                  "sk": "TBD"
+                },
+                "children": {
+                  "cbc:Name": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "A name by which the Seller is known, other than Seller name (also known as Business name).",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Seller trading name",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  }
+                }
+              },
+              "cac:PostalAddress": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "A group of business terms providing information about the address of the Seller. Sufficient components of the address are to be filled to comply with legal requirements.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "SELLER POSTAL ADDRESS",
+                  "sk": "TBD"
+                },
+                "children": {
+                  "cbc:StreetName": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The main address line in an address.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Seller address line 1",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  },
+                  "cbc:AdditionalStreetName": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "An additional address line in an address that can be used to give further details supplementing the main line.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Seller address line 2",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  },
+                  "cbc:CityName": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The common name of the city, town or village, where the Seller address is located.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Seller city",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  },
+                  "cbc:PostalZone": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The identifier for an addressable group of properties according to the relevant postal service.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Seller post code",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  },
+                  "cbc:CountrySubentity": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The subdivision of a country.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Seller country subdivision",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  },
+                  "cac:AddressLine": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "NOT DEFINED",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "ADDRESS LINE",
+                      "sk": "TBD"
+                    },
+                    "children": {
+                      "cbc:Line": {
+                        "cardinality": {
+                          "from": "1",
+                          "to": "1"
+                        },
+                        "description": {
+                          "en": "An additional address line in an address that can be used to give further details supplementing the main line.",
+                          "sk": "TBD"
+                        },
+                        "name": {
+                          "en": "Seller address line 3",
+                          "sk": "TBD"
+                        },
+                        "dataType": "Text"
+                      }
+                    }
+                  },
+                  "cac:Country": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "NOT DEFINED",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "COUNTRY",
+                      "sk": "TBD"
+                    },
+                    "children": {
+                      "cbc:IdentificationCode": {
+                        "cardinality": {
+                          "from": "1",
+                          "to": "1"
+                        },
+                        "description": {
+                          "en": "A code that identifies the country.",
+                          "sk": "TBD"
+                        },
+                        "name": {
+                          "en": "Seller country code",
+                          "sk": "TBD"
+                        },
+                        "dataType": "Text",
+                        "codeLists": [
+                          "ISO3166"
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              "cac:PartyTaxScheme": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "2"
+                },
+                "description": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "PARTY VAT/TAX IDENTIFIERS",
+                  "sk": "TBD"
+                },
+                "children": {
+                  "cbc:CompanyID": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The Seller's VAT identifier (also known as Seller VAT identification number) or the local identification (defined by the Seller’s address) of the Seller for tax purposes or a reference that enables the Seller to state his registered tax status. In order for the buyer to automatically identify a supplier, the Seller identifier (BT-29), the Seller legal registration identifier (BT-30) and/or the Seller VAT identifier (BT-31) shall be present",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Seller VAT identifier, Seller tax registration identifier",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Identifier"
+                  },
+                  "cac:TaxScheme": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "NOT DEFINED",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "TAX SCHEME",
+                      "sk": "TBD"
+                    },
+                    "children": {
+                      "cbc:ID": {
+                        "cardinality": {
+                          "from": "1",
+                          "to": "1"
+                        },
+                        "description": {
+                          "en": "Mandatory element. For Seller VAT identifier (BT-31), use value “VAT”, for the seller tax registration identifier (BT-32), use != \"VAT\"",
+                          "sk": "TBD"
+                        },
+                        "name": {
+                          "en": "NOT DEFINED",
+                          "sk": "TBD"
+                        },
+                        "dataType": null
+                      }
+                    }
+                  }
+                }
+              },
+              "cac:PartyLegalEntity": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "PARTY LEGAL ENTITY",
+                  "sk": "TBD"
+                },
+                "children": {
+                  "cbc:RegistrationName": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The full formal name by which the Seller is registered in the national registry of legal entities or as a Taxable person or otherwise trades as a person or persons.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Seller name",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  },
+                  "cbc:CompanyID": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "An identifier issued by an official registrar that identifies the Seller as a legal entity or person. In order for the buyer to automatically identify a supplier, the Seller identifier (BT-29), the Seller legal registration identifier (BT-30) and/or the Seller VAT identifier (BT-31) shall be present",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Seller legal registration identifier",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Identifier",
+                    "attributes": {
+                      "schemeID": {
+                        "cardinality": {
+                          "from": "0",
+                          "to": "1"
+                        },
+                        "description": {
+                          "en": "The identification scheme identifier of the Seller legal registration identifier.",
+                          "sk": "TBD"
+                        },
+                        "name": {
+                          "en": "Seller legal registration identifier identification scheme identifier",
+                          "sk": "TBD"
+                        },
+                        "dataType": null,
+                        "codeLists": [
+                          "ICD"
+                        ]
+                      }
+                    }
+                  },
+                  "cbc:CompanyLegalForm": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "Additional legal information relevant for the Seller.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Seller additional legal information",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  }
+                }
+              },
+              "cac:Contact": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "A group of business terms providing contact information about the Seller.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "SELLER CONTACT",
+                  "sk": "TBD"
+                },
+                "children": {
+                  "cbc:Name": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "A contact point for a legal entity or person.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Seller contact point",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  },
+                  "cbc:Telephone": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "A phone number for the contact point.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Seller contact telephone number",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  },
+                  "cbc:ElectronicMail": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "An e-mail address for the contact point.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Seller contact email address",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "cac:AccountingCustomerParty": {
+        "cardinality": {
+          "from": "1",
+          "to": "1"
+        },
+        "description": {
+          "en": "A group of business terms providing information about the Buyer.",
+          "sk": "TBD"
+        },
+        "name": {
+          "en": "BUYER",
+          "sk": "TBD"
+        },
+        "children": {
+          "cac:Party": {
+            "cardinality": {
+              "from": "1",
+              "to": "1"
+            },
+            "description": {
+              "en": "NOT DEFINED",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "PARTY",
+              "sk": "TBD"
+            },
+            "children": {
+              "cbc:EndpointID": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "Identifies the Buyer's electronic address to which the invoice is delivered.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Buyer electronic address",
+                  "sk": "TBD"
+                },
+                "dataType": "Identifier",
+                "attributes": {
+                  "schemeID": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The identification scheme identifier of the Buyer electronic address.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Buyer electronic address identification scheme identifier",
+                      "sk": "TBD"
+                    },
+                    "dataType": null,
+                    "codeLists": [
+                      "eas"
+                    ]
+                  }
+                }
+              },
+              "cac:PartyIdentification": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "PARTY IDENTIFICATION",
+                  "sk": "TBD"
+                },
+                "children": {
+                  "cbc:ID": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "An identifier of the Buyer.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Buyer identifier",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Identifier",
+                    "attributes": {
+                      "schemeID": {
+                        "cardinality": {
+                          "from": "0",
+                          "to": "1"
+                        },
+                        "description": {
+                          "en": "The identification scheme identifier of the Buyer identifier.",
+                          "sk": "TBD"
+                        },
+                        "name": {
+                          "en": "Buyer identifier identification scheme identifier",
+                          "sk": "TBD"
+                        },
+                        "dataType": null,
+                        "codeLists": [
+                          "ICD"
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              "cac:PartyName": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "PARTY NAME",
+                  "sk": "TBD"
+                },
+                "children": {
+                  "cbc:Name": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "A name by which the Buyer is known, other than Buyer name (also known as Business name).",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Buyer trading name",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  }
+                }
+              },
+              "cac:PostalAddress": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "A group of business terms providing information about the postal address for the Buyer. Sufficient components of the address are to be filled to comply with legal requirements.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "BUYER POSTAL ADDRESS",
+                  "sk": "TBD"
+                },
+                "children": {
+                  "cbc:StreetName": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The main address line in an address.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Buyer address line 1",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  },
+                  "cbc:AdditionalStreetName": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "An additional address line in an address that can be used to give further details supplementing the main line.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Buyer address line 2",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  },
+                  "cbc:CityName": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The common name of the city, town or village, where the Buyer's address is located.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Buyer city",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  },
+                  "cbc:PostalZone": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The identifier for an addressable group of properties according to the relevant postal service.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Buyer post code",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  },
+                  "cbc:CountrySubentity": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The subdivision of a country.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Buyer country subdivision",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  },
+                  "cac:AddressLine": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "NOT DEFINED",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "ADDRESS LINE",
+                      "sk": "TBD"
+                    },
+                    "children": {
+                      "cbc:Line": {
+                        "cardinality": {
+                          "from": "1",
+                          "to": "1"
+                        },
+                        "description": {
+                          "en": "An additional address line in an address that can be used to give further details supplementing the main line.",
+                          "sk": "TBD"
+                        },
+                        "name": {
+                          "en": "Buyer address line 3",
+                          "sk": "TBD"
+                        },
+                        "dataType": "Text"
+                      }
+                    }
+                  },
+                  "cac:Country": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "NOT DEFINED",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "COUNTRY",
+                      "sk": "TBD"
+                    },
+                    "children": {
+                      "cbc:IdentificationCode": {
+                        "cardinality": {
+                          "from": "1",
+                          "to": "1"
+                        },
+                        "description": {
+                          "en": "A code that identifies the country.",
+                          "sk": "TBD"
+                        },
+                        "name": {
+                          "en": "Buyer country code",
+                          "sk": "TBD"
+                        },
+                        "dataType": "Code",
+                        "codeLists": [
+                          "ISO3166"
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              "cac:PartyTaxScheme": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "PARTY VAT IDENTIFIER",
+                  "sk": "TBD"
+                },
+                "children": {
+                  "cbc:CompanyID": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The Buyer's VAT identifier (also known as Buyer VAT identification number).",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Buyer VAT identifier",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Identifier"
+                  },
+                  "cac:TaxScheme": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "NOT DEFINED",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "TAX SCHEME",
+                      "sk": "TBD"
+                    },
+                    "children": {
+                      "cbc:ID": {
+                        "cardinality": {
+                          "from": "1",
+                          "to": "1"
+                        },
+                        "description": {
+                          "en": "Mandatory element. Use “VAT”",
+                          "sk": "TBD"
+                        },
+                        "name": {
+                          "en": "NOT DEFINED",
+                          "sk": "TBD"
+                        },
+                        "dataType": "Identifier"
+                      }
+                    }
+                  }
+                }
+              },
+              "cac:PartyLegalEntity": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "PARTY LEGAL ENTITY",
+                  "sk": "TBD"
+                },
+                "children": {
+                  "cbc:RegistrationName": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The full name of the Buyer.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Buyer name",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  },
+                  "cbc:CompanyID": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "An identifier issued by an official registrar that identifies the Buyer as a legal entity or person.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Buyer legal registration identifier",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Identifier",
+                    "attributes": {
+                      "schemeID": {
+                        "cardinality": {
+                          "from": "0",
+                          "to": "1"
+                        },
+                        "description": {
+                          "en": "The identification scheme identifier of the Buyer legal registration identifier.",
+                          "sk": "TBD"
+                        },
+                        "name": {
+                          "en": "Buyer legal registration identifier identification scheme identifier",
+                          "sk": "TBD"
+                        },
+                        "dataType": null,
+                        "codeLists": [
+                          "ICD"
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              "cac:Contact": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "A group of business terms providing contact information relevant for the Buyer.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "BUYER CONTACT",
+                  "sk": "TBD"
+                },
+                "children": {
+                  "cbc:Name": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "A contact point for a legal entity or person.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Buyer contact point",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  },
+                  "cbc:Telephone": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "A phone number for the contact point.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Buyer contact telephone number",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  },
+                  "cbc:ElectronicMail": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "An e-mail address for the contact point.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Buyer contact email address",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "cac:PayeeParty": {
+        "cardinality": {
+          "from": "0",
+          "to": "1"
+        },
+        "description": {
+          "en": "A group of business terms providing information about the Payee, i.e. the role that receives the payment. Shall be used when the Payee is different from the Seller.",
+          "sk": "TBD"
+        },
+        "name": {
+          "en": "PAYEE",
+          "sk": "TBD"
+        },
+        "children": {
+          "cac:PartyIdentification": {
+            "cardinality": {
+              "from": "0",
+              "to": "1"
+            },
+            "description": {
+              "en": "NOT DEFINED",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "PARTY IDENTIFICATION",
+              "sk": "TBD"
+            },
+            "children": {
+              "cbc:ID": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "This element is used for both the identification of the Payee, or the unique banking reference identifier of Payee (assigned by the Payee bank.) For payee identification use ICD code list, for SEPA bank assigned creditor reference, use SEPA.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Payee identifier or bank assigned creditor identifier",
+                  "sk": "TBD"
+                },
+                "dataType": "Text",
+                "attributes": {
+                  "schemeID": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The identification scheme identifier of the payee identifier. For bank assigned creditor identifier (BT-90), value MUST be \"SEPA\"",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Payee or bank assigned creditor identifier identification scheme identifier",
+                      "sk": "TBD"
+                    },
+                    "dataType": null,
+                    "codeLists": [
+                      "ICD",
+                      "SEPA"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "cac:PartyName": {
+            "cardinality": {
+              "from": "1",
+              "to": "1"
+            },
+            "description": {
+              "en": "NOT DEFINED",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "PARTY NAME",
+              "sk": "TBD"
+            },
+            "children": {
+              "cbc:Name": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "The name of the Payee.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Payee name",
+                  "sk": "TBD"
+                },
+                "dataType": "Text"
+              }
+            }
+          },
+          "cac:PartyLegalEntity": {
+            "cardinality": {
+              "from": "0",
+              "to": "1"
+            },
+            "description": {
+              "en": "NOT DEFINED",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "PARTY LEGAL ENTITY",
+              "sk": "TBD"
+            },
+            "children": {
+              "cbc:CompanyID": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "An identifier issued by an official registrar that identifies the Payee as a legal entity or person.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Payee legal registration identifier",
+                  "sk": "TBD"
+                },
+                "dataType": "Identifier",
+                "attributes": {
+                  "schemeID": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The identification scheme identifier of the Payee legal registration identifier.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Payee legal registration identifier identification scheme identifier",
+                      "sk": "TBD"
+                    },
+                    "dataType": null,
+                    "codeLists": [
+                      "ICD"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "cac:TaxRepresentativeParty": {
+        "cardinality": {
+          "from": "0",
+          "to": "1"
+        },
+        "description": {
+          "en": "A group of business terms providing information about the Seller's tax representative.",
+          "sk": "TBD"
+        },
+        "name": {
+          "en": "SELLER TAX REPRESENTATIVE PARTY",
+          "sk": "TBD"
+        },
+        "children": {
+          "cac:PartyName": {
+            "cardinality": {
+              "from": "1",
+              "to": "1"
+            },
+            "description": {
+              "en": "NOT DEFINED",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "PARTY NAME",
+              "sk": "TBD"
+            },
+            "children": {
+              "cbc:Name": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "The full name of the Seller's tax representative party.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Seller tax representative name",
+                  "sk": "TBD"
+                },
+                "dataType": "Text"
+              }
+            }
+          },
+          "cac:PostalAddress": {
+            "cardinality": {
+              "from": "1",
+              "to": "1"
+            },
+            "description": {
+              "en": "A group of business terms providing information about the postal address for the tax representative party. Sufficient components of the address are to be filled to comply with legal requirements.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "SELLER TAX REPRESENTATIVE POSTAL ADDRESS",
+              "sk": "TBD"
+            },
+            "children": {
+              "cbc:StreetName": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "The main address line in an address.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Tax representative address line 1",
+                  "sk": "TBD"
+                },
+                "dataType": "Text"
+              },
+              "cbc:AdditionalStreetName": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "An additional address line in an address that can be used to give further details supplementing the main line.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Tax representative address line 2",
+                  "sk": "TBD"
+                },
+                "dataType": "Text"
+              },
+              "cbc:CityName": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "The common name of the city, town or village, where the tax representative address is located.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Tax representative city",
+                  "sk": "TBD"
+                },
+                "dataType": "Text"
+              },
+              "cbc:PostalZone": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "The identifier for an addressable group of properties according to the relevant postal service.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Tax representative post code",
+                  "sk": "TBD"
+                },
+                "dataType": "Text"
+              },
+              "cbc:CountrySubentity": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "The subdivision of a country.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Tax representative country subdivision",
+                  "sk": "TBD"
+                },
+                "dataType": "Text"
+              },
+              "cac:AddressLine": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "ADDRESS LINE",
+                  "sk": "TBD"
+                },
+                "children": {
+                  "cbc:Line": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "An additional address line in an address that can be used to give further details supplementing the main line.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Tax representative address line 3",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  }
+                }
+              },
+              "cac:Country": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "COUNTRY",
+                  "sk": "TBD"
+                },
+                "children": {
+                  "cbc:IdentificationCode": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "A code that identifies the country.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Tax representative country code",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Code",
+                    "codeLists": [
+                      "ISO3166"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "cac:PartyTaxScheme": {
+            "cardinality": {
+              "from": "1",
+              "to": "1"
+            },
+            "description": {
+              "en": "NOT DEFINED",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "PARTY VAT IDENTIFIER",
+              "sk": "TBD"
+            },
+            "children": {
+              "cbc:CompanyID": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "The VAT identifier of the Seller's tax representative party.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Seller tax representative VAT identifier",
+                  "sk": "TBD"
+                },
+                "dataType": "Identifier"
+              },
+              "cac:TaxScheme": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "TAX SCHEME",
+                  "sk": "TBD"
+                },
+                "children": {
+                  "cbc:ID": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "Mandatory element. Use “VAT”",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "NOT DEFINED",
+                      "sk": "TBD"
+                    },
+                    "dataType": null
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "cac:Delivery": {
+        "cardinality": {
+          "from": "0",
+          "to": "1"
+        },
+        "description": {
+          "en": "A group of business terms providing information about where and when the goods and services invoiced are delivered.",
+          "sk": "TBD"
+        },
+        "name": {
+          "en": "DELIVERY INFORMATION",
+          "sk": "TBD"
+        },
+        "children": {
+          "cbc:ActualDeliveryDate": {
+            "cardinality": {
+              "from": "0",
+              "to": "1"
+            },
+            "description": {
+              "en": "The date on which the supply of goods or services was made or completed. Format = \"YYYY-MM-DD\"",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Actual delivery date",
+              "sk": "TBD"
+            },
+            "dataType": "Date"
+          },
+          "cac:DeliveryLocation": {
+            "cardinality": {
+              "from": "0",
+              "to": "1"
+            },
+            "description": {
+              "en": "NOT DEFINED",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "NOT DEFINED",
+              "sk": "TBD"
+            },
+            "children": {
+              "cbc:ID": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "An identifier for the location at which the goods and services are delivered.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Deliver to location identifier",
+                  "sk": "TBD"
+                },
+                "dataType": "Identifier",
+                "attributes": {
+                  "schemeID": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The identification scheme identifier of the Deliver to location identifier.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Deliver to location identifier identification scheme identifier",
+                      "sk": "TBD"
+                    },
+                    "dataType": null,
+                    "codeLists": [
+                      "ICD"
+                    ]
+                  }
+                }
+              },
+              "cac:Address": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "A group of business terms providing information about the address to which goods and services invoiced were or are delivered.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "DELIVER TO ADDRESS",
+                  "sk": "TBD"
+                },
+                "children": {
+                  "cbc:StreetName": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The main address line in an address.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Deliver to address line 1",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  },
+                  "cbc:AdditionalStreetName": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "An additional address line in an address that can be used to give further details supplementing the main line.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Deliver to address line 2",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  },
+                  "cbc:CityName": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The common name of the city, town or village, where the deliver to address is located.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Deliver to city",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  },
+                  "cbc:PostalZone": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The identifier for an addressable group of properties according to the relevant postal service.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Deliver to post code",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  },
+                  "cbc:CountrySubentity": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The subdivision of a country.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Deliver to country subdivision",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  },
+                  "cac:AddressLine": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "NOT DEFINED",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "ADDRESS LINE",
+                      "sk": "TBD"
+                    },
+                    "children": {
+                      "cbc:Line": {
+                        "cardinality": {
+                          "from": "1",
+                          "to": "1"
+                        },
+                        "description": {
+                          "en": "An additional address line in an address that can be used to give further details supplementing the main line.",
+                          "sk": "TBD"
+                        },
+                        "name": {
+                          "en": "Deliver to address line 3",
+                          "sk": "TBD"
+                        },
+                        "dataType": "Text"
+                      }
+                    }
+                  },
+                  "cac:Country": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "NOT DEFINED",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "COUNTRY",
+                      "sk": "TBD"
+                    },
+                    "children": {
+                      "cbc:IdentificationCode": {
+                        "cardinality": {
+                          "from": "1",
+                          "to": "1"
+                        },
+                        "description": {
+                          "en": "A code that identifies the country.",
+                          "sk": "TBD"
+                        },
+                        "name": {
+                          "en": "Deliver to country code",
+                          "sk": "TBD"
+                        },
+                        "dataType": "Code",
+                        "codeLists": [
+                          "ISO3166"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "cac:DeliveryParty": {
+            "cardinality": {
+              "from": "0",
+              "to": "1"
+            },
+            "description": {
+              "en": "NOT DEFINED",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "DELIVER PARTY",
+              "sk": "TBD"
+            },
+            "children": {
+              "cac:PartyName": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "PARTY NAME",
+                  "sk": "TBD"
+                },
+                "children": {
+                  "cbc:Name": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The name of the party to which the goods and services are delivered.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "Deliver to party name",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "cac:AllowanceCharge": {
+        "cardinality": {
+          "from": "0",
+          "to": "n"
+        },
+        "description": {
+          "en": "A group of business terms providing information about allowances applicable to the Invoice as a whole. A group of business terms providing information about charges and taxes other than VAT, applicable to the Invoice as a whole.",
+          "sk": "TBD"
+        },
+        "name": {
+          "en": "DOCUMENT LEVEL ALLOWANCES AND CHARGES",
+          "sk": "TBD"
+        },
+        "children": {
+          "cbc:ChargeIndicator": {
+            "cardinality": {
+              "from": "1",
+              "to": "1"
+            },
+            "description": {
+              "en": "Use “true” when informing about Charges and “false” when informing about Allowances.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "NOT DEFINED",
+              "sk": "TBD"
+            },
+            "dataType": null
+          },
+          "cbc:AllowanceChargeReasonCode": {
+            "cardinality": {
+              "from": "0",
+              "to": "1"
+            },
+            "description": {
+              "en": "The reason for the document level allowance or charge, expressed as a code. For allowances a subset of codelist UNCL5189 is to be used, and for charges codelist UNCL7161 applies. The Document level allowance reason code and the Document level allowance reason shall indicate the same allowance reason",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Document level allowance or charge reason code",
+              "sk": "TBD"
+            },
+            "dataType": "Code",
+            "codeLists": [
+              "UNCL5189",
+              "UNCL7161"
+            ]
+          },
+          "cbc:AllowanceChargeReason": {
+            "cardinality": {
+              "from": "0",
+              "to": "1"
+            },
+            "description": {
+              "en": "The reason for the document level allowance or charge, expressed as text. The Document level allowance reason code and the Document level allowance reason shall indicate the same allowance reason",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Document level allowance or charge reason",
+              "sk": "TBD"
+            },
+            "dataType": "Text"
+          },
+          "cbc:MultiplierFactorNumeric": {
+            "cardinality": {
+              "from": "0",
+              "to": "1"
+            },
+            "description": {
+              "en": "The percentage that may be used, in conjunction with the document level allowance base amount, to calculate the document level allowance or charge amount. To state 20%, use value 20.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Document level allowance or charge percentage",
+              "sk": "TBD"
+            },
+            "dataType": "Percentage"
+          },
+          "cbc:Amount": {
+            "cardinality": {
+              "from": "1",
+              "to": "1"
+            },
+            "description": {
+              "en": "The amount of an allowance or a charge, without VAT. Must be rounded to maximum 2 decimals",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Document level allowance or charge amount",
+              "sk": "TBD"
+            },
+            "dataType": "Amount",
+            "attributes": {
+              "currencyID": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "Mandatory attribute. Use BT-5",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "dataType": null,
+                "codeLists": [
+                  "ISO4217"
+                ]
+              }
+            }
+          },
+          "cbc:BaseAmount": {
+            "cardinality": {
+              "from": "0",
+              "to": "1"
+            },
+            "description": {
+              "en": "The base amount that may be used, in conjunction with the document level allowance or charge percentage, to calculate the document level allowance or charge amount. Must be rounded to maximum 2 decimals",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Document level allowance or charge base amount",
+              "sk": "TBD"
+            },
+            "dataType": "Amount",
+            "attributes": {
+              "currencyID": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "Mandatory attribute. Use BT-5",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "dataType": null,
+                "codeLists": [
+                  "ISO4217"
+                ]
+              }
+            }
+          },
+          "cac:TaxCategory": {
+            "cardinality": {
+              "from": "1",
+              "to": "1"
+            },
+            "description": {
+              "en": "NOT DEFINED",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "TAX CATEGORY",
+              "sk": "TBD"
+            },
+            "children": {
+              "cbc:ID": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "A coded identification of what VAT category applies to the document level allowance or charge.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Document level allowance or charge VAT category code",
+                  "sk": "TBD"
+                },
+                "dataType": "Code",
+                "codeLists": [
+                  "UNCL5305"
+                ]
+              },
+              "cbc:Percent": {
+                "cardinality": {
+                  "from": "0",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "The VAT rate, represented as percentage that applies to the document level allowance or charge.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "Document level allowance or charge VAT rate",
+                  "sk": "TBD"
+                },
+                "dataType": "Percentage"
+              },
+              "cac:TaxScheme": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "TAX SCHEME",
+                  "sk": "TBD"
+                },
+                "children": {
+                  "cbc:ID": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "Mandatory element. Use “VAT”",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "NOT DEFINED",
+                      "sk": "TBD"
+                    },
+                    "dataType": null
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "cac:TaxTotal": {
+        "cardinality": {
+          "from": "1",
+          "to": "2"
+        },
+        "description": {
+          "en": "When tax currency code is provided, two instances of the tax total must be present, but only one with tax subtotal.",
+          "sk": "TBD"
+        },
+        "name": {
+          "en": "TAX TOTAL",
+          "sk": "TBD"
+        },
+        "children": {
+          "cbc:TaxAmount": {
+            "cardinality": {
+              "from": "1",
+              "to": "1"
+            },
+            "description": {
+              "en": "The total VAT amount for the Invoice or the VAT total amount expressed in the accounting currency accepted or required in the country of the Seller. Must be rounded to maximum 2 decimals",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Invoice total VAT amount, Invoice total VAT amount in accounting currency",
+              "sk": "TBD"
+            },
+            "dataType": "Amount",
+            "attributes": {
+              "currencyID": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "Mandatory attribute. Use BT-5 or BT-6.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "dataType": null,
+                "codeLists": [
+                  "ISO4217"
+                ]
+              }
+            }
+          },
+          "cac:TaxSubtotal": {
+            "cardinality": {
+              "from": "0",
+              "to": "n"
+            },
+            "description": {
+              "en": "A group of business terms providing information about VAT breakdown by different categories, rates and exemption reasons",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "VAT BREAKDOWN",
+              "sk": "TBD"
+            },
+            "children": {
+              "cbc:TaxableAmount": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "Sum of all taxable amounts subject to a specific VAT category code and VAT category rate (if the VAT category rate is applicable). Must be rounded to maximum 2 decimals.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "VAT category taxable amount",
+                  "sk": "TBD"
+                },
+                "dataType": "Amount",
+                "attributes": {
+                  "currencyID": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "Mandatory attribute. Use BT-5",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "NOT DEFINED",
+                      "sk": "TBD"
+                    },
+                    "dataType": null,
+                    "codeLists": [
+                      "ISO4217"
+                    ]
+                  }
+                }
+              },
+              "cbc:TaxAmount": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "The total VAT amount for a given VAT category. Must be rounded to maximum 2 decimals.",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "VAT category tax amount",
+                  "sk": "TBD"
+                },
+                "dataType": "Amount",
+                "attributes": {
+                  "currencyID": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "Mandatory attribute. Use BT-5",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "NOT DEFINED",
+                      "sk": "TBD"
+                    },
+                    "dataType": null,
+                    "codeLists": [
+                      "ISO4217"
+                    ]
+                  }
+                }
+              },
+              "cac:TaxCategory": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "VAT CATEGORY",
+                  "sk": "TBD"
+                },
+                "children": {
+                  "cbc:ID": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "Coded identification of a VAT category.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "VAT category code",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Code",
+                    "codeLists": [
+                      "UNCL5305"
+                    ]
+                  },
+                  "cbc:Percent": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "The VAT rate, represented as percentage that applies for the relevant VAT category.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "VAT category rate",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Percentage"
+                  },
+                  "cbc:TaxExemptionReasonCode": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "A coded statement of the reason for why the amount is exempted from VAT.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "VAT exemption reason code",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  },
+                  "cbc:TaxExemptionReason": {
+                    "cardinality": {
+                      "from": "0",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "A textual statement of the reason why the amount is exempted from VAT or why no VAT is being charged.",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "VAT exemption reason text",
+                      "sk": "TBD"
+                    },
+                    "dataType": "Text"
+                  },
+                  "cac:TaxScheme": {
+                    "cardinality": {
+                      "from": "1",
+                      "to": "1"
+                    },
+                    "description": {
+                      "en": "NOT DEFINED",
+                      "sk": "TBD"
+                    },
+                    "name": {
+                      "en": "TAX SCHEME",
+                      "sk": "TBD"
+                    },
+                    "children": {
+                      "cbc:ID": {
+                        "cardinality": {
+                          "from": "1",
+                          "to": "1"
+                        },
+                        "description": {
+                          "en": "Mandatory element. Use “VAT”",
+                          "sk": "TBD"
+                        },
+                        "name": {
+                          "en": "NOT DEFINED",
+                          "sk": "TBD"
+                        },
+                        "dataType": null
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "cac:LegalMonetaryTotal": {
+        "cardinality": {
+          "from": "1",
+          "to": "1"
+        },
+        "description": {
+          "en": "A group of business terms providing the monetary totals for the Invoice.",
+          "sk": "TBD"
+        },
+        "name": {
+          "en": "DOCUMENT TOTALS",
+          "sk": "TBD"
+        },
+        "children": {
+          "cbc:LineExtensionAmount": {
+            "cardinality": {
+              "from": "1",
+              "to": "1"
+            },
+            "description": {
+              "en": "Sum of all Invoice line net amounts in the Invoice. Must be rounded to maximum 2 decimals.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Sum of Invoice line net amount",
+              "sk": "TBD"
+            },
+            "dataType": "Amount",
+            "attributes": {
+              "currencyID": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "Mandatory attribute. Use BT-5",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "dataType": null,
+                "codeLists": [
+                  "ISO4217"
+                ]
+              }
+            }
+          },
+          "cbc:TaxExclusiveAmount": {
+            "cardinality": {
+              "from": "1",
+              "to": "1"
+            },
+            "description": {
+              "en": "The total amount of the Invoice without VAT. Must be rounded to maximum 2 decimals.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Invoice total amount without VAT",
+              "sk": "TBD"
+            },
+            "dataType": "Amount",
+            "attributes": {
+              "currencyID": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "Mandatory attribute. Use BT-5",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "dataType": null,
+                "codeLists": [
+                  "ISO4217"
+                ]
+              }
+            }
+          },
+          "cbc:TaxInclusiveAmount": {
+            "cardinality": {
+              "from": "1",
+              "to": "1"
+            },
+            "description": {
+              "en": "The total amount of the Invoice with VAT. Must be rounded to maximum 2 decimals.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Invoice total amount with VAT",
+              "sk": "TBD"
+            },
+            "dataType": "Amount",
+            "attributes": {
+              "currencyID": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "Mandatory attribute. Use BT-5",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "dataType": null,
+                "codeLists": [
+                  "ISO4217"
+                ]
+              }
+            }
+          },
+          "cbc:AllowanceTotalAmount": {
+            "cardinality": {
+              "from": "0",
+              "to": "1"
+            },
+            "description": {
+              "en": "Sum of all allowances on document level in the Invoice. Must be rounded to maximum 2 decimals.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Sum of allowances on document level",
+              "sk": "TBD"
+            },
+            "dataType": "Amount",
+            "attributes": {
+              "currencyID": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "Mandatory attribute. Use BT-5",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "dataType": null,
+                "codeLists": [
+                  "ISO4217"
+                ]
+              }
+            }
+          },
+          "cbc:ChargeTotalAmount": {
+            "cardinality": {
+              "from": "0",
+              "to": "1"
+            },
+            "description": {
+              "en": "Sum of all charges on document level in the Invoice. Must be rounded to maximum 2 decimals.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Sum of charges on document level",
+              "sk": "TBD"
+            },
+            "dataType": "Amount",
+            "attributes": {
+              "currencyID": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "Mandatory attribute. Use BT-5",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "dataType": null,
+                "codeLists": [
+                  "ISO4217"
+                ]
+              }
+            }
+          },
+          "cbc:PrepaidAmount": {
+            "cardinality": {
+              "from": "0",
+              "to": "1"
+            },
+            "description": {
+              "en": "The sum of amounts which have been paid in advance. Must be rounded to maximum 2 decimals.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Paid amount",
+              "sk": "TBD"
+            },
+            "dataType": "Amount",
+            "attributes": {
+              "currencyID": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "Mandatory attribute. Use BT-5",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "dataType": null,
+                "codeLists": [
+                  "ISO4217"
+                ]
+              }
+            }
+          },
+          "cbc:PayableRoundingAmount": {
+            "cardinality": {
+              "from": "0",
+              "to": "1"
+            },
+            "description": {
+              "en": "The amount to be added to the invoice total to round the amount to be paid. Must be rounded to maximum 2 decimals.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Rounding amount",
+              "sk": "TBD"
+            },
+            "dataType": "Amount",
+            "attributes": {
+              "currencyID": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "Mandatory attribute. Use BT-5",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "dataType": null,
+                "codeLists": [
+                  "ISO4217"
+                ]
+              }
+            }
+          },
+          "cbc:PayableAmount": {
+            "cardinality": {
+              "from": "1",
+              "to": "1"
+            },
+            "description": {
+              "en": "The outstanding amount that is requested to be paid. Must be rounded to maximum 2 decimals.",
+              "sk": "TBD"
+            },
+            "name": {
+              "en": "Amount due for payment",
+              "sk": "TBD"
+            },
+            "dataType": "Amount",
+            "attributes": {
+              "currencyID": {
+                "cardinality": {
+                  "from": "1",
+                  "to": "1"
+                },
+                "description": {
+                  "en": "Mandatory attribute. Use BT-5",
+                  "sk": "TBD"
+                },
+                "name": {
+                  "en": "NOT DEFINED",
+                  "sk": "TBD"
+                },
+                "dataType": null,
+                "codeLists": [
+                  "ISO4217"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

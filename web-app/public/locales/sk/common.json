@@ -1,4 +1,7 @@
 {
+  "add": "Pridať",
+  "delete": "Odstrániť",
+  "error": "Chyba",
   "close": "Zavrieť",
   "invoice": "Faktúra",
   "format": "Formát",
@@ -32,7 +35,7 @@
   "supplied": "Odoslané",
   "download": "Stiahnuť",
   "loadMore": "Načítaj viac",
-  "invoiceValidation": "Validácia faktúr",
+  "invoiceDocumentation": "Dokumentácia faktúr",
   "auth": {
     "title": "Nepovolený prístup",
     "description": "Nemáte povolenie na prezeranie tejto stránky"
@@ -44,10 +47,34 @@
   "loading": {
     "title": "Procesujem žiadosť"
   },
+  "invoiceDocs": {
+    "home": "Domov",
+    "cardinality": {
+      "full": "Počet",
+      "short": "Poč"
+    },
+    "description": "Popis",
+    "name": "Názov",
+    "childElements": "Potomkovia",
+    "rules": "Pravidlá",
+    "syntax": "Syntax",
+    "defaultValue": "Predvolená hodnota",
+    "exampleValue": "Ukážková hodnota",
+    "businessTerms": "Obchodné podmienky",
+    "context": "Kontext",
+    "Usage": "Použitie",
+    "attributes": "Atribúty",
+    "dataType": "Dátový typ",
+    "codeLists": "Zoznamy kódov",
+    "agency": "Agentúra",
+    "version": "Verzia",
+    "identifier": "Identifikátor",
+    "codes": "Kódy"
+  },
   "topBar": {
     "title": "E-faktúra",
     "publicInvoices": "Verejné faktúry",
-    "invoiceVisualization": "Vizualizácia faktúr",
+    "invoiceTools": "Fakturačné nástroje",
     "createInvoice": "Vytvoriť faktúru",
     "accountSettings": "Nastavenia účtu",
     "myInvoices": "Moje faktúry",
@@ -55,5 +82,8 @@
     "login": "Prihlásiť"
   },
   "submission": "Podanie",
-  "downloadVisualization": "Stiahni vizualizáciu"
+  "visualization": "Vizualizácia",
+  "downloadVisualization": "Stiahnuť vizualizáciu",
+  "form": "Formulár",
+  "generateInvoice": "Vygeneruj faktúru"
 }

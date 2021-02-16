@@ -2,6 +2,7 @@ import {useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {Button, Card, Col, Form, Row} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
+import {format as formatDate, parseISO} from 'date-fns'
 import NotFound from './helpers/NotFound'
 import BoolIcon from './helpers/BoolIcon'
 import {getInvoiceMeta} from '../actions/invoices'
@@ -79,7 +80,10 @@ export default ({history, match: {params: {id}}}) => {
           </Row>
           <Row>
             <Col>
-              <TextField label={t('invoices:createdAt')} value={createdAt} />
+              <TextField
+                label={t('invoices:createdAt')}
+                value={formatDate(parseISO(createdAt), 'yyyy-MM-dd HH:mm')}
+              />
             </Col>
             <Col>
               <TextField label={t('invoices:issueDate')} value={issueDate} />

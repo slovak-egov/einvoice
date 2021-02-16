@@ -15,11 +15,13 @@ const getInitialState = () => ({
       format: invoiceFormats.UBL,
       test: false,
     },
+    form: null,
   },
   publicInvoicesScreen: {},
   myInvoicesScreen: {},
   logging: true, // Always start with login attempt
   loggedUserId: null,
+  docs: {},
 })
 
 const rootReducer = (state = getInitialState(), action) => {

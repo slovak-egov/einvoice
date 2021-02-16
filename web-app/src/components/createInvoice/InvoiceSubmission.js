@@ -15,7 +15,7 @@ import {
 } from '../../state/createInvoiceScreen'
 import {invoiceFormats} from '../../utils/constants'
 
-export default ({showSubmission}) => {
+export default ({showSubmission, title}) => {
   const {t} = useTranslation(['common', 'invoices'])
   const history = useHistory()
 
@@ -72,7 +72,7 @@ export default ({showSubmission}) => {
   return (
     <Card className="m-1">
       <Card.Header className="bg-primary text-white text-center" as="h3">
-        {t('submission')}
+        {t(title)}
       </Card.Header>
       <Card.Body as={Form}>
         <Row>
