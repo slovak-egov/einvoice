@@ -24,13 +24,13 @@ func TestFactory(t *testing.T) {
 	}
 
 	exp := &entity.Invoice{
-		Sender:      "SellerCompany",
-		Receiver:    "Buyercompany ltd",
+		Sender:      "Bluem BV",
+		Receiver:    "Provide Verzekeringen",
 		Format:      "d16b",
 		SupplierIco: "11190993",
 		CustomerIco: "44444444",
-		Price:       4000,
-		IssueDate:   timeutil.Date{time.Date(2013, 4, 10, 0, 0, 0, 0, time.UTC)},
+		Price:       147,
+		IssueDate:   timeutil.Date{time.Date(2015, 4, 1, 0, 0, 0, 0, time.UTC)},
 	}
 
 	assert.Equal(t, exp, invoice)

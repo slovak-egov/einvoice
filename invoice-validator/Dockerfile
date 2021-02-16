@@ -1,15 +1,20 @@
-FROM node:14-alpine
+FROM node:14-alpine AS schema_builder
 
-WORKDIR /app
-
-COPY ./invoice-validator /app
+COPY ./invoice-validator/data /data
 
 RUN apk add maven --no-cache
 
-WORKDIR /app/data/ubl2.1/
-RUN mvn -f pom-preprocess.xml generate-resources
-RUN mvn -f pom-xslt.xml process-resources
-RUN npx xslt3 -xsl:xslt/EN16931-UBL-validation-preprocessed.xslt -export:en16931-schema.sef.json -t -nogo
+WORKDIR /data
+RUN ./generate-schemas.sh
+
+# Start fresh
+FROM node:14-alpine
+
+COPY --from=schema_builder /data/ubl2.1/en16931-schema.sef.json /app/schemas/ubl2.1-schema.sef.json
+COPY --from=schema_builder /data/d16b/en16931-schema.sef.json /app/schemas/d16b-schema.sef.json
+COPY ./invoice-validator/src /app/src
+COPY ./invoice-validator/package.json /app/package.json
+COPY ./invoice-validator/package-lock.json /app/package-lock.json
 
 WORKDIR /app
 RUN npm i --production

@@ -58,18 +58,23 @@ export default () => {
                 </a>
               </li>
               <li>
-                <a href={exampleInvoiceUrl(invoiceFormats.UBL, 'invoice')} target="_blank">
+                <a href={exampleInvoiceUrl(invoiceFormats.D16B, 'invoice-rules-violation')} target="_blank">
                   {t('announcements.2.links.1')}
                 </a>
               </li>
               <li>
-                <a href={exampleInvoiceUrl(invoiceFormats.UBL, 'invoice-rules-violation')} target="_blank">
+                <a href={exampleInvoiceUrl(invoiceFormats.UBL, 'invoice')} target="_blank">
                   {t('announcements.2.links.2')}
                 </a>
               </li>
               <li>
-                <a href={exampleInvoiceUrl(invoiceFormats.UBL, 'invoice-xsd-violation')} target="_blank">
+                <a href={exampleInvoiceUrl(invoiceFormats.UBL, 'invoice-rules-violation')} target="_blank">
                   {t('announcements.2.links.3')}
+                </a>
+              </li>
+              <li>
+                <a href={exampleInvoiceUrl(invoiceFormats.UBL, 'invoice-xsd-violation')} target="_blank">
+                  {t('announcements.2.links.4')}
                 </a>
               </li>
             </ul>
