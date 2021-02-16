@@ -29,7 +29,7 @@ type App struct {
 	router           *mux.Router
 	db               *db.Connector
 	storage          *storage.LocalStorage
-	xsdValidator     xml.Validator
+	xsdValidator     *xml.XsdValidator
 	cache            *cache.Cache
 	upvs             *upvs.Connector
 	invoiceValidator invoiceValidator.InvoiceValidator
@@ -43,7 +43,7 @@ func NewApp() *App {
 		router:           mux.NewRouter(),
 		db:               db.NewConnector(appConfig.Db),
 		storage:          storage.New(appConfig.LocalStorageBasePath),
-		xsdValidator:     xml.NewValidator(appConfig.Ubl21XsdPath, appConfig.D16bXsdPath),
+		xsdValidator:     xml.NewXsdValidator(appConfig.Ubl21XsdPath, appConfig.D16bXsdPath),
 		cache:            cache.NewRedis(appConfig.Cache),
 		upvs:             upvs.New(appConfig.Upvs),
 		invoiceValidator: invoiceValidator.New(appConfig.ValidationServerUrl),

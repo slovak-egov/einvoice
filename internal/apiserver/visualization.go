@@ -39,9 +39,7 @@ func (a *App) createVisualization(res http.ResponseWriter, req *http.Request) er
 		return err
 	}
 
-	parsers := formatToParsers[requestBody.format]
-
-	if err = parsers.GetXsdValidator(a)(requestBody.invoice); err != nil {
+	if err = a.xsdValidator.Validate(requestBody.invoice, requestBody.format); err != nil {
 		return InvoiceError("xsd.validation.failed").WithDetail(err)
 	}
 	if err = a.invoiceValidator.Validate(req.Context(), requestBody.invoice, requestBody.format); err != nil {

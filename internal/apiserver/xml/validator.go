@@ -1,36 +1,18 @@
 package xml
 
 import (
-	"strings"
-
 	"github.com/lestrrat-go/libxml2"
 	"github.com/lestrrat-go/libxml2/xsd"
 	log "github.com/sirupsen/logrus"
+
+	"github.com/slovak-egov/einvoice/internal/entity"
 )
 
-type Validator interface {
-	ValidateD16B(xml []byte) error
-	ValidateUBL21(xml []byte) error
+type XsdValidator struct {
+	schemas map[string]*xsd.Schema
 }
 
-type ValidationError struct {
-	Errors []error
-}
-
-func (e ValidationError) Error() string {
-	errorMessages := []string{}
-	for _, err := range e.Errors {
-		errorMessages = append(errorMessages, err.Error())
-	}
-	return strings.Join(errorMessages, "\n")
-}
-
-type validator struct {
-	d16bSchema  *xsd.Schema
-	ubl21Schema *xsd.Schema
-}
-
-func NewValidator(ubl21XsdPath, d16bXsdPath string) Validator {
+func NewXsdValidator(ubl21XsdPath, d16bXsdPath string) *XsdValidator {
 	d16bXsdMainFile := d16bXsdPath + "/data/standard/CrossIndustryInvoice_100pD16B.xsd"
 	d16bSchema, err := xsd.ParseFromFile(d16bXsdMainFile)
 	if err != nil {
@@ -43,29 +25,18 @@ func NewValidator(ubl21XsdPath, d16bXsdPath string) Validator {
 		log.WithField("error", err.Error()).Fatal("validator.parseSchema.ubl2.1.failed")
 	}
 
-	return &validator{d16bSchema, ubl21Schema}
+	return &XsdValidator{
+		map[string]*xsd.Schema{entity.UblFormat: ubl21Schema, entity.D16bFormat: d16bSchema},
+	}
 }
 
-func (validator *validator) ValidateD16B(src []byte) error {
+func (v *XsdValidator) Validate(src []byte, format string) error {
 	xml, err := libxml2.Parse(src)
 	if err != nil {
 		return err
 	}
 
-	if err = validator.d16bSchema.Validate(xml); err != nil {
-		return ValidationError{err.(xsd.SchemaValidationError).Errors()}
-	}
-
-	return nil
-}
-
-func (validator *validator) ValidateUBL21(src []byte) error {
-	xml, err := libxml2.Parse(src)
-	if err != nil {
-		return err
-	}
-
-	if err = validator.ubl21Schema.Validate(xml); err != nil {
+	if err = v.schemas[format].Validate(xml); err != nil {
 		return ValidationError{err.(xsd.SchemaValidationError).Errors()}
 	}
 
