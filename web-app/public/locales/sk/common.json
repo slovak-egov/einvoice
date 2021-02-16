@@ -55,6 +55,5 @@
     "login": "Prihlásiť"
   },
   "submission": "Podanie",
-  "visualization": "Vizualizácia",
-  "createVisualization": "Vytvor vizualizáciu"
+  "downloadVisualization": "Stiahni vizualizáciu"
 }

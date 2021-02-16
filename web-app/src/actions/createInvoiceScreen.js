@@ -7,20 +7,11 @@ export const setInvoiceSubmissionFormat = setData(['createInvoiceScreen', 'submi
 export const setInvoiceSubmissionData = setData(['createInvoiceScreen', 'submission', 'invoice'])
 export const setInvoiceSubmissionTest = setData(['createInvoiceScreen', 'submission', 'test'])
 
-export const setInvoiceVisualizationFormat = setData(['createInvoiceScreen', 'visualization', 'format'])
-export const setInvoiceVisualizationData = setData(['createInvoiceScreen', 'visualization', 'invoice'])
-
 export const resetInvoiceSubmission = () =>
   (dispatch) => {
     dispatch(setInvoiceSubmissionFormat(invoiceFormats.UBL))
     dispatch(setInvoiceSubmissionData(null))
     dispatch(setInvoiceSubmissionTest(false))
-  }
-
-export const resetInvoiceVisualization = () =>
-  (dispatch) => {
-    dispatch(setInvoiceVisualizationFormat(invoiceFormats.UBL))
-    dispatch(setInvoiceVisualizationData(null))
   }
 
 export const createInvoice = (data) => loadingWrapper(

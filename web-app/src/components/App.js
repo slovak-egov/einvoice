@@ -9,7 +9,7 @@ import FAQ from './landingPage/FAQ'
 import TopBar from './TopBar'
 import Footer from './Footer'
 import CreateInvoice from './createInvoice'
-import InvoiceVisualization from './createInvoice/Visualization'
+import InvoiceSubmission from './createInvoice/InvoiceSubmission'
 import InvoiceView from './InvoiceView'
 import AccountSettings from './AccountSettings'
 import {getMyInfo} from '../actions/users'
@@ -54,9 +54,9 @@ export default () => {
           </AuthRoute>
           <Redirect exact from="/create-invoice" to="/create-invoice/submission" />
           <AuthRoute path="/create-invoice">
-            <CreateInvoice />
+            <CreateInvoice showSubmission />
           </AuthRoute>
-          <Route exact path="/invoice-visualization" component={InvoiceVisualization} />
+          <Route exact path="/invoice-visualization" component={InvoiceSubmission} />
           <Route exact path="/invoices" component={PublicInvoices} />
           <Route exact path="/invoices/:id([0-9]+)" component={InvoiceView} />
           <Route component={NotFound} />

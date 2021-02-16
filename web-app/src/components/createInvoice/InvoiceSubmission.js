@@ -1,20 +1,21 @@
 import {useCallback} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {useHistory} from 'react-router-dom'
-import {Card, Col, Form, FormCheck, Row} from 'react-bootstrap'
+import {Button, Card, Col, Form, FormCheck, Row} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
+import save from 'save-file'
 import ConfirmationButton from '../helpers/ConfirmationButton'
 import FileUploader from '../helpers/FileUploader'
 import {
   createInvoice, setInvoiceSubmissionData, setInvoiceSubmissionFormat, setInvoiceSubmissionTest,
-  resetInvoiceSubmission,
+  resetInvoiceSubmission, getInvoiceVisualization,
 } from '../../actions/createInvoiceScreen'
 import {
   submissionFormatSelector, submissionInvoiceSelector, submissionTestSelector,
 } from '../../state/createInvoiceScreen'
 import {invoiceFormats} from '../../utils/constants'
 
-export default () => {
+export default ({showSubmission}) => {
   const {t} = useTranslation(['common', 'invoices'])
   const history = useHistory()
 
@@ -47,6 +48,25 @@ export default () => {
       }
     },
     [dispatch, history, format, invoice, test]
+  )
+
+  const visualizeInvoice = useCallback(
+    async () => {
+      const formData = new FormData()
+      formData.append('format', format)
+      formData.append('invoice', invoice)
+
+      const visualization = await dispatch(getInvoiceVisualization(formData))
+      if (visualization) {
+        await save(visualization, 'invoice.zip')
+      }
+    },
+    [dispatch, format, invoice]
+  )
+
+  const getRawInvoice = useCallback(
+    () => save(invoice, 'invoice.xml'),
+    [invoice]
   )
 
   return (
@@ -85,7 +105,7 @@ export default () => {
               </Form.Control>
             </Form.Group>
           </Col>
-          <Col>
+          {showSubmission && <Col>
             <Form.Group>
               <Form.Label>Test</Form.Label>
               <FormCheck
@@ -94,17 +114,32 @@ export default () => {
                 onChange={toggleTest}
               />
             </Form.Group>
-          </Col>
+          </Col>}
         </Row>
-        <Row className="justify-content-center">
-          <ConfirmationButton
+        <Row className="justify-content-end">
+          <Button
+            variant="secondary"
+            onClick={getRawInvoice}
+            disabled={!invoice}
+          >
+            {t('download')} XML
+          </Button>
+          <Button
+            variant="primary"
+            onClick={visualizeInvoice}
+            disabled={!invoice}
+          >
+            {t('downloadVisualization')}
+          </Button>
+          {showSubmission && <ConfirmationButton
+            variant="success"
             onClick={submitInvoice}
             confirmationTitle={t('topBar.createInvoice')}
             confirmationText={t('invoices:confirmationQuestion')}
             disabled={!invoice}
           >
             {t('submit')}
-          </ConfirmationButton>
+          </ConfirmationButton>}
         </Row>
       </Card.Body>
     </Card>
