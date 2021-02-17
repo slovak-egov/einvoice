@@ -82,7 +82,7 @@ export default ({showSubmission, title}) => {
       </Card.Header>
       <Card.Body as={Form}>
         <Row>
-          <Col sm={3} xs={6}>
+          <Col md={4} sm={6} xs={6}>
             <Form.Group>
               <Form.Label>{t('invoice')}</Form.Label>
               <div>
@@ -97,7 +97,7 @@ export default ({showSubmission, title}) => {
               </div>
             </Form.Group>
           </Col>
-          <Col sm={3} xs={6}>
+          <Col md={4} sm={6} xs={6}>
             <Form.Group>
               <Form.Label>{t('format')}</Form.Label>
               <Form.Control
@@ -112,7 +112,7 @@ export default ({showSubmission, title}) => {
             </Form.Group>
           </Col>
           {showSubmission && <>
-            <Col sm={3} xs={6}>
+            <Col md={1} sm={6} xs={6}>
               <Form.Group>
                 <Form.Label>Test</Form.Label>
                 <FormCheck
@@ -122,7 +122,7 @@ export default ({showSubmission, title}) => {
                 />
               </Form.Group>
             </Col>
-            <Col sm={3} xs={6}>
+            <Col md={3} sm={6} xs={6}>
               <Form.Group>
                 <Form.Label>{t('foreignSupplier')}</Form.Label>
                 <FormCheck
