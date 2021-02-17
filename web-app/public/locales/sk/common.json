@@ -85,5 +85,6 @@
   "visualization": "Vizualizácia",
   "downloadVisualization": "Stiahnuť vizualizáciu",
   "form": "Formulár",
-  "generateInvoice": "Vygeneruj faktúru"
+  "generateInvoice": "Vygeneruj faktúru",
+  "foreignSupplier": "Zahraničný dodávateľ"
 }

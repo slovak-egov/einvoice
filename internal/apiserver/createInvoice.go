@@ -15,9 +15,10 @@ import (
 )
 
 type CreateInvoiceRequestBody struct {
-	invoice []byte
-	test    bool
-	format  string
+	invoice         []byte
+	format          string
+	test            bool
+	foreignSupplier bool
 }
 
 func (b *CreateInvoiceRequestBody) parse(req *http.Request) error {
@@ -32,6 +33,10 @@ func (b *CreateInvoiceRequestBody) parse(req *http.Request) error {
 	b.test, err = getOptionalBool(req.PostFormValue("test"), false)
 	if err != nil {
 		return InvoiceError("test.invalid").WithDetail(err)
+	}
+	b.foreignSupplier, err = getOptionalBool(req.PostFormValue("foreignSupplier"), false)
+	if err != nil {
+		return InvoiceError("foreignSupplier.invalid").WithDetail(err)
 	}
 	b.invoice, err = parseInvoice(req)
 	if err != nil {
@@ -62,9 +67,13 @@ func parseInvoice(req *http.Request) ([]byte, error) {
 	return bytes, nil
 }
 
-// Check if creator has permission to submit invoice as supplier IČO
-func validateInvoice(ctx goContext.Context, db *db.Connector, inv *entity.Invoice) error {
-	return db.IsValidSubstitute(ctx, inv.CreatedBy, inv.SupplierIco)
+// Check if creator has permission to submit invoice
+func validateInvoice(ctx goContext.Context, db *db.Connector, inv *entity.Invoice, foreignSupplier bool) error {
+	if foreignSupplier {
+		return db.IsValidSubstitute(ctx, inv.CreatedBy, inv.CustomerIco)
+	} else {
+		return db.IsValidSubstitute(ctx, inv.CreatedBy, inv.SupplierIco)
+	}
 }
 
 func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
@@ -79,6 +88,7 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 	if err = a.xsdValidator.Validate(requestBody.invoice, requestBody.format); err != nil {
 		return InvoiceError("xsd.validation.failed").WithDetail(err)
 	}
+	// In future possibly adjust validation accoding to foreignSupplier flag
 	if err = a.invoiceValidator.Validate(req.Context(), requestBody.invoice, requestBody.format); err != nil {
 		if _, ok := err.(*invoiceValidator.ValidationError); ok {
 			return handlerutil.NewBadRequestError("invoice.validation.failed").WithDetail(err)
@@ -99,7 +109,7 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 	// TODO: add public ICO list
 	metadata.IsPublic = true
 
-	err = validateInvoice(req.Context(), a.db, metadata)
+	err = validateInvoice(req.Context(), a.db, metadata, requestBody.foreignSupplier)
 	if _, ok := err.(*dbutil.NotFoundError); ok {
 		return handlerutil.NewForbiddenError("invoice.create.permission.missing")
 	} else if err != nil {

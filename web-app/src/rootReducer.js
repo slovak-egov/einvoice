@@ -14,6 +14,7 @@ const getInitialState = () => ({
     submission: {
       format: invoiceFormats.UBL,
       test: false,
+      foreignSupplier: false,
     },
     form: null,
   },

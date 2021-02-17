@@ -36,6 +36,7 @@
 | invoice.payload.invalid | 400 | Cannot parse data | Error message |
 | invoice.file.parsingError | 400 | Cannot parse invoice file | Error message |
 | invoice.test.invalid | 400 | Cannot parse *test* field | Error message |
+| invoice.foreignSupplier.invalid | 400 | Cannot parse *foreignSupplier* field | Error message |
 | invoice.format.missing | 400 | Missing *format* field | |
 | invoice.format.unknown | 400 | *format* must be ubl2.1 or d16b | |
 | invoice.xsd.validation.failed | 400 | Xml file must follow XSD schema | Error message |

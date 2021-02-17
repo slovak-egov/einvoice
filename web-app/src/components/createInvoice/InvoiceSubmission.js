@@ -8,10 +8,11 @@ import ConfirmationButton from '../helpers/ConfirmationButton'
 import FileUploader from '../helpers/FileUploader'
 import {
   createInvoice, setInvoiceSubmissionData, setInvoiceSubmissionFormat, setInvoiceSubmissionTest,
-  resetInvoiceSubmission, getInvoiceVisualization,
+  resetInvoiceSubmission, getInvoiceVisualization, setForeignSupplier,
 } from '../../actions/createInvoiceScreen'
 import {
-  submissionFormatSelector, submissionInvoiceSelector, submissionTestSelector,
+  foreignSupplierSelector, submissionFormatSelector, submissionInvoiceSelector,
+  submissionTestSelector,
 } from '../../state/createInvoiceScreen'
 import {invoiceFormats} from '../../utils/constants'
 
@@ -22,9 +23,13 @@ export default ({showSubmission, title}) => {
   const format = useSelector(submissionFormatSelector)
   const invoice = useSelector(submissionInvoiceSelector)
   const test = useSelector(submissionTestSelector)
+  const foreignSupplier = useSelector(foreignSupplierSelector)
 
   const dispatch = useDispatch()
   const toggleTest = useCallback(() => dispatch(setInvoiceSubmissionTest(!test)), [dispatch, test])
+  const toggleForeignSupplier = useCallback(
+    () => dispatch(setForeignSupplier(!foreignSupplier)), [dispatch, foreignSupplier]
+  )
   const clearInvoiceData = useCallback(() => dispatch(setInvoiceSubmissionData(null)), [dispatch])
   const updateInvoiceData = useCallback(
     (e) => dispatch(setInvoiceSubmissionData(e.target.files[0])), [dispatch]
@@ -38,6 +43,7 @@ export default ({showSubmission, title}) => {
       formData.append('format', format)
       formData.append('invoice', invoice)
       formData.append('test', test)
+      formData.append('foreignSupplier', foreignSupplier)
 
       const {invoiceId, redirect} = await dispatch(createInvoice(formData))
       if (invoiceId) {
@@ -76,7 +82,7 @@ export default ({showSubmission, title}) => {
       </Card.Header>
       <Card.Body as={Form}>
         <Row>
-          <Col>
+          <Col sm={3} xs={6}>
             <Form.Group>
               <Form.Label>{t('invoice')}</Form.Label>
               <div>
@@ -91,7 +97,7 @@ export default ({showSubmission, title}) => {
               </div>
             </Form.Group>
           </Col>
-          <Col>
+          <Col sm={3} xs={6}>
             <Form.Group>
               <Form.Label>{t('format')}</Form.Label>
               <Form.Control
@@ -105,19 +111,32 @@ export default ({showSubmission, title}) => {
               </Form.Control>
             </Form.Group>
           </Col>
-          {showSubmission && <Col>
-            <Form.Group>
-              <Form.Label>Test</Form.Label>
-              <FormCheck
-                type="checkbox"
-                checked={test}
-                onChange={toggleTest}
-              />
-            </Form.Group>
-          </Col>}
+          {showSubmission && <>
+            <Col sm={3} xs={6}>
+              <Form.Group>
+                <Form.Label>Test</Form.Label>
+                <FormCheck
+                  type="checkbox"
+                  checked={test}
+                  onChange={toggleTest}
+                />
+              </Form.Group>
+            </Col>
+            <Col sm={3} xs={6}>
+              <Form.Group>
+                <Form.Label>{t('foreignSupplier')}</Form.Label>
+                <FormCheck
+                  type="checkbox"
+                  checked={foreignSupplier}
+                  onChange={toggleForeignSupplier}
+                />
+              </Form.Group>
+            </Col>
+          </>}
         </Row>
-        <Row className="justify-content-end">
+        <Row className="justify-content-end flex-column flex-sm-row">
           <Button
+            className="my-1"
             variant="secondary"
             onClick={getRawInvoice}
             disabled={!invoice}
@@ -125,6 +144,7 @@ export default ({showSubmission, title}) => {
             {t('download')} XML
           </Button>
           <Button
+            className="my-1"
             variant="primary"
             onClick={visualizeInvoice}
             disabled={!invoice}
@@ -132,6 +152,7 @@ export default ({showSubmission, title}) => {
             {t('downloadVisualization')}
           </Button>
           {showSubmission && <ConfirmationButton
+            className="my-1"
             variant="success"
             onClick={submitInvoice}
             confirmationTitle={t('topBar.createInvoice')}

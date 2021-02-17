@@ -85,5 +85,6 @@
   "visualization": "Visualization",
   "downloadVisualization": "Download visualization",
   "form": "Form",
-  "generateInvoice": "Generate invoice"
+  "generateInvoice": "Generate invoice",
+  "foreignSupplier": "Foreign supplier"
 }

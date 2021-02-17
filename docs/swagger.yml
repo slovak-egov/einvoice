@@ -584,12 +584,15 @@ components:
             properties:
               format:
                 $ref: '#/components/schemas/InvoiceFormat'
-              test:
-                type: boolean
-                description: If true, service will create test-only invoice
               invoice:
                 type: string
                 format: binary
+              test:
+                type: boolean
+                description: If true, service will create test-only invoice
+              foreignSupplier:
+                type: boolean
+                description: Set to true, if invoice supplier is not Slovak
             required:
               - format
               - invoice
