@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	DateLayoutISO = "2006-01-02"
+	DateLayoutISO  = "2006-01-02"
 	D16bDateLayout = "20060102"
 )
 

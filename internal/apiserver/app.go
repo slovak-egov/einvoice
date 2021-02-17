@@ -10,7 +10,7 @@ import (
 
 	"github.com/slovak-egov/einvoice/internal/apiserver/config"
 	"github.com/slovak-egov/einvoice/internal/apiserver/invoiceValidator"
-	"github.com/slovak-egov/einvoice/internal/apiserver/xml"
+	"github.com/slovak-egov/einvoice/internal/apiserver/xsdValidator"
 	"github.com/slovak-egov/einvoice/internal/cache"
 	"github.com/slovak-egov/einvoice/internal/db"
 	"github.com/slovak-egov/einvoice/internal/storage"
@@ -29,7 +29,7 @@ type App struct {
 	router           *mux.Router
 	db               *db.Connector
 	storage          *storage.LocalStorage
-	xsdValidator     *xml.XsdValidator
+	xsdValidator     *xsdValidator.XsdValidator
 	cache            *cache.Cache
 	upvs             *upvs.Connector
 	invoiceValidator invoiceValidator.InvoiceValidator
@@ -43,7 +43,7 @@ func NewApp() *App {
 		router:           mux.NewRouter(),
 		db:               db.NewConnector(appConfig.Db),
 		storage:          storage.New(appConfig.LocalStorageBasePath),
-		xsdValidator:     xml.NewXsdValidator(appConfig.Ubl21XsdPath, appConfig.D16bXsdPath),
+		xsdValidator:     xsdValidator.New(appConfig.Ubl21XsdPath, appConfig.D16bXsdPath),
 		cache:            cache.NewRedis(appConfig.Cache),
 		upvs:             upvs.New(appConfig.Upvs),
 		invoiceValidator: invoiceValidator.New(appConfig.ValidationServerUrl),

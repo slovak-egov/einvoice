@@ -1,4 +1,4 @@
-package xml
+package xsdValidator
 
 import "strings"
 
