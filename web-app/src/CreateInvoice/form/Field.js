@@ -20,13 +20,15 @@ export default ({canDelete, dropField, docs, path}) => {
 
   return (
     <Form.Group>
-      <Form.Label className="d-flex">
-        <span>{docs.name[i18n.language]}</span>
-        <Tooltip className="my-auto" tooltipText={docs.description[i18n.language]} />
-        {canDelete && <Button className="ml-auto" variant="danger" size="sm" onClick={dropField}>
+      <div className="d-flex">
+        <Form.Label className="d-flex">
+          <span>{docs.name[i18n.language]}</span>
+          <Tooltip className="my-auto" tooltipText={docs.description[i18n.language]} />
+        </Form.Label>
+        {canDelete && <Button className="ml-auto mb-1" variant="danger" size="sm" onClick={dropField}>
           {t('delete')}
         </Button>}
-      </Form.Label>
+      </div>
       <FieldInput
         codeListIds={docs.codeLists}
         dataType={docs.dataType}
