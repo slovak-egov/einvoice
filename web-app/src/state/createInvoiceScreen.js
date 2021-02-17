@@ -5,3 +5,6 @@ export const submissionFormatSelector = (state) => invoiceSubmissionScreenSelect
 export const submissionInvoiceSelector = (state) => invoiceSubmissionScreenSelector(state).invoice
 
 export const submissionTestSelector = (state) => invoiceSubmissionScreenSelector(state).test
+
+export const foreignSupplierSelector = (state) =>
+  invoiceSubmissionScreenSelector(state).foreignSupplier

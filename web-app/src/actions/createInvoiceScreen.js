@@ -6,6 +6,7 @@ import {invoiceFormats} from '../utils/constants'
 export const setInvoiceSubmissionFormat = setData(['createInvoiceScreen', 'submission', 'format'])
 export const setInvoiceSubmissionData = setData(['createInvoiceScreen', 'submission', 'invoice'])
 export const setInvoiceSubmissionTest = setData(['createInvoiceScreen', 'submission', 'test'])
+export const setForeignSupplier = setData(['createInvoiceScreen', 'submission', 'foreignSupplier'])
 
 export const resetInvoiceSubmission = () =>
   (dispatch) => {

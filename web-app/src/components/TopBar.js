@@ -48,7 +48,7 @@ export default () => {
             {t('topBar.publicInvoices')}
           </Nav.Link>
           {!isLogged && <Nav.Link as={NavLink} to="/invoice-tools">{t('topBar.invoiceTools')}</Nav.Link>}
-          <div className="d-flex ml-auto">
+          <div className="d-md-flex ml-md-auto">
             {isLogged ?
               <>
                 <Nav.Link as={NavLink} to="/create-invoice">{t('topBar.createInvoice')}</Nav.Link>
