@@ -1,4 +1,4 @@
-package xml
+package xsdValidator
 
 import (
 	"github.com/lestrrat-go/libxml2"
@@ -12,7 +12,7 @@ type XsdValidator struct {
 	schemas map[string]*xsd.Schema
 }
 
-func NewXsdValidator(ubl21XsdPath, d16bXsdPath string) *XsdValidator {
+func New(ubl21XsdPath, d16bXsdPath string) *XsdValidator {
 	d16bXsdMainFile := d16bXsdPath + "/data/standard/CrossIndustryInvoice_100pD16B.xsd"
 	d16bSchema, err := xsd.ParseFromFile(d16bXsdMainFile)
 	if err != nil {

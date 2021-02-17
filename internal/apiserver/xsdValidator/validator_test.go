@@ -1,4 +1,4 @@
-package xml_test
+package xsdValidator_test
 
 import (
 	"io/ioutil"

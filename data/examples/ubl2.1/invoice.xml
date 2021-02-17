@@ -122,9 +122,6 @@
             <cac:PartyIdentification>
                 <cbc:ID schemeID="0158">11190993</cbc:ID>
             </cac:PartyIdentification>
-            <cac:PartyIdentification>
-                <cbc:ID>BilateralID</cbc:ID >
-            </cac:PartyIdentification>
             <cac:PartyName>
                 <cbc:Name>Global Trade Chain</cbc:Name>
             </cac:PartyName>
