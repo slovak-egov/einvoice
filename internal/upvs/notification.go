@@ -30,7 +30,7 @@ func (c *Connector) SendInvoiceNotification(ctx goContext.Context, skTalkMessage
 			"/api/sktalk/receive",
 			map[string]string{
 				"Authorization": "Bearer " + signedApiToken,
-				"Content-Type":  "application/x-www-form-urlencoded",
+				"Content-Type":  "application/json",
 			},
 			strings.NewReader(data.Encode()),
 		},
