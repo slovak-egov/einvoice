@@ -1,6 +1,5 @@
 FROM golang:1.15-alpine AS build_base
 
-RUN apk add --no-cache git
 RUN apk update && apk add --no-cache g++ gcc libxml2 libxslt-dev
 
 # Set the Current Working Directory inside the container

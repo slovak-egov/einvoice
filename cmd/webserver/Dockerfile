@@ -8,8 +8,6 @@ RUN npm run build
 
 FROM golang:1.15-alpine AS server_builder
 
-RUN apk add --no-cache git
-
 # Set the Current Working Directory inside the container
 WORKDIR /server
 

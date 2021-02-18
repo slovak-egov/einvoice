@@ -297,6 +297,8 @@ paths:
                 invoice:
                   type: string
                   format: binary
+                lang:
+                  $ref: '#/components/schemas/Languages'
               required:
                 - format
                 - invoice
@@ -462,6 +464,12 @@ components:
       enum:
         - ubl2.1
         - d16b
+    Languages:
+      type: string
+      description: Requested language of response, default language is en
+      enum:
+        - sk
+        - en
     Invoice:
       type: object
       properties:
@@ -593,6 +601,8 @@ components:
               foreignSupplier:
                 type: boolean
                 description: Set to true, if invoice supplier is not Slovak
+              lang:
+                $ref: '#/components/schemas/Languages'
             required:
               - format
               - invoice

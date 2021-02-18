@@ -6,6 +6,6 @@ import (
 
 type InvoiceValidator struct{}
 
-func (v *InvoiceValidator) Validate(ctx goContext.Context, xml []byte, format string) error {
+func (v *InvoiceValidator) Validate(ctx goContext.Context, xml []byte, format, language string) error {
 	return nil
 }

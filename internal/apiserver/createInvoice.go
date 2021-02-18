@@ -17,6 +17,7 @@ import (
 type CreateInvoiceRequestBody struct {
 	invoice         []byte
 	format          string
+	language        string
 	test            bool
 	foreignSupplier bool
 }
@@ -27,6 +28,13 @@ func (b *CreateInvoiceRequestBody) parse(req *http.Request) error {
 		return InvoiceError("format.missing")
 	} else if b.format != entity.UblFormat && b.format != entity.D16bFormat {
 		return InvoiceError("format.unknown")
+	}
+
+	b.language = req.PostFormValue("lang")
+	if b.language == "" {
+		b.language = entity.EnglishLanguage
+	} else if b.language != entity.EnglishLanguage && b.language != entity.SlovakLanguage {
+		return InvoiceError("language.unknown")
 	}
 
 	var err error
@@ -89,7 +97,7 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 		return InvoiceError("xsd.validation.failed").WithDetail(err)
 	}
 	// In future possibly adjust validation accoding to foreignSupplier flag
-	if err = a.invoiceValidator.Validate(req.Context(), requestBody.invoice, requestBody.format); err != nil {
+	if err = a.invoiceValidator.Validate(req.Context(), requestBody.invoice, requestBody.format, requestBody.language); err != nil {
 		if _, ok := err.(*invoiceValidator.ValidationError); ok {
 			return handlerutil.NewBadRequestError("invoice.validation.failed").WithDetail(err)
 		} else if _, ok := err.(*invoiceValidator.RequestError); ok {
