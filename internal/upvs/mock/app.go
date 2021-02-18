@@ -69,7 +69,7 @@ func (a *App) initializeHandlers() {
 
 	registerHandler(a.router, "GET", "/login", a.handleLogin)
 	registerHandler(a.router, "GET", "/logout", a.handleLogout)
-	registerHandler(a.router, "GET", "/api/upvs/user/info", a.handleUserInfo)
+	registerHandler(a.router, "GET", "/api/upvs/identity", a.handleUserInfo)
 	registerHandler(a.router, "POST", "/api/sktalk/receive", a.handleSkTalkReceive)
 }
 
