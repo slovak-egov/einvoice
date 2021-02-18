@@ -17,7 +17,7 @@ import {
 import {invoiceFormats} from '../utils/constants'
 
 export default ({showSubmission, title}) => {
-  const {t} = useTranslation(['common', 'invoices'])
+  const {i18n, t} = useTranslation(['common', 'invoices'])
   const history = useHistory()
 
   const format = useSelector(submissionFormatSelector)
@@ -44,6 +44,7 @@ export default ({showSubmission, title}) => {
       formData.append('invoice', invoice)
       formData.append('test', test)
       formData.append('foreignSupplier', foreignSupplier)
+      formData.append('lang', i18n.language)
 
       const {invoiceId, redirect} = await dispatch(createInvoice(formData))
       if (invoiceId) {
@@ -61,6 +62,7 @@ export default ({showSubmission, title}) => {
       const formData = new FormData()
       formData.append('format', format)
       formData.append('invoice', invoice)
+      formData.append('lang', i18n.language)
 
       const visualization = await dispatch(getInvoiceVisualization(formData))
       if (visualization) {
