@@ -27,8 +27,8 @@ func (c *Connector) GetUser(ctx goContext.Context, oboToken string) (*User, erro
 		ctx,
 		&Request{
 			method:  "GET",
-			url:     "/api/upvs/user/info",
-			headers: map[string]string{"Authorization": "Bearer "+signedOboToken},
+			url:     "/api/upvs/identity",
+			headers: map[string]string{"Authorization": "Bearer " + signedOboToken},
 		},
 	)
 	if err != nil {
@@ -51,7 +51,7 @@ type Request struct {
 }
 
 func (c *Connector) sendRequest(ctx goContext.Context, request *Request) ([]byte, error) {
-	upvsReq, err := http.NewRequest(request.method, c.baseUrl + request.url, request.body)
+	upvsReq, err := http.NewRequest(request.method, c.baseUrl+request.url, request.body)
 	if err != nil {
 		context.GetLogger(ctx).WithField("error", err.Error()).Error("upvs.sendRequest.preparation.failed")
 		return nil, err

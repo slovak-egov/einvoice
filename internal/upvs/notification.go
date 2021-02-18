@@ -1,11 +1,10 @@
 package upvs
 
 import (
+	"bytes"
 	goContext "context"
 	"encoding/json"
 	"errors"
-	"net/url"
-	"strings"
 
 	"github.com/slovak-egov/einvoice/pkg/context"
 )
@@ -20,8 +19,14 @@ func (c *Connector) SendInvoiceNotification(ctx goContext.Context, skTalkMessage
 		return err
 	}
 
-	data := url.Values{}
-	data.Set("message", skTalkMessage)
+	encodedMessage, err := json.Marshal(map[string]string{"message": skTalkMessage})
+	if err != nil {
+		context.GetLogger(ctx).
+			WithField("error", err.Error()).
+			Error("upvs.sendInvoiceNotification.encodeMessage.failed")
+
+		return err
+	}
 
 	response, err := c.sendRequest(
 		ctx,
@@ -30,9 +35,9 @@ func (c *Connector) SendInvoiceNotification(ctx goContext.Context, skTalkMessage
 			"/api/sktalk/receive",
 			map[string]string{
 				"Authorization": "Bearer " + signedApiToken,
-				"Content-Type":  "application/x-www-form-urlencoded",
+				"Content-Type":  "application/json",
 			},
-			strings.NewReader(data.Encode()),
+			bytes.NewReader(encodedMessage),
 		},
 	)
 	if err != nil {

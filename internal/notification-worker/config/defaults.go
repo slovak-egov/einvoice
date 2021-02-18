@@ -24,7 +24,8 @@ var devConfig = Configuration{
 		Format:   "text",
 	},
 	Upvs: upvs.Configuration{
-		Url: "https://dev.upvs.einvoice.mfsr.sk",
+		Url:        "https://dev.upvs.einvoice.mfsr.sk",
+		SsoSubject: "einvoice",
 	},
 }
 
@@ -42,7 +43,8 @@ var prodConfig = Configuration{
 	},
 	LocalStorageBasePath: "/data",
 	Upvs: upvs.Configuration{
-		Url: "https://dev.upvs.einvoice.mfsr.sk",
+		Url:        "https://dev.upvs.einvoice.mfsr.sk",
+		SsoSubject: "einvoice",
 	},
 }
 
