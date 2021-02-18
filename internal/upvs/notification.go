@@ -19,7 +19,7 @@ func (c *Connector) SendInvoiceNotification(ctx goContext.Context, skTalkMessage
 		return err
 	}
 
-	encodedMessage, err := json.Marshal(skTalkMessage)
+	encodedMessage, err := json.Marshal(map[string]string{"message": skTalkMessage})
 	if err != nil {
 		context.GetLogger(ctx).
 			WithField("error", err.Error()).
@@ -27,10 +27,6 @@ func (c *Connector) SendInvoiceNotification(ctx goContext.Context, skTalkMessage
 
 		return err
 	}
-	buf := bytes.Buffer{}
-	buf.WriteString("{\"message\":")
-	buf.Write(encodedMessage)
-	buf.WriteRune('}')
 
 	response, err := c.sendRequest(
 		ctx,
@@ -41,7 +37,7 @@ func (c *Connector) SendInvoiceNotification(ctx goContext.Context, skTalkMessage
 				"Authorization": "Bearer " + signedApiToken,
 				"Content-Type":  "application/json",
 			},
-			&buf,
+			bytes.NewReader(encodedMessage),
 		},
 	)
 	if err != nil {

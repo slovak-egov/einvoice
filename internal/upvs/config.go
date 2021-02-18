@@ -6,7 +6,8 @@ type Configuration struct {
 	Url                string
 	ApiTokenPrivateKey string
 	OboTokenPublicKey  string
-	SsoSubject         string
+	// Identifier of certificate used for communication trough UPVS SSO. Required for sending notifications.
+	SsoSubject string
 }
 
 func NewConfig(defaultConfig Configuration) Configuration {
