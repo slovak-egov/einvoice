@@ -20,6 +20,7 @@ type Connector struct {
 	apiTokenPrivate *rsa.PrivateKey
 	oboTokenPublic  *rsa.PublicKey
 	client          *http.Client
+	ssoSubject      string
 }
 
 func New(config Configuration) *Connector {
@@ -37,10 +38,11 @@ func New(config Configuration) *Connector {
 	}
 
 	return &Connector{
-		baseUrl:           config.Url,
-		apiTokenPrivate:   apiTokenPrivate,
-		oboTokenPublic:    oboTokenPublic,
-		client:            &http.Client{},
+		baseUrl:         config.Url,
+		apiTokenPrivate: apiTokenPrivate,
+		oboTokenPublic:  oboTokenPublic,
+		client:          &http.Client{},
+		ssoSubject:      config.SsoSubject,
 	}
 }
 
@@ -84,6 +86,7 @@ func (c *Connector) signApiToken() (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodRS256, jwt.MapClaims{
 		"exp": time.Now().Add(time.Hour).Unix(),
 		"jti": uuid.New().String(),
+		"sub": c.ssoSubject,
 	})
 	token.Header["alg"] = "RS256"
 
