@@ -11,12 +11,15 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/slovak-egov/einvoice/internal/entity"
+	"github.com/slovak-egov/einvoice/internal/testutil"
 )
 
 func TestGetUser(t *testing.T) {
 	// Fill DB
-	t.Cleanup(cleanDb(t))
-	user, sessionToken := createTestUser(t, "")
+	t.Cleanup(testutil.CleanDb(t, a.db.Connector, ctx))
+	t.Cleanup(testutil.CleanCache(t, a.cache, ctx))
+	user := testutil.CreateUser(t, a.db.Connector, ctx, "")
+	sessionToken := testutil.CreateToken(t, a.cache, ctx, user)
 
 	// Temporarily do not compare this field
 	user.CreatedAt = time.Time{}
@@ -32,7 +35,7 @@ func TestGetUser(t *testing.T) {
 	for _, tt := range flagtests {
 		t.Run(tt.name, func(t *testing.T) {
 			req, _ := http.NewRequest("GET", fmt.Sprintf("/users/%d", user.Id), nil)
-			response := executeAuthRequest(req, tt.token)
+			response := testutil.ExecuteAuthRequest(a, req, tt.token)
 
 			assert.Equal(t, tt.responseStatus, response.Code)
 			if tt.responseStatus == http.StatusOK {
@@ -54,8 +57,10 @@ func TestGetUser(t *testing.T) {
 
 func TestPatchUser(t *testing.T) {
 	// Fill DB
-	t.Cleanup(cleanDb(t))
-	user, sessionToken := createTestUser(t, "")
+	t.Cleanup(testutil.CleanDb(t, a.db.Connector, ctx))
+	t.Cleanup(testutil.CleanCache(t, a.cache, ctx))
+	user := testutil.CreateUser(t, a.db.Connector, ctx, "")
+	sessionToken := testutil.CreateToken(t, a.cache, ctx, user)
 
 	expectedUserResponse := map[string]interface{}{
 		"name":                    user.Name,
@@ -77,7 +82,7 @@ func TestPatchUser(t *testing.T) {
 				t.Errorf("Request body serialization failed with error %s", err)
 			}
 			req, _ := http.NewRequest("PATCH", fmt.Sprintf("/users/%d", user.Id), bytes.NewReader(requestBody))
-			response := executeAuthRequest(req, sessionToken)
+			response := testutil.ExecuteAuthRequest(a, req, sessionToken)
 
 			assert.Equal(t, http.StatusOK, response.Code)
 

@@ -34,3 +34,10 @@ export const rootAttributes = {
   'xmlns:cac': [{text: 'urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2'}],
   'xmlns:cbc': [{text: 'urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2'}],
 }
+
+// keep in sync with internal/entity/invoice.go
+export const notificationStates = {
+  NOT_SENT: 'not_sent',
+  SENT: 'sent',
+  SENDING: 'sending',
+}

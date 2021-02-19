@@ -14,12 +14,16 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/slovak-egov/einvoice/internal/entity"
+	"github.com/slovak-egov/einvoice/internal/testutil"
 	"github.com/slovak-egov/einvoice/pkg/timeutil"
 )
 
 func TestCreateInvoice(t *testing.T) {
-	t.Cleanup(cleanDb(t))
-	user, sessionToken := createTestUser(t, "")
+	t.Cleanup(testutil.CleanDb(t, a.db.Connector, ctx))
+	t.Cleanup(testutil.CleanCache(t, a.cache, ctx))
+
+	user := testutil.CreateUser(t, a.db.Connector, ctx, "")
+	sessionToken := testutil.CreateToken(t, a.cache, ctx, user)
 
 	var requestBody bytes.Buffer
 	multipartWriter := multipart.NewWriter(&requestBody)
@@ -48,7 +52,7 @@ func TestCreateInvoice(t *testing.T) {
 	}
 	req.Header.Set("Content-Type", multipartWriter.FormDataContentType())
 
-	response := executeAuthRequest(req, sessionToken)
+	response := testutil.ExecuteAuthRequest(a, req, sessionToken)
 	assert.Equal(t, http.StatusCreated, response.Code)
 
 	var createdResponse entity.Invoice
@@ -56,17 +60,18 @@ func TestCreateInvoice(t *testing.T) {
 		t.Error(err)
 	}
 	expectedResponse := entity.Invoice{
-		Id:          createdResponse.Id,        // No need to assert this param,
-		CreatedAt:   createdResponse.CreatedAt, // No need to assert this param
-		Sender:      "Global Trade Chain",
-		Receiver:    "Project Services",
-		Price:       12500,
-		SupplierIco: "11190993",
-		CustomerIco: "22222222",
-		Format:      entity.UblFormat,
-		CreatedBy:   user.Id,
-		IssueDate:   timeutil.Date{time.Date(2011, 9, 22, 0, 0, 0, 0, time.UTC)},
-		IsPublic:    true,
+		Id:                  createdResponse.Id,        // No need to assert this param,
+		CreatedAt:           createdResponse.CreatedAt, // No need to assert this param
+		Sender:              "Global Trade Chain",
+		Receiver:            "Project Services",
+		Price:               12500,
+		SupplierIco:         "11190993",
+		CustomerIco:         "22222222",
+		Format:              entity.UblFormat,
+		CreatedBy:           user.Id,
+		IssueDate:           timeutil.Date{time.Date(2011, 9, 22, 0, 0, 0, 0, time.UTC)},
+		IsPublic:            true,
+		NotificationsStatus: entity.NotificationStatusNotSent,
 	}
 	if !reflect.DeepEqual(createdResponse, expectedResponse) {
 		t.Errorf("Expected created response was %v. Got %v", expectedResponse, createdResponse)
@@ -77,7 +82,7 @@ func TestCreateInvoice(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	response = executeRequest(req)
+	response = testutil.ExecuteRequest(a, req)
 
 	assert.Equal(t, http.StatusOK, response.Code)
 	var getResponse entity.Invoice
@@ -93,16 +98,18 @@ func TestCreateInvoice(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	response = executeRequest(req)
+	response = testutil.ExecuteRequest(a, req)
 
 	assert.Equal(t, http.StatusOK, response.Code)
 	assert.Equal(t, invoice, response.Body.Bytes())
 }
 
 func TestRateLimiter(t *testing.T) {
-	t.Cleanup(cleanDb(t))
-	t.Cleanup(cleanCache(t))
-	_, sessionToken := createTestUser(t, "")
+	t.Cleanup(testutil.CleanDb(t, a.db.Connector, ctx))
+	t.Cleanup(testutil.CleanCache(t, a.cache, ctx))
+
+	user := testutil.CreateUser(t, a.db.Connector, ctx, "")
+	sessionToken := testutil.CreateToken(t, a.cache, ctx, user)
 
 	var requestBody bytes.Buffer
 	multipartWriter := multipart.NewWriter(&requestBody)
@@ -135,7 +142,7 @@ func TestRateLimiter(t *testing.T) {
 	}
 	req.Header.Set("Content-Type", multipartWriter.FormDataContentType())
 
-	response := executeAuthRequest(req, sessionToken)
+	response := testutil.ExecuteAuthRequest(a, req, sessionToken)
 	assert.Equal(t, http.StatusCreated, response.Code)
 
 	// Limit for creating test invoices was reached, creating another test invoice should be rejected
@@ -145,6 +152,6 @@ func TestRateLimiter(t *testing.T) {
 	}
 	req.Header.Set("Content-Type", multipartWriter.FormDataContentType())
 
-	response = executeAuthRequest(req, sessionToken)
+	response = testutil.ExecuteAuthRequest(a, req, sessionToken)
 	assert.Equal(t, http.StatusTooManyRequests, response.Code)
 }

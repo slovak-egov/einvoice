@@ -37,7 +37,7 @@ func init() {
 				supplier_ico VARCHAR(20) NOT NULL,
 				is_public BOOLEAN NOT NULL,
 				test BOOLEAN NOT NULL DEFAULT FALSE,
-				notifications_sent BOOLEAN NOT NULL DEFAULT FALSE
+				notifications_status VARCHAR(20) NOT NULL DEFAULT 'not_sent'
 			);
 		`)
 
