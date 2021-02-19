@@ -22,7 +22,7 @@ func (c *Connector) GetAndUpdateNotNotifiedInvoices(ctx goContext.Context, limit
 
 	query := c.GetDb(ctx).
 		Model(&invoices).
-		Set("notifications_status = 'sending'").
+		Set("notifications_status = ?", entity.NotificationStatusSending).
 		Where("id IN (?)", notUpdatedInvoices).
 		Returning("id, customer_ico, supplier_ico")
 
