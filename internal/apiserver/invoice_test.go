@@ -14,11 +14,11 @@ import (
 
 func TestGetInvoices(t *testing.T) {
 	// Fill DB
-	t.Cleanup(testutil.CleanDb(t, a.db.Connector, ctx))
-	firstInvoiceId := testutil.CreateInvoice(t, a.db.Connector, ctx, false, true).Id
-	testutil.CreateInvoice(t, a.db.Connector, ctx, true, true)
-	thirdInvoiceId := testutil.CreateInvoice(t, a.db.Connector, ctx, false, true).Id
-	testutil.CreateInvoice(t, a.db.Connector, ctx, false, false)
+	t.Cleanup(testutil.CleanDb(ctx, t, a.db.Connector))
+	firstInvoiceId := testutil.CreateInvoice(ctx, t, a.db.Connector, false, true).Id
+	testutil.CreateInvoice(ctx, t, a.db.Connector, true, true)
+	thirdInvoiceId := testutil.CreateInvoice(ctx, t, a.db.Connector, false, true).Id
+	testutil.CreateInvoice(ctx, t, a.db.Connector, false, false)
 
 	var flagtests = []struct {
 		query          string
@@ -52,9 +52,9 @@ func TestGetInvoices(t *testing.T) {
 }
 
 func TestGetInvoice(t *testing.T) {
-	t.Cleanup(testutil.CleanDb(t, a.db.Connector, ctx))
-	id1 := testutil.CreateInvoice(t, a.db.Connector, ctx, false, true).Id
-	id2 := testutil.CreateInvoice(t, a.db.Connector, ctx, false, false).Id
+	t.Cleanup(testutil.CleanDb(ctx, t, a.db.Connector))
+	id1 := testutil.CreateInvoice(ctx, t, a.db.Connector, false, true).Id
+	id2 := testutil.CreateInvoice(ctx, t, a.db.Connector, false, false).Id
 
 	req, _ := http.NewRequest("GET", fmt.Sprintf("/invoices/%d", id1), nil)
 	response := testutil.ExecuteRequest(a, req)

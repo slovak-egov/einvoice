@@ -22,15 +22,15 @@ func organizationReqUrl(userId int) string {
 }
 
 func TestSubstitute(t *testing.T) {
-	t.Cleanup(testutil.CleanDb(t, a.db.Connector, ctx))
-	t.Cleanup(testutil.CleanCache(t, a.cache, ctx))
+	t.Cleanup(testutil.CleanDb(ctx, t, a.db.Connector))
+	t.Cleanup(testutil.CleanCache(ctx, t, a.cache))
 
 	ico1 := "10000001"
 	ico2 := "10000002"
-	user1 := testutil.CreateUser(t, a.db.Connector, ctx, ico1)
-	token1 := testutil.CreateToken(t, a.cache, ctx, user1)
-	user2 := testutil.CreateUser(t, a.db.Connector, ctx, ico2)
-	token2 := testutil.CreateToken(t, a.cache, ctx, user2)
+	user1 := testutil.CreateUser(ctx, t, a.db.Connector, ico1)
+	token1 := testutil.CreateToken(ctx, t, a.cache, user1)
+	user2 := testutil.CreateUser(ctx, t, a.db.Connector, ico2)
+	token2 := testutil.CreateToken(ctx, t, a.cache, user2)
 
 	var flagtests = []struct {
 		name     string

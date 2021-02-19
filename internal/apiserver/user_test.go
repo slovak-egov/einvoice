@@ -16,10 +16,10 @@ import (
 
 func TestGetUser(t *testing.T) {
 	// Fill DB
-	t.Cleanup(testutil.CleanDb(t, a.db.Connector, ctx))
-	t.Cleanup(testutil.CleanCache(t, a.cache, ctx))
-	user := testutil.CreateUser(t, a.db.Connector, ctx, "")
-	sessionToken := testutil.CreateToken(t, a.cache, ctx, user)
+	t.Cleanup(testutil.CleanDb(ctx, t, a.db.Connector))
+	t.Cleanup(testutil.CleanCache(ctx, t, a.cache))
+	user := testutil.CreateUser(ctx, t, a.db.Connector, "")
+	sessionToken := testutil.CreateToken(ctx, t, a.cache, user)
 
 	// Temporarily do not compare this field
 	user.CreatedAt = time.Time{}
@@ -57,10 +57,10 @@ func TestGetUser(t *testing.T) {
 
 func TestPatchUser(t *testing.T) {
 	// Fill DB
-	t.Cleanup(testutil.CleanDb(t, a.db.Connector, ctx))
-	t.Cleanup(testutil.CleanCache(t, a.cache, ctx))
-	user := testutil.CreateUser(t, a.db.Connector, ctx, "")
-	sessionToken := testutil.CreateToken(t, a.cache, ctx, user)
+	t.Cleanup(testutil.CleanDb(ctx, t, a.db.Connector))
+	t.Cleanup(testutil.CleanCache(ctx, t, a.cache))
+	user := testutil.CreateUser(ctx, t, a.db.Connector, "")
+	sessionToken := testutil.CreateToken(ctx, t, a.cache, user)
 
 	expectedUserResponse := map[string]interface{}{
 		"name":                    user.Name,

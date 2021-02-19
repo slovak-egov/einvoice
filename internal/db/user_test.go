@@ -35,7 +35,7 @@ func TestGetUserUris(t *testing.T) {
 	}
 	for _, tt := range flagtests {
 		t.Run(tt.name, func(t *testing.T) {
-			t.Cleanup(testutil.CleanDb(t, connector.Connector, ctx))
+			t.Cleanup(testutil.CleanDb(ctx, t, connector.Connector))
 
 			_, err := connector.GetDb(ctx).Model(&[]entity.User{user1, user2, user3, user4, user5}).Insert()
 			if err != nil {

@@ -10,7 +10,7 @@ import (
 	"github.com/slovak-egov/einvoice/internal/entity"
 )
 
-func CleanCache(t *testing.T, cache *cache.Cache, ctx context.Context) func() {
+func CleanCache(ctx context.Context, t *testing.T, cache *cache.Cache) func() {
 	return func() {
 		if err := cache.FlushAll(ctx); err != nil {
 			t.Error(err)
@@ -18,7 +18,7 @@ func CleanCache(t *testing.T, cache *cache.Cache, ctx context.Context) func() {
 	}
 }
 
-func CreateToken(t *testing.T, cache *cache.Cache, ctx context.Context, user *entity.User) string {
+func CreateToken(ctx context.Context, t *testing.T, cache *cache.Cache, user *entity.User) string {
 	t.Helper()
 
 	sessionToken := uuid.New().String()

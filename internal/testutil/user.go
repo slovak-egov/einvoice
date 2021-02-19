@@ -8,7 +8,7 @@ import (
 	"github.com/slovak-egov/einvoice/pkg/dbutil"
 )
 
-func CreateUser(t *testing.T, connector *dbutil.Connector, ctx goContext.Context, ico string) *entity.User {
+func CreateUser(ctx goContext.Context, t *testing.T, connector *dbutil.Connector, ico string) *entity.User {
 	t.Helper()
 
 	if ico == "" {
