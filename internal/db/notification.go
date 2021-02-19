@@ -4,6 +4,7 @@ import (
 	goContext "context"
 
 	"github.com/go-pg/pg/v10"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/slovak-egov/einvoice/internal/entity"
 	"github.com/slovak-egov/einvoice/pkg/context"
@@ -11,10 +12,18 @@ import (
 
 func (c *Connector) GetAndUpdateNotNotifiedInvoices(ctx goContext.Context, limit int) ([]entity.Invoice, error) {
 	invoices := []entity.Invoice{}
+	notUpdatedInvoices := c.GetDb(ctx).
+		Model(&entity.Invoice{}).
+		Column("id").
+		Where("notifications_status = ?", entity.NotificationStatusNotSent).
+		Order("id ASC").
+		Limit(limit).
+		For("UPDATE SKIP LOCKED")
+
 	query := c.GetDb(ctx).
 		Model(&invoices).
 		Set("notifications_status = 'sending'").
-		Where("id IN (SELECT id FROM invoices WHERE notifications_status = 'not_sent' ORDER BY id ASC LIMIT ? FOR UPDATE SKIP LOCKED)", limit).
+		Where("id IN (?)", notUpdatedInvoices).
 		Returning("id, customer_ico, supplier_ico")
 
 	if _, err := query.Update(); err != nil {
@@ -32,7 +41,11 @@ func (c *Connector) UpdateNotificationStatus(ctx goContext.Context, invoiceIds [
 		Where("id IN (?)", pg.In(invoiceIds))
 
 	if _, err := query.Update(); err != nil {
-		context.GetLogger(ctx).WithField("error", err.Error()).Error("db.updateNotificationStatus.failed")
+		context.GetLogger(ctx).WithFields(log.Fields{
+			"error":      err.Error(),
+			"invoiceIds": invoiceIds,
+			"status":     status,
+		}).Error("db.updateNotificationStatus.failed")
 		return err
 	}
 
