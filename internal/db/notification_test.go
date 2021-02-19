@@ -20,13 +20,13 @@ func assertInvoiceNotificationStatus(t *testing.T, id int, status string) {
 
 // Test if two parallel invoice updates update different invoices
 func TestGetAndUpdateNotNotifiedInvoices(t *testing.T) {
-	t.Cleanup(testutil.CleanDb(t, connector.Connector, ctx))
+	t.Cleanup(testutil.CleanDb(ctx, t, connector.Connector))
 
-	inv1 := testutil.CreateInvoice(t, connector.Connector, ctx, false, true)
-	inv2 := testutil.CreateInvoice(t, connector.Connector, ctx, false, true)
-	inv3 := testutil.CreateInvoice(t, connector.Connector, ctx, false, true)
-	inv4 := testutil.CreateInvoice(t, connector.Connector, ctx, false, true)
-	inv5 := testutil.CreateInvoice(t, connector.Connector, ctx, false, true)
+	inv1 := testutil.CreateInvoice(ctx, t, connector.Connector, false, true)
+	inv2 := testutil.CreateInvoice(ctx, t, connector.Connector, false, true)
+	inv3 := testutil.CreateInvoice(ctx, t, connector.Connector, false, true)
+	inv4 := testutil.CreateInvoice(ctx, t, connector.Connector, false, true)
+	inv5 := testutil.CreateInvoice(ctx, t, connector.Connector, false, true)
 
 	stopTx1 := make(chan bool, 1)
 	startTx2 := make(chan bool, 1)
@@ -92,11 +92,11 @@ func TestGetAndUpdateNotNotifiedInvoices(t *testing.T) {
 }
 
 func TestUpdateNotificationStatus(t *testing.T) {
-	t.Cleanup(testutil.CleanDb(t, connector.Connector, ctx))
+	t.Cleanup(testutil.CleanDb(ctx, t, connector.Connector))
 
-	inv1 := testutil.CreateInvoice(t, connector.Connector, ctx, false, true)
-	inv2 := testutil.CreateInvoice(t, connector.Connector, ctx, false, true)
-	inv3 := testutil.CreateInvoice(t, connector.Connector, ctx, false, true)
+	inv1 := testutil.CreateInvoice(ctx, t, connector.Connector, false, true)
+	inv2 := testutil.CreateInvoice(ctx, t, connector.Connector, false, true)
+	inv3 := testutil.CreateInvoice(ctx, t, connector.Connector, false, true)
 
 	err := connector.UpdateNotificationStatus(ctx, []int{inv1.Id, inv2.Id}, entity.NotificationStatusSent)
 	if err != nil {

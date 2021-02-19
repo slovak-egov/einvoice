@@ -19,11 +19,11 @@ import (
 )
 
 func TestCreateInvoice(t *testing.T) {
-	t.Cleanup(testutil.CleanDb(t, a.db.Connector, ctx))
-	t.Cleanup(testutil.CleanCache(t, a.cache, ctx))
+	t.Cleanup(testutil.CleanDb(ctx, t, a.db.Connector))
+	t.Cleanup(testutil.CleanCache(ctx, t, a.cache))
 
-	user := testutil.CreateUser(t, a.db.Connector, ctx, "")
-	sessionToken := testutil.CreateToken(t, a.cache, ctx, user)
+	user := testutil.CreateUser(ctx, t, a.db.Connector, "")
+	sessionToken := testutil.CreateToken(ctx, t, a.cache, user)
 
 	var requestBody bytes.Buffer
 	multipartWriter := multipart.NewWriter(&requestBody)
@@ -105,11 +105,11 @@ func TestCreateInvoice(t *testing.T) {
 }
 
 func TestRateLimiter(t *testing.T) {
-	t.Cleanup(testutil.CleanDb(t, a.db.Connector, ctx))
-	t.Cleanup(testutil.CleanCache(t, a.cache, ctx))
+	t.Cleanup(testutil.CleanDb(ctx, t, a.db.Connector))
+	t.Cleanup(testutil.CleanCache(ctx, t, a.cache))
 
-	user := testutil.CreateUser(t, a.db.Connector, ctx, "")
-	sessionToken := testutil.CreateToken(t, a.cache, ctx, user)
+	user := testutil.CreateUser(ctx, t, a.db.Connector, "")
+	sessionToken := testutil.CreateToken(ctx, t, a.cache, user)
 
 	var requestBody bytes.Buffer
 	multipartWriter := multipart.NewWriter(&requestBody)

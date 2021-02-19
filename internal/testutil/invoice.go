@@ -10,10 +10,12 @@ import (
 	"github.com/slovak-egov/einvoice/pkg/timeutil"
 )
 
-func CreateInvoice(t *testing.T, connector *dbutil.Connector, ctx goContext.Context, test, isPublic bool) *entity.Invoice {
+func CreateInvoice(
+	ctx goContext.Context, t *testing.T, connector *dbutil.Connector, test, isPublic bool,
+) *entity.Invoice {
 	t.Helper()
 
-	user := CreateUser(t, connector, ctx, "")
+	user := CreateUser(ctx, t, connector, "")
 	invoice := &entity.Invoice{
 		Sender:      "sender",
 		Receiver:    "receiver",

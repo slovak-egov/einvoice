@@ -8,7 +8,7 @@ import (
 	"github.com/slovak-egov/einvoice/pkg/dbutil"
 )
 
-func CleanDb(t *testing.T, connector *dbutil.Connector, ctx goContext.Context) func() {
+func CleanDb(ctx goContext.Context, t *testing.T, connector *dbutil.Connector) func() {
 	return func() {
 		if _, err := connector.GetDb(ctx).Model(&entity.Substitute{}).Where("TRUE").Delete(); err != nil {
 			t.Error(err)
