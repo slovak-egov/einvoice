@@ -5,12 +5,13 @@ import i18n from '../../i18n'
 const setUblInvoiceDocs = setData(['docs', 'ubl2.1', 'invoice'])
 const setUblCreditNoteDocs = setData(['docs', 'ubl2.1', 'creditNote'])
 const setUblRulesDocs = setData(['docs', 'ubl2.1', 'rules'])
+const setBusinessTermsDocs = setData(['docs', 'businessTerms'])
 const setCodeLists = setData(['docs', 'codeLists'])
 
 export const getUblInvoiceDocs = () => loadingWrapper(
   async (dispatch, getState, {api}) => {
     try {
-      const documentation = await api.getUblInvoiceDocumentation()
+      const documentation = await api.documentation.getUblInvoice()
       dispatch(setUblInvoiceDocs(documentation))
     } catch (error) {
       await swal({
@@ -25,7 +26,7 @@ export const getUblInvoiceDocs = () => loadingWrapper(
 export const getUblCreditNoteDocs = () => loadingWrapper(
   async (dispatch, getState, {api}) => {
     try {
-      const documentation = await api.getUblCreditNoteDocumentation()
+      const documentation = await api.documentation.getUblCreditNote()
       dispatch(setUblCreditNoteDocs(documentation))
     } catch (error) {
       await swal({
@@ -40,7 +41,7 @@ export const getUblCreditNoteDocs = () => loadingWrapper(
 export const getUblRulesDocs = () => loadingWrapper(
   async (dispatch, getState, {api}) => {
     try {
-      const documentation = await api.getUblRulesDocumentation()
+      const documentation = await api.documentation.getUblRules()
       dispatch(setUblRulesDocs(documentation))
     } catch (error) {
       await swal({
@@ -52,10 +53,25 @@ export const getUblRulesDocs = () => loadingWrapper(
   }
 )
 
+export const getBusinessTermsDocs = () => loadingWrapper(
+  async (dispatch, getState, {api}) => {
+    try {
+      const docs = await api.documentation.getBusinessTerms()
+      dispatch(setBusinessTermsDocs(docs))
+    } catch (error) {
+      await swal({
+        title: i18n.t('errorMessages.getBusinessTerms'),
+        text: error.message,
+        icon: 'error',
+      })
+    }
+  }
+)
+
 export const getCodeLists = () => loadingWrapper(
   async (dispatch, getState, {api}) => {
     try {
-      const codeLists = await api.getCodeLists()
+      const codeLists = await api.documentation.getCodeLists()
       dispatch(setCodeLists(codeLists))
     } catch (error) {
       await swal({

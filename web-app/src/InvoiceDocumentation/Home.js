@@ -34,6 +34,13 @@ export default ({match}) => {
             </Button>
           </Link>
         </Row>
+        <Row className="justify-content-center">
+          <Link to={`${match.url}/businessTerms`}>
+            <Button variant="danger">
+              {t('invoiceDocs.businessTerms')}
+            </Button>
+          </Link>
+        </Row>
       </Card.Body>
     </Card>
   )

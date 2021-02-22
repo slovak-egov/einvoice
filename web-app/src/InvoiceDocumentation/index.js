@@ -2,6 +2,7 @@ import {Link, Route, Switch, useLocation, useRouteMatch} from 'react-router-dom'
 import {Breadcrumb} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import Syntax from './ubl2.1/syntax'
+import BusinessTerms from './businessTerms'
 import Home from './Home'
 import CodeLists from './codeLists'
 import Rules from './ubl2.1/rules'
@@ -49,6 +50,7 @@ export default ({location, match}) => {
       <Switch>
         <Route path={`${match.url}/ublInvoice`} component={Syntax} />
         <Route path={`${match.url}/ublCreditNote`} component={Syntax} />
+        <Route path={`${match.url}/businessTerms`} component={BusinessTerms} />
         <Route path={`${match.url}/codeLists`} component={CodeLists} />
         <Route path={`${match.url}/ublRules`} component={Rules} />
         <Route component={Home} />

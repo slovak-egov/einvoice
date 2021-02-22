@@ -65,8 +65,8 @@
   "invoiceDocs": {
     "home": "Domov",
     "cardinality": {
-      "full": "Počet",
-      "short": "Poč"
+      "full": "Kardinalita",
+      "short": "Kard"
     },
     "description": "Popis",
     "name": "Názov",
@@ -137,6 +137,7 @@
     "getUblInvoiceDocs": "Dokumentáciu UBL2.1 faktúry sa nepodarilo načítať",
     "getUblCreditNoteDocs": "Dokumentáciu UBL2.1 dobropisu sa nepodarilo načítať",
     "getUblRulesDocs": "Dokumentáciu UBL pravidiel sa nepodarilo načítať",
+    "getBusinessTerms": "Dokumentáciu obchodných pravidiel sa nepodarilo načítať",
     "getCodeLists": "Zoznamy kódov sa nepodarilo načítať",
     "unsupportedMimeType": "Pokúsili ste sa nahrať súbor nepodporovaného typu",
     "emptyField": "Toto políčko nemôže byť prázdne"

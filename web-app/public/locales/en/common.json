@@ -137,6 +137,7 @@
     "getUblInvoiceDocs": "UBL2.1 invoice docs could not be fetched",
     "getUblCreditNoteDocs": "UBL2.1 credit note docs could not be fetched",
     "getUblRulesDocs": "UBL2.1 rules could not be fetched",
+    "getBusinessTerms": "Business terms docs could not be fetched",
     "getCodeLists": "Code lists could not be fetched",
     "unsupportedMimeType": "You tried to upload file with unsupported media type",
     "emptyField": "This field cannot be empty"
