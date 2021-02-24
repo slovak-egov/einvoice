@@ -40,7 +40,7 @@ export default ({canDelete, dropField, docs, path}) => {
 }
 
 const FieldInput = ({codeListIds, dataType, updateField, value}) => {
-  const {t} = useTranslation()
+  const {t} = useTranslation('common')
   const getValue = useCallback(
     (e) => {
       switch (dataType) {

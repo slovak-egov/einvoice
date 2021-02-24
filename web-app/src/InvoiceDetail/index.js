@@ -27,7 +27,7 @@ const CheckboxField = ({label, value}) => (
 )
 
 export default ({history, match: {params: {id}}}) => {
-  const {t} = useTranslation(['common', 'invoices'])
+  const {t} = useTranslation('common')
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -54,7 +54,7 @@ export default ({history, match: {params: {id}}}) => {
     <Card className="m-1">
       <Card.Header className="bg-primary text-white text-center" as="h3" style={{display: 'grid'}}>
         <div style={{gridRowStart: 1, gridColumnStart: 1, justifySelf: 'center'}}>
-          {t('invoice')} {id}
+          {t('invoice.title')} {id}
         </div>
         <div style={{gridRowStart: 1, gridColumnStart: 1, justifySelf: 'right'}}>
           <Button variant="danger" onClick={history.goBack}>{t('close')}</Button>
@@ -64,46 +64,46 @@ export default ({history, match: {params: {id}}}) => {
         <div>
           <Row>
             <Col>
-              <TextField label={t('invoices:sender')} value={sender} />
+              <TextField label={t('invoice.sender')} value={sender} />
             </Col>
             <Col>
-              <TextField label={t('invoices:supplierIco')} value={supplierIco} />
+              <TextField label={t('invoice.supplierIco')} value={supplierIco} />
             </Col>
           </Row>
           <Row>
             <Col>
-              <TextField label={t('invoices:receiver')} value={receiver} />
+              <TextField label={t('invoice.receiver')} value={receiver} />
             </Col>
             <Col>
-              <TextField label={t('invoices:customerIco')} value={customerIco} />
+              <TextField label={t('invoice.customerIco')} value={customerIco} />
             </Col>
           </Row>
           <Row>
             <Col>
               <TextField
-                label={t('invoices:createdAt')}
+                label={t('invoice.createdAt')}
                 value={formatDate(parseISO(createdAt), 'yyyy-MM-dd HH:mm')}
               />
             </Col>
             <Col>
-              <TextField label={t('invoices:issueDate')} value={issueDate} />
+              <TextField label={t('invoice.issueDate')} value={issueDate} />
             </Col>
             <Col>
-              <TextField label={t('format')} value={format} />
+              <TextField label={t('invoice.format')} value={format} />
             </Col>
           </Row>
           <Row>
             <Col>
-              <TextField label={t('invoices:price')} value={price} />
+              <TextField label={t('invoice.price')} value={price} />
             </Col>
             <Col>
               <CheckboxField label="Test" value={test} />
             </Col>
             <Col>
-              <CheckboxField label={t('invoices:public')} value={isPublic} />
+              <CheckboxField label={t('invoice.public')} value={isPublic} />
             </Col>
             <Col>
-              <CheckboxField label={t('invoices:notificationsSent')} value={notificationsStatus === notificationStates.SENT} />
+              <CheckboxField label={t('invoice.notificationsSent')} value={notificationsStatus === notificationStates.SENT} />
             </Col>
           </Row>
         </div>

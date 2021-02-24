@@ -68,7 +68,7 @@ export default ({areCustomFilterFieldsValid, CustomFilter, getInvoices}) => {
           <div>
             <div className="d-flex">
               <div style={{flex: 1}}>
-                <strong className="filter-heading">{t('format')}</strong>
+                <strong className="filter-heading">{t('invoice.format')}</strong>
                 <div className="d-flex">
                   {Object.values(invoiceFormats).map((format) => (
                     <FormCheck

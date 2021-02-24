@@ -11,7 +11,7 @@ import {invoicesSelector} from '../cache/invoices/state'
 export default ({
   areCustomFilterFieldsValid, CustomFilter, getInvoicesAction, path, title,
 }) => {
-  const {t} = useTranslation(['common', 'invoices'])
+  const {t} = useTranslation('common')
   const {search} = useLocation()
 
   const invoices = useSelector(invoicesSelector)
@@ -37,11 +37,11 @@ export default ({
             <thead>
               <tr>
                 <th>ID</th>
-                <th>{t('invoices:supplierIco')}</th>
-                <th>{t('invoices:customerIco')}</th>
-                <th>{t('invoices:issueDate')}</th>
-                <th>{t('invoices:price')}</th>
-                <th>{t('format')}</th>
+                <th>{t('invoice.supplierIco')}</th>
+                <th>{t('invoice.customerIco')}</th>
+                <th>{t('invoice.issueDate')}</th>
+                <th>{t('invoice.price')}</th>
+                <th>{t('invoice.format')}</th>
                 <th />
               </tr>
             </thead>
