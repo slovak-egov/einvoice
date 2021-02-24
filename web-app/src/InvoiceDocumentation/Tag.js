@@ -78,6 +78,10 @@ export default ({location}) => {
           <Col className="font-weight-bold" sm="3">{t('invoiceDocs.dataType')}</Col>
           <Col sm="9">{docs.dataType}</Col>
         </Row>}
+        {docs.defaultValue && <Row>
+          <Col className="font-weight-bold" sm="3">{t('invoiceDocs.defaultValue')}</Col>
+          <Col sm="9">{docs.defaultValue}</Col>
+        </Row>}
         {docs.businessTerms && <Row>
           <Col className="font-weight-bold" sm="3">{t('invoiceDocs.businessTerms')}</Col>
           <Col sm="9">{docs.businessTerms}</Col>
