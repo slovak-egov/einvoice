@@ -519,7 +519,7 @@ components:
       type: array
       items:
         type: integer
-        description: Organization IČO
+        description: Organization ID (IČO)
     Error:
       type: object
       properties:

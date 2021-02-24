@@ -1,5 +1,6 @@
 import swal from 'sweetalert'
 import {loadingWrapper, setData} from '../../helpers/actions'
+import i18n from '../../i18n'
 
 const setSubstitutes = (id) => setData(['users', id, 'substituteIds'])
 
@@ -24,7 +25,7 @@ export const getUserSubstitutes = () => loadingWrapper(
       dispatch(setSubstitutes(localStorage.getItem('userId'))(substituteIds))
     } catch (error) {
       await swal({
-        title: 'User substitutes could not be fetched',
+        title: i18n.t('errorMessages.getUserSubstitutes'),
         text: error.message,
         icon: 'error',
       })
@@ -39,7 +40,7 @@ export const removeUserSubstitute = (id) => loadingWrapper(
       dispatch(removeSubstitute(localStorage.getItem('userId'), deletedId))
     } catch (error) {
       await swal({
-        title: 'User substitute could not be removed',
+        title: i18n.t('errorMessages.removeUserSubstitute'),
         text: error.message,
         icon: 'error',
       })
@@ -56,15 +57,15 @@ export const addUserSubstitute = (id) => loadingWrapper(
         return true
       } else {
         await swal({
-          title: 'User substitute could not be added',
-          text: 'This user is substitute already',
+          title: i18n.t('errorMessages.addUserSubstitute.title'),
+          text: i18n.t('errorMessages.addUserSubstitute.alreadyAdded'),
           icon: 'error',
         })
         return false
       }
     } catch (error) {
       await swal({
-        title: 'User substitute could not be added',
+        title: i18n.t('errorMessages.addUserSubstitute.title'),
         text: error.message,
         icon: 'error',
       })

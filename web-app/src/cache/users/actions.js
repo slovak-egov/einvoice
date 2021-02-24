@@ -1,10 +1,11 @@
 import swal from 'sweetalert'
 import {loadingWrapper, setData} from '../../helpers/actions'
+import i18n from '../../i18n'
 
 const setLogging = setData(['logging'])
 const setLoggedUserId = setData(['loggedUserId'])
 const setUser = (id) => setData(['users', id])
-const setOrganizationIcos = (id) => setData(['users', id, 'organizationIcos'])
+const setUserOrganizationIds = (id) => setData(['users', id, 'organizationIds'])
 
 const updateUserData = (userId, data) => ({
   type: 'UPDATE USER',
@@ -49,7 +50,7 @@ export const updateUser = (data) => loadingWrapper(
       return true
     } catch (error) {
       await swal({
-        title: 'User data could not be updated',
+        title: i18n.t('errorMessages.updateUser'),
         text: error.message,
         icon: 'error',
       })
@@ -72,7 +73,7 @@ export const login = (token) => (
     } catch (error) {
       dispatch(removeLoggedUser())
       await swal({
-        title: 'Login failed',
+        title: i18n.t('errorMessages.failedLogin'),
         text: error.message,
         icon: 'error',
       })
@@ -88,14 +89,14 @@ export const logout = () => (
   }
 )
 
-export const getUserOrganizationIcos = () => loadingWrapper(
+export const getUserOrganizationIds = () => loadingWrapper(
   async (dispatch, getState, {api}) => {
     try {
-      const organizationIcos = await api.users.getOrganizationIcos()
-      dispatch(setOrganizationIcos(localStorage.getItem('userId'))(organizationIcos))
+      const organizationIds = await api.users.getOrganizationIds()
+      dispatch(setUserOrganizationIds(localStorage.getItem('userId'))(organizationIds))
     } catch (error) {
       await swal({
-        title: 'User organization IČOs could not be fetched',
+        title: i18n.t('errorMessages.getUserOrganizationIds'),
         text: error.message,
         icon: 'error',
       })

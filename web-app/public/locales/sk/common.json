@@ -29,16 +29,16 @@
   "search": "Hľadaj",
   "upload": "Nahraj",
   "userId": {
-    "label": "Identifikačné číslo používateľa",
+    "label": "ID používateľa",
     "tooltip": "Identifikačné číslo"
   },
   "substituteIds": {
-    "label": "Identifikačné čísla zastupujúcich používateľov",
+    "label": "ID zastupujúcich používateľov",
     "tooltip": "Títo používatelia budú mať právomoc zadávať faktúry vo vašom mene"
   },
-  "organizationIcos": {
-    "label": "Identifikačné čísla zastupovaných organizácií",
-    "tooltip": "Identifikačné čísla organizácií, v mene ktorých môžete zadávať faktúry",
+  "organizationIds": {
+    "label": "ID zastupovaných organizácií (IČO)",
+    "tooltip": "ID organizácií (IČO), v mene ktorých môžete zadávať faktúry",
     "empty": "Žiadne záznamy"
   },
   "invoiceType": "Typ faktúry",
@@ -98,5 +98,28 @@
   "form": "Formulár",
   "generateInvoice": "Vygeneruj faktúru",
   "foreignSupplier": "Zahraničný dodávateľ",
-  "submitInvoiceConfirmationQuestion": "Naozaj chcete odovzdať túto faktúru?"
+  "confirmationQuestions": {
+    "submitInvoice": "Naozaj chcete odovzdať túto faktúru?"
+  },
+  "errorMessages": {
+    "loginFailed": "Prihlásenie neúspešné",
+    "updateUser": "Údaje používateľa sa nepodarilo aktualizovať",
+    "getUserOrganizationIds": "Nepodarilo sa načítať IČO, ktoré používateľ zastupuje",
+    "getUserSubstitutes": "Používateľových náhradníkov sa nepodarilo načítať",
+    "removeUserSubstitute": "Náhradníka sa nepodarilo odstrániť",
+    "addUserSubstitute": {
+      "title": "Náhradníka sa nepodarilo pridať",
+      "alreadyAdded": "Tento používateľ už je zástupcom"
+    },
+    "getInvoices": "Faktúry sa nepodarilo načítať",
+    "getInvoiceMeta": "Faktúru {{id}} nebolo možné načítať",
+    "getUblDocs": "Dokumentáciu UBL2.1 sa nepodarilo načítať",
+    "getCodeLists": "Zoznamy kódov sa nepodarilo načítať"
+  },
+  "successMessages": {
+    "createInvoice": {
+      "title": "Faktúra bola vytvorená",
+      "buttons": ["Vytvoriť ďalšiu", "Pozrieť detail"]
+    }
+  }
 }
