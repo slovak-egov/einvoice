@@ -2,7 +2,6 @@ import swal from 'sweetalert'
 import {loadingWrapper, setData} from '../../helpers/actions'
 
 const setSubstitutes = (id) => setData(['users', id, 'substituteIds'])
-export const setNewSubstituteId = setData(['accountScreen', 'newSubstituteId'])
 
 const removeSubstitute = (userId, substituteId) => ({
   type: 'REMOVE SUBSTITUTE',
