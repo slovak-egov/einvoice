@@ -15,14 +15,6 @@ const generateInvoiceXml = async (name, data, indent, additionalAttributes) => {
     const attributesString = setAttributes.map(([k, v]) => `${k}="${v[0].text}"`).join(' ')
     openingTag = `${openingTag.slice(0, -1)} ${attributesString}>`
   }
-  const rows = [openingTag]
-  if (data.children != null) {
-    for (const [name, childArr] of Object.entries(data.children)) {
-      for (const child of childArr) {
-        rows.push(await generateInvoiceXml(name, child, indent + 2))
-      }
-    }
-  }
 
   // Text inside of tag
   if (data.text) {
@@ -32,7 +24,16 @@ const generateInvoiceXml = async (name, data, indent, additionalAttributes) => {
     } else if (innerXml instanceof File) {
       innerXml = await fileToBase64(innerXml)
     }
-    rows.push(`${' '.repeat(indent + 2)}${innerXml}`)
+    return `${openingTag}${innerXml}</${name}>`
+  }
+
+  const rows = [openingTag]
+  if (data.children != null) {
+    for (const [name, childArr] of Object.entries(data.children)) {
+      for (const child of childArr) {
+        rows.push(await generateInvoiceXml(name, child, indent + 2))
+      }
+    }
   }
 
   rows.push(`${' '.repeat(indent)}</${name}>`)

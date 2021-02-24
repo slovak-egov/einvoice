@@ -3,7 +3,7 @@ import {Button, Card, Row} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 
 export default ({match}) => {
-  const {t} = useTranslation()
+  const {t} = useTranslation('common')
   return (
     <Card>
       <Card.Header className="bg-primary text-white text-center" as="h3">
@@ -16,13 +16,6 @@ export default ({match}) => {
               UBL2.1
             </Button>
           </Link>
-          <Link to={`${match.url}/syntax/d16b`}>
-            <Button variant="success" disabled>
-              D16B
-            </Button>
-          </Link>
-        </Row>
-        <Row className="justify-content-center">
           <Link to={`${match.url}/codeLists`}>
             <Button variant="secondary">
               {t('invoiceDocs.codeLists')}

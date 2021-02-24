@@ -3,8 +3,19 @@
   "delete": "Odstrániť",
   "error": "Chyba",
   "close": "Zavrieť",
-  "invoice": "Faktúra",
-  "format": "Formát",
+  "invoice": {
+    "title": "Faktúra",
+    "sender": "Odosielateľ",
+    "receiver": "Prijímateľ",
+    "issueDate": "Dátum vydania",
+    "price": "Cena",
+    "createdAt": "Vytvorené o",
+    "supplierIco": "IČO dodávateľa",
+    "customerIco": "IČO zákazníka",
+    "public": "Verejne prístupné",
+    "notificationsSent": "Notifikácie odoslané",
+    "format": "Formát"
+  },
   "cancel": "Zrušiť",
   "save": "Uložiť",
   "edit": "Upraviť",
@@ -86,5 +97,6 @@
   "downloadVisualization": "Stiahnuť vizualizáciu",
   "form": "Formulár",
   "generateInvoice": "Vygeneruj faktúru",
-  "foreignSupplier": "Zahraničný dodávateľ"
+  "foreignSupplier": "Zahraničný dodávateľ",
+  "submitInvoiceConfirmationQuestion": "Naozaj chcete odovzdať túto faktúru?"
 }

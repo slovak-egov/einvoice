@@ -3,8 +3,19 @@
   "delete": "Delete",
   "error": "Error",
   "close": "Close",
-  "invoice": "Invoice",
-  "format": "Format",
+  "invoice": {
+    "title": "Invoice",
+    "sender": "Sender",
+    "receiver": "Receiver",
+    "issueDate": "Issue date",
+    "price": "Price",
+    "createdAt": "Created at",
+    "supplierIco": "Supplier IČO",
+    "customerIco": "Customer IČO",
+    "public": "Public",
+    "notificationsSent": "Notifications sent",
+    "format": "Format"
+  },
   "cancel": "Cancel",
   "save": "Save",
   "edit": "Edit",
@@ -86,5 +97,6 @@
   "downloadVisualization": "Download visualization",
   "form": "Form",
   "generateInvoice": "Generate invoice",
-  "foreignSupplier": "Foreign supplier"
+  "foreignSupplier": "Foreign supplier",
+  "submitInvoiceConfirmationQuestion": "Do you really want to create this invoice?"
 }

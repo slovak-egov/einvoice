@@ -17,7 +17,7 @@ import {
 import {invoiceFormats} from '../utils/constants'
 
 export default ({showSubmission, title}) => {
-  const {i18n, t} = useTranslation(['common', 'invoices'])
+  const {i18n, t} = useTranslation('common')
   const history = useHistory()
 
   const format = useSelector(submissionFormatSelector)
@@ -86,7 +86,7 @@ export default ({showSubmission, title}) => {
         <Row>
           <Col md={4} sm={6} xs={6}>
             <Form.Group>
-              <Form.Label>{t('invoice')}</Form.Label>
+              <Form.Label>{t('invoice.title')}</Form.Label>
               <div>
                 <FileUploader
                   file={invoice}
@@ -101,7 +101,7 @@ export default ({showSubmission, title}) => {
           </Col>
           <Col md={4} sm={6} xs={6}>
             <Form.Group>
-              <Form.Label>{t('format')}</Form.Label>
+              <Form.Label>{t('invoice.format')}</Form.Label>
               <Form.Control
                 as="select"
                 value={format}
@@ -158,7 +158,7 @@ export default ({showSubmission, title}) => {
             variant="success"
             onClick={submitInvoice}
             confirmationTitle={t('topBar.createInvoice')}
-            confirmationText={t('invoices:confirmationQuestion')}
+            confirmationText={t('submitInvoiceConfirmationQuestion')}
             disabled={!invoice}
           >
             {t('submit')}
