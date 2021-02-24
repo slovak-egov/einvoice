@@ -24,7 +24,10 @@ export const removeFieldInstance = (path) => ({
 
 export const initializeFormState = () => (
   (dispatch, getState) => {
-    const initialState = getFormInitialState(ubl21DocsSelector(getState()))
+    // Add fake start point and unwrap it at the end
+    const initialState = getFormInitialState({
+      children: ubl21DocsSelector(getState()),
+    }).children
     dispatch(setInvoiceFormField([])(initialState))
   }
 )

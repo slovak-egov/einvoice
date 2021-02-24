@@ -8,30 +8,24 @@ export const invoiceFormFieldSelector = (path) => (state) => get(invoiceFormSele
 
 export const isFormInitialized = (state) => invoiceFormSelector(state) != null
 
-export const getLeafChildInitialState = (docs) => {
-  const initialState = {text: ''}
-  // Add attributes
-  if (docs.attributes != null) {
-    initialState.attributes = {}
-    for (const [name, attr] of Object.entries(docs.attributes)) {
-      initialState.attributes[name] = []
+export const getFormInitialState = (ublDocs) => {
+  const result = {}
+  if (ublDocs.dataType != null) result.text = ublDocs.defaultValue || ''
+  if (ublDocs.attributes != null) {
+    result.attributes = {}
+    for (const [name, attr] of Object.entries(ublDocs.attributes)) {
+      result.attributes[name] = []
       if (attr.cardinality.from !== '0') {
-        initialState.attributes[name].push({text: ''})
+        result.attributes[name].push({text: attr.defaultValue || ''})
       }
     }
   }
-  return initialState
-}
-
-export const getFormInitialState = (ublDocs) => {
-  const result = {}
-  for (const [tag, data] of Object.entries(ublDocs)) {
-    result[tag] = []
-    for (let i = 0; i < parseInt(data.cardinality.from, 10); i++) {
-      if (data.children != null) {
-        result[tag].push({children: getFormInitialState(data.children)})
-      } else {
-        result[tag].push(getLeafChildInitialState(data))
+  if (ublDocs.children != null) {
+    result.children = {}
+    for (const [tag, child] of Object.entries(ublDocs.children)) {
+      result.children[tag] = []
+      for (let i = 0; i < parseInt(child.cardinality.from, 10); i++) {
+        result.children[tag].push(getFormInitialState(child))
       }
     }
   }

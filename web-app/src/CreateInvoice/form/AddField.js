@@ -2,21 +2,15 @@ import {useCallback} from 'react'
 import {useDispatch} from 'react-redux'
 import {useTranslation} from 'react-i18next'
 import {Button, Card} from 'react-bootstrap'
-import {getFormInitialState, getLeafChildInitialState} from './state'
+import {getFormInitialState} from './state'
 import {addFieldInstance} from './actions'
 
 export default ({docs, path}) => {
   const {i18n, t} = useTranslation('common')
   const dispatch = useDispatch()
   const addField = useCallback(
-    () => {
-      const fieldInitialState = docs.children ?
-        {children: getFormInitialState(docs.children)} :
-        getLeafChildInitialState(docs)
-
-      dispatch(addFieldInstance(path, fieldInitialState))
-    },
-    [path, docs]
+    () => dispatch(addFieldInstance(path, getFormInitialState(docs))),
+    [path, docs],
   )
 
   return (

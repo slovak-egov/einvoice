@@ -17,7 +17,7 @@ const generateInvoiceXml = async (name, data, indent, additionalAttributes) => {
   }
 
   // Text inside of tag
-  if (data.text) {
+  if (data.text != null) {
     let innerXml = data.text
     if (innerXml instanceof Date) {
       innerXml = formatDate(innerXml, 'yyyy-MM-dd')
