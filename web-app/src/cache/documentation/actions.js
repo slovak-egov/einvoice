@@ -1,17 +1,18 @@
 import swal from 'sweetalert'
 import {loadingWrapper, setData} from '../../helpers/actions'
+import i18n from '../../i18n'
 
-export const setUblDocs = setData(['docs', 'ubl2.1'])
-export const setCodeLists = setData(['docs', 'codeLists'])
+const setUblDocs = setData(['docs', 'ubl2.1'])
+const setCodeLists = setData(['docs', 'codeLists'])
 
 export const getUblDocs = () => loadingWrapper(
   async (dispatch, getState, {api}) => {
     try {
-      const docs = await api.getUbl21Docs()
-      dispatch(setUblDocs(docs))
+      const documentation = await api.getUbl21Documentation()
+      dispatch(setUblDocs(documentation))
     } catch (error) {
       await swal({
-        title: 'UBL2.1 docs could not be fetched',
+        title: i18n.t('errorMessages.getUblDocs'),
         text: error.message,
         icon: 'error',
       })
@@ -26,7 +27,7 @@ export const getCodeLists = () => loadingWrapper(
       dispatch(setCodeLists(codeLists))
     } catch (error) {
       await swal({
-        title: 'Code lists could not be fetched',
+        title: i18n.t('errorMessages.getCodeLists'),
         text: error.message,
         icon: 'error',
       })

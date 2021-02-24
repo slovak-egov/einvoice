@@ -3,6 +3,7 @@ import {INVOICE_SUBMISSION_PATH} from './state'
 import {setInvoices} from '../cache/invoices/actions'
 import {loadingWrapper, setData} from '../helpers/actions'
 import {invoiceFormats} from '../utils/constants'
+import i18n from '../i18n'
 
 export const setInvoiceSubmissionFormat = setData([...INVOICE_SUBMISSION_PATH, 'format'])
 export const setInvoiceSubmissionData = setData([...INVOICE_SUBMISSION_PATH, 'invoice'])
@@ -25,20 +26,21 @@ export const createInvoice = (data) => loadingWrapper(
       }))
 
       const redirect = await swal({
-        title: 'Invoice was created',
+        title: i18n.t('successMessages.createInvoice.title'),
         icon: 'success',
-        buttons: ['Create another', 'Check detail'],
+        buttons: [
+          i18n.t('successMessages.createInvoice.buttons.0'),
+          i18n.t('successMessages.createInvoice.buttons.1'),
+        ],
       })
       return {
         invoiceId: invoice.id,
         redirect,
       }
     } catch (error) {
-      let text = error.message
-      if (error.detail) text += `\n${error.detail}`
       await swal({
-        title: 'Invoice could not be created',
-        text,
+        title: error.message,
+        text: error.detail,
         icon: 'error',
       })
       return {
@@ -54,11 +56,9 @@ export const getInvoiceVisualization = (data) => loadingWrapper(
     try {
       return await api.invoices.createVisualization(data)
     } catch (error) {
-      let text = error.message
-      if (error.detail) text += `\n${error.detail}`
       await swal({
-        title: 'Invoice could not be visualized',
-        text,
+        title: error.message,
+        text: error.detail,
         icon: 'error',
       })
       return null

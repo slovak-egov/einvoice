@@ -33,12 +33,12 @@
     "tooltip": "Identification number"
   },
   "substituteIds": {
-    "label": "Substitute user ids",
+    "label": "Substitute user IDs",
     "tooltip": "These users will be able to submit invoices on your behalf"
   },
-  "organizationIcos": {
-    "label": "Organization IČOs",
-    "tooltip": "List of organization IČOs that you can create invoices on behalf of",
+  "organizationIds": {
+    "label": "Organization IDs (IČO)",
+    "tooltip": "List of organization IDs (IČO) that you can create invoices on behalf of",
     "empty": "Empty list"
   },
   "invoiceType": "Invoice type",
@@ -98,5 +98,28 @@
   "form": "Form",
   "generateInvoice": "Generate invoice",
   "foreignSupplier": "Foreign supplier",
-  "submitInvoiceConfirmationQuestion": "Do you really want to create this invoice?"
+  "confirmationQuestions": {
+    "submitInvoice": "Do you really want to create this invoice?"
+  },
+  "errorMessages": {
+    "loginFailed": "Login failed",
+    "updateUser": "User data could not be updated",
+    "getUserOrganizationIds": "User organization IDs (IČO) could not be fetched",
+    "getUserSubstitutes": "User substitutes could not be fetched",
+    "removeUserSubstitute": "Substitute could not be removed",
+    "addUserSubstitute": {
+      "title": "Substitute could not be added",
+      "alreadyAdded": "This user is already substitute"
+    },
+    "getInvoices": "Invoices could not be fetched",
+    "getInvoiceMeta": "Invoice {{id}} could not be fetched",
+    "getUblDocs": "UBL2.1 docs could not be fetched",
+    "getCodeLists": "Code lists could not be fetched"
+  },
+  "successMessages": {
+    "createInvoice": {
+      "title": "Invoice was created",
+      "buttons": ["Create another", "Check detail"]
+    }
+  }
 }

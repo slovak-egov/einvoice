@@ -15,7 +15,7 @@ export default (api) => {
 
   const getSubstituteIds = () => prepareRequest({route: '/substitutes'})
 
-  const getOrganizationIcos = () => prepareRequest({route: '/organizations'})
+  const getOrganizationIds = () => prepareRequest({route: '/organizations'})
 
   const removeSubstitute = (id) =>
     prepareRequest({
@@ -35,9 +35,9 @@ export default (api) => {
     addSubstitute,
     getInfo,
     getMyInvoices,
+    getOrganizationIds,
     getSubstituteIds,
     removeSubstitute,
     updateInfo,
-    getOrganizationIcos,
   }
 }

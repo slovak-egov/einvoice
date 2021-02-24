@@ -1,5 +1,6 @@
 import swal from 'sweetalert'
 import {loadingWrapper, setData} from '../../helpers/actions'
+import i18n from '../../i18n'
 
 const setInvoiceIds = (path, data) => ({
   type: 'SET INVOICE IDS',
@@ -37,7 +38,7 @@ export const getInvoiceMeta = (id) => loadingWrapper(
         dispatch(setInvoiceNotFound(id))
       } else {
         await swal({
-          title: `Invoice ${id} could not be fetched`,
+          title: i18n.t('errorMessages.getInvoiceMeta', {id}),
           text: error.message,
           icon: 'error',
         })
@@ -69,7 +70,7 @@ export const getInvoices = ({path, fetchInvoices}) => (query, startId) => loadin
       }))
     } catch (error) {
       await swal({
-        title: 'Invoices could not be fetched',
+        title: i18n.t('errorMessages.getInvoices'),
         text: error.message,
         icon: 'error',
       })

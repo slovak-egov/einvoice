@@ -4,7 +4,7 @@ import {Button, Card, Form, InputGroup} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import Tooltip from '../helpers/Tooltip'
 import {getLoggedUser} from '../cache/users/state'
-import {getUserOrganizationIcos, updateUser} from '../cache/users/actions'
+import {getUserOrganizationIds, updateUser} from '../cache/users/actions'
 import {addUserSubstitute, getUserSubstitutes, removeUserSubstitute} from '../cache/substitutes/actions'
 import {keepDigitsOnly} from '../utils/validations'
 
@@ -59,7 +59,7 @@ export default () => {
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(getUserSubstitutes())
-    dispatch(getUserOrganizationIcos())
+    dispatch(getUserOrganizationIds())
   }, [dispatch])
 
   const removeSubstitute = useCallback(
@@ -81,7 +81,7 @@ export default () => {
   )
 
   // Data is still loading
-  if (loggedUser.substituteIds == null || loggedUser.organizationIcos == null) return null
+  if (loggedUser.substituteIds == null || loggedUser.organizationIds == null) return null
 
   return (
     <Card className="m-1">
@@ -139,11 +139,11 @@ export default () => {
           </div>
         </Form.Group>
         <Form.Group>
-          <Form.Label>{t('organizationIcos.label')}</Form.Label>
-          <Tooltip tooltipText={t('organizationIcos.tooltip')} />
+          <Form.Label>{t('organizationIds.label')}</Form.Label>
+          <Tooltip tooltipText={t('organizationIds.tooltip')} />
           <div className="d-flex flex-wrap">
-            {loggedUser.organizationIcos.length > 0 ?
-              loggedUser.organizationIcos.map((ico, i) => (
+            {loggedUser.organizationIds.length > 0 ?
+              loggedUser.organizationIds.map((ico, i) => (
                 <Form.Control
                   key={i}
                   value={ico}
@@ -152,7 +152,7 @@ export default () => {
                   style={{width: '105px'}}
                 />
               )) :
-              <strong>{t('organizationIcos.empty')}</strong>
+              <strong>{t('organizationIds.empty')}</strong>
             }
           </div>
         </Form.Group>

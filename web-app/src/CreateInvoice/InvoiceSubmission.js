@@ -158,7 +158,7 @@ export default ({showSubmission, title}) => {
             variant="success"
             onClick={submitInvoice}
             confirmationTitle={t('topBar.createInvoice')}
-            confirmationText={t('submitInvoiceConfirmationQuestion')}
+            confirmationText={t('confirmationQuestions.submitInvoice')}
             disabled={!invoice}
           >
             {t('submit')}
