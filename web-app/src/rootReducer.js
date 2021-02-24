@@ -4,9 +4,6 @@ import {invoiceFormats} from './utils/constants'
 const getInitialState = () => ({
   invoices: {},
   users: {},
-  accountScreen: {
-    newSubstituteId: '',
-  },
   // Count of running requests
   // If there is at least one running request show Loading Modal
   loadingRequests: 0,

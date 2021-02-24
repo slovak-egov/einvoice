@@ -3,12 +3,9 @@ import {useDispatch, useSelector} from 'react-redux'
 import {Button, Card, Form, InputGroup} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import Tooltip from '../helpers/Tooltip'
-import {newSubstituteIdSelector} from './state'
 import {getLoggedUser} from '../cache/users/state'
 import {getUserOrganizationIcos, updateUser} from '../cache/users/actions'
-import {
-  addUserSubstitute, getUserSubstitutes, removeUserSubstitute, setNewSubstituteId,
-} from '../cache/substitutes/actions'
+import {addUserSubstitute, getUserSubstitutes, removeUserSubstitute} from '../cache/substitutes/actions'
 import {keepDigitsOnly} from '../utils/validations'
 
 const EditableField = ({actualValue, label, save, tooltipText, ...props}) => {
@@ -56,7 +53,7 @@ const EditableField = ({actualValue, label, save, tooltipText, ...props}) => {
 export default () => {
   const {t} = useTranslation('common')
 
-  const newSubstituteId = useSelector(newSubstituteIdSelector)
+  const [newSubstituteId, setNewSubstituteId] = useState('')
   const loggedUser = useSelector(getLoggedUser)
 
   const dispatch = useDispatch()
@@ -69,12 +66,12 @@ export default () => {
     (id) => () => dispatch(removeUserSubstitute(id)), [dispatch]
   )
   const changeNewSubstituteId = useCallback(
-    (e) => dispatch(setNewSubstituteId(keepDigitsOnly(e.target.value))), [dispatch]
+    (e) => setNewSubstituteId(keepDigitsOnly(e.target.value)), []
   )
   const addSubstitute = useCallback(
     async () => {
       if (await dispatch(addUserSubstitute(newSubstituteId))) {
-        dispatch(setNewSubstituteId(''))
+        setNewSubstituteId('')
       }
     },
     [dispatch, newSubstituteId]
