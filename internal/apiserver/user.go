@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/mux"
 
 	"github.com/slovak-egov/einvoice/internal/entity"
@@ -52,8 +53,13 @@ type PatchUserRequest struct {
 }
 
 func (u *PatchUserRequest) Validate() error {
-	if *u == (PatchUserRequest{}) {
+	if u == nil || *u == (PatchUserRequest{}) {
 		return errors.New("Body should not be empty")
+	}
+	if u.ServiceAccountPublicKey != nil {
+		if _, err := jwt.ParseRSAPublicKeyFromPEM([]byte(*u.ServiceAccountPublicKey)); err != nil {
+			return errors.New("Cannot parse public key")
+		}
 	}
 	return nil
 }
