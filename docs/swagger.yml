@@ -413,7 +413,7 @@ components:
 
             {
               "alg": "RS256",
-              "type": "JWT"
+              "typ": "JWT"
             }
 
         Example of `payload` segment:
