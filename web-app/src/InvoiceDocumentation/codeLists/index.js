@@ -4,8 +4,8 @@ import {Link, Route, Switch} from 'react-router-dom'
 import {Card, ListGroup} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import CodeList from './CodeList'
-import {areCodeListsLoadedSelector, codeListsSelector} from '../cache/documentation/state'
-import {getCodeLists} from '../cache/documentation/actions'
+import {areCodeListsLoadedSelector, codeListsSelector} from '../../cache/documentation/state'
+import {getCodeLists} from '../../cache/documentation/actions'
 
 const Home = ({codeLists}) => {
   const {t} = useTranslation('common')

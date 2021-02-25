@@ -1,15 +1,11 @@
-import {useEffect} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import {useSelector} from 'react-redux'
 import {Link, useLocation} from 'react-router-dom'
 import {Card, Col, Row, Table} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import {last} from 'lodash'
-import NotFound from '../helpers/NotFound'
+import NotFound from '../../helpers/NotFound'
 import {tagDocsSelector} from './state'
-import {getUblDocs} from '../cache/documentation/actions'
-import {isUblDocsLoadedSelector} from '../cache/documentation/state'
-
-const displayCardinality = (card) => typeof card === 'object' ? `${card.from}..${card.to}` : card
+import {displayCardinality} from './helpers'
 
 const TagDescendantsTable = ({descendants, attributes}) => {
   const {i18n, t} = useTranslation('common')
@@ -19,9 +15,9 @@ const TagDescendantsTable = ({descendants, attributes}) => {
     <Table striped hover responsive size="sm">
       <thead>
         <tr>
-          <th>{t('invoiceDocs.cardinality.short')}</th>
-          <th>{t('invoiceDocs.name')}</th>
-          <th>{t('invoiceDocs.description')}</th>
+          <th style={{width: '5%'}}>{t('invoiceDocs.cardinality.short')}</th>
+          <th className="w-25">{t('invoiceDocs.name')}</th>
+          <th className="d-none d-md-table-cell">{t('invoiceDocs.description')}</th>
         </tr>
       </thead>
       <tbody>
@@ -30,11 +26,14 @@ const TagDescendantsTable = ({descendants, attributes}) => {
           const childName = `${attributes ? '@' : ''}${name}`
           return (
             <tr key={index}>
-              <td>{displayCardinality(child.cardinality)}</td>
-              <td>
+              <td style={{width: '5%'}}>{displayCardinality(child.cardinality)}</td>
+              <td className="w-25">
                 <Link to={`${location.pathname}/${childName}`}>{childName}</Link>
               </td>
-              <td>{child.description[i18n.language]}</td>
+              <td className="d-none d-md-table-cell">
+                <strong>{child.name[i18n.language]}</strong>
+                <div>{child.description[i18n.language]}</div>
+              </td>
             </tr>
           )
         })}
@@ -45,21 +44,10 @@ const TagDescendantsTable = ({descendants, attributes}) => {
 
 export default ({location}) => {
   const {i18n, t} = useTranslation('common')
-  const isLoaded = useSelector(isUblDocsLoadedSelector)
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    if (!isLoaded) {
-      dispatch(getUblDocs())
-    }
-  }, [dispatch, isLoaded])
 
   const tagPath = location.pathname.split('/').slice(3)
-
   const docs = useSelector(tagDocsSelector(tagPath))
 
-  // Data is loading
-  if (!isLoaded) return null
   // Tag does not exist in invoice documentation
   if (docs == null) return <NotFound />
 

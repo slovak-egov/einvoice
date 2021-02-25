@@ -11,7 +11,7 @@ export default ({match}) => {
       </Card.Header>
       <Card.Body>
         <Row className="justify-content-center">
-          <Link to={`${match.url}/syntax/ubl:Invoice`}>
+          <Link to={`${match.url}/ublInvoice`}>
             <Button variant="primary">
               UBL2.1
             </Button>

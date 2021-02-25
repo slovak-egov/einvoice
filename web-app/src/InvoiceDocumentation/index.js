@@ -1,9 +1,9 @@
-import {Link, Redirect, Route, Switch, useLocation, useRouteMatch} from 'react-router-dom'
+import {Link, Route, Switch, useLocation, useRouteMatch} from 'react-router-dom'
 import {Breadcrumb} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
-import Tag from './Tag'
+import UblInvoice from './ubl2.1'
 import Home from './Home'
-import CodeLists from './CodeLists'
+import CodeLists from './codeLists'
 
 const UrlBreadcrumbItems = () => {
   const {t} = useTranslation('common')
@@ -32,10 +32,7 @@ const UrlBreadcrumbItems = () => {
 
 export default ({location, match}) => {
   const {t} = useTranslation('common')
-  // Temporarily redirect to root element docs
-  if (location.pathname === `${match.url}/syntax`) {
-    return <Redirect to={`${match.url}/syntax/ubl:Invoice`} />
-  }
+
   return (
     <div className="m-1">
       <Breadcrumb>
@@ -49,7 +46,7 @@ export default ({location, match}) => {
         <UrlBreadcrumbItems />
       </Breadcrumb>
       <Switch>
-        <Route path={`${match.url}/syntax`} component={Tag} />
+        <Route path={`${match.url}/ublInvoice`} component={UblInvoice} />
         <Route path={`${match.url}/codeLists`} component={CodeLists} />
         <Route component={Home} />
       </Switch>
