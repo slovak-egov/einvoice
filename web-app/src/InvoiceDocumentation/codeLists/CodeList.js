@@ -1,6 +1,6 @@
 import {Card, Col, Row} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
-import NotFound from '../helpers/NotFound'
+import NotFound from '../../helpers/NotFound'
 
 export default ({data, identifier}) => {
   const {i18n, t} = useTranslation('common')
