@@ -68,7 +68,7 @@
     "name": "Názov",
     "childElements": "Potomkovia",
     "rules": "Pravidlá",
-    "syntax": "Syntax",
+    "ublInvoice": "UBL Faktúra",
     "defaultValue": "Predvolená hodnota",
     "exampleValue": "Ukážková hodnota",
     "businessTerms": "Obchodné podmienky",

@@ -1,5 +1,5 @@
 import {get} from 'lodash'
-import {ubl21DocsSelector} from '../cache/documentation/state'
+import {ubl21DocsSelector} from '../../cache/documentation/state'
 
 // Distinguish path to child and attribute
 const getElementPath = (v) => {
