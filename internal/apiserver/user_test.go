@@ -72,7 +72,7 @@ func TestPatchUser(t *testing.T) {
 		name        string
 		requestBody map[string]string
 	}{
-		{"Set public key", map[string]string{"serviceAccountPublicKey": "1"}},
+		{"Set public key", map[string]string{"serviceAccountPublicKey": testutil.TestPublicKey}},
 		{"Delete public key", map[string]string{"serviceAccountPublicKey": ""}},
 	}
 	for _, tt := range flagtests {
