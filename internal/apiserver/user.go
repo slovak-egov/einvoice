@@ -56,7 +56,7 @@ func (u *PatchUserRequest) Validate() error {
 	if u == nil || *u == (PatchUserRequest{}) {
 		return errors.New("Body should not be empty")
 	}
-	if u.ServiceAccountPublicKey != nil {
+	if u.ServiceAccountPublicKey != nil && *u.ServiceAccountPublicKey != "" {
 		if _, err := jwt.ParseRSAPublicKeyFromPEM([]byte(*u.ServiceAccountPublicKey)); err != nil {
 			return errors.New("Cannot parse public key")
 		}

@@ -72,7 +72,7 @@ func TestPatchUser(t *testing.T) {
 		name        string
 		requestBody map[string]string
 	}{
-		{"Set public key", map[string]string{"serviceAccountPublicKey": "1"}},
+		{"Set public key", map[string]string{"serviceAccountPublicKey": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoyRD6SYPRICp6KqdMJbj\n/R/kZecSqtyUUmJplrUUuet9SnCV+dBrnGN1NllZFCzQQVJHTM5DWduNnxe76e9V\nSTyN5Kvq5NrtBbTvNOJjefn74updE8u4q6N/qu8zKrItNaMqfHiE9MBHiUx12SuY\nk5NLeqltbzzodk3WvnUA5SZC6prBxOenOBQXXP/8oOsDId5UYccPDx5nAph6Q+tm\nDKQIx0mF9mg0QMb0Pcy0/3OgICrtackHsuZUkkEOycYEjftz7vHPRu7TAgEkAIUo\nm58l0wL356Bfm4J/cJlY7pzlVBiF1+599ssQEDS9LujEsQnP6Qq9DcOQEal+wdNy\nTQIDAQAB\n-----END PUBLIC KEY-----\n"}},
 		{"Delete public key", map[string]string{"serviceAccountPublicKey": ""}},
 	}
 	for _, tt := range flagtests {
