@@ -8,6 +8,8 @@ import (
 
 	"github.com/lestrrat-go/libxml2"
 	"github.com/lestrrat-go/libxml2/types"
+
+	"github.com/slovak-egov/einvoice/pkg/environment"
 )
 
 func getTranslation(translationFilePath string) map[string]string {
@@ -97,9 +99,14 @@ func createRules(schematron []byte, translations map[string]string) map[string]R
 			} else {
 				message = child.TextContent()
 			}
+
+			skMessage, ok := translations[id]
+			if !ok {
+				skMessage = "TODO: Add translation"
+			}
 			rules[id] = Rule{
 				Message: Message{
-					Sk: translations[id],
+					Sk: skMessage,
 					En: message,
 				},
 				Context: context,
@@ -116,8 +123,15 @@ func createRules(schematron []byte, translations map[string]string) map[string]R
 	return rules
 }
 
-func writeRules(rules map[string]Rule, outputPath string) {
-	bytes, err := json.MarshalIndent(rules, "", "  ")
+func writeRules(rules map[string]Rule, outputPath string, prettyPrint bool) {
+	var bytes []byte
+	var err error
+
+	if prettyPrint {
+		bytes, err = json.MarshalIndent(rules, "", "  ")
+	} else {
+		bytes, err = json.Marshal(rules)
+	}
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -128,18 +142,10 @@ func writeRules(rules map[string]Rule, outputPath string) {
 }
 
 func main() {
-	translationFilePath := "sk-rules-translation.json"
-	if value, ok := os.LookupEnv("TRANSLATION_FILE"); ok {
-		translationFilePath = value
-	}
-	schematronFile := "ubl2.1/schematron/preprocessed/EN16931-UBL-validation-preprocessed.sch"
-	if value, ok := os.LookupEnv("SCHEMATRON_FILE"); ok {
-		schematronFile = value
-	}
-	outputFile := "ubl2.1/schematron/rules-documentation.json"
-	if value, ok := os.LookupEnv("OUTPUT"); ok {
-		outputFile = value
-	}
+	translationFilePath := environment.Getenv("TRANSLATION_FILE", "sk-rules-translation.json")
+	schematronFile := environment.Getenv("SCHEMATRON_FILE", "ubl2.1/schematron/preprocessed/EN16931-UBL-validation-preprocessed.sch")
+	outputFile := environment.Getenv("OUTPUT", "ubl2.1/schematron/rules-documentation.json")
+	prettyPrint := environment.ParseBool("PRETTY_PRINT", false)
 
 	translations := getTranslation(translationFilePath)
 
@@ -147,5 +153,5 @@ func main() {
 
 	rules := createRules(schematronData, translations)
 
-	writeRules(rules, outputFile)
+	writeRules(rules, outputFile, prettyPrint)
 }
