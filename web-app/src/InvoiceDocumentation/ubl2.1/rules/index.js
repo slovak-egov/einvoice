@@ -21,8 +21,8 @@ export default ({match}) => {
 
   return (
     <Switch>
-      <Route exact path={match.url} component={Overview} />
-      <Route component={Rule} />
+      <Route path={`${match.url}/:id`} component={Rule} />
+      <Route component={Overview} />
     </Switch>
   )
 }

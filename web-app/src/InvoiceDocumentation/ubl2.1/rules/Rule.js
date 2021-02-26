@@ -2,18 +2,16 @@ import {useSelector} from 'react-redux'
 import {Card, Col, Row} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import NotFound from '../../../helpers/NotFound'
-import {ubl21RulesDocsSelector} from '../../../cache/documentation/state'
+import {ubl21RuleSelector} from '../../../cache/documentation/state'
 
-export default ({location}) => {
+export default ({match}) => {
   const {i18n, t} = useTranslation('common')
 
-  const ruleId = location.pathname.split('/')[3]
-  const docs = useSelector(ubl21RulesDocsSelector)
+  const ruleId = match.params.id
+  const rule = useSelector(ubl21RuleSelector(ruleId))
 
   // Rule does not exist in invoice rules documentation
-  if (docs == null || !docs[ruleId]) return <NotFound />
-
-  const rule = docs[ruleId]
+  if (rule == null) return <NotFound />
 
   return (
     <Card>

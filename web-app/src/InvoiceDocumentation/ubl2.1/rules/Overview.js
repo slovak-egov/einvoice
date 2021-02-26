@@ -17,17 +17,17 @@ export default ({match}) => {
         <Table striped hover responsive size="sm">
           <thead>
             <tr>
-              <th style={{width: '5%'}}>{t('invoiceDocs.rules.identifier')}</th>
-              <th className="w-50">{t('invoiceDocs.rules.message')}</th>
-              <th style={{width: '5%'}}>{t('invoiceDocs.rules.flag')}</th>
+              <th>{t('invoiceDocs.rules.identifier')}</th>
+              <th>{t('invoiceDocs.rules.message')}</th>
+              <th>{t('invoiceDocs.rules.flag')}</th>
             </tr>
           </thead>
           <tbody>
-            {Object.entries(docs).map((row, index) => (
+            {Object.entries(docs).map(([id, rule], index) => (
               <tr key={index} >
-                <td><Link to={`${match.url}/${row[0]}`}>{row[0]}</Link></td>
-                <td>{row[1].message[i18n.language]}</td>
-                <td>{t(`invoiceDocs.rules.flags.${row[1].flag}`)}</td>
+                <td><Link to={`${match.url}/${id}`}>{id}</Link></td>
+                <td>{rule.message[i18n.language]}</td>
+                <td>{t(`invoiceDocs.rules.flags.${rule.flag}`)}</td>
               </tr>
             ))}
           </tbody>

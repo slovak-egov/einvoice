@@ -16,14 +16,16 @@ export default ({match}) => {
               UBL2.1
             </Button>
           </Link>
+          <Link to={`${match.url}/ublRules`}>
+            <Button variant="success">
+              {t('invoiceDocs.ublRules')}
+            </Button>
+          </Link>
+        </Row>
+        <Row className="justify-content-center">
           <Link to={`${match.url}/codeLists`}>
             <Button variant="secondary">
               {t('invoiceDocs.codeLists')}
-            </Button>
-          </Link>
-          <Link to={`${match.url}/ublRules`}>
-            <Button variant="primary">
-              {t('invoiceDocs.ublRules')}
             </Button>
           </Link>
         </Row>
