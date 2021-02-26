@@ -2,7 +2,7 @@ import {useMemo} from 'react'
 import {useSelector} from 'react-redux'
 import {Card, Table} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
-import {ubl21DocsSelector} from '../../cache/documentation/state'
+import {ubl21XsdDocsSelector} from '../../../cache/documentation/state'
 import {Link} from 'react-router-dom'
 import {displayCardinality} from './helpers'
 
@@ -30,7 +30,7 @@ const getTableRows = (docs, path) => {
 
 export default ({match}) => {
   const {i18n, t} = useTranslation('common')
-  const docs = useSelector(ubl21DocsSelector)
+  const docs = useSelector(ubl21XsdDocsSelector)
   const tableRows = useMemo(() => getTableRows(docs['ubl:Invoice'], ['ubl:Invoice']), [docs])
 
   return (

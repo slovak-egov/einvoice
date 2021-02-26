@@ -21,6 +21,11 @@ export default ({match}) => {
               {t('invoiceDocs.codeLists')}
             </Button>
           </Link>
+          <Link to={`${match.url}/ublRules`}>
+            <Button variant="primary">
+              {t('invoiceDocs.ublRules')}
+            </Button>
+          </Link>
         </Row>
       </Card.Body>
     </Card>

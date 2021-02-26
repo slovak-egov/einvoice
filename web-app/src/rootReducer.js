@@ -19,7 +19,9 @@ const getInitialState = () => ({
   myInvoicesScreen: {},
   logging: true, // Always start with login attempt
   loggedUserId: null,
-  docs: {},
+  docs: {
+    'ubl2.1': {},
+  },
 })
 
 const rootReducer = (state = getInitialState(), action) => {
