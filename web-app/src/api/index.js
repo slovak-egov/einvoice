@@ -20,7 +20,8 @@ export default class Api {
 
   logout = () => this.apiRequest({route: '/logout'})
 
-  getUbl21Documentation = () => this.apiRequest({route: '/data/schemas/ubl2.1/documentation.json'})
+  getUbl21XsdDocumentation = () => this.apiRequest({route: '/data/schemas/ubl2.1/documentation.json'})
+  getUbl21RulesDocumentation = () => this.apiRequest({route: '/data/schemas/ubl2.1/rules-documentation.json'})
   getCodeLists = () => this.apiRequest({route: '/data/codeLists.json'})
 
   apiRequest = (params) => {

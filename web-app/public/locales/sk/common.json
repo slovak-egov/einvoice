@@ -67,7 +67,6 @@
     "description": "Popis",
     "name": "Názov",
     "childElements": "Potomkovia",
-    "rules": "Pravidlá",
     "ublInvoice": "UBL Faktúra",
     "defaultValue": "Predvolená hodnota",
     "exampleValue": "Ukážková hodnota",
@@ -80,7 +79,19 @@
     "agency": "Agentúra",
     "version": "Verzia",
     "identifier": "Identifikátor",
-    "codes": "Kódy"
+    "codes": "Kódy",
+    "ublRules": "UBL Pravidlá",
+    "rules": {
+      "identifier": "Identifikátor",
+      "message": "Popis",
+      "flag": "Vážnosť",
+      "context": "Kontext",
+      "test": "Podmienka",
+      "flags": {
+        "fatal": "Nutná",
+        "warning": "Varovanie"
+      }
+    }
   },
   "topBar": {
     "title": "E-faktúra",

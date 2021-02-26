@@ -3,16 +3,16 @@ import {useDispatch, useSelector} from 'react-redux'
 import {Route, Switch} from 'react-router-dom'
 import UblInvoice from './UblInvoice'
 import Tag from './Tag'
-import {isUblDocsLoadedSelector} from '../../cache/documentation/state'
-import {getUblDocs} from '../../cache/documentation/actions'
+import {isUblXsdDocsLoadedSelector} from '../../../cache/documentation/state'
+import {getUblXsdDocs} from '../../../cache/documentation/actions'
 
 export default ({match}) => {
-  const isLoaded = useSelector(isUblDocsLoadedSelector)
+  const isLoaded = useSelector(isUblXsdDocsLoadedSelector)
   const dispatch = useDispatch()
 
   useEffect(() => {
     if (!isLoaded) {
-      dispatch(getUblDocs())
+      dispatch(getUblXsdDocs())
     }
   }, [dispatch, isLoaded])
 

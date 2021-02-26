@@ -3,7 +3,7 @@ import {Link, useLocation} from 'react-router-dom'
 import {Card, Col, Row, Table} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import {last} from 'lodash'
-import NotFound from '../../helpers/NotFound'
+import NotFound from '../../../helpers/NotFound'
 import {tagDocsSelector} from './state'
 import {displayCardinality} from './helpers'
 

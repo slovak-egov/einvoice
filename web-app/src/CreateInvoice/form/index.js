@@ -7,24 +7,24 @@ import TagGroup from './TagGroup'
 import {isFormInitialized, invoiceFormSelector} from './state'
 import {initializeFormState, submitInvoiceForm} from './actions'
 import {
-  areCodeListsLoadedSelector, isUblDocsLoadedSelector, ubl21DocsSelector,
+  areCodeListsLoadedSelector, isUblXsdDocsLoadedSelector, ubl21XsdDocsSelector,
 } from '../../cache/documentation/state'
-import {getCodeLists, getUblDocs} from '../../cache/documentation/actions'
+import {getCodeLists, getUblXsdDocs} from '../../cache/documentation/actions'
 
 export default ({match}) => {
   const {t} = useTranslation('common')
   const history = useHistory()
-  const isDocsLoaded = useSelector(isUblDocsLoadedSelector)
+  const isDocsLoaded = useSelector(isUblXsdDocsLoadedSelector)
   const areCodeListsLoaded = useSelector(areCodeListsLoadedSelector)
   const isFormLoaded = useSelector(isFormInitialized)
-  const invoiceDocs = useSelector(ubl21DocsSelector)
+  const invoiceDocs = useSelector(ubl21XsdDocsSelector)
   const invoiceForm = useSelector(invoiceFormSelector)
   const dispatch = useDispatch()
 
   // We need to have separate useEffects, so requests can be done in parallel
   useEffect(() => {
     if (!isDocsLoaded) {
-      dispatch(getUblDocs())
+      dispatch(getUblXsdDocs())
     }
   }, [dispatch, isDocsLoaded])
 

@@ -67,7 +67,6 @@
     "description": "Description",
     "name": "Name",
     "childElements": "Child elements",
-    "rules": "Rules",
     "ublInvoice": "UBL Invoice",
     "defaultValue": "Default value",
     "exampleValue": "Example value",
@@ -80,7 +79,19 @@
     "agency": "Agency",
     "version": "Version",
     "identifier": "Identifier",
-    "codes": "Codes"
+    "codes": "Codes",
+    "ublRules": "UBL Rules",
+    "rules": {
+      "identifier": "Identifier",
+      "message": "Message",
+      "flag": "Flag",
+      "context": "Context",
+      "test": "Test",
+      "flags": {
+        "fatal": "Fatal",
+        "warning": "Warning"
+      }
+    }
   },
   "topBar": {
     "title": "E-invoice",
