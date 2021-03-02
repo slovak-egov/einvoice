@@ -15,36 +15,33 @@ import (
 )
 
 type CreateInvoiceRequestBody struct {
-	invoice         []byte
-	format          string
-	language        string
-	test            bool
-	foreignSupplier bool
+	invoice     []byte
+	format      string
+	language    string
+	test        bool
+	partiesType string
 }
 
 func (b *CreateInvoiceRequestBody) parse(req *http.Request) error {
-	b.format = req.PostFormValue("format")
-	if b.format == "" {
-		return InvoiceError("format.missing")
-	} else if b.format != entity.UblFormat && b.format != entity.D16bFormat {
-		return InvoiceError("format.unknown")
+	var err error
+	b.format, err = getEnum(req.PostFormValue("format"), entity.InvoiceFormats, "")
+	if err != nil {
+		return InvoiceError("format."+err.Error())
 	}
 
-	b.language = req.PostFormValue("lang")
-	if b.language == "" {
-		b.language = entity.EnglishLanguage
-	} else if b.language != entity.EnglishLanguage && b.language != entity.SlovakLanguage {
+	b.language, err = getEnum(req.PostFormValue("lang"), entity.Languages, entity.EnglishLanguage)
+	if err != nil {
 		return InvoiceError("language.unknown")
 	}
 
-	var err error
+	b.partiesType, err = getEnum(req.PostFormValue("partiesType"), entity.InvoicePartiesTypes, entity.SlovakInvoiceParties)
+	if err != nil {
+		return InvoiceError("partiesType.unknown")
+	}
+
 	b.test, err = getOptionalBool(req.PostFormValue("test"), false)
 	if err != nil {
 		return InvoiceError("test.invalid").WithDetail(err)
-	}
-	b.foreignSupplier, err = getOptionalBool(req.PostFormValue("foreignSupplier"), false)
-	if err != nil {
-		return InvoiceError("foreignSupplier.invalid").WithDetail(err)
 	}
 	b.invoice, err = parseInvoice(req)
 	if err != nil {
@@ -76,8 +73,8 @@ func parseInvoice(req *http.Request) ([]byte, error) {
 }
 
 // Check if creator has permission to submit invoice
-func validateInvoice(ctx goContext.Context, db *db.Connector, inv *entity.Invoice, foreignSupplier bool) error {
-	if foreignSupplier {
+func validateInvoice(ctx goContext.Context, db *db.Connector, inv *entity.Invoice, partiesType string) error {
+	if partiesType == entity.ForeignSupplierParty {
 		return db.IsValidSubstitute(ctx, inv.CreatedBy, inv.CustomerIco)
 	} else {
 		return db.IsValidSubstitute(ctx, inv.CreatedBy, inv.SupplierIco)
@@ -96,7 +93,7 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 	if err = a.xsdValidator.Validate(requestBody.invoice, requestBody.format); err != nil {
 		return InvoiceError("xsd.validation.failed").WithDetail(err)
 	}
-	// In future possibly adjust validation accoding to foreignSupplier flag
+	// In future possibly adjust validation according to partiesType
 	if err = a.invoiceValidator.Validate(req.Context(), requestBody.invoice, requestBody.format, requestBody.language); err != nil {
 		if _, ok := err.(*invoiceValidator.ValidationError); ok {
 			return handlerutil.NewBadRequestError("invoice.validation.failed").WithDetail(err)
@@ -117,7 +114,7 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 	// TODO: add public ICO list
 	metadata.IsPublic = true
 
-	err = validateInvoice(req.Context(), a.db, metadata, requestBody.foreignSupplier)
+	err = validateInvoice(req.Context(), a.db, metadata, requestBody.partiesType)
 	if _, ok := err.(*dbutil.NotFoundError); ok {
 		return handlerutil.NewForbiddenError("invoice.create.permission.missing")
 	} else if err != nil {

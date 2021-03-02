@@ -10,4 +10,4 @@ export const submissionInvoiceSelector = (state) => invoiceSubmissionSelector(st
 
 export const submissionTestSelector = (state) => invoiceSubmissionSelector(state).test
 
-export const foreignSupplierSelector = (state) => invoiceSubmissionSelector(state).foreignSupplier
+export const partiesTypeSelector = (state) => invoiceSubmissionSelector(state).partiesType

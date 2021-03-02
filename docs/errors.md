@@ -36,7 +36,7 @@
 | invoice.payload.invalid | 400 | Cannot parse data | Error message |
 | invoice.file.parsingError | 400 | Cannot parse invoice file | Error message |
 | invoice.test.invalid | 400 | Cannot parse *test* field | Error message |
-| invoice.foreignSupplier.invalid | 400 | Cannot parse *foreignSupplier* field | Error message |
+| invoice.partiesType.unknown | 400 | *partiesType* should be one of slovakParties, foreignSupplier, foreignCustomer | |
 | invoice.format.missing | 400 | Missing *format* field | |
 | invoice.format.unknown | 400 | *format* must be ubl2.1 or d16b | |
 | invoice.language.unknown | 400 | *language* must be en or sk | |

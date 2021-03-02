@@ -41,3 +41,10 @@ export const notificationStates = {
   SENT: 'sent',
   SENDING: 'sending',
 }
+
+// keep in sync with internal/entity/invoice.go
+export const partiesTypes = {
+  SLOVAK: 'slovakParties',
+  FOREIGN_SUPPLIER: 'foreignSupplier',
+  FOREIGN_CUSTOMER: 'foreignCustomer',
+}

@@ -1,6 +1,9 @@
 package apiserver
 
-import "strconv"
+import (
+	"errors"
+	"strconv"
+)
 
 func getOptionalInt(value string, defaultValue int) (int, error) {
 	// Return default int if value is not provided
@@ -24,4 +27,25 @@ func getOptionalBool(value string, defaultValue bool) (bool, error) {
 		return false, err
 	}
 	return parsedValue, nil
+}
+
+func getEnum(value string, possibleValues []string, defaultValue string) (string, error) {
+	// Return default if value is not provided
+	if value == "" {
+		// If defaultValue is not defined return error
+		if defaultValue == "" {
+			return "", errors.New("missing")
+		} else {
+			return defaultValue, nil
+		}
+	}
+
+	for _, possibleValue := range possibleValues {
+		if value == possibleValue {
+			return value, nil
+		}
+	}
+
+	// Value is not in enum
+	return "", errors.New("unknown")
 }

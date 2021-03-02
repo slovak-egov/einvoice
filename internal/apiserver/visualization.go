@@ -17,21 +17,17 @@ type VisualizationRequestBody struct {
 }
 
 func (b *VisualizationRequestBody) parse(req *http.Request) error {
-	b.format = req.PostFormValue("format")
-	if b.format == "" {
-		return InvoiceError("format.missing")
-	} else if b.format != entity.UblFormat && b.format != entity.D16bFormat {
-		return InvoiceError("format.unknown")
+	var err error
+	b.format, err = getEnum(req.PostFormValue("format"), entity.InvoiceFormats, "")
+	if err != nil {
+		return InvoiceError("format."+err.Error())
 	}
 
-	b.language = req.PostFormValue("lang")
-	if b.language == "" {
-		b.language = entity.EnglishLanguage
-	} else if b.language != entity.EnglishLanguage && b.language != entity.SlovakLanguage {
+	b.language, err = getEnum(req.PostFormValue("lang"), entity.Languages, entity.EnglishLanguage)
+	if err != nil {
 		return InvoiceError("language.unknown")
 	}
 
-	var err error
 	b.invoice, err = parseInvoice(req)
 	if err != nil {
 		return InvoiceError("file.parsingError").WithDetail(err)
