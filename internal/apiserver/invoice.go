@@ -14,7 +14,6 @@ import (
 	"github.com/slovak-egov/einvoice/internal/db"
 	"github.com/slovak-egov/einvoice/internal/entity"
 	"github.com/slovak-egov/einvoice/internal/storage"
-	"github.com/slovak-egov/einvoice/pkg/context"
 	"github.com/slovak-egov/einvoice/pkg/dbutil"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
@@ -78,30 +77,6 @@ func (a *App) getPublicInvoices(res http.ResponseWriter, req *http.Request) erro
 	return nil
 }
 
-func (a *App) canUserViewInvoice(ctx goContext.Context, invoice *entity.Invoice) error {
-	// Anyone can view invoice if it is public
-	if invoice.IsPublic {
-		return nil
-	} else if context.GetUserId(ctx) == 0 {
-		// Unauthenticated user does not have access to private invoices
-		return AuthError("missing")
-	}
-
-	accessibleIcos, err := a.db.GetUserOrganizationIds(ctx, context.GetUserId(ctx))
-	if err != nil {
-		return err
-	}
-
-	for _, ico := range accessibleIcos {
-		// User can view invoice if one of contract parties is accessible by him
-		if ico == invoice.CustomerIco || ico == invoice.SupplierIco {
-			return nil
-		}
-	}
-
-	return handlerutil.NewForbiddenError("invoice.view.permission.missing")
-}
-
 func (a *App) getInvoiceFromDb(ctx goContext.Context, id int) (*entity.Invoice, error) {
 	invoice, err := a.db.GetInvoice(ctx, id)
 	if err != nil {
@@ -136,10 +111,6 @@ func (a *App) getInvoice(res http.ResponseWriter, req *http.Request) error {
 		return err
 	}
 
-	if err := a.canUserViewInvoice(req.Context(), invoice); err != nil {
-		return err
-	}
-
 	handlerutil.RespondWithJSON(res, http.StatusOK, invoice)
 	return nil
 }
@@ -151,12 +122,9 @@ func (a *App) getInvoiceXml(res http.ResponseWriter, req *http.Request) error {
 		return InvoiceError("params.id.invalid")
 	}
 
-	invoiceMeta, err := a.getInvoiceFromDb(req.Context(), id)
+	// DB is source of truth, so we have to check if invoice exists in DB
+	_, err = a.getInvoiceFromDb(req.Context(), id)
 	if err != nil {
-		return err
-	}
-
-	if err := a.canUserViewInvoice(req.Context(), invoiceMeta); err != nil {
 		return err
 	}
 
@@ -179,17 +147,14 @@ func (a *App) getInvoiceVisualization(res http.ResponseWriter, req *http.Request
 		return InvoiceError("params.id.invalid")
 	}
 
-	invoice, err := a.getInvoiceFromDb(req.Context(), id)
+	// DB is source of truth, so we have to check if invoice exists in DB
+	_, err = a.getInvoiceFromDb(req.Context(), id)
 	if err != nil {
 		return err
 	}
 
 	invoiceFile, err := a.getInvoiceFromStorage(req.Context(), id)
 	if err != nil {
-		return err
-	}
-
-	if err := a.canUserViewInvoice(req.Context(), invoice); err != nil {
 		return err
 	}
 

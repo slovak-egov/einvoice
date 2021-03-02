@@ -10,9 +10,7 @@ import (
 	"github.com/slovak-egov/einvoice/pkg/timeutil"
 )
 
-func CreateInvoice(
-	ctx goContext.Context, t *testing.T, connector *dbutil.Connector, test, isPublic bool,
-) *entity.Invoice {
+func CreateInvoice(ctx goContext.Context, t *testing.T, connector *dbutil.Connector, test bool) *entity.Invoice {
 	t.Helper()
 
 	user := CreateUser(ctx, t, connector, "")
@@ -26,7 +24,6 @@ func CreateInvoice(
 		CreatedBy:   user.Id,
 		IssueDate:   timeutil.Date{time.Date(2011, 9, 22, 0, 0, 0, 0, time.UTC)},
 		Test:        test,
-		IsPublic:    isPublic,
 	}
 
 	if _, err := connector.GetDb(ctx).Model(invoice).Insert(invoice); err != nil {

@@ -34,6 +34,5 @@ type Invoice struct {
 	IssueDate           timeutil.Date `json:"issueDate"`
 	CreatedBy           int           `json:"createdBy"` // User id of invoice creator
 	Test                bool          `json:"test"`
-	IsPublic            bool          `json:"isPublic" pg:",use_zero"`
 	NotificationsStatus string        `json:"notificationsStatus"`
 }

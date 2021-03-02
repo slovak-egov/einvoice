@@ -108,11 +108,9 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 		return InvoiceError("validation.failed").WithDetail(err)
 	}
 
-	// Add creator Id, test flag, isPublic flag
+	// Add creator Id, test flag
 	metadata.CreatedBy = userId
 	metadata.Test = requestBody.test
-	// TODO: add public ICO list
-	metadata.IsPublic = true
 
 	err = validateInvoice(req.Context(), a.db, metadata, requestBody.partiesType)
 	if _, ok := err.(*dbutil.NotFoundError); ok {
