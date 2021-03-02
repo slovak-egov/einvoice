@@ -1,5 +1,6 @@
 import {useRef} from 'react'
 import {Button, Form, InputGroup} from 'react-bootstrap'
+import {clearEventTarget} from '../utils/helpers'
 
 const FileUploader = ({accept, buttonStyle, buttonText, uploadFile}) => {
   const hiddenFileInput = useRef(null)
@@ -8,10 +9,12 @@ const FileUploader = ({accept, buttonStyle, buttonText, uploadFile}) => {
       <Button onClick={() => hiddenFileInput.current.click()} style={buttonStyle}>
         {buttonText}
       </Button>
+      {/*We have to clear target in onClick, so we can upload same file multiple times in row*/}
       <input
         type="file"
         ref={hiddenFileInput}
         onChange={uploadFile}
+        onClick={clearEventTarget}
         className="d-none"
         accept={accept}
       />

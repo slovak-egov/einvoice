@@ -125,7 +125,8 @@
     "getInvoiceMeta": "Faktúru {{id}} nebolo možné načítať",
     "getUblXsdDocs": "Dokumentáciu UBL2.1 sa nepodarilo načítať",
     "getUblRulesDocs": "Dokumentáciu UBL pravidiel sa nepodarilo načítať",
-    "getCodeLists": "Zoznamy kódov sa nepodarilo načítať"
+    "getCodeLists": "Zoznamy kódov sa nepodarilo načítať",
+    "unsupportedMimeType": "Pokúsili ste sa nahrať súbor nepodporovaného typu"
   },
   "successMessages": {
     "createInvoice": {

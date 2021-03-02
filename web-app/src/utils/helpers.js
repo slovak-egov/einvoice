@@ -20,3 +20,7 @@ export const fileToBase64 = (file) =>
     reader.onload = () => resolve(reader.result.replace('data:', '').replace(/^.+,/, ''))
     reader.onerror = (error) => reject(error)
   })
+
+export const clearEventTarget = (e) => {
+  e.target.value = null
+}
