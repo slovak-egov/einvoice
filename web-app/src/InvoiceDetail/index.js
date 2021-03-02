@@ -7,7 +7,8 @@ import NotFound from '../helpers/NotFound'
 import BoolIcon from '../helpers/BoolIcon'
 import {getInvoiceSelector} from '../cache/invoices/state'
 import {getInvoiceMeta} from '../cache/invoices/actions'
-import {invoiceDownloadXmlUrl, invoiceDownloadZipUrl, notificationStates} from '../utils/constants'
+import {notificationStates} from '../utils/constants'
+import {CONFIG} from '../appSettings'
 
 const TextField = ({label, value}) => (
   <Form.Group>
@@ -46,8 +47,8 @@ export default ({history, match: {params: {id}}}) => {
   }
 
   const {
-    createdAt, customerIco, format, isPublic, issueDate, notificationsStatus, price, receiver,
-    sender, supplierIco, test,
+    createdAt, customerIco, format, issueDate, notificationsStatus, price, receiver, sender,
+    supplierIco, test,
   } = invoice
 
   return (
@@ -100,18 +101,15 @@ export default ({history, match: {params: {id}}}) => {
               <CheckboxField label="Test" value={test} />
             </Col>
             <Col>
-              <CheckboxField label={t('invoice.public')} value={isPublic} />
-            </Col>
-            <Col>
               <CheckboxField label={t('invoice.notificationsSent')} value={notificationsStatus === notificationStates.SENT} />
             </Col>
           </Row>
         </div>
         <Row className="justify-content-center">
-          <Button variant="primary" href={invoiceDownloadXmlUrl(id)}>
+          <Button variant="primary" href={`${CONFIG.apiServerUrl}/invoices/${id}/detail`}>
             {`${t('download')} XML`}
           </Button>
-          <Button variant="success" href={invoiceDownloadZipUrl(id)}>
+          <Button variant="success" href={`${CONFIG.apiServerUrl}/invoices/${id}/visualization`}>
             {`${t('download')} ZIP`}
           </Button>
         </Row>

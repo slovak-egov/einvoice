@@ -15,10 +15,9 @@ import (
 func TestGetInvoices(t *testing.T) {
 	// Fill DB
 	t.Cleanup(testutil.CleanDb(ctx, t, a.db.Connector))
-	firstInvoiceId := testutil.CreateInvoice(ctx, t, a.db.Connector, false, true).Id
-	testutil.CreateInvoice(ctx, t, a.db.Connector, true, true)
-	thirdInvoiceId := testutil.CreateInvoice(ctx, t, a.db.Connector, false, true).Id
-	testutil.CreateInvoice(ctx, t, a.db.Connector, false, false)
+	firstInvoiceId := testutil.CreateInvoice(ctx, t, a.db.Connector, false).Id
+	testutil.CreateInvoice(ctx, t, a.db.Connector, true)
+	thirdInvoiceId := testutil.CreateInvoice(ctx, t, a.db.Connector, false).Id
 
 	var flagtests = []struct {
 		query          string
@@ -53,26 +52,19 @@ func TestGetInvoices(t *testing.T) {
 
 func TestGetInvoice(t *testing.T) {
 	t.Cleanup(testutil.CleanDb(ctx, t, a.db.Connector))
-	id1 := testutil.CreateInvoice(ctx, t, a.db.Connector, false, true).Id
-	id2 := testutil.CreateInvoice(ctx, t, a.db.Connector, false, false).Id
+	id := testutil.CreateInvoice(ctx, t, a.db.Connector, false).Id
 
-	req, _ := http.NewRequest("GET", fmt.Sprintf("/invoices/%d", id1), nil)
+	req, _ := http.NewRequest("GET", fmt.Sprintf("/invoices/%d", id), nil)
 	response := testutil.ExecuteRequest(a, req)
 
 	assert.Equal(t, http.StatusOK, response.Code)
 	var parsedResponse entity.Invoice
 	json.Unmarshal(response.Body.Bytes(), &parsedResponse)
 
-	assert.Equal(t, id1, parsedResponse.Id)
-
-	// Try to get private invoice
-	req, _ = http.NewRequest("GET", fmt.Sprintf("/invoices/%d", id2), nil)
-	response = testutil.ExecuteRequest(a, req)
-
-	assert.Equal(t, http.StatusUnauthorized, response.Code)
+	assert.Equal(t, id, parsedResponse.Id)
 
 	// Try to get nonexistent invoice
-	req, _ = http.NewRequest("GET", fmt.Sprintf("/invoices/%d", id2+1), nil)
+	req, _ = http.NewRequest("GET", fmt.Sprintf("/invoices/%d", id+1), nil)
 	response = testutil.ExecuteRequest(a, req)
 
 	assert.Equal(t, http.StatusNotFound, response.Code)

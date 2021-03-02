@@ -89,7 +89,7 @@ func (r *UserInvoicesOptions) Validate(maxLimit int) error {
 
 func (c *Connector) GetPublicInvoices(ctx goContext.Context, options *PublicInvoicesOptions) ([]entity.Invoice, error) {
 	invoices := []entity.Invoice{}
-	query := c.GetDb(ctx).Model(&invoices).Where("is_public = TRUE")
+	query := c.GetDb(ctx).Model(&invoices)
 
 	if err := options.buildQuery(query).Select(); err != nil {
 		context.GetLogger(ctx).WithFields(log.Fields{

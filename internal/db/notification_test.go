@@ -22,11 +22,11 @@ func assertInvoiceNotificationStatus(t *testing.T, id int, status string) {
 func TestGetAndUpdateNotNotifiedInvoices(t *testing.T) {
 	t.Cleanup(testutil.CleanDb(ctx, t, connector.Connector))
 
-	inv1 := testutil.CreateInvoice(ctx, t, connector.Connector, false, true)
-	inv2 := testutil.CreateInvoice(ctx, t, connector.Connector, false, true)
-	inv3 := testutil.CreateInvoice(ctx, t, connector.Connector, false, true)
-	inv4 := testutil.CreateInvoice(ctx, t, connector.Connector, false, true)
-	inv5 := testutil.CreateInvoice(ctx, t, connector.Connector, false, true)
+	inv1 := testutil.CreateInvoice(ctx, t, connector.Connector, false)
+	inv2 := testutil.CreateInvoice(ctx, t, connector.Connector, false)
+	inv3 := testutil.CreateInvoice(ctx, t, connector.Connector, false)
+	inv4 := testutil.CreateInvoice(ctx, t, connector.Connector, false)
+	inv5 := testutil.CreateInvoice(ctx, t, connector.Connector, false)
 
 	stopTx1 := make(chan bool, 1)
 	startTx2 := make(chan bool, 1)
@@ -94,9 +94,9 @@ func TestGetAndUpdateNotNotifiedInvoices(t *testing.T) {
 func TestUpdateNotificationStatus(t *testing.T) {
 	t.Cleanup(testutil.CleanDb(ctx, t, connector.Connector))
 
-	inv1 := testutil.CreateInvoice(ctx, t, connector.Connector, false, true)
-	inv2 := testutil.CreateInvoice(ctx, t, connector.Connector, false, true)
-	inv3 := testutil.CreateInvoice(ctx, t, connector.Connector, false, true)
+	inv1 := testutil.CreateInvoice(ctx, t, connector.Connector, false)
+	inv2 := testutil.CreateInvoice(ctx, t, connector.Connector, false)
+	inv3 := testutil.CreateInvoice(ctx, t, connector.Connector, false)
 
 	err := connector.UpdateNotificationStatus(ctx, []int{inv1.Id, inv2.Id}, entity.NotificationStatusSent)
 	if err != nil {

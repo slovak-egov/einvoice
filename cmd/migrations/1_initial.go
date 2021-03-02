@@ -35,7 +35,6 @@ func init() {
 				price DECIMAL NOT NULL,
 				customer_ico VARCHAR(20) NOT NULL,
 				supplier_ico VARCHAR(20) NOT NULL,
-				is_public BOOLEAN NOT NULL,
 				test BOOLEAN NOT NULL DEFAULT FALSE,
 				notifications_status VARCHAR(20) NOT NULL DEFAULT 'not_sent'
 			);

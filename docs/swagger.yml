@@ -312,9 +312,6 @@ paths:
                 format: binary
   /invoices/{invoiceId}:
     get:
-      security:
-        - sessionAuth: []
-        - apiKeyAuth: []
       tags:
         - Invoices
       summary: Get invoice meta data
@@ -338,9 +335,6 @@ paths:
           $ref: '#/components/responses/Error'
   /invoices/{invoiceId}/detail:
     get:
-      security:
-        - sessionAuth: []
-        - apiKeyAuth: []
       tags:
         - Invoices
       summary: Get invoice content
@@ -364,9 +358,6 @@ paths:
           $ref: '#/components/responses/Error'
   /invoices/{invoiceId}/visualization:
     get:
-      security:
-        - sessionAuth: []
-        - apiKeyAuth: []
       tags:
         - Invoices
       summary: Get invoice visualization
@@ -508,9 +499,6 @@ components:
           format: date
         createdBy:
           type: integer
-        isPublic:
-          type: boolean
-          description: True if invoice is visible to everyone
         test:
           type: boolean
           description: True if invoice is just for test purposes
