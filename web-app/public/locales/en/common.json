@@ -113,7 +113,7 @@
     "submitInvoice": "Do you really want to create this invoice?"
   },
   "errorMessages": {
-    "loginFailed": "Login failed",
+    "failedLogin": "Login failed",
     "updateUser": "User data could not be updated",
     "getUserOrganizationIds": "User organization IDs (IČO) could not be fetched",
     "getUserSubstitutes": "User substitutes could not be fetched",
@@ -124,7 +124,8 @@
     },
     "getInvoices": "Invoices could not be fetched",
     "getInvoiceMeta": "Invoice {{id}} could not be fetched",
-    "getUblDocs": "UBL2.1 docs could not be fetched",
+    "getUblXsdDocs": "UBL2.1 docs could not be fetched",
+    "getUblRulesDocs": "UBL2.1 rules could not be fetched",
     "getCodeLists": "Code lists could not be fetched"
   },
   "successMessages": {
