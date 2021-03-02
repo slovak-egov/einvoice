@@ -70,7 +70,7 @@
     "ublInvoice": "UBL Faktúra",
     "defaultValue": "Predvolená hodnota",
     "exampleValue": "Ukážková hodnota",
-    "businessTerms": "Obchodné podmienky",
+    "businessTerms": "Obchodné termíny",
     "context": "Kontext",
     "Usage": "Použitie",
     "attributes": "Atribúty",
@@ -113,7 +113,7 @@
     "submitInvoice": "Naozaj chcete odovzdať túto faktúru?"
   },
   "errorMessages": {
-    "loginFailed": "Prihlásenie neúspešné",
+    "failedLogin": "Prihlásenie neúspešné",
     "updateUser": "Údaje používateľa sa nepodarilo aktualizovať",
     "getUserOrganizationIds": "Nepodarilo sa načítať IČO, ktoré používateľ zastupuje",
     "getUserSubstitutes": "Používateľových náhradníkov sa nepodarilo načítať",
@@ -124,7 +124,8 @@
     },
     "getInvoices": "Faktúry sa nepodarilo načítať",
     "getInvoiceMeta": "Faktúru {{id}} nebolo možné načítať",
-    "getUblDocs": "Dokumentáciu UBL2.1 sa nepodarilo načítať",
+    "getUblXsdDocs": "Dokumentáciu UBL2.1 sa nepodarilo načítať",
+    "getUblRulesDocs": "Dokumentáciu UBL pravidiel sa nepodarilo načítať",
     "getCodeLists": "Zoznamy kódov sa nepodarilo načítať"
   },
   "successMessages": {
