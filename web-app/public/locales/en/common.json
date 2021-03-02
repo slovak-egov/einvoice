@@ -125,7 +125,8 @@
     "getInvoiceMeta": "Invoice {{id}} could not be fetched",
     "getUblXsdDocs": "UBL2.1 docs could not be fetched",
     "getUblRulesDocs": "UBL2.1 rules could not be fetched",
-    "getCodeLists": "Code lists could not be fetched"
+    "getCodeLists": "Code lists could not be fetched",
+    "unsupportedMimeType": "You tried to upload file with unsupported media type"
   },
   "successMessages": {
     "createInvoice": {

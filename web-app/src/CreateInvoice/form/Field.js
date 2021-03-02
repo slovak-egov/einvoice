@@ -2,12 +2,22 @@ import {useCallback} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {useTranslation} from 'react-i18next'
 import {Button, Form} from 'react-bootstrap'
+import swal from 'sweetalert'
 import DatePicker from '../../helpers/DatePicker'
 import FileUploader from '../../helpers/FileUploader'
 import Tooltip from '../../helpers/Tooltip'
 import {invoiceFormFieldSelector} from './state'
 import {setInvoiceFormField} from './actions'
 import {codeListsSelector} from '../../cache/documentation/state'
+import {allowedAttachmentMimeTypes} from '../../utils/constants'
+
+const fileToState = (file, name, mime) => ({
+  text: file,
+  attributes: {
+    filename: [{text: name}],
+    mimeCode: [{text: mime}],
+  },
+})
 
 export default ({canDelete, dropField, docs, path}) => {
   const {t, i18n} = useTranslation('common')
@@ -15,7 +25,12 @@ export default ({canDelete, dropField, docs, path}) => {
   const dispatch = useDispatch()
 
   const updateField = useCallback(
-    (value) => dispatch(setInvoiceFormField(path)(value)), [dispatch, path],
+    (value) => {
+      // Uploading file is special case
+      // We allow field to change its parent, it will set mime type and filename too
+      const pathToUpdate = docs.dataType === 'Binary object' ? path.slice(0, -1) : path
+      dispatch(setInvoiceFormField(pathToUpdate)(value))
+    }, [dispatch, docs.dataType, path]
   )
 
   return (
@@ -45,7 +60,16 @@ const FieldInput = ({codeListIds, dataType, updateField, value}) => {
     (e) => {
       switch (dataType) {
         case 'Date': return e
-        case 'Binary object': return e.target.files[0]
+        case 'Binary object':
+          if (allowedAttachmentMimeTypes.includes(e.target.files[0].type)) {
+            return fileToState(e.target.files[0], e.target.files[0].name, e.target.files[0].type)
+          } else {
+            swal({
+              title: t('errorMessages.unsupportedMimeType'),
+              icon: 'error',
+            })
+            return fileToState('', '', '')
+          }
         case 'Percentage': {
           let result = '', digits = 0, decimalPart = false
           for (const c of e.target.value.replace(/[^0-9.]/g, '')) {
@@ -96,9 +120,10 @@ const FieldInput = ({codeListIds, dataType, updateField, value}) => {
     case 'Binary object':
       return (
         <FileUploader
+          accept={allowedAttachmentMimeTypes.join(',')}
           buttonText={t('upload')}
           uploadFile={onChange}
-          deleteFile={() => updateField('')}
+          deleteFile={() => updateField(fileToState('', '', ''))}
           file={value}
         />
       )
@@ -122,6 +147,8 @@ const FieldInput = ({codeListIds, dataType, updateField, value}) => {
           onChange={onChange}
           value={value}
         >
+          {/*Add empty option*/}
+          <option />
           {codeListIds.map((id, i) => (
             <optgroup key={i} label={id}>
               {Object.keys(codeLists[id].codes).map((code, index) => (
