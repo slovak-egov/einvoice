@@ -118,7 +118,7 @@ const FieldInput = ({codeListIds, dataType, updateField, value}) => {
       return (
         <Form.Control
           as="select"
-          style={{maxWidth: '100px'}}
+          className="w-auto"
           onChange={onChange}
           value={value}
         >

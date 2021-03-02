@@ -13,7 +13,14 @@ const (
 	NotificationStatusNotSent = "not_sent"
 	NotificationStatusSent    = "sent"
 	NotificationStatusSending = "sending"
+
+	SlovakInvoiceParties = "slovakParties"
+	ForeignSupplierParty = "foreignSupplier"
+	ForeignCustomerParty = "foreignCustomer"
 )
+
+var InvoiceFormats = []string{UblFormat, D16bFormat}
+var InvoicePartiesTypes = []string{SlovakInvoiceParties, ForeignSupplierParty, ForeignCustomerParty}
 
 type Invoice struct {
 	Id                  int           `json:"id"`

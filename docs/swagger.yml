@@ -464,6 +464,13 @@ components:
       enum:
         - ubl2.1
         - d16b
+    InvoiceParties:
+      type: string
+      description: Type of invoice party nationalities
+      enum:
+        - slovakParties
+        - foreignSupplier
+        - foreignCustomer
     Languages:
       type: string
       description: Requested language of response, default language is en
@@ -598,9 +605,8 @@ components:
               test:
                 type: boolean
                 description: If true, service will create test-only invoice
-              foreignSupplier:
-                type: boolean
-                description: Set to true, if invoice supplier is not Slovak
+              partiesType:
+                $ref: '#/components/schemas/InvoiceParties'
               lang:
                 $ref: '#/components/schemas/Languages'
             required:

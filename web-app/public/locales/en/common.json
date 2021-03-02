@@ -108,7 +108,6 @@
   "downloadVisualization": "Download visualization",
   "form": "Form",
   "generateInvoice": "Generate invoice",
-  "foreignSupplier": "Foreign supplier",
   "confirmationQuestions": {
     "submitInvoice": "Do you really want to create this invoice?"
   },
@@ -133,5 +132,11 @@
       "title": "Invoice was created",
       "buttons": ["Create another", "Check detail"]
     }
+  },
+  "partiesTypes": {
+    "name": "Parties type",
+    "slovakParties": "Slovak parties",
+    "foreignSupplier": "Foreign supplier",
+    "foreignCustomer": "Foreign customer"
   }
 }

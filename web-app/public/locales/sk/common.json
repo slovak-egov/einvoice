@@ -108,7 +108,6 @@
   "downloadVisualization": "Stiahnuť vizualizáciu",
   "form": "Formulár",
   "generateInvoice": "Vygeneruj faktúru",
-  "foreignSupplier": "Zahraničný dodávateľ",
   "confirmationQuestions": {
     "submitInvoice": "Naozaj chcete odovzdať túto faktúru?"
   },
@@ -133,5 +132,11 @@
       "title": "Faktúra bola vytvorená",
       "buttons": ["Vytvoriť ďalšiu", "Pozrieť detail"]
     }
+  },
+  "partiesTypes": {
+    "name": "Typ obchodných strán",
+    "slovakParties": "Slovenské strany",
+    "foreignSupplier": "Zahraničný dodávateľ",
+    "foreignCustomer": "Zahraničný zákazník"
   }
 }

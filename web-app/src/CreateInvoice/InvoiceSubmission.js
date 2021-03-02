@@ -8,13 +8,13 @@ import ConfirmationButton from '../helpers/ConfirmationButton'
 import FileUploader from '../helpers/FileUploader'
 import {
   createInvoice, setInvoiceSubmissionData, setInvoiceSubmissionFormat, setInvoiceSubmissionTest,
-  resetInvoiceSubmission, getInvoiceVisualization, setForeignSupplier,
+  resetInvoiceSubmission, getInvoiceVisualization, setPartiesType,
 } from './actions'
 import {
-  foreignSupplierSelector, submissionFormatSelector, submissionInvoiceSelector,
+  partiesTypeSelector, submissionFormatSelector, submissionInvoiceSelector,
   submissionTestSelector,
 } from './state'
-import {invoiceFormats} from '../utils/constants'
+import {invoiceFormats, partiesTypes} from '../utils/constants'
 
 export default ({showSubmission, title}) => {
   const {i18n, t} = useTranslation('common')
@@ -23,12 +23,12 @@ export default ({showSubmission, title}) => {
   const format = useSelector(submissionFormatSelector)
   const invoice = useSelector(submissionInvoiceSelector)
   const test = useSelector(submissionTestSelector)
-  const foreignSupplier = useSelector(foreignSupplierSelector)
+  const partiesType = useSelector(partiesTypeSelector)
 
   const dispatch = useDispatch()
   const toggleTest = useCallback(() => dispatch(setInvoiceSubmissionTest(!test)), [dispatch, test])
-  const toggleForeignSupplier = useCallback(
-    () => dispatch(setForeignSupplier(!foreignSupplier)), [dispatch, foreignSupplier]
+  const updatePartiesType = useCallback(
+    (e) => dispatch(setPartiesType(e.target.value)), [dispatch]
   )
   const clearInvoiceData = useCallback(() => dispatch(setInvoiceSubmissionData(null)), [dispatch])
   const updateInvoiceData = useCallback(
@@ -43,18 +43,18 @@ export default ({showSubmission, title}) => {
       formData.append('format', format)
       formData.append('invoice', invoice)
       formData.append('test', test)
-      formData.append('foreignSupplier', foreignSupplier)
+      formData.append('partiesType', partiesType)
       formData.append('lang', i18n.language)
 
       const {invoiceId, redirect} = await dispatch(createInvoice(formData))
       if (invoiceId) {
-        dispatch(resetInvoiceSubmission())
+        dispatch(resetInvoiceSubmission)
         if (redirect) {
           history.push(`/invoices/${invoiceId}`)
         }
       }
     },
-    [dispatch, history, format, invoice, test]
+    [dispatch, history, format, invoice, test, partiesType, i18n.language]
   )
 
   const visualizeInvoice = useCallback(
@@ -99,14 +99,14 @@ export default ({showSubmission, title}) => {
               </div>
             </Form.Group>
           </Col>
-          <Col md={4} sm={6} xs={6}>
+          <Col md={3} sm={6} xs={6}>
             <Form.Group>
               <Form.Label>{t('invoice.format')}</Form.Label>
               <Form.Control
                 as="select"
+                className="w-auto"
                 value={format}
                 onChange={updateFormat}
-                style={{width: '100px'}}
               >
                 <option value={invoiceFormats.UBL}>UBL2.1</option>
                 <option value={invoiceFormats.D16B}>D16B</option>
@@ -114,6 +114,21 @@ export default ({showSubmission, title}) => {
             </Form.Group>
           </Col>
           {showSubmission && <>
+            <Col md={4} sm={6} xs={6}>
+              <Form.Group>
+                <Form.Label>{t('partiesTypes.name')}</Form.Label>
+                <Form.Control
+                  as="select"
+                  className="w-auto"
+                  value={partiesType}
+                  onChange={updatePartiesType}
+                >
+                  {Object.values(partiesTypes).map((type) => (
+                    <option key={type} value={type}>{t(`partiesTypes.${type}`)}</option>
+                  ))}
+                </Form.Control>
+              </Form.Group>
+            </Col>
             <Col md={1} sm={6} xs={6}>
               <Form.Group>
                 <Form.Label>Test</Form.Label>
@@ -121,16 +136,6 @@ export default ({showSubmission, title}) => {
                   type="checkbox"
                   checked={test}
                   onChange={toggleTest}
-                />
-              </Form.Group>
-            </Col>
-            <Col md={3} sm={6} xs={6}>
-              <Form.Group>
-                <Form.Label>{t('foreignSupplier')}</Form.Label>
-                <FormCheck
-                  type="checkbox"
-                  checked={foreignSupplier}
-                  onChange={toggleForeignSupplier}
                 />
               </Form.Group>
             </Col>
