@@ -39,3 +39,8 @@ export const allowedAttachmentMimeTypes = [
   'application/vnd.oasis.opendocument.spreadsheet',
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
 ]
+
+export const invoiceTypes = {
+  INVOICE: 'invoice',
+  CREDIT_NOTE: 'creditNote',
+}

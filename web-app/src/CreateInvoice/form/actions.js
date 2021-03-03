@@ -1,11 +1,12 @@
 import {dropRight} from 'lodash'
-import {getFormInitialState, invoiceFormSelector, INVOICE_FORM_PATH} from './state'
+import {FORM_TYPE_PATH, getFormInitialState, invoiceFormSelector, INVOICE_FORM_PATH} from './state'
 import {setInvoiceSubmissionData, setInvoiceSubmissionFormat} from '../actions'
 import {loadingWrapper, setData} from '../../helpers/actions'
 import {ubl21XsdDocsSelector} from '../../cache/documentation/state'
 import {generateInvoice} from '../../utils/invoiceGenerator'
 import {invoiceFormats} from '../../utils/constants'
 
+export const setFormType = setData(FORM_TYPE_PATH)
 export const setInvoiceFormField = (path) => setData([...INVOICE_FORM_PATH, ...path])
 
 export const addFieldInstance = (path, data) => ({

@@ -2,23 +2,25 @@ import {useCallback, useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {useHistory} from 'react-router-dom'
 import {useTranslation} from 'react-i18next'
-import {Button, Card} from 'react-bootstrap'
+import {Button, Card, Form} from 'react-bootstrap'
 import TagGroup from './TagGroup'
-import {isFormInitialized, invoiceFormSelector} from './state'
-import {initializeFormState, submitInvoiceForm} from './actions'
+import {formTypeSelector, isInvoiceFormInitialized, invoiceFormSelector} from './state'
+import {initializeFormState, setFormType, submitInvoiceForm} from './actions'
 import {
   areCodeListsLoadedSelector, isUblXsdDocsLoadedSelector, ubl21XsdDocsSelector,
 } from '../../cache/documentation/state'
 import {getCodeLists, getUblXsdDocs} from '../../cache/documentation/actions'
+import {invoiceTypes} from '../../utils/constants'
 
 export default ({match}) => {
   const {t} = useTranslation('common')
   const history = useHistory()
   const isDocsLoaded = useSelector(isUblXsdDocsLoadedSelector)
   const areCodeListsLoaded = useSelector(areCodeListsLoadedSelector)
-  const isFormLoaded = useSelector(isFormInitialized)
+  const isInvoiceFormLoaded = useSelector(isInvoiceFormInitialized)
   const invoiceDocs = useSelector(ubl21XsdDocsSelector)
   const invoiceForm = useSelector(invoiceFormSelector)
+  const formType = useSelector(formTypeSelector)
   const dispatch = useDispatch()
 
   // We need to have separate useEffects, so requests can be done in parallel
@@ -35,37 +37,68 @@ export default ({match}) => {
   }, [areCodeListsLoaded, dispatch])
 
   useEffect(() => {
-    if (areCodeListsLoaded && isDocsLoaded && !isFormLoaded) {
+    if (areCodeListsLoaded && isDocsLoaded && !isInvoiceFormLoaded) {
       dispatch(initializeFormState())
     }
-  }, [areCodeListsLoaded, dispatch, isDocsLoaded, isFormLoaded])
+  }, [areCodeListsLoaded, dispatch, isDocsLoaded, isInvoiceFormLoaded])
+
+  const changeFormType = useCallback(
+    (e) => dispatch(setFormType(e.target.value)), [dispatch]
+  )
+
+  const resetForm = useCallback(
+    () => dispatch(initializeFormState()), [dispatch],
+  )
 
   const submit = useCallback(
     async () => {
       await dispatch(submitInvoiceForm())
       const parentUrl = match.url.split('/').slice(0, -1).join('/')
       history.push(`${parentUrl}/submission`)
-    }, [dispatch, match])
+    }, [dispatch, match.url])
 
   // Data is loading
-  if (!isFormLoaded) return null
+  if (!isInvoiceFormLoaded) return null
 
   return (
     <Card className="m-1">
-      <Card.Header className="bg-primary text-white text-center" as="h3">
-        {t('form')}
+      <Card.Header className="bg-primary text-white text-center" as="h3" style={{display: 'grid'}}>
+        <Form.Control
+          as="select"
+          style={{gridRowStart: 1, gridColumnStart: 1, justifySelf: 'left'}}
+          className="w-auto"
+          value={formType}
+          onChange={changeFormType}
+        >
+          {Object.values(invoiceTypes).map((type) => (
+            <option key={type} value={type}>{t(`invoiceTypes.${type}`)}</option>
+          ))}
+        </Form.Control>
+        <div style={{gridRowStart: 1, gridColumnStart: 1, justifySelf: 'center'}}>
+          {t('form')}
+        </div>
+        <Button
+          variant="danger"
+          style={{gridRowStart: 1, gridColumnStart: 1, justifySelf: 'right'}}
+          onClick={resetForm}
+        >
+          {t('reset')}
+        </Button>
       </Card.Header>
       <Card.Body>
-        <TagGroup
-          path={['ubl:Invoice']}
-          formData={invoiceForm['ubl:Invoice']}
-          docs={invoiceDocs['ubl:Invoice']}
-        />
-        <div className="d-flex mt-1">
-          <Button variant="primary" className="ml-auto" onClick={submit}>
-            {t('generateInvoice')}
-          </Button>
-        </div>
+        {formType === invoiceTypes.INVOICE ? <>
+          <TagGroup
+            path={['ubl:Invoice']}
+            formData={invoiceForm['ubl:Invoice']}
+            docs={invoiceDocs['ubl:Invoice']}
+          />
+          <div className="d-flex mt-1">
+            <Button variant="primary" className="ml-auto" onClick={submit}>
+              {t('generateInvoice')}
+            </Button>
+          </div>
+        </> : <div>Coming soon</div>
+        }
       </Card.Body>
     </Card>
   )

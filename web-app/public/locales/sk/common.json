@@ -3,6 +3,7 @@
   "delete": "Odstrániť",
   "error": "Chyba",
   "close": "Zavrieť",
+  "reset": "Vynulovať",
   "invoice": {
     "title": "Faktúra",
     "sender": "Odosielateľ",
@@ -139,5 +140,9 @@
     "slovakParties": "Slovenské strany",
     "foreignSupplier": "Zahraničný dodávateľ",
     "foreignCustomer": "Zahraničný zákazník"
+  },
+  "invoiceTypes": {
+    "invoice": "Faktúra",
+    "creditNote": "Dobropis"
   }
 }

@@ -74,8 +74,7 @@ const FieldInput = ({codeListIds, dataType, updateField, value}) => {
           let result = '', digits = 0, decimalPart = false
           for (const c of e.target.value.replace(/[^0-9.]/g, '')) {
             if (c === '.') {
-              if (decimalPart) break
-              if (digits === 0)result += '0'
+              if (decimalPart || digits === 0) break
               decimalPart = true
             } else if (decimalPart === false) {
               digits += 1
@@ -91,6 +90,8 @@ const FieldInput = ({codeListIds, dataType, updateField, value}) => {
           let result = '', decimalDigits = 0
           for (const c of e.target.value.replace(/[^0-9.]/g, '')) {
             if (c === '.' && decimalDigits !== 0) break
+            // Dot cannot be first character
+            if (c === '.' && result === '') break
             if (decimalDigits > 2) break
             if (decimalDigits > 0 || c === '.') decimalDigits += 1
             result += c
