@@ -53,54 +53,53 @@ export default ({history, match: {params: {id}}}) => {
 
   return (
     <Card className="m-1">
-      <Card.Header className="bg-primary text-white text-center" as="h3" style={{display: 'grid'}}>
-        <div style={{gridRowStart: 1, gridColumnStart: 1, justifySelf: 'center'}}>
-          {t('invoice.title')} {id}
-        </div>
-        <div style={{gridRowStart: 1, gridColumnStart: 1, justifySelf: 'right'}}>
-          <Button variant="danger" onClick={history.goBack}>{t('close')}</Button>
-        </div>
+      <Card.Header className="bg-primary text-white text-center d-sm-flex" as="h3">
+        <Col />
+        <Col>{t('invoice.title')} {id}</Col>
+        <Col className="d-sm-flex">
+          <Button className="ml-auto" variant="danger" onClick={history.goBack}>{t('close')}</Button>
+        </Col>
       </Card.Header>
       <Card.Body>
         <div>
           <Row>
-            <Col>
+            <Col sm>
               <TextField label={t('invoice.sender')} value={sender} />
             </Col>
-            <Col>
+            <Col sm>
               <TextField label={t('invoice.supplierIco')} value={supplierIco} />
             </Col>
           </Row>
           <Row>
-            <Col>
+            <Col sm>
               <TextField label={t('invoice.receiver')} value={receiver} />
             </Col>
-            <Col>
+            <Col sm>
               <TextField label={t('invoice.customerIco')} value={customerIco} />
             </Col>
           </Row>
           <Row>
-            <Col>
+            <Col sm>
               <TextField
                 label={t('invoice.createdAt')}
                 value={formatDate(parseISO(createdAt), 'yyyy-MM-dd HH:mm')}
               />
             </Col>
-            <Col>
+            <Col sm>
               <TextField label={t('invoice.issueDate')} value={issueDate} />
             </Col>
-            <Col>
+            <Col sm>
               <TextField label={t('invoice.format')} value={format} />
             </Col>
           </Row>
           <Row>
-            <Col>
+            <Col sm>
               <TextField label={t('invoice.price')} value={price} />
             </Col>
-            <Col>
+            <Col sm>
               <CheckboxField label="Test" value={test} />
             </Col>
-            <Col>
+            <Col sm>
               <CheckboxField label={t('invoice.notificationsSent')} value={notificationsStatus === notificationStates.SENT} />
             </Col>
           </Row>

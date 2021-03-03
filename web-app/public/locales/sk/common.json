@@ -98,7 +98,6 @@
     "title": "E-faktúra",
     "publicInvoices": "Verejné faktúry",
     "invoiceTools": "Fakturačné nástroje",
-    "createInvoice": "Vytvoriť faktúru",
     "accountSettings": "Nastavenia účtu",
     "myInvoices": "Moje faktúry",
     "logout": "Odhlásiť",
@@ -110,7 +109,10 @@
   "form": "Formulár",
   "generateInvoice": "Vygeneruj faktúru",
   "confirmationQuestions": {
-    "submitInvoice": "Naozaj chcete odovzdať túto faktúru?"
+    "submitInvoice": {
+      "title": "Vytvorenie faktúry",
+      "text": "Naozaj chcete odovzdať túto faktúru?"
+    }
   },
   "errorMessages": {
     "failedLogin": "Prihlásenie neúspešné",
@@ -127,7 +129,8 @@
     "getUblXsdDocs": "Dokumentáciu UBL2.1 sa nepodarilo načítať",
     "getUblRulesDocs": "Dokumentáciu UBL pravidiel sa nepodarilo načítať",
     "getCodeLists": "Zoznamy kódov sa nepodarilo načítať",
-    "unsupportedMimeType": "Pokúsili ste sa nahrať súbor nepodporovaného typu"
+    "unsupportedMimeType": "Pokúsili ste sa nahrať súbor nepodporovaného typu",
+    "emptyField": "Toto políčko nemôže byť prázdne"
   },
   "successMessages": {
     "createInvoice": {
@@ -144,5 +147,6 @@
   "invoiceTypes": {
     "invoice": "Faktúra",
     "creditNote": "Dobropis"
-  }
+  },
+  "errorCount": "Počet chýb"
 }

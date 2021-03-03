@@ -1,12 +1,15 @@
-import {NavLink, Route, Switch, useRouteMatch} from 'react-router-dom'
+import {useSelector} from 'react-redux'
+import {NavLink, Route, Switch} from 'react-router-dom'
 import {Button} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import InvoiceSubmission from './InvoiceSubmission'
 import Form from './form'
+import {isUserLogged} from '../cache/users/state'
 
-export default ({showSubmission, title}) => {
+export default ({match}) => {
   const {t} = useTranslation('common')
-  const match = useRouteMatch()
+  const isLogged = useSelector(isUserLogged)
+  const title = isLogged ? 'submission' : 'visualization'
   return (
     <div className="m-1">
       <div className="row justify-content-center">
@@ -20,7 +23,7 @@ export default ({showSubmission, title}) => {
       <Switch>
         <Route path={`${match.url}/form`} component={Form} />
         <Route path={`${match.url}/submission`}>
-          <InvoiceSubmission showSubmission={showSubmission} title={title} />
+          <InvoiceSubmission showSubmission={isLogged} title={title} />
         </Route>
       </Switch>
     </div>

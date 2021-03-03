@@ -98,7 +98,6 @@
     "title": "E-invoice",
     "publicInvoices": "Public invoices",
     "invoiceTools": "Invoice tools",
-    "createInvoice": "Create invoice",
     "accountSettings": "Account settings",
     "myInvoices": "My invoices",
     "logout": "Logout",
@@ -110,7 +109,10 @@
   "form": "Form",
   "generateInvoice": "Generate invoice",
   "confirmationQuestions": {
-    "submitInvoice": "Do you really want to create this invoice?"
+    "submitInvoice": {
+      "title": "Create invoice",
+      "text": "Do you really want to create this invoice?"
+    }
   },
   "errorMessages": {
     "failedLogin": "Login failed",
@@ -127,7 +129,8 @@
     "getUblXsdDocs": "UBL2.1 docs could not be fetched",
     "getUblRulesDocs": "UBL2.1 rules could not be fetched",
     "getCodeLists": "Code lists could not be fetched",
-    "unsupportedMimeType": "You tried to upload file with unsupported media type"
+    "unsupportedMimeType": "You tried to upload file with unsupported media type",
+    "emptyField": "This field cannot be empty"
   },
   "successMessages": {
     "createInvoice": {
@@ -144,5 +147,6 @@
   "invoiceTypes": {
     "invoice": "Invoice",
     "creditNote": "Credit note"
-  }
+  },
+  "errorCount": "Error count"
 }

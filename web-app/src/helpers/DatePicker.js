@@ -1,4 +1,4 @@
-import 'react-datepicker/dist/react-datepicker.css'
+import 'react-datepicker/dist/react-datepicker.min.css'
 import DatePicker from 'react-datepicker'
 import {useTranslation} from 'react-i18next'
 

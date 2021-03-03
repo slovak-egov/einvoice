@@ -21,10 +21,10 @@ export default ({docs, path}) => {
       >
         <span>{docs.name[i18n.language]}</span>
         <div className="ml-auto">
-          <Button className="mr-sm-3" variant="primary" size="sm" onClick={addField}>
+          <Button className="mr-md-3" variant="primary" size="sm" onClick={addField}>
             {t('add')}
           </Button>
-          <i className="fas fa-plus invisible d-none d-sm-inline-block" />
+          <i className="fas fa-plus invisible d-none d-md-inline-block" />
         </div>
       </Card.Header>
     </Card>

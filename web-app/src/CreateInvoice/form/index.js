@@ -1,8 +1,8 @@
-import {useCallback, useEffect} from 'react'
+import {useCallback, useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {useHistory} from 'react-router-dom'
 import {useTranslation} from 'react-i18next'
-import {Button, Card, Form} from 'react-bootstrap'
+import {Button, Card, Col, Form, Row} from 'react-bootstrap'
 import TagGroup from './TagGroup'
 import {formTypeSelector, isInvoiceFormInitialized, invoiceFormSelector} from './state'
 import {initializeFormState, setFormType, submitInvoiceForm} from './actions'
@@ -22,6 +22,8 @@ export default ({match}) => {
   const invoiceForm = useSelector(invoiceFormSelector)
   const formType = useSelector(formTypeSelector)
   const dispatch = useDispatch()
+
+  const [errorCount, setErrorCount] = useState(0)
 
   // We need to have separate useEffects, so requests can be done in parallel
   useEffect(() => {
@@ -62,28 +64,32 @@ export default ({match}) => {
 
   return (
     <Card className="m-1">
-      <Card.Header className="bg-primary text-white text-center" as="h3" style={{display: 'grid'}}>
-        <Form.Control
-          as="select"
-          style={{gridRowStart: 1, gridColumnStart: 1, justifySelf: 'left'}}
-          className="w-auto"
-          value={formType}
-          onChange={changeFormType}
-        >
-          {Object.values(invoiceTypes).map((type) => (
-            <option key={type} value={type}>{t(`invoiceTypes.${type}`)}</option>
-          ))}
-        </Form.Control>
-        <div style={{gridRowStart: 1, gridColumnStart: 1, justifySelf: 'center'}}>
-          {t('form')}
-        </div>
-        <Button
-          variant="danger"
-          style={{gridRowStart: 1, gridColumnStart: 1, justifySelf: 'right'}}
-          onClick={resetForm}
-        >
-          {t('reset')}
-        </Button>
+      <Card.Header className="bg-primary text-white text-center" as="h3">
+        <Row className="d-block d-sm-none">{t('form')}</Row>
+        <Row className="mb-0">
+          <Col>
+            <Form.Control
+              as="select"
+              className="w-auto"
+              value={formType}
+              onChange={changeFormType}
+            >
+              {Object.values(invoiceTypes).map((type) => (
+                <option key={type} value={type}>{t(`invoiceTypes.${type}`)}</option>
+              ))}
+            </Form.Control>
+          </Col>
+          <Col className="d-none d-sm-block">{t('form')}</Col>
+          <Col className="d-flex">
+            <Button
+              variant="danger"
+              className="ml-auto"
+              onClick={resetForm}
+            >
+              {t('reset')}
+            </Button>
+          </Col>
+        </Row>
       </Card.Header>
       <Card.Body>
         {formType === invoiceTypes.INVOICE ? <>
@@ -91,9 +97,10 @@ export default ({match}) => {
             path={['ubl:Invoice']}
             formData={invoiceForm['ubl:Invoice']}
             docs={invoiceDocs['ubl:Invoice']}
+            setErrorCount={setErrorCount}
           />
           <div className="d-flex mt-1">
-            <Button variant="primary" className="ml-auto" onClick={submit}>
+            <Button variant="primary" className="ml-auto" onClick={submit} disabled={errorCount !== 0}>
               {t('generateInvoice')}
             </Button>
           </div>

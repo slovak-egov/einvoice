@@ -1,8 +1,9 @@
-import {useCallback} from 'react'
+import {useCallback, useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {useTranslation} from 'react-i18next'
 import {Button, Form} from 'react-bootstrap'
 import swal from 'sweetalert'
+import classnames from 'classnames'
 import DatePicker from '../../helpers/DatePicker'
 import FileUploader from '../../helpers/FileUploader'
 import Tooltip from '../../helpers/Tooltip'
@@ -19,10 +20,18 @@ const fileToState = (file, name, mime) => ({
   },
 })
 
-export default ({canDelete, dropField, docs, path}) => {
+export default ({canDelete, dropField, docs, path, setErrorCount}) => {
   const {t, i18n} = useTranslation('common')
   const value = useSelector(invoiceFormFieldSelector(path)) || ''
   const dispatch = useDispatch()
+  const isInvalid = value === ''
+
+  useEffect(
+    () => {
+      setErrorCount(isInvalid ? 1 : 0)
+      return () => setErrorCount(0)
+    }, [isInvalid],
+  )
 
   const updateField = useCallback(
     (value) => {
@@ -49,12 +58,14 @@ export default ({canDelete, dropField, docs, path}) => {
         dataType={docs.dataType}
         updateField={updateField}
         value={value}
+        isInvalid={isInvalid}
       />
+      <Form.Control.Feedback type="invalid">{t('errorMessages.emptyField')}</Form.Control.Feedback>
     </Form.Group>
   )
 }
 
-const FieldInput = ({codeListIds, dataType, updateField, value}) => {
+const FieldInput = ({codeListIds, dataType, isInvalid, updateField, value}) => {
   const {t} = useTranslation('common')
   const getValue = useCallback(
     (e) => {
@@ -114,7 +125,7 @@ const FieldInput = ({codeListIds, dataType, updateField, value}) => {
         <DatePicker
           selected={value}
           onChange={onChange}
-          className="form-control"
+          className={classnames('form-control', {'is-invalid': isInvalid})}
           dateFormat="yyyy-MM-dd"
         />
       )
@@ -136,6 +147,7 @@ const FieldInput = ({codeListIds, dataType, updateField, value}) => {
             onChange={onChange}
             className="text-right"
             style={{maxWidth: '100px'}}
+            isInvalid={isInvalid}
           />
           <span className="my-auto ml-1">%</span>
         </div>
@@ -145,8 +157,10 @@ const FieldInput = ({codeListIds, dataType, updateField, value}) => {
         <Form.Control
           as="select"
           className="w-auto"
+          style={{maxWidth: '100%'}}
           onChange={onChange}
           value={value}
+          isInvalid={isInvalid}
         >
           {/*Add empty option*/}
           <option />
@@ -164,6 +178,7 @@ const FieldInput = ({codeListIds, dataType, updateField, value}) => {
         <Form.Control
           value={value}
           onChange={onChange}
+          isInvalid={isInvalid}
         />
       )
   }
