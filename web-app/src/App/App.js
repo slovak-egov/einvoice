@@ -58,14 +58,8 @@ export default () => {
           <AuthRoute exact path="/my-invoices">
             <MyInvoices />
           </AuthRoute>
-          <Redirect exact from="/create-invoice" to="/create-invoice/submission" />
-          <AuthRoute path="/create-invoice">
-            <CreateInvoice showSubmission title="submission" />
-          </AuthRoute>
           <Redirect exact from="/invoice-tools" to="/invoice-tools/form" />
-          <Route path="/invoice-tools">
-            <CreateInvoice title="visualization" />
-          </Route>
+          <Route path="/invoice-tools" component={CreateInvoice} />
           <Route exact path="/invoices" component={PublicInvoices} />
           <Route exact path="/invoices/:id([0-9]+)" component={InvoiceDetail} />
           <Route path="/invoice-documentation" component={InvoiceDocumentation} />

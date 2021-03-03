@@ -1,22 +1,44 @@
-import {useCallback} from 'react'
+import {useCallback, useEffect, useState} from 'react'
 import {useDispatch} from 'react-redux'
 import {useTranslation} from 'react-i18next'
-import {Accordion, Button, Card} from 'react-bootstrap'
+import {Accordion, Badge, Button, Card} from 'react-bootstrap'
 import FormField from './Field'
 import AddField from './AddField'
 import {removeFieldInstance} from './actions'
 
-const Tag = ({canDelete, path, formData, docs}) => {
+const Tag = ({canDelete, path, formData, docs, setErrorCount}) => {
   const {i18n, t} = useTranslation('common')
   const dispatch = useDispatch()
   const dropField = useCallback(
     () => dispatch(removeFieldInstance(path.slice(0, -1))), [path]
   )
+  const [childrenErrorCount, setChildrenErrorCount] = useState({})
+  const updateChildErrorCount = (child) => (newCount) => setChildrenErrorCount(
+    (prevState) => ({
+      ...prevState,
+      [child]: newCount,
+    }))
+  // sum of errorCount of children
+  const errorCount = Object.values(childrenErrorCount).reduce((a, b) => a + b, 0)
   const result = []
+
+  useEffect(
+    () => {
+      setErrorCount(errorCount)
+      return () => setErrorCount(0)
+    }, [errorCount],
+  )
 
   if (!formData.children) {
     result.push(
-      <FormField key="text" path={[...path, 'text']} docs={docs} canDelete={canDelete} dropField={dropField} />
+      <FormField
+        key="text"
+        path={[...path, 'text']}
+        docs={docs}
+        canDelete={canDelete}
+        dropField={dropField}
+        setErrorCount={updateChildErrorCount('text')}
+      />
     )
   }
 
@@ -32,6 +54,7 @@ const Tag = ({canDelete, path, formData, docs}) => {
             docs={attr}
             canDelete={attr.cardinality.from === '0'}
             dropField={() => dispatch(removeFieldInstance(attrPath))}
+            setErrorCount={updateChildErrorCount(`attr-${name}`)}
           />
         )
       } else {
@@ -51,13 +74,17 @@ const Tag = ({canDelete, path, formData, docs}) => {
           eventKey="0"
         >
           <span>{docs.name[i18n.language]}</span>
+          {errorCount !== 0 && <Badge variant="danger" className="d-flex ml-1">
+            <span className="d-none d-md-block">{t('errorCount')}:&nbsp;</span>
+            <span>{errorCount}</span>
+          </Badge>}
           <div className="ml-auto">
             {canDelete &&
               <Button className="mr-sm-3" variant="danger" size="sm" onClick={dropField}>
                 {t('delete')}
               </Button>
             }
-            <i className="fas fa-plus d-none d-sm-inline-block" />
+            <i className="fas fa-plus d-none d-md-inline-block" />
           </div>
         </Accordion.Toggle>
         <Accordion.Collapse eventKey="0">
@@ -68,6 +95,7 @@ const Tag = ({canDelete, path, formData, docs}) => {
                 path={[...path, 'children', name]}
                 formData={child}
                 docs={docs.children[name]}
+                setErrorCount={updateChildErrorCount(`child-${name}`)}
               />
             ))}
           </Card.Body>
@@ -79,7 +107,23 @@ const Tag = ({canDelete, path, formData, docs}) => {
   return result
 }
 
-const TagGroup = ({path, formData, docs}) => {
+const TagGroup = ({path, formData, docs, setErrorCount}) => {
+  const [childrenErrorCount, setChildrenErrorCount] = useState({})
+  const updateChildErrorCount = (child) => (newCount) => setChildrenErrorCount(
+    (prevState) => ({
+      ...prevState,
+      [child]: newCount,
+    }))
+  // sum of errorCount of children
+  const errorCount = Object.values(childrenErrorCount).reduce((a, b) => a + b, 0)
+
+  useEffect(
+    () => {
+      setErrorCount(errorCount)
+      return () => setErrorCount(0)
+    }, [errorCount],
+  )
+
   // Element can be deleted only if it is last and cardinality allows smaller number of elements
   const canDeleteElement = (index) =>
     index === formData.length - 1 && docs.cardinality.from !== formData.length.toString()
@@ -93,6 +137,7 @@ const TagGroup = ({path, formData, docs}) => {
           formData={element}
           docs={docs}
           canDelete={canDeleteElement(index)}
+          setErrorCount={updateChildErrorCount(index)}
         />
       ))}
       {docs.cardinality.to !== formData.length.toString() && <AddField docs={docs} path={path} />}
