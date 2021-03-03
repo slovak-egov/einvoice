@@ -3,6 +3,7 @@
   "delete": "Delete",
   "error": "Error",
   "close": "Close",
+  "reset": "Reset",
   "invoice": {
     "title": "Invoice",
     "sender": "Sender",
@@ -139,5 +140,9 @@
     "slovakParties": "Slovak parties",
     "foreignSupplier": "Foreign supplier",
     "foreignCustomer": "Foreign customer"
+  },
+  "invoiceTypes": {
+    "invoice": "Invoice",
+    "creditNote": "Credit note"
   }
 }

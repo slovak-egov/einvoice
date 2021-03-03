@@ -1,12 +1,16 @@
 import {get} from 'lodash'
 
-export const INVOICE_FORM_PATH = ['createInvoiceScreen', 'form']
+const FORM_PATH = ['createInvoiceScreen', 'form']
+export const INVOICE_FORM_PATH = [...FORM_PATH, 'invoice']
+export const FORM_TYPE_PATH = [...FORM_PATH, 'type']
+
+export const formTypeSelector = (state) => get(state, FORM_TYPE_PATH)
 
 export const invoiceFormSelector = (state) => get(state, INVOICE_FORM_PATH)
 
 export const invoiceFormFieldSelector = (path) => (state) => get(invoiceFormSelector(state), path)
 
-export const isFormInitialized = (state) => invoiceFormSelector(state) != null
+export const isInvoiceFormInitialized = (state) => invoiceFormSelector(state) != null
 
 export const getFormInitialState = (ublDocs) => {
   const result = {}
