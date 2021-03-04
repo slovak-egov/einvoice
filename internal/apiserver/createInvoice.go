@@ -15,18 +15,19 @@ import (
 )
 
 type CreateInvoiceRequestBody struct {
-	invoice     []byte
-	format      string
-	language    string
-	test        bool
-	partiesType string
+	invoice      []byte
+	format       string
+	language     string
+	test         bool
+	partiesType  string
+	documentType string
 }
 
 func (b *CreateInvoiceRequestBody) parse(req *http.Request) error {
 	var err error
 	b.format, err = getEnum(req.PostFormValue("format"), entity.InvoiceFormats, "")
 	if err != nil {
-		return InvoiceError("format."+err.Error())
+		return InvoiceError("format." + err.Error())
 	}
 
 	b.language, err = getEnum(req.PostFormValue("lang"), entity.Languages, entity.EnglishLanguage)
@@ -43,9 +44,15 @@ func (b *CreateInvoiceRequestBody) parse(req *http.Request) error {
 	if err != nil {
 		return InvoiceError("test.invalid").WithDetail(err)
 	}
+
 	b.invoice, err = parseInvoice(req)
 	if err != nil {
 		return InvoiceError("file.parsingError").WithDetail(err)
+	}
+
+	b.documentType, err = getEnum(req.PostFormValue("documentType"), entity.DocumentTypes, entity.InvoiceDocumentType)
+	if err != nil {
+		return InvoiceError("documentType.parsingError").WithDetail(err)
 	}
 	return nil
 }
@@ -90,7 +97,7 @@ func (a *App) createInvoice(res http.ResponseWriter, req *http.Request) error {
 	userId := context.GetUserId(req.Context())
 
 	// Validate invoice format
-	if err = a.xsdValidator.Validate(requestBody.invoice, requestBody.format); err != nil {
+	if err = a.xsdValidator.Validate(requestBody.invoice, requestBody.format, requestBody.documentType); err != nil {
 		return InvoiceError("xsd.validation.failed").WithDetail(err)
 	}
 	// In future possibly adjust validation according to partiesType

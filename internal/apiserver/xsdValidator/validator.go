@@ -9,7 +9,9 @@ import (
 )
 
 type XsdValidator struct {
-	schemas map[string]*xsd.Schema
+	ubl21Schema           *xsd.Schema
+	ubl21CreditNoteSchema *xsd.Schema
+	d16bSchema            *xsd.Schema
 }
 
 func New(ubl21XsdPath, d16bXsdPath string) *XsdValidator {
@@ -25,18 +27,39 @@ func New(ubl21XsdPath, d16bXsdPath string) *XsdValidator {
 		log.WithField("error", err.Error()).Fatal("validator.parseSchema.ubl2.1.failed")
 	}
 
+	ubl21CreditNoteFile := ubl21XsdPath + "/maindoc/UBL-CreditNote-2.1.xsd"
+	ubl21CreditNoteSchema, err := xsd.ParseFromFile(ubl21CreditNoteFile)
+	if err != nil {
+		log.WithField("error", err.Error()).Fatal("validator.parseSchema.ubl2.1.failed")
+	}
+
 	return &XsdValidator{
-		map[string]*xsd.Schema{entity.UblFormat: ubl21Schema, entity.D16bFormat: d16bSchema},
+		ubl21Schema:           ubl21Schema,
+		ubl21CreditNoteSchema: ubl21CreditNoteSchema,
+		d16bSchema:            d16bSchema,
 	}
 }
 
-func (v *XsdValidator) Validate(src []byte, format string) error {
+func (v *XsdValidator) Validate(src []byte, format, documentType string) error {
 	xml, err := libxml2.Parse(src)
 	if err != nil {
 		return err
 	}
 
-	if err = v.schemas[format].Validate(xml); err != nil {
+	var schema *xsd.Schema
+	switch format {
+	case entity.UblFormat:
+		switch documentType {
+		case entity.InvoiceDocumentType:
+			schema = v.ubl21Schema
+		case entity.CreditNoteDocumentType:
+			schema = v.ubl21CreditNoteSchema
+		}
+	case entity.D16bFormat:
+		schema = v.d16bSchema
+	}
+
+	if err = schema.Validate(xml); err != nil {
 		return ValidationError{err.(xsd.SchemaValidationError).Errors()}
 	}
 

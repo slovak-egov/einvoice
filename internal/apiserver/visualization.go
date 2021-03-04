@@ -11,16 +11,17 @@ import (
 )
 
 type VisualizationRequestBody struct {
-	invoice  []byte
-	format   string
-	language string
+	invoice      []byte
+	format       string
+	language     string
+	documentType string
 }
 
 func (b *VisualizationRequestBody) parse(req *http.Request) error {
 	var err error
 	b.format, err = getEnum(req.PostFormValue("format"), entity.InvoiceFormats, "")
 	if err != nil {
-		return InvoiceError("format."+err.Error())
+		return InvoiceError("format." + err.Error())
 	}
 
 	b.language, err = getEnum(req.PostFormValue("lang"), entity.Languages, entity.EnglishLanguage)
@@ -33,6 +34,11 @@ func (b *VisualizationRequestBody) parse(req *http.Request) error {
 		return InvoiceError("file.parsingError").WithDetail(err)
 	}
 
+	b.documentType, err = getEnum(req.PostFormValue("documentType"), entity.DocumentTypes, entity.InvoiceDocumentType)
+	if err != nil {
+		return InvoiceError("documentType.parsingError").WithDetail(err)
+	}
+
 	return nil
 }
 
@@ -43,7 +49,7 @@ func (a *App) createVisualization(res http.ResponseWriter, req *http.Request) er
 		return err
 	}
 
-	if err = a.xsdValidator.Validate(requestBody.invoice, requestBody.format); err != nil {
+	if err = a.xsdValidator.Validate(requestBody.invoice, requestBody.format, requestBody.documentType); err != nil {
 		return InvoiceError("xsd.validation.failed").WithDetail(err)
 	}
 	if err = a.invoiceValidator.Validate(req.Context(), requestBody.invoice, requestBody.format, requestBody.language); err != nil {
