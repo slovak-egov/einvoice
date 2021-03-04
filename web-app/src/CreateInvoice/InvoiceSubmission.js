@@ -8,13 +8,13 @@ import ConfirmationButton from '../helpers/ConfirmationButton'
 import FileUploader from '../helpers/FileUploader'
 import {
   createInvoice, setInvoiceSubmissionData, setInvoiceSubmissionFormat, setInvoiceSubmissionTest,
-  resetInvoiceSubmission, getInvoiceVisualization, setPartiesType,
+  resetInvoiceSubmission, getInvoiceVisualization, setPartiesType, setInvoiceSubmissionDocumentType
 } from './actions'
 import {
   partiesTypeSelector, submissionFormatSelector, submissionInvoiceSelector,
-  submissionTestSelector,
+  submissionTestSelector, documentTypeSelector
 } from './state'
-import {invoiceFormats, partiesTypes} from '../utils/constants'
+import {invoiceFormats, invoiceTypes, partiesTypes} from '../utils/constants'
 
 export default ({showSubmission, title}) => {
   const {i18n, t} = useTranslation('common')
@@ -24,6 +24,7 @@ export default ({showSubmission, title}) => {
   const invoice = useSelector(submissionInvoiceSelector)
   const test = useSelector(submissionTestSelector)
   const partiesType = useSelector(partiesTypeSelector)
+  const documentType = useSelector(documentTypeSelector)
 
   const dispatch = useDispatch()
   const toggleTest = useCallback(() => dispatch(setInvoiceSubmissionTest(!test)), [dispatch, test])
@@ -37,6 +38,9 @@ export default ({showSubmission, title}) => {
   const updateFormat = useCallback(
     (e) => dispatch(setInvoiceSubmissionFormat(e.target.value)), [dispatch]
   )
+  const updateDocumentType = useCallback(
+    (e) => dispatch(setInvoiceSubmissionDocumentType(e.target.value)), [dispatch]
+  )
   const submitInvoice = useCallback(
     async () => {
       const formData = new FormData()
@@ -45,6 +49,7 @@ export default ({showSubmission, title}) => {
       formData.append('test', test)
       formData.append('partiesType', partiesType)
       formData.append('lang', i18n.language)
+      formData.append('documentType', documentType)
 
       const {invoiceId, redirect} = await dispatch(createInvoice(formData))
       if (invoiceId) {
@@ -54,7 +59,7 @@ export default ({showSubmission, title}) => {
         }
       }
     },
-    [dispatch, history, format, invoice, test, partiesType, i18n.language]
+    [dispatch, history, format, invoice, test, partiesType, i18n.language, documentType]
   )
 
   const visualizeInvoice = useCallback(
@@ -63,13 +68,14 @@ export default ({showSubmission, title}) => {
       formData.append('format', format)
       formData.append('invoice', invoice)
       formData.append('lang', i18n.language)
+      formData.append('documentType', documentType)
 
       const visualization = await dispatch(getInvoiceVisualization(formData))
       if (visualization) {
         await save(visualization, 'invoice.zip')
       }
     },
-    [dispatch, format, invoice]
+    [dispatch, format, invoice, documentType]
   )
 
   const getRawInvoice = useCallback(
@@ -112,6 +118,21 @@ export default ({showSubmission, title}) => {
                 <option value={invoiceFormats.D16B}>D16B</option>
               </Form.Control>
             </Form.Group>
+            {format === invoiceFormats.UBL &&
+            <Form.Group>
+              <Form.Label>{t('invoice.type')}</Form.Label>
+              <Form.Control
+                as="select"
+                className="w-auto"
+                value={documentType}
+                onChange={updateDocumentType}
+              >
+                {Object.values(invoiceTypes).map((type) => (
+                  <option key={type} value={type}>{t(`invoiceTypes.${type}`)}</option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+            }
           </Col>
           {showSubmission && <>
             <Col md={4} sm={6} xs={6}>

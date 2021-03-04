@@ -2,12 +2,13 @@ import swal from 'sweetalert'
 import {INVOICE_SUBMISSION_PATH} from './state'
 import {setInvoices} from '../cache/invoices/actions'
 import {loadingWrapper, setData} from '../helpers/actions'
-import {invoiceFormats, partiesTypes} from '../utils/constants'
+import {invoiceFormats, partiesTypes, invoiceTypes} from '../utils/constants'
 import i18n from '../i18n'
 
 export const setInvoiceSubmissionFormat = setData([...INVOICE_SUBMISSION_PATH, 'format'])
 export const setInvoiceSubmissionData = setData([...INVOICE_SUBMISSION_PATH, 'invoice'])
 export const setInvoiceSubmissionTest = setData([...INVOICE_SUBMISSION_PATH, 'test'])
+export const setInvoiceSubmissionDocumentType = setData([...INVOICE_SUBMISSION_PATH, 'documentType'])
 export const setPartiesType = setData([...INVOICE_SUBMISSION_PATH, 'partiesType'])
 
 export const resetInvoiceSubmission = setData(INVOICE_SUBMISSION_PATH)({
@@ -15,6 +16,7 @@ export const resetInvoiceSubmission = setData(INVOICE_SUBMISSION_PATH)({
   format: invoiceFormats.UBL,
   partiesType: partiesTypes.SLOVAK,
   test: false,
+  documentType: invoiceTypes.INVOICE,
 })
 
 export const createInvoice = (data) => loadingWrapper(
