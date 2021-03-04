@@ -5,20 +5,18 @@ import {useTranslation} from 'react-i18next'
 const ConfirmationModal = ({cancel, confirm, text, title}) => {
   const {t} = useTranslation('common')
   return (
-    <div className="static-modal Modal" style={{cursor: 'default'}}>
-      <Modal.Dialog>
-        <Modal.Header className="d-flex">
-          <Modal.Title className="m-auto">{title}</Modal.Title>
-        </Modal.Header>
+    <Modal show centered>
+      <Modal.Header className="d-flex">
+        <Modal.Title className="m-auto">{title}</Modal.Title>
+      </Modal.Header>
 
-        <Modal.Body>{text}</Modal.Body>
+      <Modal.Body>{text}</Modal.Body>
 
-        <Modal.Footer>
-          <Button variant="danger" onClick={cancel}>{t('cancel')}</Button>
-          <Button variant="success" onClick={confirm}>{t('confirm')}</Button>
-        </Modal.Footer>
-      </Modal.Dialog>
-    </div>
+      <Modal.Footer>
+        <Button variant="danger" onClick={cancel}>{t('cancel')}</Button>
+        <Button variant="success" onClick={confirm}>{t('confirm')}</Button>
+      </Modal.Footer>
+    </Modal>
   )
 }
 

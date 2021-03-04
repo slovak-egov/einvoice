@@ -57,7 +57,7 @@
     "description": "Stránka nebola nájdená"
   },
   "loading": {
-    "title": "Procesujem žiadosť"
+    "title": "Spracúvam žiadosť"
   },
   "invoiceDocs": {
     "home": "Domov",
@@ -113,6 +113,10 @@
     "submitInvoice": {
       "title": "Vytvorenie faktúry",
       "text": "Naozaj chcete odovzdať túto faktúru?"
+    },
+    "resetForm": {
+      "title": "Vynulovanie formulára",
+      "text": "Naozaj chcete vynulovať formulár?"
     }
   },
   "errorMessages": {

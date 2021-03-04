@@ -1,4 +1,5 @@
 import {CONFIG} from '../appSettings'
+import {capitalizeFirstChar} from './helpers'
 
 export const invoiceFormats = {
   UBL: 'ubl2.1',
@@ -13,12 +14,6 @@ export const getLogoutUrl = () =>
 
 export const exampleInvoiceUrl = (format, name) =>
   `${CONFIG.apiServerUrl}/data/examples/${format}/${name}.xml`
-
-export const rootAttributes = {
-  'xmlns': [{text: 'urn:oasis:names:specification:ubl:schema:xsd:Invoice-2'}],
-  'xmlns:cac': [{text: 'urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2'}],
-  'xmlns:cbc': [{text: 'urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2'}],
-}
 
 // keep in sync with internal/entity/invoice.go
 export const notificationStates = {
@@ -43,4 +38,19 @@ export const allowedAttachmentMimeTypes = [
 export const invoiceTypes = {
   INVOICE: 'invoice',
   CREDIT_NOTE: 'creditNote',
+}
+
+export const rootAttributes = (invoiceType) => ({
+  'xmlns': [{text: `urn:oasis:names:specification:ubl:schema:xsd:${capitalizeFirstChar(invoiceType)}-2`}],
+  'xmlns:cac': [{text: 'urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2'}],
+  'xmlns:cbc': [{text: 'urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2'}],
+})
+
+export const dataTypes = {
+  BINARY_OBJECT: 'Binary object',
+  PERCENTAGE: 'Percentage',
+  AMOUNT: 'Amount',
+  QUANTITY: 'Quantity',
+  DATE: 'Date',
+  CODE: 'Code',
 }

@@ -1308,7 +1308,8 @@
                         "name": {
                           "en": "Tax scheme ID",
                           "sk": "TBD"
-                        }
+                        },
+                        "dataType": "Text"
                       }
                     }
                   }
@@ -2579,6 +2580,7 @@
                       "en": "Tax scheme ID",
                       "sk": "TBD"
                     },
+                    "dataType": "Identifier",
                     "defaultValue": "VAT"
                   }
                 }
@@ -3582,6 +3584,7 @@
                       "en": "Tax scheme ID",
                       "sk": "TBD"
                     },
+                    "dataType": "Identifier",
                     "defaultValue": "VAT"
                   }
                 }
@@ -5250,6 +5253,7 @@
                           "en": "Tax scheme ID",
                           "sk": "TBD"
                         },
+                        "dataType": "Identifier",
                         "defaultValue": "VAT"
                       }
                     }

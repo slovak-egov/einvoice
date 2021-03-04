@@ -24,3 +24,5 @@ export const fileToBase64 = (file) =>
 export const clearEventTarget = (e) => {
   e.target.value = null
 }
+
+export const capitalizeFirstChar = (s) => s.charAt(0).toUpperCase() + s.substring(1)

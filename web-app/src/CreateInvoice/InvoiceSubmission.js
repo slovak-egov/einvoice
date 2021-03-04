@@ -82,10 +82,7 @@ export default ({showSubmission, title}) => {
     [dispatch, format, invoice, documentType]
   )
 
-  const getRawInvoice = useCallback(
-    () => save(invoice, 'invoice.xml'),
-    [invoice]
-  )
+  const getRawInvoice = useCallback(() => save(invoice), [invoice])
 
   return (
     <Card className="m-1">
@@ -94,7 +91,7 @@ export default ({showSubmission, title}) => {
       </Card.Header>
       <Card.Body as={Form}>
         <Row>
-          <Col md={4} sm={6} xs={6}>
+          <Col md={4} sm={6} xs={12}>
             <Form.Group>
               <Form.Label>{t('invoiceTypes.invoice')}</Form.Label>
               <div>
@@ -109,7 +106,7 @@ export default ({showSubmission, title}) => {
               </div>
             </Form.Group>
           </Col>
-          <Col md={3} sm={6} xs={6}>
+          <Col md={3} sm={6} xs={12}>
             <Form.Group>
               <Form.Label>{t('invoice.format')}</Form.Label>
               <Form.Control
@@ -139,7 +136,7 @@ export default ({showSubmission, title}) => {
             }
           </Col>
           {showSubmission && <>
-            <Col md={4} sm={6} xs={6}>
+            <Col md={4} sm={6} xs={12}>
               <Form.Group>
                 <Form.Label>{t('partiesTypes.name')}</Form.Label>
                 <Form.Control
@@ -154,7 +151,7 @@ export default ({showSubmission, title}) => {
                 </Form.Control>
               </Form.Group>
             </Col>
-            <Col md={1} sm={6} xs={6}>
+            <Col md={1} sm={6} xs={12}>
               <Form.Group>
                 <Form.Label>Test</Form.Label>
                 <FormCheck

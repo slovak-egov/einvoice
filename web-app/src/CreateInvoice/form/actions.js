@@ -1,44 +1,46 @@
-import {dropRight} from 'lodash'
-import {FORM_TYPE_PATH, getFormInitialState, invoiceFormSelector, INVOICE_FORM_PATH} from './state'
-import {setInvoiceSubmissionData, setInvoiceSubmissionFormat} from '../actions'
+import {dropRight, get} from 'lodash'
+import {formDataSelector, FORM_PATH, FORM_TYPE_PATH, getFormInitialState} from './state'
+import {
+  setInvoiceSubmissionData, setInvoiceSubmissionFormat, setInvoiceSubmissionDocumentType,
+} from '../actions'
 import {loadingWrapper, setData} from '../../helpers/actions'
-import {ublInvoiceDocsSelector} from '../../cache/documentation/state'
 import {generateInvoice} from '../../utils/invoiceGenerator'
-import {invoiceFormats} from '../../utils/constants'
+import {invoiceFormats, invoiceTypes} from '../../utils/constants'
 
+export const setFormField = (path) => setData([...FORM_PATH, ...path])
 export const setFormType = setData(FORM_TYPE_PATH)
-export const setInvoiceFormField = (path) => setData([...INVOICE_FORM_PATH, ...path])
 
 export const addFieldInstance = (path, data) => ({
   type: 'ADD INVOICE FIELD',
-  path: [...INVOICE_FORM_PATH, ...path],
+  path: [...FORM_PATH, ...path],
   payload: data,
   reducer: (state, data) => [...state, data],
 })
 
 export const removeFieldInstance = (path) => ({
-  type: 'ADD INVOICE FIELD',
-  path: [...INVOICE_FORM_PATH, ...path],
+  type: 'REMOVE INVOICE FIELD',
+  path: [...FORM_PATH, ...path],
   payload: null,
   reducer: (state) => dropRight(state),
 })
 
-export const initializeFormState = () => (
-  (dispatch, getState) => {
+export const initializeFormState = (invoiceType, docs) => (
+  (dispatch) => {
     // Add fake start point and unwrap it at the end
     const initialState = getFormInitialState({
-      children: ublInvoiceDocsSelector(getState()),
+      children: docs,
     }).children
-    dispatch(setInvoiceFormField([])(initialState))
+    dispatch(setFormField([invoiceType])(initialState))
   }
 )
 
-export const submitInvoiceForm = () => loadingWrapper(
+export const submitInvoiceForm = (invoiceType, rootPath) => loadingWrapper(
   async (dispatch, getState) => {
-    const invoiceForm = invoiceFormSelector(getState())
-    const xml = await generateInvoice(invoiceForm['ubl:Invoice'][0])
-    const invoiceFile = new File([xml], 'invoice.xml', {type: 'application/xml'})
+    const invoiceForm = formDataSelector(getState())
+    const xml = await generateInvoice(get(invoiceForm, [...rootPath, 0]), invoiceType)
+    const invoiceFile = new File([xml], `${invoiceType}.xml`, {type: 'application/xml'})
     dispatch(setInvoiceSubmissionData(invoiceFile))
     dispatch(setInvoiceSubmissionFormat(invoiceFormats.UBL))
+    dispatch(setInvoiceSubmissionDocumentType(invoiceType))
   }
 )

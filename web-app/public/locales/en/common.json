@@ -113,6 +113,10 @@
     "submitInvoice": {
       "title": "Create invoice",
       "text": "Do you really want to create this invoice?"
+    },
+    "resetForm": {
+      "title": "Reset form",
+      "text": "Do you really want to reset this form?"
     }
   },
   "errorMessages": {

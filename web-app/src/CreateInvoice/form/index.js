@@ -3,24 +3,45 @@ import {useDispatch, useSelector} from 'react-redux'
 import {useHistory} from 'react-router-dom'
 import {useTranslation} from 'react-i18next'
 import {Button, Card, Col, Form, Row} from 'react-bootstrap'
+import {get} from 'lodash'
 import TagGroup from './TagGroup'
-import {formTypeSelector, isInvoiceFormInitialized, invoiceFormSelector} from './state'
+import {formTypeSelector, formDataSelector, isFormInitialized} from './state'
 import {initializeFormState, setFormType, submitInvoiceForm} from './actions'
 import {
-  areCodeListsLoadedSelector, isUblInvoiceDocsLoadedSelector, ublInvoiceDocsSelector,
+  areCodeListsLoadedSelector,
+  isUblCreditNoteDocsLoadedSelector,
+  isUblInvoiceDocsLoadedSelector,
+  ublCreditNoteDocsSelector,
+  ublInvoiceDocsSelector,
 } from '../../cache/documentation/state'
-import {getCodeLists, getUblInvoiceDocs} from '../../cache/documentation/actions'
+import {getCodeLists, getUblCreditNoteDocs, getUblInvoiceDocs} from '../../cache/documentation/actions'
 import {invoiceTypes} from '../../utils/constants'
+import ConfirmationButton from '../../helpers/ConfirmationButton'
 
-export default ({match}) => {
+const invoiceTypeData = {
+  [invoiceTypes.INVOICE]: {
+    isLoadedSelector: isUblInvoiceDocsLoadedSelector,
+    docsSelector: ublInvoiceDocsSelector,
+    getDocs: getUblInvoiceDocs,
+    rootPath: ['invoice', 'ubl:Invoice'],
+  },
+  [invoiceTypes.CREDIT_NOTE]: {
+    isLoadedSelector: isUblCreditNoteDocsLoadedSelector,
+    docsSelector: ublCreditNoteDocsSelector,
+    getDocs: getUblCreditNoteDocs,
+    rootPath: ['creditNote', 'ubl:CreditNote'],
+  },
+}
+
+export default () => {
   const {t} = useTranslation('common')
   const history = useHistory()
-  const isDocsLoaded = useSelector(isUblInvoiceDocsLoadedSelector)
-  const areCodeListsLoaded = useSelector(areCodeListsLoadedSelector)
-  const isInvoiceFormLoaded = useSelector(isInvoiceFormInitialized)
-  const invoiceDocs = useSelector(ublInvoiceDocsSelector)
-  const invoiceForm = useSelector(invoiceFormSelector)
   const formType = useSelector(formTypeSelector)
+  const isDocsLoaded = useSelector(invoiceTypeData[formType].isLoadedSelector)
+  const areCodeListsLoaded = useSelector(areCodeListsLoadedSelector)
+  const isFormLoaded = useSelector(isFormInitialized(formType))
+  const docs = useSelector(invoiceTypeData[formType].docsSelector)
+  const formData = useSelector(formDataSelector)
   const dispatch = useDispatch()
 
   const [errorCount, setErrorCount] = useState(0)
@@ -28,9 +49,9 @@ export default ({match}) => {
   // We need to have separate useEffects, so requests can be done in parallel
   useEffect(() => {
     if (!isDocsLoaded) {
-      dispatch(getUblInvoiceDocs())
+      dispatch(invoiceTypeData[formType].getDocs())
     }
-  }, [dispatch, isDocsLoaded])
+  }, [dispatch, formType, isDocsLoaded])
 
   useEffect(() => {
     if (!areCodeListsLoaded) {
@@ -39,33 +60,29 @@ export default ({match}) => {
   }, [areCodeListsLoaded, dispatch])
 
   useEffect(() => {
-    if (areCodeListsLoaded && isDocsLoaded && !isInvoiceFormLoaded) {
-      dispatch(initializeFormState())
+    if (areCodeListsLoaded && isDocsLoaded && !isFormLoaded) {
+      dispatch(initializeFormState(formType, docs))
     }
-  }, [areCodeListsLoaded, dispatch, isDocsLoaded, isInvoiceFormLoaded])
+  }, [areCodeListsLoaded, dispatch, docs, formType, isDocsLoaded, isFormLoaded])
 
   const changeFormType = useCallback(
-    (e) => dispatch(setFormType(e.target.value)), [dispatch]
+    (e) => dispatch(setFormType(e.target.value)), [dispatch],
   )
 
   const resetForm = useCallback(
-    () => dispatch(initializeFormState()), [dispatch],
+    () => dispatch(initializeFormState(formType, docs)), [dispatch, formType, docs],
   )
 
   const submit = useCallback(
     async () => {
-      await dispatch(submitInvoiceForm())
-      const parentUrl = match.url.split('/').slice(0, -1).join('/')
-      history.push(`${parentUrl}/submission`)
-    }, [dispatch, match.url])
-
-  // Data is loading
-  if (!isInvoiceFormLoaded) return null
+      await dispatch(submitInvoiceForm(formType, invoiceTypeData[formType].rootPath))
+      history.push('/invoice-tools/submission')
+    }, [dispatch, formType])
 
   return (
     <Card className="m-1">
-      <Card.Header className="bg-primary text-white text-center" as="h3">
-        <Row className="d-block d-sm-none">{t('form')}</Row>
+      <Card.Header className="bg-primary text-center" as="h3">
+        <Row className="d-block d-sm-none text-white">{t('form')}</Row>
         <Row className="mb-0">
           <Col>
             <Form.Control
@@ -79,34 +96,34 @@ export default ({match}) => {
               ))}
             </Form.Control>
           </Col>
-          <Col className="d-none d-sm-block">{t('form')}</Col>
+          <Col className="d-none d-sm-block text-white">{t('form')}</Col>
           <Col className="d-flex">
-            <Button
+            <ConfirmationButton
               variant="danger"
               className="ml-auto"
+              confirmationTitle={t('confirmationQuestions.resetForm.title')}
+              confirmationText={t('confirmationQuestions.resetForm.text')}
               onClick={resetForm}
             >
               {t('reset')}
-            </Button>
+            </ConfirmationButton>
           </Col>
         </Row>
       </Card.Header>
-      <Card.Body>
-        {formType === invoiceTypes.INVOICE ? <>
-          <TagGroup
-            path={['ubl:Invoice']}
-            formData={invoiceForm['ubl:Invoice']}
-            docs={invoiceDocs['ubl:Invoice']}
-            setErrorCount={setErrorCount}
-          />
-          <div className="d-flex mt-1">
-            <Button variant="primary" className="ml-auto" onClick={submit} disabled={errorCount !== 0}>
-              {t('generateInvoice')}
-            </Button>
-          </div>
-        </> : <div>Coming soon</div>
-        }
-      </Card.Body>
+      {/*Render once data are loaded*/}
+      {isFormLoaded && <Card.Body>
+        <TagGroup
+          path={invoiceTypeData[formType].rootPath}
+          formData={get(formData, invoiceTypeData[formType].rootPath)}
+          docs={docs[invoiceTypeData[formType].rootPath[1]]}
+          setErrorCount={setErrorCount}
+        />
+        <div className="d-flex mt-1">
+          <Button variant="primary" className="ml-auto" onClick={submit} disabled={errorCount !== 0}>
+            {t('generateInvoice')}
+          </Button>
+        </div>
+      </Card.Body>}
     </Card>
   )
 }

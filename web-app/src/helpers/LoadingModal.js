@@ -1,20 +1,17 @@
-import './LoadingModal.css'
 import {Modal, Spinner} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 
 export default () => {
   const {t} = useTranslation('common')
   return (
-    <div className="static-modal Modal">
-      <Modal.Dialog>
-        <Modal.Header style={{display: 'flex', backgroundColor: '#f3f3f3'}}>
-          <Modal.Title className="m-auto">{t('loading.title')}</Modal.Title>
-        </Modal.Header>
+    <Modal show centered size="sm">
+      <Modal.Header className="d-flex">
+        <Modal.Title className="m-auto">{t('loading.title')}</Modal.Title>
+      </Modal.Header>
 
-        <Modal.Body style={{display: 'flex', backgroundColor: '#f3f3f3'}}>
-          <Spinner animation="border" variant="primary" className="m-auto" />
-        </Modal.Body>
-      </Modal.Dialog>
-    </div>
+      <Modal.Body className="d-flex">
+        <Spinner animation="border" variant="primary" className="m-auto" />
+      </Modal.Body>
+    </Modal>
   )
 }
