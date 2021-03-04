@@ -1,11 +1,10 @@
-import {useSelector} from 'react-redux'
+import {Fragment} from 'react'
 import {Link, useLocation} from 'react-router-dom'
 import {Card, Col, Row, Table} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import {last} from 'lodash'
 import NotFound from '../../../helpers/NotFound'
-import {tagDocsSelector} from './state'
-import {displayCardinality} from './helpers'
+import {displayCardinality, getTagDocs} from './helpers'
 
 const TagDescendantsTable = ({descendants, attributes}) => {
   const {i18n, t} = useTranslation('common')
@@ -42,11 +41,12 @@ const TagDescendantsTable = ({descendants, attributes}) => {
   )
 }
 
-export default ({location}) => {
+export default ({rootDocs}) => {
   const {i18n, t} = useTranslation('common')
+  const location = useLocation()
 
   const tagPath = location.pathname.split('/').slice(3)
-  const docs = useSelector(tagDocsSelector(tagPath))
+  const docs = getTagDocs(rootDocs, tagPath)
 
   // Tag does not exist in invoice documentation
   if (docs == null) return <NotFound />
@@ -78,10 +78,10 @@ export default ({location}) => {
           <Col className="font-weight-bold" sm="3">{t('invoiceDocs.codeLists')}</Col>
           <Col sm="9">
             {docs.codeLists.map((codeList, i) => (
-              <>
+              <Fragment key={i}>
                 {i !== 0 && <span>, </span>}
-                <Link key={i} to={`/invoice-documentation/codeLists/${codeList}`}>{codeList}</Link>
-              </>
+                <Link to={`/invoice-documentation/codeLists/${codeList}`}>{codeList}</Link>
+              </Fragment>
             ))}
           </Col>
         </Row>}

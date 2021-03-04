@@ -1,5 +1,6 @@
 import {get} from 'lodash'
-import {ubl21XsdDocsSelector} from '../../../cache/documentation/state'
+
+export const displayCardinality = (card) => `${card.from}..${card.to}`
 
 // Distinguish path to child and attribute
 const getElementPath = (v) => {
@@ -7,7 +8,7 @@ const getElementPath = (v) => {
   else return ['children', v]
 }
 
-export const tagDocsSelector = (tagPath) => (state) => {
+export const getTagDocs = (docs, tagPath) => {
   const path = tagPath.flatMap((v, i) => i === 0 ? [v] : getElementPath(v))
-  return get(ubl21XsdDocsSelector(state), path)
+  return get(docs, path)
 }
