@@ -2,7 +2,7 @@ import {dropRight} from 'lodash'
 import {FORM_TYPE_PATH, getFormInitialState, invoiceFormSelector, INVOICE_FORM_PATH} from './state'
 import {setInvoiceSubmissionData, setInvoiceSubmissionFormat} from '../actions'
 import {loadingWrapper, setData} from '../../helpers/actions'
-import {ubl21XsdDocsSelector} from '../../cache/documentation/state'
+import {ublInvoiceDocsSelector} from '../../cache/documentation/state'
 import {generateInvoice} from '../../utils/invoiceGenerator'
 import {invoiceFormats} from '../../utils/constants'
 
@@ -27,7 +27,7 @@ export const initializeFormState = () => (
   (dispatch, getState) => {
     // Add fake start point and unwrap it at the end
     const initialState = getFormInitialState({
-      children: ubl21XsdDocsSelector(getState()),
+      children: ublInvoiceDocsSelector(getState()),
     }).children
     dispatch(setInvoiceFormField([])(initialState))
   }

@@ -86,7 +86,7 @@ export default ({showSubmission, title}) => {
         <Row>
           <Col md={4} sm={6} xs={6}>
             <Form.Group>
-              <Form.Label>{t('invoice.title')}</Form.Label>
+              <Form.Label>{t('invoiceTypes.invoice')}</Form.Label>
               <div>
                 <FileUploader
                   file={invoice}

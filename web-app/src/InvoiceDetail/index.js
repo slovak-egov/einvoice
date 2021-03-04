@@ -55,7 +55,7 @@ export default ({history, match: {params: {id}}}) => {
     <Card className="m-1">
       <Card.Header className="bg-primary text-white text-center d-sm-flex" as="h3">
         <Col />
-        <Col>{t('invoice.title')} {id}</Col>
+        <Col>{t('invoiceTypes.invoice')} {id}</Col>
         <Col className="d-sm-flex">
           <Button className="ml-auto" variant="danger" onClick={history.goBack}>{t('close')}</Button>
         </Col>
