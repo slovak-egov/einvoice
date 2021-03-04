@@ -13,16 +13,21 @@ export default ({match}) => {
         <Row className="justify-content-center">
           <Link to={`${match.url}/ublInvoice`}>
             <Button variant="primary">
-              UBL2.1
+              UBL2.1 {t('invoiceTypes.invoice')}
             </Button>
           </Link>
-          <Link to={`${match.url}/ublRules`}>
+          <Link to={`${match.url}/ublCreditNote`}>
             <Button variant="success">
-              {t('invoiceDocs.ublRules')}
+              UBL2.1 {t('invoiceTypes.creditNote')}
             </Button>
           </Link>
         </Row>
         <Row className="justify-content-center">
+          <Link to={`${match.url}/ublRules`}>
+            <Button variant="warning">
+              {t('invoiceDocs.ublRules')}
+            </Button>
+          </Link>
           <Link to={`${match.url}/codeLists`}>
             <Button variant="secondary">
               {t('invoiceDocs.codeLists')}
