@@ -1,6 +1,6 @@
 import {isEmpty} from 'lodash'
 import {format as formatDate} from 'date-fns'
-import {fileToBase64} from './helpers'
+import {capitalizeFirstChar, fileToBase64} from './helpers'
 import {rootAttributes} from './constants'
 
 const generateInvoiceXml = async (name, data, indent, additionalAttributes) => {
@@ -41,7 +41,9 @@ const generateInvoiceXml = async (name, data, indent, additionalAttributes) => {
   return rows.join('\n')
 }
 
-export const generateInvoice = async (formData) => {
-  const invoice = await generateInvoiceXml('Invoice', formData, 0, rootAttributes)
+export const generateInvoice = async (formData, invoiceType) => {
+  const invoice = await generateInvoiceXml(
+    capitalizeFirstChar(invoiceType), formData, 0, rootAttributes(invoiceType),
+  )
   return `<?xml version="1.0" encoding="UTF-8"?>\n${invoice}`
 }

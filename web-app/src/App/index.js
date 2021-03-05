@@ -8,7 +8,7 @@ import App from './App'
 import {login, logout} from '../cache/users/actions'
 
 const CenteredSpinner = () => (
-  <div className="Modal">
+  <div className="position-fixed" style={{top: '50%', left: '50%'}}>
     <Spinner animation="border" variant="primary" />
   </div>
 )

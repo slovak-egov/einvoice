@@ -7,10 +7,10 @@ import classnames from 'classnames'
 import DatePicker from '../../helpers/DatePicker'
 import FileUploader from '../../helpers/FileUploader'
 import Tooltip from '../../helpers/Tooltip'
-import {invoiceFormFieldSelector} from './state'
-import {setInvoiceFormField} from './actions'
+import {formFieldSelector} from './state'
+import {setFormField} from './actions'
 import {codeListsSelector} from '../../cache/documentation/state'
-import {allowedAttachmentMimeTypes} from '../../utils/constants'
+import {allowedAttachmentMimeTypes, dataTypes} from '../../utils/constants'
 
 const fileToState = (file, name, mime) => ({
   text: file,
@@ -22,7 +22,7 @@ const fileToState = (file, name, mime) => ({
 
 export default ({canDelete, dropField, docs, path, setErrorCount}) => {
   const {t, i18n} = useTranslation('common')
-  const value = useSelector(invoiceFormFieldSelector(path)) || ''
+  const value = useSelector(formFieldSelector(path)) || ''
   const dispatch = useDispatch()
   const isInvalid = value === ''
 
@@ -37,8 +37,8 @@ export default ({canDelete, dropField, docs, path, setErrorCount}) => {
     (value) => {
       // Uploading file is special case
       // We allow field to change its parent, it will set mime type and filename too
-      const pathToUpdate = docs.dataType === 'Binary object' ? path.slice(0, -1) : path
-      dispatch(setInvoiceFormField(pathToUpdate)(value))
+      const pathToUpdate = docs.dataType === dataTypes.BINARY_OBJECT ? path.slice(0, -1) : path
+      dispatch(setFormField(pathToUpdate)(value))
     }, [dispatch, docs.dataType, path]
   )
 
@@ -70,8 +70,8 @@ const FieldInput = ({codeListIds, dataType, isInvalid, updateField, value}) => {
   const getValue = useCallback(
     (e) => {
       switch (dataType) {
-        case 'Date': return e
-        case 'Binary object':
+        case dataTypes.DATE: return e
+        case dataTypes.BINARY_OBJECT:
           if (allowedAttachmentMimeTypes.includes(e.target.files[0].type)) {
             return fileToState(e.target.files[0], e.target.files[0].name, e.target.files[0].type)
           } else {
@@ -81,7 +81,7 @@ const FieldInput = ({codeListIds, dataType, isInvalid, updateField, value}) => {
             })
             return fileToState('', '', '')
           }
-        case 'Percentage': {
+        case dataTypes.PERCENTAGE: {
           let result = '', digits = 0, decimalPart = false
           for (const c of e.target.value.replace(/[^0-9.]/g, '')) {
             if (c === '.') {
@@ -95,8 +95,8 @@ const FieldInput = ({codeListIds, dataType, isInvalid, updateField, value}) => {
           }
           return result
         }
-        case 'Quantity': return e.target.value.replace(/[^0-9]/g, '')
-        case 'Amount': {
+        case dataTypes.QUANTITY: return e.target.value.replace(/[^0-9]/g, '')
+        case dataTypes.AMOUNT: {
           // Only number with up to 2 decimal digits allowed
           let result = '', decimalDigits = 0
           for (const c of e.target.value.replace(/[^0-9.]/g, '')) {
@@ -120,7 +120,7 @@ const FieldInput = ({codeListIds, dataType, isInvalid, updateField, value}) => {
   const codeLists = useSelector(codeListsSelector)
 
   switch (dataType) {
-    case 'Date':
+    case dataTypes.DATE:
       return (
         <DatePicker
           selected={value}
@@ -129,7 +129,7 @@ const FieldInput = ({codeListIds, dataType, isInvalid, updateField, value}) => {
           dateFormat="yyyy-MM-dd"
         />
       )
-    case 'Binary object':
+    case dataTypes.BINARY_OBJECT:
       return (
         <FileUploader
           accept={allowedAttachmentMimeTypes.join(',')}
@@ -139,7 +139,7 @@ const FieldInput = ({codeListIds, dataType, isInvalid, updateField, value}) => {
           file={value}
         />
       )
-    case 'Percentage':
+    case dataTypes.PERCENTAGE:
       return (
         <div className="d-flex">
           <Form.Control
@@ -152,7 +152,7 @@ const FieldInput = ({codeListIds, dataType, isInvalid, updateField, value}) => {
           <span className="my-auto ml-1">%</span>
         </div>
       )
-    case 'Code':
+    case dataTypes.CODE:
       return (
         <Form.Control
           as="select"
