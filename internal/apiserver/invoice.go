@@ -48,13 +48,37 @@ func NewPublicInvoicesOptions(params url.Values, maxLimit int) (*db.PublicInvoic
 	if order == "" {
 		order = dbutil.DescOrder
 	}
+	amountFrom, err := getOptionalFloat(params.Get("amountFrom"))
+	if err != nil {
+		return nil, fmt.Errorf("amountFrom: %w", err)
+	}
+	amountTo, err := getOptionalFloat(params.Get("amountTo"))
+	if err != nil {
+		return nil, fmt.Errorf("amountTo: %w", err)
+	}
+	amountWithoutVatFrom, err := getOptionalFloat(params.Get("amountWithoutVatFrom"))
+	if err != nil {
+		return nil, fmt.Errorf("amountWithoutVatFrom: %w", err)
+	}
+	amountWithoutVatTo, err := getOptionalFloat(params.Get("amountWithoutVatTo"))
+	if err != nil {
+		return nil, fmt.Errorf("amountWithoutVatTo: %w", err)
+	}
 	return &db.PublicInvoicesOptions{
-		params["format"],
-		startId,
-		limit,
-		test,
-		params.Get("ico"),
-		order,
+		Formats: params["format"],
+		StartId: startId,
+		Limit:   limit,
+		Test:    test,
+		Ico:     params.Get("ico"),
+		Order:   order,
+		Amount: db.AmountOptions{
+			From: amountFrom,
+			To:   amountTo,
+		},
+		AmountWithoutVat: db.AmountOptions{
+			From: amountWithoutVatFrom,
+			To:   amountWithoutVatTo,
+		},
 	}, nil
 }
 

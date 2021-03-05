@@ -32,13 +32,14 @@ func parseUblInvoice(rawInvoice []byte) (*entity.Invoice, error) {
 	}
 
 	return &entity.Invoice{
-		Format:      entity.UblFormat,
-		Sender:      invoice.AccountingSupplierParty.Party.PartyName.Name,
-		SupplierIco: invoice.AccountingSupplierParty.Party.PartyIdentification.ID,
-		Receiver:    invoice.AccountingCustomerParty.Party.PartyName.Name,
-		CustomerIco: invoice.AccountingCustomerParty.Party.PartyIdentification.ID,
-		Price:       invoice.LegalMonetaryTotal.PayableAmount,
-		IssueDate:   *issueDate,
+		Format:           entity.UblFormat,
+		Sender:           invoice.AccountingSupplierParty.Party.PartyName.Name,
+		SupplierIco:      invoice.AccountingSupplierParty.Party.PartyIdentification.ID,
+		Receiver:         invoice.AccountingCustomerParty.Party.PartyName.Name,
+		CustomerIco:      invoice.AccountingCustomerParty.Party.PartyIdentification.ID,
+		Amount:           invoice.LegalMonetaryTotal.TaxInclusiveAmount,
+		AmountWithoutVat: invoice.LegalMonetaryTotal.TaxExclusiveAmount,
+		IssueDate:        *issueDate,
 	}, nil
 }
 
@@ -58,12 +59,13 @@ func parseD16bInvoice(rawInvoice []byte) (*entity.Invoice, error) {
 	}
 
 	return &entity.Invoice{
-		Format:      entity.D16bFormat,
-		Sender:      invoice.SupplyChainTradeTransaction.ApplicableHeaderTradeAgreement.SellerTradeParty.Name,
-		SupplierIco: invoice.SupplyChainTradeTransaction.ApplicableHeaderTradeAgreement.SellerTradeParty.ID,
-		Receiver:    invoice.SupplyChainTradeTransaction.ApplicableHeaderTradeAgreement.BuyerTradeParty.Name,
-		CustomerIco: invoice.SupplyChainTradeTransaction.ApplicableHeaderTradeAgreement.BuyerTradeParty.ID,
-		Price:       invoice.SupplyChainTradeTransaction.ApplicableHeaderTradeSettlement.SpecifiedTradeSettlementHeaderMonetarySummation.DuePayableAmount,
-		IssueDate:   *issueDate,
+		Format:           entity.D16bFormat,
+		Sender:           invoice.SupplyChainTradeTransaction.ApplicableHeaderTradeAgreement.SellerTradeParty.Name,
+		SupplierIco:      invoice.SupplyChainTradeTransaction.ApplicableHeaderTradeAgreement.SellerTradeParty.ID,
+		Receiver:         invoice.SupplyChainTradeTransaction.ApplicableHeaderTradeAgreement.BuyerTradeParty.Name,
+		CustomerIco:      invoice.SupplyChainTradeTransaction.ApplicableHeaderTradeAgreement.BuyerTradeParty.ID,
+		Amount:           invoice.SupplyChainTradeTransaction.ApplicableHeaderTradeSettlement.SpecifiedTradeSettlementHeaderMonetarySummation.GrandTotalAmount,
+		AmountWithoutVat: invoice.SupplyChainTradeTransaction.ApplicableHeaderTradeSettlement.SpecifiedTradeSettlementHeaderMonetarySummation.TaxBasisTotalAmount,
+		IssueDate:        *issueDate,
 	}, nil
 }

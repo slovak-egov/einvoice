@@ -16,12 +16,19 @@ import (
 )
 
 type PublicInvoicesOptions struct {
-	Formats []string
-	StartId int
-	Limit   int
-	Test    bool
-	Ico     string
-	Order   string
+	Formats          []string
+	StartId          int
+	Limit            int
+	Test             bool
+	Ico              string
+	Order            string
+	Amount           AmountOptions
+	AmountWithoutVat AmountOptions
+}
+
+type AmountOptions struct {
+	From *float64
+	To   *float64
 }
 
 func (o *PublicInvoicesOptions) Validate(maxLimit int) error {
@@ -62,6 +69,26 @@ func (o *PublicInvoicesOptions) buildQuery(query *orm.Query) *orm.Query {
 		query = query.WhereGroup(func(q *orm.Query) (*orm.Query, error) {
 			return q.WhereOr("supplier_ico = ?", o.Ico).WhereOr("customer_ico = ?", o.Ico), nil
 		})
+	}
+
+	if o.Amount.From != nil {
+		// Filter out invoices with amount less then requested limit
+		query = query.Where("amount >= ?", o.Amount.From)
+	}
+
+	if o.Amount.To != nil {
+		// Filter out invoices with amount greater then requested limit
+		query = query.Where("amount <= ?", o.Amount.To)
+	}
+
+	if o.AmountWithoutVat.From != nil {
+		// Filter out invoices with amount without vat less then requested limit
+		query = query.Where("amount_without_vat >= ?", o.AmountWithoutVat.From)
+	}
+
+	if o.AmountWithoutVat.To != nil {
+		// Filter out invoices with amount without vat greater then requested limit
+		query = query.Where("amount_without_vat <= ?", o.AmountWithoutVat.To)
 	}
 
 	if o.Order == dbutil.AscOrder {

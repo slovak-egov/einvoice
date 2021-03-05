@@ -229,6 +229,10 @@ paths:
         - $ref: '#/components/parameters/Order'
         - $ref: '#/components/parameters/Limit'
         - $ref: '#/components/parameters/TestInvoice'
+        - $ref: '#/components/parameters/AmountFrom'
+        - $ref: '#/components/parameters/AmountTo'
+        - $ref: '#/components/parameters/AmountWithoutVatFrom'
+        - $ref: '#/components/parameters/AmountWithoutVatTo'
       security:
         - sessionAuth: []
         - apiKeyAuth: []
@@ -252,6 +256,10 @@ paths:
         - $ref: '#/components/parameters/Limit'
         - $ref: '#/components/parameters/TestInvoice'
         - $ref: '#/components/parameters/Ico'
+        - $ref: '#/components/parameters/AmountFrom'
+        - $ref: '#/components/parameters/AmountTo'
+        - $ref: '#/components/parameters/AmountWithoutVatFrom'
+        - $ref: '#/components/parameters/AmountWithoutVatTo'
       responses:
         '200':
           description: Successfull response
@@ -578,6 +586,30 @@ components:
       description: Request entities related to given IČO. If not provided, all will be considered
       schema:
         type: string
+    AmountFrom:
+      name: amountFrom
+      in: query
+      description: Select invoices with amount not lesser than this value
+      schema:
+        type: number
+    AmountTo:
+      name: amountTo
+      in: query
+      description: Select invoices with amount not greater than this value
+      schema:
+        type: number
+    AmountWithoutVatFrom:
+      name: amountWithoutVatFrom
+      in: query
+      description: Select invoices with amount without VAT not lesser than this value
+      schema:
+        type: number
+    AmountWithoutVatTo:
+      name: amountWithoutVatTo
+      in: query
+      description: Select invoices with amount without VAT not greater than this value
+      schema:
+        type: number
   requestBodies:
     PatchUser:
       content:

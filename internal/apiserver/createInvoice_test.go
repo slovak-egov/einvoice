@@ -64,7 +64,8 @@ func TestCreateInvoice(t *testing.T) {
 		CreatedAt:           createdResponse.CreatedAt, // No need to assert this param
 		Sender:              "Global Trade Chain",
 		Receiver:            "Project Services",
-		Price:               12500,
+		Amount:              12500,
+		AmountWithoutVat:    10000,
 		SupplierIco:         "11190993",
 		CustomerIco:         "22222222",
 		Format:              entity.UblFormat,
