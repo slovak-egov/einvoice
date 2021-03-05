@@ -14,7 +14,8 @@
     "customerIco": "IČO zákazníka",
     "public": "Verejne prístupné",
     "notificationsSent": "Notifikácie odoslané",
-    "format": "Formát"
+    "format": "Formát",
+    "type": "Typ"
   },
   "cancel": "Zrušiť",
   "save": "Uložiť",

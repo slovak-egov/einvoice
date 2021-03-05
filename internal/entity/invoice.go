@@ -17,10 +17,14 @@ const (
 	SlovakInvoiceParties = "slovakParties"
 	ForeignSupplierParty = "foreignSupplier"
 	ForeignCustomerParty = "foreignCustomer"
+
+	InvoiceDocumentType    = "invoice"
+	CreditNoteDocumentType = "creditNote"
 )
 
 var InvoiceFormats = []string{UblFormat, D16bFormat}
 var InvoicePartiesTypes = []string{SlovakInvoiceParties, ForeignSupplierParty, ForeignCustomerParty}
+var DocumentTypes = []string{InvoiceDocumentType, CreditNoteDocumentType}
 
 type Invoice struct {
 	Id                  int           `json:"id"`

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CreditNote xmlns="urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">
+	<cbc:UBLVersionID>2.0</cbc:UBLVersionID>
+	<cbc:CustomizationID>urn:oasis:names:specification:ubl:xpath:CreditNote-2.0:sbs-1.0-draft</cbc:CustomizationID>
+	<cbc:ProfileID>bpid:urn:oasis:names:draft:bpss:ubl-2-sbs-credit-notification-draft</cbc:ProfileID>
+	<cbc:ID>CN758494</cbc:ID>
+	<cbc:CopyIndicator>false</cbc:CopyIndicator>
+	<cbc:UUID>349ABBAE-DF9D-40B4-849F-94C5FF9D1AF4</cbc:UUID>
+	<cbc:IssueDate>2005-06-25</cbc:IssueDate>
+	<cbc:TaxPointDate>2005-06-21</cbc:TaxPointDate>
+	<cbc:Note>sample</cbc:Note>
+	<cac:AccountingSupplierParty>
+		<cac:Party>
+			<cbc:EndpointID schemeID="0007">1234567890</cbc:EndpointID>
+			<cac:PartyIdentification>
+				<cbc:ID schemeID="0158">11190993</cbc:ID>
+			</cac:PartyIdentification>
+			<cac:PartyName>
+				<cbc:Name>Global Trade Chain</cbc:Name>
+			</cac:PartyName>
+			<cac:PostalAddress>
+				<cbc:StreetName>Streetname-line1</cbc:StreetName>
+				<cbc:AdditionalStreetName>AddStreetname-line2</cbc:AdditionalStreetName>
+				<cbc:CityName>Big City</cbc:CityName>
+				<cbc:PostalZone>11122</cbc:PostalZone>
+				<cbc:CountrySubentity>Delstat A</cbc:CountrySubentity>
+				<cac:AddressLine>
+					<cbc:Line>Address-line3</cbc:Line>
+				</cac:AddressLine>
+				<cac:Country>
+					<cbc:IdentificationCode>SE</cbc:IdentificationCode>
+				</cac:Country>
+			</cac:PostalAddress>
+			<cac:PartyTaxScheme>
+				<cbc:CompanyID>SE123456789001</cbc:CompanyID>
+				<cac:TaxScheme>
+					<cbc:ID>VAT</cbc:ID>
+				</cac:TaxScheme>
+			</cac:PartyTaxScheme>
+			<cac:PartyTaxScheme>
+				<cbc:CompanyID>Godkänd för F-skatt</cbc:CompanyID>
+				<cac:TaxScheme>
+					<cbc:ID>TAX</cbc:ID>
+				</cac:TaxScheme>
+			</cac:PartyTaxScheme>
+			<cac:PartyLegalEntity>
+				<cbc:RegistrationName>The Global Chain Sweden AB</cbc:RegistrationName>
+				<cbc:CompanyID schemeID="0007">1234567890</cbc:CompanyID>
+				<cbc:CompanyLegalForm>Säte: Big CIty</cbc:CompanyLegalForm>
+			</cac:PartyLegalEntity>
+			<cac:Contact>
+				<cbc:Name>A Persson</cbc:Name>
+				<cbc:Telephone>0201234567</cbc:Telephone>
+				<cbc:ElectronicMail>info@UCS.se</cbc:ElectronicMail>
+			</cac:Contact>
+		</cac:Party>
+	</cac:AccountingSupplierParty>
+	<cac:AccountingCustomerParty>
+		<cac:Party>
+			<cbc:EndpointID schemeID="0007">1234512345</cbc:EndpointID>
+			<cac:PartyIdentification>
+				<cbc:ID schemeID="0158">22222222</cbc:ID>
+			</cac:PartyIdentification>
+			<cac:PartyName>
+				<cbc:Name>Project Services</cbc:Name>
+			</cac:PartyName>
+			<cac:PostalAddress>
+				<cbc:StreetName>Gata (rad1)</cbc:StreetName>
+				<cbc:AdditionalStreetName>Box 8 (rad2)</cbc:AdditionalStreetName>
+				<cbc:CityName>Motown</cbc:CityName>
+				<cbc:PostalZone>10203</cbc:PostalZone>
+				<cbc:CountrySubentity>Delstat B</cbc:CountrySubentity>
+				<cac:AddressLine>
+					<cbc:Line>Building 4 (rad3)</cbc:Line>
+				</cac:AddressLine>
+				<cac:Country>
+					<cbc:IdentificationCode>SE</cbc:IdentificationCode>
+				</cac:Country>
+			</cac:PostalAddress>
+			<cac:PartyTaxScheme>
+				<cbc:CompanyID>SE123451234501</cbc:CompanyID>
+				<cac:TaxScheme>
+					<cbc:ID>VAT</cbc:ID>
+				</cac:TaxScheme>
+			</cac:PartyTaxScheme>
+			<cac:PartyLegalEntity>
+				<cbc:RegistrationName>Project services AB</cbc:RegistrationName>
+				<cbc:CompanyID schemeID="0007">1234512345</cbc:CompanyID>
+			</cac:PartyLegalEntity>
+			<cac:Contact>
+				<cbc:Name>B. E. Ställman</cbc:Name>
+				<cbc:Telephone>070123456</cbc:Telephone>
+				<cbc:ElectronicMail>B.E.Stallman@projekttjanst.se</cbc:ElectronicMail>
+			</cac:Contact>
+		</cac:Party>
+	</cac:AccountingCustomerParty>
+	<cac:TaxTotal>
+		<cbc:TaxAmount currencyID="GBP">17.50</cbc:TaxAmount>
+		<cbc:TaxEvidenceIndicator>true</cbc:TaxEvidenceIndicator>
+		<cac:TaxSubtotal>
+			<cbc:TaxableAmount currencyID="GBP">100.00</cbc:TaxableAmount>
+			<cbc:TaxAmount currencyID="GBP">17.50</cbc:TaxAmount>
+			<cac:TaxCategory>
+				<cbc:ID>A</cbc:ID>
+				<cac:TaxScheme>
+					<cbc:ID>UK VAT</cbc:ID>
+					<cbc:TaxTypeCode>VAT</cbc:TaxTypeCode>
+				</cac:TaxScheme>
+			</cac:TaxCategory>
+		</cac:TaxSubtotal>
+	</cac:TaxTotal>
+	<cac:LegalMonetaryTotal>
+		<cbc:LineExtensionAmount currencyID="GBP">100.00</cbc:LineExtensionAmount>
+		<cbc:TaxExclusiveAmount currencyID="GBP">90.00</cbc:TaxExclusiveAmount>
+		<cbc:PayableAmount currencyID="GBP">107.50</cbc:PayableAmount>
+	</cac:LegalMonetaryTotal>
+	<cac:CreditNoteLine>
+		<cbc:ID>1</cbc:ID>
+		<cbc:Note>as agreed on phone, the invoice should have been cancelled earlier, apologies</cbc:Note>
+		<cbc:CreditedQuantity unitCode="KGM">100</cbc:CreditedQuantity>
+		<cbc:LineExtensionAmount currencyID="GBP">100.00</cbc:LineExtensionAmount>
+		<cbc:TaxPointDate>2005-06-21</cbc:TaxPointDate>
+		<cac:DiscrepancyResponse>
+			<cbc:ReferenceID>A00095678</cbc:ReferenceID>
+			<cbc:Description>invoice cancelation</cbc:Description>
+		</cac:DiscrepancyResponse>
+		<cac:BillingReference>
+			<cac:InvoiceDocumentReference>
+				<cbc:ID>A00095678</cbc:ID>
+				<cbc:UUID>849FBBCE-E081-40B4-906C-94C5FF9D1AC3</cbc:UUID>
+				<cbc:IssueDate>2005-06-21</cbc:IssueDate>
+			</cac:InvoiceDocumentReference>
+		</cac:BillingReference>
+		<cac:TaxTotal>
+			<cbc:TaxAmount currencyID="GBP">17.50</cbc:TaxAmount>
+			<cbc:TaxEvidenceIndicator>true</cbc:TaxEvidenceIndicator>
+			<cac:TaxSubtotal>
+				<cbc:TaxableAmount currencyID="GBP">100.00</cbc:TaxableAmount>
+				<cbc:TaxAmount currencyID="GBP">17.50</cbc:TaxAmount>
+				<cac:TaxCategory>
+					<cbc:ID>A</cbc:ID>
+					<cac:TaxScheme>
+						<cbc:ID>UK VAT</cbc:ID>
+						<cbc:TaxTypeCode>VAT</cbc:TaxTypeCode>
+					</cac:TaxScheme>
+				</cac:TaxCategory>
+			</cac:TaxSubtotal>
+		</cac:TaxTotal>
+		<cac:Item>
+			<cbc:Description>Acme beeswax</cbc:Description>
+			<cbc:Name>beeswax</cbc:Name>
+			<cac:BuyersItemIdentification>
+				<cbc:ID>6578489</cbc:ID>
+			</cac:BuyersItemIdentification>
+			<cac:SellersItemIdentification>
+				<cbc:ID>17589683</cbc:ID>
+			</cac:SellersItemIdentification>
+			<cac:ItemInstance>
+				<cac:LotIdentification>
+					<cbc:LotNumberID>546378239</cbc:LotNumberID>
+					<cbc:ExpiryDate>2010-01-01</cbc:ExpiryDate>
+				</cac:LotIdentification>
+			</cac:ItemInstance>
+		</cac:Item>
+		<cac:Price>
+			<cbc:PriceAmount currencyID="GBP">1.00</cbc:PriceAmount>
+			<cbc:BaseQuantity unitCode="KGM">1</cbc:BaseQuantity>
+		</cac:Price>
+	</cac:CreditNoteLine>
+</CreditNote>

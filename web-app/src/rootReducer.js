@@ -12,6 +12,7 @@ const getInitialState = () => ({
       format: invoiceFormats.UBL,
       partiesType: partiesTypes.SLOVAK,
       test: false,
+      documentType: invoiceTypes.INVOICE,
     },
     form: {
       type: invoiceTypes.INVOICE,

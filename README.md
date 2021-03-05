@@ -67,8 +67,9 @@ Useful resources:
 
 [Maindoc](http://docs.oasis-open.org/ubl/os-UBL-2.1/xsd)
 
-From maindoc you need only [this](http://docs.oasis-open.org/ubl/os-UBL-2.1/xsd/maindoc/UBL-Invoice-2.1.xsd)
-part.
+From maindoc you need only [invoice](http://docs.oasis-open.org/ubl/os-UBL-2.1/xsd/maindoc/UBL-Invoice-2.1.xsd)
+and [credit note](http://docs.oasis-open.org/ubl/os-UBL-2.1/xsd/maindoc/UBL-CreditNote-2.1.xsd)
+parts.
 
 ### [D16B (SCRDM — CII)](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32017D1870#ntc1-L_2017266EN.01002101-E0001)
 

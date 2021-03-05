@@ -12,10 +12,12 @@ import (
 func TestValidation(t *testing.T) {
 	var flagtests = []struct {
 		format          string
+		documentType    string
 		testInvoicePath string
 	}{
-		{entity.UblFormat, "../../../data/examples/ubl2.1/invoice.xml"},
-		{entity.D16bFormat, "../../../data/examples/d16b/invoice.xml"},
+		{entity.UblFormat, entity.InvoiceDocumentType, "../../../data/examples/ubl2.1/invoice.xml"},
+		{entity.UblFormat, entity.CreditNoteDocumentType, "../../../data/examples/ubl2.1/creditNote.xml"},
+		{entity.D16bFormat, entity.InvoiceDocumentType, "../../../data/examples/d16b/invoice.xml"},
 	}
 	for _, tt := range flagtests {
 		t.Run(tt.format, func(t *testing.T) {
@@ -24,7 +26,7 @@ func TestValidation(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			assert.Nil(t, validator.Validate(bytes, tt.format))
+			assert.Nil(t, validator.Validate(bytes, tt.format, tt.documentType))
 		})
 	}
 }

@@ -14,7 +14,8 @@
     "customerIco": "Customer IČO",
     "public": "Public",
     "notificationsSent": "Notifications sent",
-    "format": "Format"
+    "format": "Format",
+    "type": "Type"
   },
   "cancel": "Cancel",
   "save": "Save",

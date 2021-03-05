@@ -11,3 +11,5 @@ export const submissionInvoiceSelector = (state) => invoiceSubmissionSelector(st
 export const submissionTestSelector = (state) => invoiceSubmissionSelector(state).test
 
 export const partiesTypeSelector = (state) => invoiceSubmissionSelector(state).partiesType
+
+export const documentTypeSelector = (state) => invoiceSubmissionSelector(state).documentType

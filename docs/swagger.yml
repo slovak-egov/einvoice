@@ -299,6 +299,8 @@ paths:
                   format: binary
                 lang:
                   $ref: '#/components/schemas/Languages'
+                documentType:
+                  $ref: '#/components/schemas/DocumentType'
               required:
                 - format
                 - invoice
@@ -455,6 +457,12 @@ components:
       enum:
         - ubl2.1
         - d16b
+    DocumentType:
+      type: string
+      description: Invoice or credit note
+      enum:
+        - invoice
+        - creditNote
     InvoiceParties:
       type: string
       description: Type of invoice party nationalities
@@ -597,6 +605,8 @@ components:
                 $ref: '#/components/schemas/InvoiceParties'
               lang:
                 $ref: '#/components/schemas/Languages'
+              documentType:
+                $ref: '#/components/schemas/DocumentType'
             required:
               - format
               - invoice
