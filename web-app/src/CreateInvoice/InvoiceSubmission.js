@@ -49,7 +49,9 @@ export default ({showSubmission, title}) => {
       formData.append('test', test)
       formData.append('partiesType', partiesType)
       formData.append('lang', i18n.language)
-      formData.append('documentType', documentType)
+      if (format === invoiceFormats.UBL) {
+        formData.append('documentType', documentType)
+      }
 
       const {invoiceId, redirect} = await dispatch(createInvoice(formData))
       if (invoiceId) {
@@ -68,7 +70,9 @@ export default ({showSubmission, title}) => {
       formData.append('format', format)
       formData.append('invoice', invoice)
       formData.append('lang', i18n.language)
-      formData.append('documentType', documentType)
+      if (format === invoiceFormats.UBL) {
+        formData.append('documentType', documentType)
+      }
 
       const visualization = await dispatch(getInvoiceVisualization(formData))
       if (visualization) {
