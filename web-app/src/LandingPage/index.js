@@ -77,6 +77,11 @@ export default () => {
                   {t('announcements.2.links.4')}
                 </a>
               </li>
+              <li>
+                <a href={exampleInvoiceUrl(invoiceFormats.UBL, 'creditNote')} target="_blank">
+                  {t('announcements.2.links.5')}
+                </a>
+              </li>
             </ul>
             <div>
               {t('announcements.2.body.2')}&nbsp;

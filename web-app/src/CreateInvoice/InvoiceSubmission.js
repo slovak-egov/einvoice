@@ -8,11 +8,11 @@ import ConfirmationButton from '../helpers/ConfirmationButton'
 import FileUploader from '../helpers/FileUploader'
 import {
   createInvoice, setInvoiceSubmissionData, setInvoiceSubmissionFormat, setInvoiceSubmissionTest,
-  resetInvoiceSubmission, getInvoiceVisualization, setPartiesType, setInvoiceSubmissionDocumentType
+  resetInvoiceSubmission, getInvoiceVisualization, setPartiesType, setInvoiceSubmissionDocumentType,
 } from './actions'
 import {
   partiesTypeSelector, submissionFormatSelector, submissionInvoiceSelector,
-  submissionTestSelector, documentTypeSelector
+  submissionTestSelector, documentTypeSelector,
 } from './state'
 import {invoiceFormats, invoiceTypes, partiesTypes} from '../utils/constants'
 

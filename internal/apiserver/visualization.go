@@ -36,7 +36,7 @@ func (b *VisualizationRequestBody) parse(req *http.Request) error {
 
 	b.documentType, err = getEnum(req.PostFormValue("documentType"), entity.DocumentTypes, entity.InvoiceDocumentType)
 	if err != nil {
-		return InvoiceError("documentType.parsingError").WithDetail(err)
+		return InvoiceError("documentType." + err.Error())
 	}
 
 	return nil
