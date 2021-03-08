@@ -1,4 +1,4 @@
-FROM node:14-alpine AS ui_builder
+FROM node:15-alpine AS ui_builder
 
 WORKDIR /client
 COPY web-app/package.json .

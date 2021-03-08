@@ -1,4 +1,4 @@
-FROM node:14-alpine AS schema_builder
+FROM node:15-alpine AS schema_builder
 
 COPY ./invoice-validator/data /data
 
@@ -8,7 +8,7 @@ WORKDIR /data
 RUN ./generate-schemas.sh
 
 # Start fresh
-FROM node:14-alpine
+FROM node:15-alpine
 
 COPY --from=schema_builder /data/ubl2.1/en16931-schema.sef.json /app/schemas/ubl2.1-schema.sef.json
 COPY --from=schema_builder /data/d16b/en16931-schema.sef.json /app/schemas/d16b-schema.sef.json
