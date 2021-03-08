@@ -33,6 +33,13 @@
       ],
       "user": "User",
       "password": "Password"
+    },
+    "3": {
+      "body": ["API documentation can be found", "here"]
+    },
+    "4": {
+      "title": "We're hiring",
+      "body": ["We are looking for programmers who help us build this system. See more information", "here"]
     }
   },
   "devVersion": "This website is used solely for development",

@@ -5,7 +5,7 @@ import {
 } from '../actions'
 import {loadingWrapper, setData} from '../../helpers/actions'
 import {generateInvoice} from '../../utils/invoiceGenerator'
-import {invoiceFormats, invoiceTypes} from '../../utils/constants'
+import {invoiceFormats} from '../../utils/constants'
 
 export const setFormField = (path) => setData([...FORM_PATH, ...path])
 export const setFormType = setData(FORM_TYPE_PATH)
