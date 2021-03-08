@@ -1,10 +1,10 @@
 import './Filters.css'
 import {useCallback, useEffect, useState} from 'react'
 import {useHistory, useLocation} from 'react-router'
-import {Accordion, Button, Card, Form, FormCheck, InputGroup} from 'react-bootstrap'
+import {Accordion, Button, Card, Col, Form, FormCheck, InputGroup, Row} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import {invoiceFormats} from '../utils/constants'
-import {isInvoicesFilterValid, keepDigitsOnly} from '../utils/validations'
+import {isInvoicesFilterValid, keepDigitsOnly, keepFloatCharactersOnly} from '../utils/validations'
 
 export default ({areCustomFilterFieldsValid, CustomFilter, getInvoices}) => {
   const {t} = useTranslation('common')
@@ -20,12 +20,21 @@ export default ({areCustomFilterFieldsValid, CustomFilter, getInvoices}) => {
     formats[format] = {value, setter, toggleFormat: () => setter((v) => !v)}
   }
 
+  const [amountFrom, setAmountFrom] = useState(queryParams.get('amountFrom'))
+  const [amountTo, setAmountTo] = useState(queryParams.get('amountTo'))
+  const [amountWithoutVatFrom, setAmountWithoutVatFrom] = useState(queryParams.get('amountWithoutVatFrom'))
+  const [amountWithoutVatTo, setAmountWithoutVatTo] = useState(queryParams.get('amountWithoutVatTo'))
+
   const [ico, setIco] = useState(queryParams.get('ico'))
   // Rest of query params passed to CustomFilter
   const initExtraQuery = new URLSearchParams(search)
   initExtraQuery.delete('ico')
   initExtraQuery.delete('format')
   initExtraQuery.delete('test')
+  initExtraQuery.delete('amountFrom')
+  initExtraQuery.delete('amountTo')
+  initExtraQuery.delete('amountWithoutVatFrom')
+  initExtraQuery.delete('amountWithoutVatTo')
   const [extraQuery, setExtraQuery] = useState(initExtraQuery)
 
   // Triggering search with new filters is done by redirect
@@ -38,14 +47,22 @@ export default ({areCustomFilterFieldsValid, CustomFilter, getInvoices}) => {
         if (value) newQueryParams.append('format', format)
       }
       if (ico != null) newQueryParams.set('ico', ico)
+      if (amountFrom != null) newQueryParams.set('amountFrom', amountFrom)
+      if (amountTo != null) newQueryParams.set('amountTo', amountTo)
+      if (amountWithoutVatFrom != null) newQueryParams.set('amountWithoutVatFrom', amountWithoutVatFrom)
+      if (amountWithoutVatTo != null) newQueryParams.set('amountWithoutVatTo', amountWithoutVatTo)
 
       history.push(`${pathname}?${newQueryParams}`)
     },
-    [extraQuery, history, ico, pathname, test, ...Object.values(formats).map(({value}) => value)]
+    [
+      extraQuery, history, ico, pathname, test, amountFrom, amountTo, amountWithoutVatFrom,
+      amountWithoutVatTo, ...Object.values(formats).map(({value}) => value),
+    ],
   )
 
-  const searchEnabled = isInvoicesFilterValid({formats, ico}) &&
-    areCustomFilterFieldsValid(extraQuery)
+  const searchEnabled = isInvoicesFilterValid({
+    formats, ico, amountFrom, amountTo, amountWithoutVatFrom, amountWithoutVatTo,
+  }) && areCustomFilterFieldsValid(extraQuery)
 
   // When query URL parameters change try to fetch proper data
   useEffect(() => {
@@ -66,8 +83,8 @@ export default ({areCustomFilterFieldsValid, CustomFilter, getInvoices}) => {
       <Accordion.Collapse eventKey="0">
         <Card.Body>
           <div>
-            <div className="d-flex">
-              <div style={{flex: 1}}>
+            <Row>
+              <Col sm>
                 <strong className="filter-heading">{t('invoice.format')}</strong>
                 <div className="d-flex">
                   {Object.values(invoiceFormats).map((format) => (
@@ -81,8 +98,8 @@ export default ({areCustomFilterFieldsValid, CustomFilter, getInvoices}) => {
                     />
                   ))}
                 </div>
-              </div>
-              <div style={{flex: 1}}>
+              </Col>
+              <Col sm>
                 <strong className="filter-heading">Test</strong>
                 <FormCheck
                   type="checkbox"
@@ -90,24 +107,96 @@ export default ({areCustomFilterFieldsValid, CustomFilter, getInvoices}) => {
                   onChange={() => setTest((v) => !v)}
                   label="Test"
                 />
-              </div>
-            </div>
-            <div>
-              <strong className="filter-heading">IČO</strong>
-              <InputGroup style={{width: '140px'}}>
-                <Form.Control
-                  value={ico || ''}
-                  onChange={(e) => setIco(keepDigitsOnly(e.target.value))}
-                  readOnly={ico == null}
-                />
-                <InputGroup.Append>
-                  <InputGroup.Checkbox
-                    checked={ico != null}
-                    onChange={() => setIco(ico == null ? '' : null)}
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <strong className="filter-heading">IČO</strong>
+                <InputGroup style={{maxWidth: '140px'}}>
+                  <Form.Control
+                    value={ico || ''}
+                    onChange={(e) => setIco(keepDigitsOnly(e.target.value))}
+                    readOnly={ico == null}
                   />
-                </InputGroup.Append>
-              </InputGroup>
-            </div>
+                  <InputGroup.Append>
+                    <InputGroup.Checkbox
+                      checked={ico != null}
+                      onChange={() => setIco(ico == null ? '' : null)}
+                    />
+                  </InputGroup.Append>
+                </InputGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col md>
+                <strong className="filter-heading">{t('invoice.amount')}</strong>
+                <InputGroup>
+                  <Form.Label style={{width: '20%'}}>{t('invoice.amountFrom')}</Form.Label>
+                  <Form.Control
+                    style={{maxWidth: '150px'}}
+                    value={amountFrom || ''}
+                    onChange={(e) => setAmountFrom(keepFloatCharactersOnly(e.target.value))}
+                    readOnly={amountFrom == null}
+                  />
+                  <InputGroup.Append>
+                    <InputGroup.Checkbox
+                      checked={amountFrom != null}
+                      onChange={() => setAmountFrom(amountFrom == null ? '' : null)}
+                    />
+                  </InputGroup.Append>
+                </InputGroup>
+                <InputGroup>
+                  <Form.Label style={{width: '20%'}}>{t('invoice.amountTo')}</Form.Label>
+                  <Form.Control
+                    style={{maxWidth: '150px'}}
+                    value={amountTo || ''}
+                    onChange={(e) => setAmountTo(keepFloatCharactersOnly(e.target.value))}
+                    readOnly={amountTo == null}
+                  />
+                  <InputGroup.Append>
+                    <InputGroup.Checkbox
+                      checked={amountTo != null}
+                      onChange={() => setAmountTo(amountTo == null ? '' : null)}
+                    />
+                  </InputGroup.Append>
+                </InputGroup>
+              </Col>
+              <Col md>
+                <strong className="filter-heading">{t('invoice.amountWithoutVat')}</strong>
+                <InputGroup>
+                  <Form.Label style={{width: '20%'}}>{t('invoice.amountFrom')}</Form.Label>
+                  <Form.Control
+                    style={{maxWidth: '150px'}}
+                    value={amountWithoutVatFrom || ''}
+                    onChange={
+                      (e) => setAmountWithoutVatFrom(keepFloatCharactersOnly(e.target.value))
+                    }
+                    readOnly={amountWithoutVatFrom == null}
+                  />
+                  <InputGroup.Append>
+                    <InputGroup.Checkbox
+                      checked={amountWithoutVatFrom != null}
+                      onChange={() => setAmountWithoutVatFrom(amountWithoutVatFrom == null ? '' : null)}
+                    />
+                  </InputGroup.Append>
+                </InputGroup>
+                <InputGroup>
+                  <Form.Label style={{width: '20%'}}>{t('invoice.amountTo')}</Form.Label>
+                  <Form.Control
+                    style={{maxWidth: '150px'}}
+                    value={amountWithoutVatTo || ''}
+                    onChange={(e) => setAmountWithoutVatTo(keepFloatCharactersOnly(e.target.value))}
+                    readOnly={amountWithoutVatTo == null}
+                  />
+                  <InputGroup.Append>
+                    <InputGroup.Checkbox
+                      checked={amountWithoutVatTo != null}
+                      onChange={() => setAmountWithoutVatTo(amountWithoutVatTo == null ? '' : null)}
+                    />
+                  </InputGroup.Append>
+                </InputGroup>
+              </Col>
+            </Row>
             {CustomFilter &&
               <CustomFilter extraQuery={extraQuery} setExtraQuery={setExtraQuery} />
             }

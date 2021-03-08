@@ -1,7 +1,7 @@
 package metadataExtractor
 
 type ublInvoice struct {
-	IssueDate string
+	IssueDate               string
 	AccountingSupplierParty struct {
 		Party ublParty
 	}
@@ -9,7 +9,8 @@ type ublInvoice struct {
 		Party ublParty
 	}
 	LegalMonetaryTotal struct {
-		PayableAmount float64
+		TaxExclusiveAmount float64
+		TaxInclusiveAmount float64
 	}
 }
 

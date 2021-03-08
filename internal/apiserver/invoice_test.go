@@ -15,22 +15,41 @@ import (
 func TestGetInvoices(t *testing.T) {
 	// Fill DB
 	t.Cleanup(testutil.CleanDb(ctx, t, a.db.Connector))
-	firstInvoiceId := testutil.CreateInvoice(ctx, t, a.db.Connector, false).Id
-	testutil.CreateInvoice(ctx, t, a.db.Connector, true)
-	thirdInvoiceId := testutil.CreateInvoice(ctx, t, a.db.Connector, false).Id
+	firstInvoiceId := testutil.CreateInvoice(
+		ctx, t, a.db.Connector,
+		testutil.WithAmount(100),
+		testutil.WithAmountWithoutTax(50),
+	).Id
+	secondInvoiceId := testutil.CreateInvoice(
+		ctx, t, a.db.Connector,
+		testutil.WithTest,
+		testutil.WithAmount(200),
+		testutil.WithAmountWithoutTax(150),
+	).Id
+	thirdInvoiceId := testutil.CreateInvoice(
+		ctx, t, a.db.Connector,
+		testutil.WithAmount(300),
+		testutil.WithAmountWithoutTax(250),
+	).Id
 
 	var flagtests = []struct {
-		query          string
-		responseLength int
-		responseNextId *int
+		query            string
+		responseInvoices []int
+		responseNextId   *int
 	}{
-		{"", 2, nil},
-		{"?test=true&ico=11111111", 3, nil},
-		{"?format=d16b", 0, nil},
-		{"?ico=11111112", 0, nil},
-		{fmt.Sprintf("?startId=%d&limit=1", thirdInvoiceId), 1, &firstInvoiceId},
-		{fmt.Sprintf("?startId=%d", firstInvoiceId), 1, nil},
-		{fmt.Sprintf("?startId=%d&order=asc", firstInvoiceId), 2, nil},
+		{"", []int{thirdInvoiceId, firstInvoiceId}, nil},
+		{"?test=true&ico=11111111", []int{thirdInvoiceId, secondInvoiceId, firstInvoiceId}, nil},
+		{"?format=d16b", nil, nil},
+		{"?ico=11111112", nil, nil},
+		{fmt.Sprintf("?startId=%d&limit=1", thirdInvoiceId), []int{thirdInvoiceId}, &firstInvoiceId},
+		{fmt.Sprintf("?startId=%d", firstInvoiceId), []int{firstInvoiceId}, nil},
+		{fmt.Sprintf("?startId=%d&order=asc", firstInvoiceId), []int{firstInvoiceId, thirdInvoiceId}, nil},
+		{"?test=true&amountFrom=190", []int{thirdInvoiceId, secondInvoiceId}, nil},
+		{"?test=true&amountTo=210", []int{secondInvoiceId, firstInvoiceId}, nil},
+		{"?test=true&amountFrom=190&amountTo=210", []int{secondInvoiceId}, nil},
+		{"?test=true&amountWithoutVatFrom=140", []int{thirdInvoiceId, secondInvoiceId}, nil},
+		{"?test=true&amountWithoutVatTo=160", []int{secondInvoiceId, firstInvoiceId}, nil},
+		{"?test=true&amountWithoutVatFrom=140&amountWithoutVatTo=160", []int{secondInvoiceId}, nil},
 	}
 	// Run tests
 	for _, tt := range flagtests {
@@ -43,7 +62,15 @@ func TestGetInvoices(t *testing.T) {
 			var parsedResponse PagedInvoices
 			json.Unmarshal(response.Body.Bytes(), &parsedResponse)
 
-			assert.Equal(t, tt.responseLength, len(parsedResponse.Invoices))
+			assert.Equal(t, len(tt.responseInvoices), len(parsedResponse.Invoices))
+
+			if len(tt.responseInvoices) > 0 {
+				var ids []int
+				for _, invoice := range parsedResponse.Invoices {
+					ids = append(ids, invoice.Id)
+				}
+				assert.Equal(t, tt.responseInvoices, ids)
+			}
 
 			assert.Equal(t, tt.responseNextId, parsedResponse.NextId)
 		})
@@ -52,7 +79,7 @@ func TestGetInvoices(t *testing.T) {
 
 func TestGetInvoice(t *testing.T) {
 	t.Cleanup(testutil.CleanDb(ctx, t, a.db.Connector))
-	id := testutil.CreateInvoice(ctx, t, a.db.Connector, false).Id
+	id := testutil.CreateInvoice(ctx, t, a.db.Connector).Id
 
 	req, _ := http.NewRequest("GET", fmt.Sprintf("/invoices/%d", id), nil)
 	response := testutil.ExecuteRequest(a, req)

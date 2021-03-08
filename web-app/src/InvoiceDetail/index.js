@@ -47,8 +47,8 @@ export default ({history, match: {params: {id}}}) => {
   }
 
   const {
-    createdAt, customerIco, format, issueDate, notificationsStatus, price, receiver, sender,
-    supplierIco, test,
+    createdAt, customerIco, format, issueDate, notificationsStatus, amount, amountWithoutVat,
+    receiver, sender, supplierIco, test,
   } = invoice
 
   return (
@@ -94,8 +94,13 @@ export default ({history, match: {params: {id}}}) => {
           </Row>
           <Row>
             <Col sm>
-              <TextField label={t('invoice.price')} value={price} />
+              <TextField label={t('invoice.amount')} value={amount} />
             </Col>
+            <Col sm>
+              <TextField label={t('invoice.amountWithoutVat')} value={amountWithoutVat} />
+            </Col>
+          </Row>
+          <Row>
             <Col sm>
               <CheckboxField label="Test" value={test} />
             </Col>

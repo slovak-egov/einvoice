@@ -13,7 +13,8 @@ type d16bInvoice struct {
 		}
 		ApplicableHeaderTradeSettlement struct {
 			SpecifiedTradeSettlementHeaderMonetarySummation struct {
-				DuePayableAmount float64
+				GrandTotalAmount    float64
+				TaxBasisTotalAmount float64
 			}
 		}
 	}

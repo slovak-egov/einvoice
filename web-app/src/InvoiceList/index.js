@@ -40,7 +40,7 @@ export default ({
                 <th>{t('invoice.supplierIco')}</th>
                 <th>{t('invoice.customerIco')}</th>
                 <th>{t('invoice.issueDate')}</th>
-                <th>{t('invoice.price')}</th>
+                <th>{t('invoice.amount')}</th>
                 <th>{t('invoice.format')}</th>
                 <th />
               </tr>
@@ -52,7 +52,7 @@ export default ({
                   <td>{invoices[invoiceId].supplierIco}</td>
                   <td>{invoices[invoiceId].customerIco}</td>
                   <td>{invoices[invoiceId].issueDate}</td>
-                  <td>{invoices[invoiceId].price}</td>
+                  <td>{invoices[invoiceId].amount}</td>
                   <td>{invoices[invoiceId].format}</td>
                   <td>
                     <Link to={`/invoices/${invoiceId}`}>detail</Link>

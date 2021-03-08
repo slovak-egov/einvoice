@@ -17,6 +17,18 @@ func getOptionalInt(value string, defaultValue int) (int, error) {
 	return parsedValue, nil
 }
 
+func getOptionalFloat(value string) (*float64, error) {
+	// Return nil if value is not provided
+	if value == "" {
+		return nil, nil
+	}
+	parsedValue, err := strconv.ParseFloat(value, 64)
+	if err != nil {
+		return nil, err
+	}
+	return &parsedValue, nil
+}
+
 func getOptionalBool(value string, defaultValue bool) (bool, error) {
 	// Return default if value is not provided
 	if value == "" {

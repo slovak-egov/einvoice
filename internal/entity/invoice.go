@@ -31,7 +31,8 @@ type Invoice struct {
 	Sender              string        `json:"sender"`
 	Receiver            string        `json:"receiver"`
 	Format              string        `json:"format"`
-	Price               float64       `json:"price"`
+	Amount              float64       `json:"amount"`
+	AmountWithoutVat    float64       `json:"amountWithoutVat"`
 	SupplierIco         string        `json:"supplierIco"`
 	CustomerIco         string        `json:"customerIco"`
 	CreatedAt           time.Time     `json:"createdAt"`
