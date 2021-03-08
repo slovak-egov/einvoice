@@ -1,9 +1,14 @@
 FROM node:14-alpine AS ui_builder
 
-COPY web-app /client
-
 WORKDIR /client
+COPY web-app/package.json .
+COPY web-app/package-lock.json .
+
 RUN npm install --production
+
+COPY web-app/src /client/src
+COPY web-app/public /client/public
+
 RUN npm run build
 
 FROM golang:1.15-alpine AS server_builder

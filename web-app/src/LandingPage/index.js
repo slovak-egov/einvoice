@@ -1,6 +1,6 @@
 import {useTranslation} from 'react-i18next'
 import {Card} from 'react-bootstrap'
-import {exampleInvoiceUrl, invoiceFormats} from '../utils/constants'
+import {exampleInvoiceUrl, invoiceFormats, swaggerUrl} from '../utils/constants'
 
 const Announcement = ({className, children, title}) => (
   <Card className={className}>
@@ -41,10 +41,19 @@ export default () => {
           {t('announcements.title')}
         </Card.Header>
         <Card.Body>
+          <Announcement className="mb-1" title={t('announcements.4.title')}>
+            {t('announcements.4.body.0')}&nbsp;
+            <a
+              href="https://www.profesia.sk/praca/ministerstvo-financii-sr/O4041786"
+              target="_blank"
+            >
+              {t('announcements.4.body.1')}
+            </a>.
+          </Announcement>
           <Announcement className="mb-1" title={t('announcements.1.title')}>
             {t('announcements.1.body')}
           </Announcement>
-          <Announcement title={t('announcements.2.title')}>
+          <Announcement className="mb-1" title={t('announcements.2.title')}>
             <div>{t('announcements.2.body.0')}:</div>
             <ul>
               <li>{t('announcements.2.user')}: <strong>E0000046137</strong></li>
@@ -87,6 +96,10 @@ export default () => {
               {t('announcements.2.body.2')}&nbsp;
               <a href="https://edesk.vyvoj.upvs.globaltel.sk" target="_blank">{t('announcements.2.body.3')}</a>
             </div>
+          </Announcement>
+          <Announcement title="API">
+            {t('announcements.3.body.0')}&nbsp;
+            <a href={swaggerUrl} target="_blank">{t('announcements.3.body.1')}</a>.
           </Announcement>
         </Card.Body>
       </Card>

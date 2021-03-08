@@ -33,6 +33,13 @@
       ],
       "user": "Používateľ",
       "password": "Heslo"
+    },
+    "3": {
+      "body": ["Dokumentáciu API je možné nájsť", "tu"]
+    },
+    "4": {
+      "title": "Hľadáme programátorov",
+      "body": ["Hľadáme programátorov, ktorý nám pomôžu s budovaním tohto systému. Viac informácii nájdete", "tu"]
     }
   },
   "devVersion": "Táto webstránka slúži výlučne na vývoj",
