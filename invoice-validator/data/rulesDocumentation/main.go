@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"log"
 	"os"
 
@@ -19,7 +19,7 @@ func getTranslation(translationFilePath string) map[string]string {
 		log.Fatal(err)
 	}
 	defer file.Close()
-	bytes, err := ioutil.ReadAll(file)
+	bytes, err := io.ReadAll(file)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -36,7 +36,7 @@ func getSchematronFile(schematronPath string) []byte {
 		log.Fatal(err)
 	}
 	defer file.Close()
-	bytes, err := ioutil.ReadAll(file)
+	bytes, err := io.ReadAll(file)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -135,7 +135,7 @@ func writeRules(rules map[string]Rule, outputPath string, prettyPrint bool) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = ioutil.WriteFile(outputPath, bytes, 0644)
+	err = os.WriteFile(outputPath, bytes, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}

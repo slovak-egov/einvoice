@@ -1,7 +1,7 @@
 package xsdValidator_test
 
 import (
-	"io/ioutil"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -21,7 +21,7 @@ func TestValidation(t *testing.T) {
 	}
 	for _, tt := range flagtests {
 		t.Run(tt.format, func(t *testing.T) {
-			bytes, err := ioutil.ReadFile(tt.testInvoicePath)
+			bytes, err := os.ReadFile(tt.testInvoicePath)
 			if err != nil {
 				t.Fatal(err)
 			}

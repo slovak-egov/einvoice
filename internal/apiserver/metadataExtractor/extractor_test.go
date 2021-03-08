@@ -1,7 +1,7 @@
 package metadataExtractor
 
 import (
-	"io/ioutil"
+	"os"
 	"testing"
 	"time"
 
@@ -46,7 +46,7 @@ func TestParseInvoice(t *testing.T) {
 	}
 	for _, tt := range flagtests {
 		t.Run(tt.format, func(t *testing.T) {
-			bytes, err := ioutil.ReadFile(tt.testInvoicePath)
+			bytes, err := os.ReadFile(tt.testInvoicePath)
 			if err != nil {
 				t.Fatal(err)
 			}

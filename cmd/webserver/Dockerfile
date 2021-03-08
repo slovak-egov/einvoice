@@ -1,4 +1,4 @@
-FROM node:14-alpine AS ui_builder
+FROM node:15-alpine AS ui_builder
 
 WORKDIR /client
 COPY web-app/package.json .
@@ -11,7 +11,7 @@ COPY web-app/public /client/public
 
 RUN npm run build
 
-FROM golang:1.15-alpine AS server_builder
+FROM golang:1.16-alpine AS server_builder
 
 # Set the Current Working Directory inside the container
 WORKDIR /server
@@ -27,7 +27,7 @@ COPY . .
 RUN go build -o /out/server ./cmd/webserver
 
 # Start fresh from a smaller image
-FROM alpine:3.12
+FROM alpine:3.13
 RUN apk add --no-cache ca-certificates
 
 COPY --from=server_builder /out/server /app/server

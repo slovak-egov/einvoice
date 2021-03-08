@@ -4,7 +4,6 @@ import (
 	goContext "context"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 
 	log "github.com/sirupsen/logrus"
@@ -54,7 +53,7 @@ func (storage *LocalStorage) DeleteInvoice(ctx goContext.Context, id int) error 
 }
 
 func (storage *LocalStorage) saveObject(ctx goContext.Context, path string, value []byte) error {
-	err := ioutil.WriteFile(path, value, 0644)
+	err := os.WriteFile(path, value, 0644)
 	if err != nil {
 		context.GetLogger(ctx).WithField("error", err.Error()).Error("localStorage.saveObject.failed")
 	}
@@ -62,7 +61,7 @@ func (storage *LocalStorage) saveObject(ctx goContext.Context, path string, valu
 }
 
 func (storage *LocalStorage) readObject(path string) ([]byte, error) {
-	return ioutil.ReadFile(path)
+	return os.ReadFile(path)
 }
 
 func (storage *LocalStorage) deleteObject(path string) error {

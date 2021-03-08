@@ -2,7 +2,7 @@ package worker
 
 import (
 	goContext "context"
-	"io/ioutil"
+	"io"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -120,7 +120,7 @@ func (w *Worker) notifyInvoiceParties(ctx goContext.Context, invoice entity.Invo
 		return err
 	}
 
-	invoiceZipBytes, err := ioutil.ReadAll(invoiceZip)
+	invoiceZipBytes, err := io.ReadAll(invoiceZip)
 	if err != nil {
 		context.GetLogger(ctx).
 			WithField("invoiceId", invoice.Id).

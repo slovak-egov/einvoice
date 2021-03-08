@@ -9,3 +9,8 @@ Installation of maven & npm is required before running script.
 ```
 
 Sample UBL validation output can be found [here](ubl2.1/examples/response.xml).
+
+For displaying proper documentation on web-app regenerate documentation as well:
+```shell
+./generate/schema-documentation.sh
+```

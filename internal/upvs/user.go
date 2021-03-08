@@ -4,7 +4,6 @@ import (
 	goContext "context"
 	"encoding/json"
 	"io"
-	"io/ioutil"
 	"net/http"
 
 	log "github.com/sirupsen/logrus"
@@ -72,7 +71,7 @@ func (c *Connector) sendRequest(ctx goContext.Context, request *Request) ([]byte
 
 	defer upvsRes.Body.Close()
 
-	body, err := ioutil.ReadAll(upvsRes.Body)
+	body, err := io.ReadAll(upvsRes.Body)
 	if err != nil {
 		context.GetLogger(ctx).WithField("error", err.Error()).Error("upvs.sendRequest.readResponse.failed")
 		return nil, err

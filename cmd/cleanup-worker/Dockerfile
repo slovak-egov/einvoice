@@ -1,4 +1,4 @@
-FROM golang:1.15-alpine AS build_base
+FROM golang:1.16-alpine AS build_base
 
 # Set the Current Working Directory inside the container
 WORKDIR /tmp/einvoice
@@ -14,7 +14,7 @@ COPY . .
 RUN go build -o /tmp/out/cleanup-worker ./cmd/cleanup-worker
 
 # Start fresh from a smaller image
-FROM alpine:3.12
+FROM alpine:3.13
 RUN apk add --no-cache ca-certificates
 
 COPY --from=build_base /tmp/out/cleanup-worker /worker/cleanup-worker

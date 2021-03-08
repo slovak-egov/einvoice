@@ -5,7 +5,7 @@ import (
 	goContext "context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 
 	log "github.com/sirupsen/logrus"
@@ -52,7 +52,7 @@ func (v *invoiceValidator) Validate(ctx goContext.Context, xml []byte, format, l
 
 	defer res.Body.Close()
 
-	body, err := ioutil.ReadAll(res.Body)
+	body, err := io.ReadAll(res.Body)
 	if err != nil {
 		context.GetLogger(ctx).WithField("error", err.Error()).Error("invoiceValidator.response.body.read.failed")
 		return err
