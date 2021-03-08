@@ -1,4 +1,4 @@
-FROM golang:1.15-alpine AS build_base
+FROM golang:1.16-alpine AS build_base
 
 RUN apk update && apk add --no-cache g++ gcc libxml2 libxslt-dev
 
@@ -16,7 +16,7 @@ COPY . .
 RUN go build -o /tmp/out/notification-worker ./cmd/notification-worker
 
 # Start fresh from a smaller image
-FROM alpine:3.12
+FROM alpine:3.13
 RUN apk add --no-cache ca-certificates
 
 COPY --from=build_base /tmp/out/notification-worker /worker/notification-worker

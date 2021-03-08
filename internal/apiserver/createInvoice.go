@@ -2,7 +2,7 @@ package apiserver
 
 import (
 	goContext "context"
-	"io/ioutil"
+	"io"
 	"net/http"
 
 	"github.com/slovak-egov/einvoice/internal/apiserver/invoiceValidator"
@@ -68,7 +68,7 @@ func parseInvoice(req *http.Request) ([]byte, error) {
 		return nil, err
 	}
 
-	bytes, err := ioutil.ReadAll(file)
+	bytes, err := io.ReadAll(file)
 	if err != nil {
 		context.GetLogger(req.Context()).
 			WithField("error", err.Error()).
