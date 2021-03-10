@@ -1,6 +1,7 @@
 import {useState} from 'react'
-import {Modal, Button, Form} from 'react-bootstrap'
+import {Modal, Form} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
+import {Button} from '../../helpers/idsk'
 
 export default ({cancel, confirm}) => {
   const {t} = useTranslation('common')
@@ -25,8 +26,8 @@ export default ({cancel, confirm}) => {
       </Modal.Body>
 
       <Modal.Footer>
-        <Button variant="danger" onClick={cancel}>{t('cancel')}</Button>
-        <Button variant="success" onClick={confirm(name)} disabled={isNameInvalid}>{t('confirm')}</Button>
+        <Button className="govuk-button--warning" onClick={cancel}>{t('cancel')}</Button>
+        <Button onClick={confirm(name)} disabled={isNameInvalid}>{t('confirm')}</Button>
       </Modal.Footer>
     </Modal>
   )

@@ -1,9 +1,10 @@
 import {useCallback} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {useHistory} from 'react-router-dom'
-import {Button, Card, Col, Form, FormCheck, Row} from 'react-bootstrap'
+import {Card, Col, Form, FormCheck, Row} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import save from 'save-file'
+import {Button} from '../helpers/idsk'
 import ConfirmationButton from '../helpers/ConfirmationButton'
 import FileUploader from '../helpers/FileUploader'
 import {
@@ -58,7 +59,7 @@ export default ({showSubmission, title}) => {
       <Card.Header className="bg-primary text-white text-center" as="h3">
         {t(title)}
       </Card.Header>
-      <Card.Body as={Form}>
+      <Card.Body>
         <Row>
           <Col sm>
             <Form.Group>
@@ -88,26 +89,22 @@ export default ({showSubmission, title}) => {
             </Col>
           </>}
         </Row>
-        <Row className="justify-content-end flex-column flex-sm-row">
+        <div className="govuk-button-group" style={{justifyContent: 'center'}}>
           <Button
-            className="my-1"
-            variant="secondary"
+            className="govuk-button--secondary"
             onClick={getRawInvoice}
             disabled={!invoice}
           >
             {t('download')} XML
           </Button>
           <Button
-            className="my-1"
-            variant="primary"
+            className="govuk-button--secondary"
             onClick={visualizeInvoice}
             disabled={!invoice}
           >
             {t('downloadVisualization')}
           </Button>
           {showSubmission && <ConfirmationButton
-            className="my-1"
-            variant="success"
             onClick={submitInvoice}
             confirmationTitle={t('confirmationQuestions.submitInvoice.title')}
             confirmationText={t('confirmationQuestions.submitInvoice.text')}
@@ -115,7 +112,7 @@ export default ({showSubmission, title}) => {
           >
             {t('submit')}
           </ConfirmationButton>}
-        </Row>
+        </div>
       </Card.Body>
     </Card>
   )

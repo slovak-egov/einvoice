@@ -2,8 +2,9 @@ import {useCallback, useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {useHistory} from 'react-router-dom'
 import {useTranslation} from 'react-i18next'
-import {Button, Card, Col, Form, Row} from 'react-bootstrap'
+import {Card, Col, Form, Row} from 'react-bootstrap'
 import {get} from 'lodash'
+import {Button} from '../../helpers/idsk'
 import TagGroup from './TagGroup'
 import CreateDraftModal from './CreateDraftModal'
 import ConfirmationButton from '../../helpers/ConfirmationButton'
@@ -116,7 +117,7 @@ export default () => {
           <Col className="d-flex">
             <ConfirmationButton
               variant="danger"
-              className="ml-auto"
+              className="ml-auto govuk-button--warning"
               confirmationTitle={t('confirmationQuestions.resetForm.title')}
               confirmationText={t('confirmationQuestions.resetForm.text')}
               onClick={resetForm}
@@ -134,9 +135,9 @@ export default () => {
           docs={docs[invoiceTypeData[formType].rootPath[1]]}
           setErrorCount={setErrorCount}
         />
-        <Row className="justify-content-end flex-column flex-sm-row mx-0">
+        <div className="govuk-button-group">
           {isLogged &&
-            <Button variant="secondary" className="mt-1" onClick={() => setShowCreateDraftModal(true)}>
+            <Button className="govuk-button--secondary" onClick={() => setShowCreateDraftModal(true)}>
               {t('saveAsDraft')}
             </Button>
           }
@@ -145,10 +146,10 @@ export default () => {
               cancel={() => setShowCreateDraftModal(false)}
               confirm={confirmDraft}
             />}
-          <Button variant="success" className="mt-1" onClick={submit} disabled={errorCount !== 0}>
+          <Button onClick={submit} disabled={errorCount !== 0}>
             {t('generateInvoice')}
           </Button>
-        </Row>
+        </div>
       </Card.Body>}
     </Card>
   )

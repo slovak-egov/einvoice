@@ -1,8 +1,9 @@
 import {useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
-import {Button, Card, Col, Form, Row} from 'react-bootstrap'
+import {Card, Col, Form, Row} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import {format as formatDate, parseISO} from 'date-fns'
+import {Button} from '../helpers/idsk'
 import NotFound from '../helpers/NotFound'
 import BoolIcon from '../helpers/BoolIcon'
 import {getInvoiceSelector} from '../cache/invoices/state'
@@ -57,7 +58,7 @@ export default ({history, match: {params: {id}}}) => {
         <Col />
         <Col>{t('invoiceTypes.invoice')}</Col>
         <Col className="d-sm-flex">
-          <Button className="ml-auto" variant="danger" onClick={history.goBack}>{t('close')}</Button>
+          <Button className="ml-auto govuk-button--warning" onClick={history.goBack}>{t('close')}</Button>
         </Col>
       </Card.Header>
       <Card.Body>
@@ -114,14 +115,14 @@ export default ({history, match: {params: {id}}}) => {
             </Col>
           </Row>
         </div>
-        <Row className="justify-content-center">
-          <Button variant="primary" href={`${CONFIG.apiServerUrl}/invoices/${id}/detail`}>
+        <div className="govuk-button-group" style={{justifyContent: 'center'}}>
+          <Button className="govuk-button--secondary" href={`${CONFIG.apiServerUrl}/invoices/${id}/detail`}>
             {`${t('download')} XML`}
           </Button>
-          <Button variant="success" href={`${CONFIG.apiServerUrl}/invoices/${id}/visualization`}>
+          <Button href={`${CONFIG.apiServerUrl}/invoices/${id}/visualization`}>
             {`${t('download')} ZIP`}
           </Button>
-        </Row>
+        </div>
       </Card.Body>
     </Card>
   )

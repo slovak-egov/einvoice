@@ -2,7 +2,8 @@ import './Filters.css'
 import {useCallback, useEffect, useState} from 'react'
 import {useHistory, useLocation} from 'react-router'
 import {useTranslation} from 'react-i18next'
-import {Accordion, Button, Card, Col, Form, FormCheck, InputGroup, Row} from 'react-bootstrap'
+import {Accordion, Card, Col, Form, FormCheck, InputGroup, Row} from 'react-bootstrap'
+import {Button} from '../helpers/idsk'
 import DatePicker from '../helpers/DatePicker'
 import {invoiceFormats} from '../utils/constants'
 import {formatDate, formatTime, parseTime} from '../utils/helpers'
@@ -338,10 +339,8 @@ export default ({getInvoices}) => {
               </Col>
             </Row>
           </div>
-          <div className="d-flex">
+          <div className="govuk-button-group" style={{justifyContent: 'center'}}>
             <Button
-              variant="primary"
-              className="ml-auto"
               onClick={filterRedirect}
               disabled={!searchEnabled}
             >

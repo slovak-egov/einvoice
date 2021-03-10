@@ -50,10 +50,8 @@ export default () => {
                 <td className="d-none d-md-table-cell">
                   {formatDate(parseISO(draft.createdAt), 'yyyy-MM-dd HH:mm')}
                 </td>
-                <td style={{float: 'right'}}>
+                <td className="govuk-button-group" style={{float: 'right', marginRight: '0'}}>
                   <ConfirmationButton
-                    variant="success"
-                    size="sm"
                     onClick={() => openDraft(draft.id)}
                     confirmationTitle={t('confirmationQuestions.openDraft.title')}
                     confirmationText={t('confirmationQuestions.openDraft.text')}
@@ -61,8 +59,7 @@ export default () => {
                     {t('open')}
                   </ConfirmationButton>
                   <ConfirmationButton
-                    variant="danger"
-                    size="sm"
+                    className="govuk-button--warning"
                     onClick={() => dispatch(deleteDraft(draft.id))}
                     confirmationTitle={t('confirmationQuestions.deleteDraft.title')}
                     confirmationText={t('confirmationQuestions.deleteDraft.text')}
