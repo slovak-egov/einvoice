@@ -30,7 +30,7 @@ export default ({showSubmission, title}) => {
   const submitInvoice = useCallback(
     async () => {
       const data = await invoice.text()
-      const {invoiceId, redirect} = await dispatch(createInvoice({data, test}))
+      const {invoiceId, redirect} = await dispatch(createInvoice(data, test, i18n.language))
       if (invoiceId) {
         dispatch(resetInvoiceSubmission)
         if (redirect) {
@@ -43,7 +43,7 @@ export default ({showSubmission, title}) => {
 
   const visualizeInvoice = useCallback(
     async () => {
-      const visualization = await dispatch(getInvoiceVisualization(invoice))
+      const visualization = await dispatch(getInvoiceVisualization(invoice, i18n.language))
       if (visualization) {
         await save(visualization, 'invoice.zip')
       }

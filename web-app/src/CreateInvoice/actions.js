@@ -12,10 +12,10 @@ export const resetInvoiceSubmission = setData(INVOICE_SUBMISSION_PATH)({
   test: false,
 })
 
-export const createInvoice = ({data, test}) => loadingWrapper(
+export const createInvoice = (data, test, language) => loadingWrapper(
   async (dispatch, getState, {api}) => {
     try {
-      const invoice = test ? await api.invoices.createTest(data) : await api.invoices.create(data)
+      const invoice = test ? await api.invoices.createTest(data, language) : await api.invoices.create(data, language)
       dispatch(setInvoices({
         [invoice.id]: invoice,
       }))
@@ -46,10 +46,10 @@ export const createInvoice = ({data, test}) => loadingWrapper(
   }
 )
 
-export const getInvoiceVisualization = (data) => loadingWrapper(
+export const getInvoiceVisualization = (data, language) => loadingWrapper(
   async (dispatch, getState, {api}) => {
     try {
-      return await api.invoices.createVisualization(data)
+      return await api.invoices.createVisualization(data, language)
     } catch (error) {
       await swal({
         title: error.message,

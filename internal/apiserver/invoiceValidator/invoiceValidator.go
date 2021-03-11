@@ -15,7 +15,7 @@ import (
 )
 
 type InvoiceValidator interface {
-	Validate(ctx goContext.Context, xml []byte, format string) error
+	Validate(ctx goContext.Context, xml []byte, format, language string) error
 }
 
 type invoiceValidator struct {
@@ -33,15 +33,19 @@ func New(url string) InvoiceValidator {
 	}
 }
 
-func (v *invoiceValidator) Validate(ctx goContext.Context, xml []byte, format string) error {
+func (v *invoiceValidator) Validate(ctx goContext.Context, xml []byte, format, language string) error {
 	requestBody, err := json.Marshal(map[string]string{"xml": string(xml)})
 	if err != nil {
 		context.GetLogger(ctx).WithField("error", err.Error()).Error("invoiceValidator.request.body.preparation.failed")
 		return err
 	}
 
+	if language == "" {
+		language = "en"
+	}
+
 	res, err := v.client.Post(
-		fmt.Sprintf("%s?format=%s", v.url, format),
+		fmt.Sprintf("%s?format=%s&lang=%s", v.url, format, language),
 		"application/json",
 		bytes.NewReader([]byte(requestBody)),
 	)

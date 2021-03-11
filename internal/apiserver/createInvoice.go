@@ -47,6 +47,8 @@ func (a *App) createInvoice(testInvoice bool) func(res http.ResponseWriter, req 
 			return InvoiceError("invoice." + err.Error())
 		}
 
+		language := req.Header.Get("Accept-Language")
+
 		userId := context.GetUserId(req.Context())
 
 		// Validate invoice format
@@ -54,7 +56,7 @@ func (a *App) createInvoice(testInvoice bool) func(res http.ResponseWriter, req 
 			return InvoiceError("xsd.validation.failed").WithDetail(err)
 		}
 		// In future possibly adjust validation according to partiesType
-		if err = a.invoiceValidator.Validate(req.Context(), invoice, format); err != nil {
+		if err = a.invoiceValidator.Validate(req.Context(), invoice, format, language); err != nil {
 			if _, ok := err.(*invoiceValidator.ValidationError); ok {
 				return handlerutil.NewBadRequestError("invoice.validation.failed").WithDetail(err)
 			} else if _, ok := err.(*invoiceValidator.RequestError); ok {

@@ -20,10 +20,12 @@ func (a *App) createVisualization(res http.ResponseWriter, req *http.Request) er
 		return InvoiceError("invoice." + err.Error())
 	}
 
+	language := req.Header.Get("Accept-Language")
+
 	if err = a.xsdValidator.Validate(invoice, format, documentType); err != nil {
 		return InvoiceError("xsd.validation.failed").WithDetail(err)
 	}
-	if err = a.invoiceValidator.Validate(req.Context(), invoice, format); err != nil {
+	if err = a.invoiceValidator.Validate(req.Context(), invoice, format, language); err != nil {
 		if _, ok := err.(*invoiceValidator.ValidationError); ok {
 			return handlerutil.NewBadRequestError("invoice.validation.failed").WithDetail(err)
 		} else if _, ok := err.(*invoiceValidator.RequestError); ok {
