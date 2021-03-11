@@ -15,7 +15,8 @@ app.post('/', async (req, res) => {
   }
 
   if (!Object.values(languages).includes(req.query.lang)) {
-    req.query.lang = 'en'
+    res.status(400).send({error: 'unknown language'})
+    return
   }
 
   try {

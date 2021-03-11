@@ -15,7 +15,7 @@ export const resetInvoiceSubmission = setData(INVOICE_SUBMISSION_PATH)({
 export const createInvoice = (data, test, language) => loadingWrapper(
   async (dispatch, getState, {api}) => {
     try {
-      const invoice = test ? await api.invoices.createTest(data, language) : await api.invoices.create(data, language)
+      const invoice = await api.invoices.create(data, test, language)
       dispatch(setInvoices({
         [invoice.id]: invoice,
       }))

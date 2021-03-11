@@ -14,6 +14,37 @@ import (
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
+func (a *App) parseAndValidateInvoice(req *http.Request) ([]byte, string, error) {
+	invoice, err := parseInvoice(req)
+	if err != nil {
+		return nil, "", InvoiceError("invoice.parsingError").WithDetail(err)
+	}
+
+	format, documentType, err := a.xsdValidator.GetFormatAndType(invoice)
+	if err != nil {
+		return nil, "", InvoiceError("invoice.format.invalid").WithDetail(err)
+	}
+
+	language := req.Header.Get("Accept-Language")
+
+	// Validate invoice format
+	if err = a.xsdValidator.Validate(invoice, format, documentType); err != nil {
+		return nil, "", InvoiceError("xsd.validation.failed").WithDetail(err)
+	}
+	// In future possibly adjust validation according to partiesType
+	if err = a.invoiceValidator.Validate(req.Context(), invoice, format, language); err != nil {
+		if _, ok := err.(*invoiceValidator.ValidationError); ok {
+			return nil, "", handlerutil.NewBadRequestError("invoice.validation.failed").WithDetail(err)
+		} else if _, ok := err.(*invoiceValidator.RequestError); ok {
+			return nil, "", handlerutil.NewFailedDependencyError("invoice.validation.request.failed")
+		} else {
+			return nil, "", err
+		}
+	}
+
+	return invoice, format, nil
+}
+
 func parseInvoice(req *http.Request) ([]byte, error) {
 	bytes, err := io.ReadAll(req.Body)
 	if err != nil {
@@ -37,38 +68,17 @@ func validateInvoice(ctx goContext.Context, db *db.Connector, inv *entity.Invoic
 
 func (a *App) createInvoice(testInvoice bool) func(res http.ResponseWriter, req *http.Request) error {
 	return func(res http.ResponseWriter, req *http.Request) error {
-		invoice, err := parseInvoice(req)
+		invoice, format, err := a.parseAndValidateInvoice(req)
 		if err != nil {
-			return InvoiceError("invoice.parsingError").WithDetail(err)
+			return err
 		}
 
-		format, documentType, err := a.xsdValidator.GetFormatAndType(invoice)
-		if err != nil {
-			return InvoiceError("invoice." + err.Error())
-		}
-
-		language := req.Header.Get("Accept-Language")
-
-		userId := context.GetUserId(req.Context())
-
-		// Validate invoice format
-		if err = a.xsdValidator.Validate(invoice, format, documentType); err != nil {
-			return InvoiceError("xsd.validation.failed").WithDetail(err)
-		}
-		// In future possibly adjust validation according to partiesType
-		if err = a.invoiceValidator.Validate(req.Context(), invoice, format, language); err != nil {
-			if _, ok := err.(*invoiceValidator.ValidationError); ok {
-				return handlerutil.NewBadRequestError("invoice.validation.failed").WithDetail(err)
-			} else if _, ok := err.(*invoiceValidator.RequestError); ok {
-				return handlerutil.NewFailedDependencyError("invoice.validation.request.failed")
-			} else {
-				return err
-			}
-		}
 		metadata, err := metadataExtractor.ParseInvoice(invoice, format)
 		if err != nil {
 			return InvoiceError("validation.failed").WithDetail(err)
 		}
+
+		userId := context.GetUserId(req.Context())
 
 		// Add creator Id, test flag
 		metadata.CreatedBy = userId

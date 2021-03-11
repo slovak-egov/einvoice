@@ -11,21 +11,10 @@ export default (api) => {
 
   const getMeta = (id) => prepareRequest({route: `/${id}`})
 
-  const create = (body, language) =>
+  const create = (body, test, language) =>
     prepareRequest({
       method: 'POST',
-      route: '',
-      data: body,
-      jsonBody: false,
-      headers: {
-        'Accept-Language': language,
-      },
-    })
-
-  const createTest = (body, language) =>
-    prepareRequest({
-      method: 'POST',
-      route: '/test',
+      route: test ? '/test' : '',
       data: body,
       jsonBody: false,
       headers: {
@@ -46,7 +35,6 @@ export default (api) => {
 
   return {
     create,
-    createTest,
     createVisualization,
     getMeta,
     getPublic,

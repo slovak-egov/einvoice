@@ -60,7 +60,7 @@ export default ({showSubmission, title}) => {
       </Card.Header>
       <Card.Body as={Form}>
         <Row>
-          <Col md={4} sm={6} xs={12}>
+          <Col sm>
             <Form.Group>
               <Form.Label>{t('invoiceTypes.invoice')}</Form.Label>
               <div>
@@ -76,7 +76,7 @@ export default ({showSubmission, title}) => {
             </Form.Group>
           </Col>
           {showSubmission && <>
-            <Col md={1} sm={6} xs={12}>
+            <Col sm>
               <Form.Group>
                 <Form.Label>Test</Form.Label>
                 <FormCheck

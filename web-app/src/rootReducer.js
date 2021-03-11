@@ -9,10 +9,7 @@ const getInitialState = () => ({
   loadingRequests: 0,
   createInvoiceScreen: {
     submission: {
-      format: invoiceFormats.UBL,
-      partiesType: partiesTypes.SLOVAK,
       test: false,
-      documentType: invoiceTypes.INVOICE,
     },
     form: {
       type: invoiceTypes.INVOICE,

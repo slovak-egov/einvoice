@@ -20,6 +20,8 @@ const (
 
 	InvoiceDocumentType    = "invoice"
 	CreditNoteDocumentType = "creditNote"
+
+	Slovakia = "SK"
 )
 
 var InvoiceFormats = []string{UblFormat, D16bFormat}
@@ -45,9 +47,9 @@ type Invoice struct {
 }
 
 func (invoice *Invoice) GetInvoicePartiesType() string {
-	if invoice.SupplierCountry == "SK" && invoice.CustomerCountry == "SK" {
+	if invoice.SupplierCountry == Slovakia && invoice.CustomerCountry == Slovakia {
 		return SlovakInvoiceParties
-	} else if invoice.SupplierCountry != "SK" {
+	} else if invoice.SupplierCountry != Slovakia {
 		return ForeignSupplierParty
 	} else {
 		return ForeignCustomerParty
