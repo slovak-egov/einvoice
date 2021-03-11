@@ -1,6 +1,8 @@
 package xsdValidator
 
 import (
+	"errors"
+
 	"github.com/lestrrat-go/libxml2"
 	"github.com/lestrrat-go/libxml2/xsd"
 	log "github.com/sirupsen/logrus"
@@ -64,4 +66,21 @@ func (v *XsdValidator) Validate(src []byte, format, documentType string) error {
 	}
 
 	return nil
+}
+
+func (v *XsdValidator) GetFormatAndType(src []byte) (string, string, error) {
+	xml, err := libxml2.Parse(src)
+	if err != nil {
+		return "", "", err
+	}
+	if child, err := xml.FirstChild(); err == nil && child.NodeName() == "Invoice" {
+		return entity.UblFormat, entity.InvoiceDocumentType, nil
+	}
+	if child, err := xml.FirstChild(); err == nil && child.NodeName() == "CreditNote" {
+		return entity.UblFormat, entity.CreditNoteDocumentType, nil
+	}
+	if child, err := xml.FirstChild(); err == nil && child.NodeName() == "rsm:CrossIndustryInvoice" {
+		return entity.D16bFormat, entity.InvoiceDocumentType, nil
+	}
+	return "", "", errors.New("format.unknown")
 }

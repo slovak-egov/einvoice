@@ -21,6 +21,9 @@ type d16bInvoice struct {
 }
 
 type d16bParty struct {
-	ID   string
-	Name string
+	ID                 string
+	Name               string
+	PostalTradeAddress struct {
+		CountryID string
+	}
 }

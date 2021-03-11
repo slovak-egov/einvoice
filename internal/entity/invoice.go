@@ -34,10 +34,22 @@ type Invoice struct {
 	Amount              float64       `json:"amount"`
 	AmountWithoutVat    float64       `json:"amountWithoutVat"`
 	SupplierIco         string        `json:"supplierIco"`
+	SupplierCountry     string        `json:"-" pg:"-"`
 	CustomerIco         string        `json:"customerIco"`
+	CustomerCountry     string        `json:"-" pg:"-"`
 	CreatedAt           time.Time     `json:"createdAt"`
 	IssueDate           timeutil.Date `json:"issueDate"`
 	CreatedBy           int           `json:"createdBy"` // User id of invoice creator
 	Test                bool          `json:"test"`
 	NotificationsStatus string        `json:"notificationsStatus"`
+}
+
+func (invoice *Invoice) GetInvoicePartiesType() string {
+	if invoice.SupplierCountry == "SK" && invoice.CustomerCountry == "SK" {
+		return SlovakInvoiceParties
+	} else if invoice.SupplierCountry != "SK" {
+		return ForeignSupplierParty
+	} else {
+		return ForeignCustomerParty
+	}
 }

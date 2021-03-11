@@ -11,24 +11,33 @@ export default (api) => {
 
   const getMeta = (id) => prepareRequest({route: `/${id}`})
 
-  const create = (formData) =>
+  const create = (body) =>
     prepareRequest({
       method: 'POST',
       route: '',
-      data: formData,
+      data: body,
       jsonBody: false,
     })
 
-  const createVisualization = (formData) =>
+  const createTest = (body) =>
+    prepareRequest({
+      method: 'POST',
+      route: '/test',
+      data: body,
+      jsonBody: false,
+    })
+
+  const createVisualization = (body) =>
     prepareRequest({
       method: 'POST',
       route: '/visualization',
-      data: formData,
+      data: body,
       jsonBody: false,
     })
 
   return {
     create,
+    createTest,
     createVisualization,
     getMeta,
     getPublic,

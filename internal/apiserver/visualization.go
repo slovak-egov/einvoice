@@ -6,53 +6,24 @@ import (
 
 	"github.com/slovak-egov/einvoice/internal/apiserver/invoiceValidator"
 	"github.com/slovak-egov/einvoice/internal/apiserver/visualization"
-	"github.com/slovak-egov/einvoice/internal/entity"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
-type VisualizationRequestBody struct {
-	invoice      []byte
-	format       string
-	language     string
-	documentType string
-}
-
-func (b *VisualizationRequestBody) parse(req *http.Request) error {
-	var err error
-	b.format, err = getEnum(req.PostFormValue("format"), entity.InvoiceFormats, "")
-	if err != nil {
-		return InvoiceError("format." + err.Error())
-	}
-
-	b.language, err = getEnum(req.PostFormValue("lang"), entity.Languages, entity.EnglishLanguage)
-	if err != nil {
-		return InvoiceError("language.unknown")
-	}
-
-	b.invoice, err = parseInvoice(req)
-	if err != nil {
-		return InvoiceError("file.parsingError").WithDetail(err)
-	}
-
-	b.documentType, err = getEnum(req.PostFormValue("documentType"), entity.DocumentTypes, entity.InvoiceDocumentType)
-	if err != nil {
-		return InvoiceError("documentType." + err.Error())
-	}
-
-	return nil
-}
-
 func (a *App) createVisualization(res http.ResponseWriter, req *http.Request) error {
-	requestBody := VisualizationRequestBody{}
-	err := requestBody.parse(req)
+	invoice, err := parseInvoice(req)
 	if err != nil {
-		return err
+		return InvoiceError("invoice.parsingError").WithDetail(err)
 	}
 
-	if err = a.xsdValidator.Validate(requestBody.invoice, requestBody.format, requestBody.documentType); err != nil {
+	format, documentType, err := a.xsdValidator.GetFormatAndType(invoice)
+	if err != nil {
+		return InvoiceError("invoice." + err.Error())
+	}
+
+	if err = a.xsdValidator.Validate(invoice, format, documentType); err != nil {
 		return InvoiceError("xsd.validation.failed").WithDetail(err)
 	}
-	if err = a.invoiceValidator.Validate(req.Context(), requestBody.invoice, requestBody.format, requestBody.language); err != nil {
+	if err = a.invoiceValidator.Validate(req.Context(), invoice, format); err != nil {
 		if _, ok := err.(*invoiceValidator.ValidationError); ok {
 			return handlerutil.NewBadRequestError("invoice.validation.failed").WithDetail(err)
 		} else if _, ok := err.(*invoiceValidator.RequestError); ok {
@@ -62,7 +33,7 @@ func (a *App) createVisualization(res http.ResponseWriter, req *http.Request) er
 		}
 	}
 
-	data, err := visualization.GenerateZip(requestBody.invoice)
+	data, err := visualization.GenerateZip(invoice)
 	if err != nil {
 		return err
 	}
