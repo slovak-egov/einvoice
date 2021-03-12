@@ -22,13 +22,6 @@ export const notificationStates = {
   SENDING: 'sending',
 }
 
-// keep in sync with internal/entity/invoice.go
-export const partiesTypes = {
-  SLOVAK: 'slovakParties',
-  FOREIGN_SUPPLIER: 'foreignSupplier',
-  FOREIGN_CUSTOMER: 'foreignCustomer',
-}
-
 export const allowedAttachmentMimeTypes = [
   'text/csv', 'application/pdf', 'image/png', 'image/jpeg',
   'application/vnd.oasis.opendocument.spreadsheet',
