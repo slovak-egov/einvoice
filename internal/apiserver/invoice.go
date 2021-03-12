@@ -201,8 +201,6 @@ func NewUserInvoicesOptions(userId int, params url.Values, maxLimit int) (*db.Us
 	}
 	return &db.UserInvoicesOptions{
 		userId,
-		params.Get("received") == "true",
-		params.Get("supplied") == "true",
 		publicInvoicesOptions,
 	}, nil
 }

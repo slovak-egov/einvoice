@@ -102,16 +102,7 @@ func (o *PublicInvoicesOptions) buildQuery(query *orm.Query) *orm.Query {
 
 type UserInvoicesOptions struct {
 	UserId   int
-	Received bool
-	Supplied bool
 	*PublicInvoicesOptions
-}
-
-func (r *UserInvoicesOptions) Validate(maxLimit int) error {
-	if !r.Received && !r.Supplied {
-		return errors.New("Either received or supplied should be requested")
-	}
-	return r.PublicInvoicesOptions.Validate(maxLimit)
 }
 
 func (c *Connector) GetPublicInvoices(ctx goContext.Context, options *PublicInvoicesOptions) ([]entity.Invoice, error) {
@@ -158,14 +149,10 @@ func (c *Connector) GetUserInvoices(ctx goContext.Context, options *UserInvoices
 	query := c.GetDb(ctx).Model(&invoices).
 		With("accessible_uris", c.accessibleUrisQuery(ctx, options.UserId)).
 		WhereGroup(func(q *orm.Query) (*orm.Query, error) {
-			subquery := q
-			if options.Received {
-				subquery = subquery.WhereOr("'ico://sk/' || customer_ico IN (?)", c.GetDb(ctx).Model().Table("accessible_uris"))
-			}
-			if options.Supplied {
-				subquery = subquery.WhereOr("'ico://sk/' || supplier_ico IN (?)", c.GetDb(ctx).Model().Table("accessible_uris"))
-			}
-			return subquery, nil
+			return q.
+				WhereOr("'ico://sk/' || customer_ico IN (?)", c.GetDb(ctx).Model().Table("accessible_uris")).
+				WhereOr("'ico://sk/' || supplier_ico IN (?)", c.GetDb(ctx).Model().Table("accessible_uris")),
+				nil
 		})
 
 	if err := options.PublicInvoicesOptions.buildQuery(query).Select(); err != nil {

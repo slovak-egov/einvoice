@@ -64,7 +64,7 @@ export default ({history, match: {params: {id}}}) => {
         <div>
           <Row>
             <Col sm>
-              <TextField label={t('invoice.sender')} value={sender} />
+              <TextField label={t('invoice.supplier')} value={sender} />
             </Col>
             <Col sm>
               <TextField label={t('invoice.supplierIco')} value={supplierIco} />
@@ -72,7 +72,7 @@ export default ({history, match: {params: {id}}}) => {
           </Row>
           <Row>
             <Col sm>
-              <TextField label={t('invoice.receiver')} value={receiver} />
+              <TextField label={t('invoice.customer')} value={receiver} />
             </Col>
             <Col sm>
               <TextField label={t('invoice.customerIco')} value={customerIco} />

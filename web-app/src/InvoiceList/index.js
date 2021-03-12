@@ -8,9 +8,7 @@ import {get} from 'lodash'
 import Filters from './Filters'
 import {invoicesSelector} from '../cache/invoices/state'
 
-export default ({
-  areCustomFilterFieldsValid, CustomFilter, getInvoicesAction, path, title,
-}) => {
+export default ({getInvoicesAction, path, title}) => {
   const {t} = useTranslation('common')
   const {search} = useLocation()
 
@@ -27,11 +25,7 @@ export default ({
     <Card className="m-1">
       <Card.Header className="bg-primary text-white text-center" as="h3">{title}</Card.Header>
       <Card.Body>
-        <Filters
-          getInvoices={getInvoices}
-          CustomFilter={CustomFilter}
-          areCustomFilterFieldsValid={areCustomFilterFieldsValid}
-        />
+        <Filters getInvoices={getInvoices} />
         {invoiceIds && <>
           <Table striped hover responsive size="sm">
             <thead>

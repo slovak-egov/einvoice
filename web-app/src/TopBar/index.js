@@ -12,11 +12,6 @@ const defaultInvoiceQuery = new URLSearchParams([
   ['format', 'ubl2.1'], ['format', 'd16b'],
 ])
 
-const defaultMyInvoiceQuery = new URLSearchParams({
-  supplied: true,
-  received: true,
-})
-
 export default () => {
   const {i18n, t} = useTranslation('common')
 
@@ -51,7 +46,7 @@ export default () => {
           <div className="d-md-flex ml-md-auto">
             {isLogged ?
               <>
-                <Nav.Link as={NavLink} to={`/my-invoices?${defaultInvoiceQuery}&${defaultMyInvoiceQuery}`}>
+                <Nav.Link as={NavLink} to={`/my-invoices?${defaultInvoiceQuery}`}>
                   {t('topBar.myInvoices')}
                 </Nav.Link>
                 <Nav.Link as={NavLink} to="/account">{loggedUser.name}</Nav.Link>

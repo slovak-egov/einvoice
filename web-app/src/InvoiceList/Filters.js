@@ -6,7 +6,7 @@ import {useTranslation} from 'react-i18next'
 import {invoiceFormats} from '../utils/constants'
 import {isInvoicesFilterValid, keepDigitsOnly, keepFloatCharactersOnly} from '../utils/validations'
 
-export default ({areCustomFilterFieldsValid, CustomFilter, getInvoices}) => {
+export default ({getInvoices}) => {
   const {t} = useTranslation('common')
   const history = useHistory()
   const {pathname, search} = useLocation()
@@ -26,22 +26,12 @@ export default ({areCustomFilterFieldsValid, CustomFilter, getInvoices}) => {
   const [amountWithoutVatTo, setAmountWithoutVatTo] = useState(queryParams.get('amountWithoutVatTo'))
 
   const [ico, setIco] = useState(queryParams.get('ico'))
-  // Rest of query params passed to CustomFilter
-  const initExtraQuery = new URLSearchParams(search)
-  initExtraQuery.delete('ico')
-  initExtraQuery.delete('format')
-  initExtraQuery.delete('test')
-  initExtraQuery.delete('amountFrom')
-  initExtraQuery.delete('amountTo')
-  initExtraQuery.delete('amountWithoutVatFrom')
-  initExtraQuery.delete('amountWithoutVatTo')
-  const [extraQuery, setExtraQuery] = useState(initExtraQuery)
 
   // Triggering search with new filters is done by redirect
   // Page itself is responsible to fetch proper data
   const filterRedirect = useCallback(
     () => {
-      const newQueryParams = new URLSearchParams(extraQuery)
+      const newQueryParams = new URLSearchParams()
       if (test) newQueryParams.set('test', 'true')
       for (const [format, {value}] of Object.entries(formats)) {
         if (value) newQueryParams.append('format', format)
@@ -55,14 +45,14 @@ export default ({areCustomFilterFieldsValid, CustomFilter, getInvoices}) => {
       history.push(`${pathname}?${newQueryParams}`)
     },
     [
-      extraQuery, history, ico, pathname, test, amountFrom, amountTo, amountWithoutVatFrom,
+      history, ico, pathname, test, amountFrom, amountTo, amountWithoutVatFrom,
       amountWithoutVatTo, ...Object.values(formats).map(({value}) => value),
     ],
   )
 
   const searchEnabled = isInvoicesFilterValid({
     formats, ico, amountFrom, amountTo, amountWithoutVatFrom, amountWithoutVatTo,
-  }) && areCustomFilterFieldsValid(extraQuery)
+  })
 
   // When query URL parameters change try to fetch proper data
   useEffect(() => {
@@ -131,7 +121,7 @@ export default ({areCustomFilterFieldsValid, CustomFilter, getInvoices}) => {
               <Col md>
                 <strong className="filter-heading">{t('invoice.amount')}</strong>
                 <InputGroup>
-                  <Form.Label style={{width: '20%'}}>{t('invoice.amountFrom')}</Form.Label>
+                  <Form.Label style={{width: '40px'}}>{t('invoice.amountFrom')}</Form.Label>
                   <Form.Control
                     style={{maxWidth: '150px'}}
                     value={amountFrom || ''}
@@ -146,7 +136,7 @@ export default ({areCustomFilterFieldsValid, CustomFilter, getInvoices}) => {
                   </InputGroup.Append>
                 </InputGroup>
                 <InputGroup>
-                  <Form.Label style={{width: '20%'}}>{t('invoice.amountTo')}</Form.Label>
+                  <Form.Label style={{width: '40px'}}>{t('invoice.amountTo')}</Form.Label>
                   <Form.Control
                     style={{maxWidth: '150px'}}
                     value={amountTo || ''}
@@ -164,7 +154,7 @@ export default ({areCustomFilterFieldsValid, CustomFilter, getInvoices}) => {
               <Col md>
                 <strong className="filter-heading">{t('invoice.amountWithoutVat')}</strong>
                 <InputGroup>
-                  <Form.Label style={{width: '20%'}}>{t('invoice.amountFrom')}</Form.Label>
+                  <Form.Label style={{width: '40px'}}>{t('invoice.amountFrom')}</Form.Label>
                   <Form.Control
                     style={{maxWidth: '150px'}}
                     value={amountWithoutVatFrom || ''}
@@ -181,7 +171,7 @@ export default ({areCustomFilterFieldsValid, CustomFilter, getInvoices}) => {
                   </InputGroup.Append>
                 </InputGroup>
                 <InputGroup>
-                  <Form.Label style={{width: '20%'}}>{t('invoice.amountTo')}</Form.Label>
+                  <Form.Label style={{width: '40px'}}>{t('invoice.amountTo')}</Form.Label>
                   <Form.Control
                     style={{maxWidth: '150px'}}
                     value={amountWithoutVatTo || ''}
@@ -197,9 +187,6 @@ export default ({areCustomFilterFieldsValid, CustomFilter, getInvoices}) => {
                 </InputGroup>
               </Col>
             </Row>
-            {CustomFilter &&
-              <CustomFilter extraQuery={extraQuery} setExtraQuery={setExtraQuery} />
-            }
           </div>
           <div className="d-flex">
             <Button
