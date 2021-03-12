@@ -32,6 +32,10 @@ func TestGetAndUpdateNotNotifiedInvoices(t *testing.T) {
 	startTx2 := make(chan bool, 1)
 	finishedTx1 := make(chan bool, 1)
 	go func() {
+		defer func() {
+			finishedTx1 <- true
+		}()
+
 		err := connector.RunInTransaction(ctx, func(ctx goContext.Context) error {
 			invoices, err := connector.GetAndUpdateNotNotifiedInvoices(ctx, 2)
 			if err != nil {
@@ -49,14 +53,15 @@ func TestGetAndUpdateNotNotifiedInvoices(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-
-		finishedTx1 <- true
 	}()
 
 	stopTx2 := make(chan bool, 1)
 	finishedTx2 := make(chan bool, 1)
 	go func() {
 		<-startTx2
+		defer func() {
+			finishedTx2 <- true
+		}()
 
 		err := connector.RunInTransaction(ctx, func(ctx goContext.Context) error {
 			invoices, err := connector.GetAndUpdateNotNotifiedInvoices(ctx, 2)
@@ -74,8 +79,6 @@ func TestGetAndUpdateNotNotifiedInvoices(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-
-		finishedTx2 <- true
 	}()
 
 	stopTx1 <- true

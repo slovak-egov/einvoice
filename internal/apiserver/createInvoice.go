@@ -21,10 +21,6 @@ func (a *App) parseAndValidateInvoice(req *http.Request) ([]byte, string, error)
 			WithField("error", err.Error()).
 			Debug("app.parseInvoice.failed")
 
-		return nil, "", err
-	}
-
-	if err != nil {
 		return nil, "", InvoiceError("invoice.parsingError").WithDetail(err)
 	}
 
@@ -51,18 +47,6 @@ func (a *App) parseAndValidateInvoice(req *http.Request) ([]byte, string, error)
 	}
 
 	return invoice, format, nil
-}
-
-func parseInvoice(req *http.Request) ([]byte, error) {
-	bytes, err := io.ReadAll(req.Body)
-	if err != nil {
-		context.GetLogger(req.Context()).
-			WithField("error", err.Error()).
-			Debug("app.parseInvoice.failed")
-
-		return nil, err
-	}
-	return bytes, nil
 }
 
 // Check if creator has permission to submit invoice

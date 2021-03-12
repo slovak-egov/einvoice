@@ -274,8 +274,14 @@ paths:
       tags:
         - Invoices
       summary: Create invoice
+      parameters:
+        - $ref: '#/components/parameters/Language'
       requestBody:
-        $ref: '#/components/requestBodies/CreateInvoice'
+        description: "UBL2.1 or D16B invoice"
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Invoice'
       responses:
         '201':
           description: Invoice created
@@ -289,29 +295,49 @@ paths:
           $ref: '#/components/responses/Error'
         '429':
           $ref: '#/components/responses/Error'
+  /invoices/test:
+    post:
+      security:
+        - sessionAuth: []
+        - apiKeyAuth: []
+      tags:
+        - Invoices
+      summary: Create test invoice
+      parameters:
+        - $ref: '#/components/parameters/Language'
+      requestBody:
+        description: "UBL2.1 or D16B invoice"
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Invoice'
+      responses:
+        '201':
+          description: Test invoice created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '400':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '429':
+          $ref: '#/components/responses/Error'
+
   /invoices/visualization:
     post:
       tags:
         - Invoices
       summary: Get visualization of sent invoice
+      parameters:
+        - $ref: '#/components/parameters/Language'
       requestBody:
+        description: "UBL2.1 or D16B invoice"
         content:
-          multipart/form-data:
+          application/xml:
             schema:
-              type: object
-              properties:
-                format:
-                  $ref: '#/components/schemas/InvoiceFormat'
-                invoice:
-                  type: string
-                  format: binary
-                lang:
-                  $ref: '#/components/schemas/Languages'
-                documentType:
-                  $ref: '#/components/schemas/DocumentType'
-              required:
-                - format
-                - invoice
+              $ref: '#/components/schemas/Invoice'
       responses:
         '200':
           description: Successful response
@@ -465,19 +491,6 @@ components:
       enum:
         - ubl2.1
         - d16b
-    DocumentType:
-      type: string
-      description: Invoice or credit note
-      enum:
-        - invoice
-        - creditNote
-    InvoiceParties:
-      type: string
-      description: Type of invoice party nationalities
-      enum:
-        - slovakParties
-        - foreignSupplier
-        - foreignCustomer
     Languages:
       type: string
       description: Requested language of response, default language is en
@@ -610,6 +623,11 @@ components:
       description: Select invoices with amount without VAT not greater than this value
       schema:
         type: number
+    Language:
+      name: Accept-Language
+      in: header
+      schema:
+        $ref: '#/components/schemas/Languages'
   requestBodies:
     PatchUser:
       content:
@@ -619,29 +637,6 @@ components:
             properties:
               serviceAccountPublicKey:
                 type: string
-    CreateInvoice:
-      content:
-        multipart/form-data:
-          schema:
-            type: object
-            properties:
-              format:
-                $ref: '#/components/schemas/InvoiceFormat'
-              invoice:
-                type: string
-                format: binary
-              test:
-                type: boolean
-                description: If true, service will create test-only invoice
-              partiesType:
-                $ref: '#/components/schemas/InvoiceParties'
-              lang:
-                $ref: '#/components/schemas/Languages'
-              documentType:
-                $ref: '#/components/schemas/DocumentType'
-            required:
-              - format
-              - invoice
   responses:
     Login:
       description: User is sucessfully logged in.

@@ -1,5 +1,5 @@
 import {forwardReducerTo} from './utils/helpers'
-import {invoiceFormats, invoiceTypes, partiesTypes} from './utils/constants'
+import {invoiceTypes} from './utils/constants'
 
 const getInitialState = () => ({
   invoices: {},
