@@ -281,7 +281,9 @@ paths:
         content:
           application/xml:
             schema:
-              $ref: '#/components/schemas/Invoice'
+              type: object
+              xml:
+                name: Invoice
       responses:
         '201':
           description: Invoice created
@@ -310,7 +312,9 @@ paths:
         content:
           application/xml:
             schema:
-              $ref: '#/components/schemas/Invoice'
+              type: object
+              xml:
+                name: Invoice
       responses:
         '201':
           description: Test invoice created
