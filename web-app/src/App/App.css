@@ -21,3 +21,7 @@ body {
     vertical-align: middle;
     margin: 3px;
 }
+
+.datepicker-width {
+    max-width: 150px;
+}

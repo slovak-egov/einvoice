@@ -8,15 +8,16 @@
     "supplier": "Supplier",
     "customer": "Customer",
     "issueDate": "Issue date",
+    "uploadTime": "Upload time",
     "amount": "Amount",
     "amountWithoutVat": "Amount without VAT",
-    "amountFrom": "From",
-    "amountTo": "To",
     "createdAt": "Created at",
     "supplierIco": "Supplier IČO",
     "customerIco": "Customer IČO",
     "notificationsSent": "Notifications sent",
-    "format": "Format"
+    "format": "Format",
+    "intervalStart": "From",
+    "intervalEnd": "To"
   },
   "cancel": "Cancel",
   "save": "Save",
@@ -148,5 +149,6 @@
     "invoice": "Invoice",
     "creditNote": "Credit note"
   },
-  "errorCount": "Error count"
+  "errorCount": "Error count",
+  "time": "Time"
 }

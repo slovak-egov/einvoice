@@ -125,7 +125,7 @@ const FieldInput = ({codeListIds, dataType, isInvalid, updateField, value}) => {
         <DatePicker
           selected={value}
           onChange={onChange}
-          className={classnames('form-control', {'is-invalid': isInvalid})}
+          className={classnames({'is-invalid': isInvalid})}
           dateFormat="yyyy-MM-dd"
         />
       )

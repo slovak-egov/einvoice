@@ -1,8 +1,10 @@
 package apiserver
 
 import (
-	"errors"
 	"strconv"
+	"time"
+
+	"github.com/slovak-egov/einvoice/pkg/timeutil"
 )
 
 func getOptionalInt(value string, defaultValue int) (int, error) {
@@ -41,23 +43,24 @@ func getOptionalBool(value string, defaultValue bool) (bool, error) {
 	return parsedValue, nil
 }
 
-func getEnum(value string, possibleValues []string, defaultValue string) (string, error) {
-	// Return default if value is not provided
+func getOptionalDate(value string) (*timeutil.Date, error) {
 	if value == "" {
-		// If defaultValue is not defined return error
-		if defaultValue == "" {
-			return "", errors.New("missing")
-		} else {
-			return defaultValue, nil
-		}
+		return nil, nil
 	}
-
-	for _, possibleValue := range possibleValues {
-		if value == possibleValue {
-			return value, nil
-		}
+	date, err := timeutil.ParseDate(value, timeutil.DateLayoutISO)
+	if err != nil {
+		return nil, err
 	}
+	return date, nil
+}
 
-	// Value is not in enum
-	return "", errors.New("unknown")
+func getOptionalTime(value string) (*time.Time, error) {
+	if value == "" {
+		return nil, nil
+	}
+	t, err := time.Parse(timeutil.DateTimeLayoutISO, value)
+	if err != nil {
+		return nil, err
+	}
+	return &t, nil
 }

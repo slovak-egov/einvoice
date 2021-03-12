@@ -55,3 +55,15 @@ func WithAmountWithoutTax(amount float64) TestInvoiceOption {
 		invoice.AmountWithoutVat = amount
 	}
 }
+
+func WithIssueDate(date timeutil.Date) TestInvoiceOption {
+	return func(invoice *entity.Invoice) {
+		invoice.IssueDate = date
+	}
+}
+
+func WithCreatedAt(time time.Time) TestInvoiceOption {
+	return func(invoice *entity.Invoice) {
+		invoice.CreatedAt = time
+	}
+}

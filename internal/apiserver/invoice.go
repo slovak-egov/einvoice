@@ -32,54 +32,61 @@ func NewPagedInvoices(invoices []entity.Invoice, limit int) *PagedInvoices {
 }
 
 func NewPublicInvoicesOptions(params url.Values, maxLimit int) (*db.PublicInvoicesOptions, error) {
-	startId, err := getOptionalInt(params.Get("startId"), 0)
+	options := &db.PublicInvoicesOptions{
+		Formats: params["format"],
+		Ico:     params.Get("ico"),
+	}
+	var err error
+	options.StartId, err = getOptionalInt(params.Get("startId"), 0)
 	if err != nil {
 		return nil, fmt.Errorf("startId: %w", err)
 	}
-	limit, err := getOptionalInt(params.Get("limit"), maxLimit)
+	options.Limit, err = getOptionalInt(params.Get("limit"), maxLimit)
 	if err != nil {
 		return nil, fmt.Errorf("limit: %w", err)
 	}
-	test, err := getOptionalBool(params.Get("test"), false)
+	options.Test, err = getOptionalBool(params.Get("test"), false)
 	if err != nil {
 		return nil, fmt.Errorf("test: %w", err)
 	}
-	order := params.Get("order")
-	if order == "" {
-		order = dbutil.DescOrder
+	options.Order = params.Get("order")
+	if options.Order == "" {
+		options.Order = dbutil.DescOrder
 	}
-	amountFrom, err := getOptionalFloat(params.Get("amountFrom"))
+	options.Amount.From, err = getOptionalFloat(params.Get("amountFrom"))
 	if err != nil {
 		return nil, fmt.Errorf("amountFrom: %w", err)
 	}
-	amountTo, err := getOptionalFloat(params.Get("amountTo"))
+	options.Amount.To, err = getOptionalFloat(params.Get("amountTo"))
 	if err != nil {
 		return nil, fmt.Errorf("amountTo: %w", err)
 	}
-	amountWithoutVatFrom, err := getOptionalFloat(params.Get("amountWithoutVatFrom"))
+	options.AmountWithoutVat.From, err = getOptionalFloat(params.Get("amountWithoutVatFrom"))
 	if err != nil {
 		return nil, fmt.Errorf("amountWithoutVatFrom: %w", err)
 	}
-	amountWithoutVatTo, err := getOptionalFloat(params.Get("amountWithoutVatTo"))
+	options.AmountWithoutVat.To, err = getOptionalFloat(params.Get("amountWithoutVatTo"))
 	if err != nil {
 		return nil, fmt.Errorf("amountWithoutVatTo: %w", err)
 	}
-	return &db.PublicInvoicesOptions{
-		Formats: params["format"],
-		StartId: startId,
-		Limit:   limit,
-		Test:    test,
-		Ico:     params.Get("ico"),
-		Order:   order,
-		Amount: db.AmountOptions{
-			From: amountFrom,
-			To:   amountTo,
-		},
-		AmountWithoutVat: db.AmountOptions{
-			From: amountWithoutVatFrom,
-			To:   amountWithoutVatTo,
-		},
-	}, nil
+	options.IssueDate.From, err = getOptionalDate(params.Get("issueDateFrom"))
+	if err != nil {
+		return nil, fmt.Errorf("issueDateFrom: %w", err)
+	}
+	options.IssueDate.To, err = getOptionalDate(params.Get("issueDateTo"))
+	if err != nil {
+		return nil, fmt.Errorf("issueDateTo: %w", err)
+	}
+	options.CreatedAt.From, err = getOptionalTime(params.Get("uploadTimeFrom"))
+	if err != nil {
+		return nil, fmt.Errorf("uploadDateFrom: %w", err)
+	}
+	options.CreatedAt.To, err = getOptionalTime(params.Get("uploadTimeTo"))
+	if err != nil {
+		return nil, fmt.Errorf("uploadDateTo: %w", err)
+	}
+
+	return options, nil
 }
 
 func (a *App) getPublicInvoices(res http.ResponseWriter, req *http.Request) error {

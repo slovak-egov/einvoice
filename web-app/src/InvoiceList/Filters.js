@@ -1,9 +1,11 @@
 import './Filters.css'
 import {useCallback, useEffect, useState} from 'react'
 import {useHistory, useLocation} from 'react-router'
-import {Accordion, Button, Card, Col, Form, FormCheck, InputGroup, Row} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
+import {Accordion, Button, Card, Col, Form, FormCheck, InputGroup, Row} from 'react-bootstrap'
+import DatePicker from '../helpers/DatePicker'
 import {invoiceFormats} from '../utils/constants'
+import {formatDate, formatTime, parseTime} from '../utils/helpers'
 import {isInvoicesFilterValid, keepDigitsOnly, keepFloatCharactersOnly} from '../utils/validations'
 
 export default ({getInvoices}) => {
@@ -14,16 +16,18 @@ export default ({getInvoices}) => {
 
   const [test, setTest] = useState(queryParams.get('test') === 'true')
 
-  const formats = {}
-  for (const format of Object.values(invoiceFormats)) {
-    const [value, setter] = useState(queryParams.getAll('format').includes(format))
-    formats[format] = {value, setter, toggleFormat: () => setter((v) => !v)}
-  }
+  const [ublFormat, setUblFormat] = useState(queryParams.getAll('format').includes(invoiceFormats.UBL))
+  const [d16bFormat, setD16bFormat] = useState(queryParams.getAll('format').includes(invoiceFormats.D16B))
 
   const [amountFrom, setAmountFrom] = useState(queryParams.get('amountFrom'))
   const [amountTo, setAmountTo] = useState(queryParams.get('amountTo'))
   const [amountWithoutVatFrom, setAmountWithoutVatFrom] = useState(queryParams.get('amountWithoutVatFrom'))
   const [amountWithoutVatTo, setAmountWithoutVatTo] = useState(queryParams.get('amountWithoutVatTo'))
+
+  const [issueDateFrom, setIssueDateFrom] = useState(parseTime(queryParams.get('issueDateFrom')))
+  const [issueDateTo, setIssueDateTo] = useState(parseTime(queryParams.get('issueDateTo')))
+  const [uploadTimeFrom, setUploadTimeFrom] = useState(parseTime(queryParams.get('uploadTimeFrom')))
+  const [uploadTimeTo, setUploadTimeTo] = useState(parseTime(queryParams.get('uploadTimeTo')))
 
   const [ico, setIco] = useState(queryParams.get('ico'))
 
@@ -33,25 +37,32 @@ export default ({getInvoices}) => {
     () => {
       const newQueryParams = new URLSearchParams()
       if (test) newQueryParams.set('test', 'true')
-      for (const [format, {value}] of Object.entries(formats)) {
-        if (value) newQueryParams.append('format', format)
-      }
+
+      if (ublFormat) newQueryParams.append('format', invoiceFormats.UBL)
+      if (d16bFormat) newQueryParams.append('format', invoiceFormats.D16B)
+
       if (ico != null) newQueryParams.set('ico', ico)
       if (amountFrom != null) newQueryParams.set('amountFrom', amountFrom)
       if (amountTo != null) newQueryParams.set('amountTo', amountTo)
       if (amountWithoutVatFrom != null) newQueryParams.set('amountWithoutVatFrom', amountWithoutVatFrom)
       if (amountWithoutVatTo != null) newQueryParams.set('amountWithoutVatTo', amountWithoutVatTo)
 
+      if (issueDateFrom != null) newQueryParams.set('issueDateFrom', formatDate(issueDateFrom))
+      if (issueDateTo != null) newQueryParams.set('issueDateTo', formatDate(issueDateTo))
+      if (uploadTimeFrom != null) newQueryParams.set('uploadTimeFrom', formatTime(uploadTimeFrom))
+      if (uploadTimeTo != null) newQueryParams.set('uploadTimeTo', formatTime(uploadTimeTo))
+
       history.push(`${pathname}?${newQueryParams}`)
     },
     [
-      history, ico, pathname, test, amountFrom, amountTo, amountWithoutVatFrom,
-      amountWithoutVatTo, ...Object.values(formats).map(({value}) => value),
+      history, ico, pathname, test, amountFrom, amountTo, amountWithoutVatFrom, amountWithoutVatTo,
+      issueDateFrom, issueDateTo, uploadTimeFrom, uploadTimeTo, ublFormat, d16bFormat,
     ],
   )
 
   const searchEnabled = isInvoicesFilterValid({
-    formats, ico, amountFrom, amountTo, amountWithoutVatFrom, amountWithoutVatTo,
+    ublFormat, d16bFormat, ico, amountFrom, amountTo, amountWithoutVatFrom, amountWithoutVatTo,
+    issueDateFrom, issueDateTo, uploadTimeFrom, uploadTimeTo,
   })
 
   // When query URL parameters change try to fetch proper data
@@ -77,16 +88,19 @@ export default ({getInvoices}) => {
               <Col sm>
                 <strong className="filter-heading">{t('invoice.format')}</strong>
                 <div className="d-flex">
-                  {Object.values(invoiceFormats).map((format) => (
-                    <FormCheck
-                      type="checkbox"
-                      key={format}
-                      checked={formats[format].value}
-                      onChange={formats[format].toggleFormat}
-                      label={format}
-                      className="mr-3"
-                    />
-                  ))}
+                  <FormCheck
+                    type="checkbox"
+                    checked={ublFormat}
+                    onChange={() => setUblFormat(!ublFormat)}
+                    label={invoiceFormats.UBL}
+                    className="mr-3"
+                  />
+                  <FormCheck
+                    type="checkbox"
+                    checked={d16bFormat}
+                    onChange={() => setD16bFormat(!d16bFormat)}
+                    label={invoiceFormats.D16B}
+                  />
                 </div>
               </Col>
               <Col sm>
@@ -121,7 +135,7 @@ export default ({getInvoices}) => {
               <Col md>
                 <strong className="filter-heading">{t('invoice.amount')}</strong>
                 <InputGroup>
-                  <Form.Label style={{width: '40px'}}>{t('invoice.amountFrom')}</Form.Label>
+                  <Form.Label style={{width: '40px'}}>{t('invoice.intervalStart')}</Form.Label>
                   <Form.Control
                     style={{maxWidth: '150px'}}
                     value={amountFrom || ''}
@@ -136,7 +150,7 @@ export default ({getInvoices}) => {
                   </InputGroup.Append>
                 </InputGroup>
                 <InputGroup>
-                  <Form.Label style={{width: '40px'}}>{t('invoice.amountTo')}</Form.Label>
+                  <Form.Label style={{width: '40px'}}>{t('invoice.intervalEnd')}</Form.Label>
                   <Form.Control
                     style={{maxWidth: '150px'}}
                     value={amountTo || ''}
@@ -154,7 +168,7 @@ export default ({getInvoices}) => {
               <Col md>
                 <strong className="filter-heading">{t('invoice.amountWithoutVat')}</strong>
                 <InputGroup>
-                  <Form.Label style={{width: '40px'}}>{t('invoice.amountFrom')}</Form.Label>
+                  <Form.Label style={{width: '40px'}}>{t('invoice.intervalStart')}</Form.Label>
                   <Form.Control
                     style={{maxWidth: '150px'}}
                     value={amountWithoutVatFrom || ''}
@@ -171,7 +185,7 @@ export default ({getInvoices}) => {
                   </InputGroup.Append>
                 </InputGroup>
                 <InputGroup>
-                  <Form.Label style={{width: '40px'}}>{t('invoice.amountTo')}</Form.Label>
+                  <Form.Label style={{width: '40px'}}>{t('invoice.intervalEnd')}</Form.Label>
                   <Form.Control
                     style={{maxWidth: '150px'}}
                     value={amountWithoutVatTo || ''}
@@ -182,6 +196,84 @@ export default ({getInvoices}) => {
                     <InputGroup.Checkbox
                       checked={amountWithoutVatTo != null}
                       onChange={() => setAmountWithoutVatTo(amountWithoutVatTo == null ? '' : null)}
+                    />
+                  </InputGroup.Append>
+                </InputGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col md>
+                <strong className="filter-heading">{t('invoice.issueDate')}</strong>
+                <InputGroup>
+                  <Form.Label style={{width: '40px'}}>{t('invoice.intervalStart')}</Form.Label>
+                  <DatePicker
+                    className="datepicker-width"
+                    selected={issueDateFrom || ''}
+                    onChange={setIssueDateFrom}
+                    disabled={issueDateFrom == null}
+                    dateFormat="P"
+                  />
+                  <InputGroup.Append>
+                    <InputGroup.Checkbox
+                      checked={issueDateFrom != null}
+                      onChange={() => setIssueDateFrom(issueDateFrom == null ? '' : null)}
+                    />
+                  </InputGroup.Append>
+                </InputGroup>
+                <InputGroup>
+                  <Form.Label style={{width: '40px'}}>{t('invoice.intervalEnd')}</Form.Label>
+                  <DatePicker
+                    className="datepicker-width"
+                    selected={issueDateTo || ''}
+                    onChange={setIssueDateTo}
+                    disabled={issueDateTo == null}
+                    dateFormat="P"
+                  />
+                  <InputGroup.Append>
+                    <InputGroup.Checkbox
+                      checked={issueDateTo != null}
+                      onChange={() => setIssueDateTo(issueDateTo == null ? '' : null)}
+                    />
+                  </InputGroup.Append>
+                </InputGroup>
+              </Col>
+              <Col md>
+                <strong className="filter-heading">{t('invoice.uploadTime')}</strong>
+                <InputGroup>
+                  <Form.Label style={{width: '40px'}}>{t('invoice.intervalStart')}</Form.Label>
+                  <DatePicker
+                    className="datepicker-width"
+                    selected={uploadTimeFrom || ''}
+                    onChange={setUploadTimeFrom}
+                    disabled={uploadTimeFrom == null}
+                    showTimeSelect
+                    dateFormat="Pp"
+                    maxDate={new Date()}
+                    timeCaption={t('time')}
+                  />
+                  <InputGroup.Append>
+                    <InputGroup.Checkbox
+                      checked={uploadTimeFrom != null}
+                      onChange={() => setUploadTimeFrom(uploadTimeFrom == null ? '' : null)}
+                    />
+                  </InputGroup.Append>
+                </InputGroup>
+                <InputGroup>
+                  <Form.Label style={{width: '40px'}}>{t('invoice.intervalEnd')}</Form.Label>
+                  <DatePicker
+                    className="datepicker-width"
+                    selected={uploadTimeTo || ''}
+                    onChange={setUploadTimeTo}
+                    disabled={uploadTimeTo == null}
+                    showTimeSelect
+                    dateFormat="Pp"
+                    maxDate={new Date()}
+                    timeCaption={t('time')}
+                  />
+                  <InputGroup.Append>
+                    <InputGroup.Checkbox
+                      checked={uploadTimeTo != null}
+                      onChange={() => setUploadTimeTo(uploadTimeTo == null ? '' : null)}
                     />
                   </InputGroup.Append>
                 </InputGroup>

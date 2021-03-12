@@ -8,8 +8,9 @@ import (
 )
 
 const (
-	DateLayoutISO  = "2006-01-02"
-	D16bDateLayout = "20060102"
+	DateLayoutISO     = "2006-01-02"
+	D16bDateLayout    = "20060102"
+	DateTimeLayoutISO = "2006-01-02T15:04:05.999-07:00"
 )
 
 type Date struct {
