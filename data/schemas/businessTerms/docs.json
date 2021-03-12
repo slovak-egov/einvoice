@@ -1,0 +1,4593 @@
+{
+  "BT-1": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoice number",
+      "sk": "Číslo faktúry"
+    },
+    "description": {
+      "en": "A unique identification of the Invoice.",
+      "sk": "Jedinečná identifikácia faktúry."
+    },
+    "usageNote": {
+      "en": "The sequential number required in Article 226(2) of the directive 2006/112/EC [2], to uniquely identify the Invoice within the business context, time-frame, operating systems and records of the Seller. It may be based on one or more series of numbers, which may include alphanumeric characters. No identification scheme is to be used.",
+      "sk": "Poradové číslo požadované v čl. 226 ods. 2 Smernice 2006/112/ES [2], ktoré jednoznačne určuje faktúru v rámci obchodného kontextu, časového rámca, prevádzkových systémov a evidencie predávajúceho. Môže byť založené na jednej alebo viacerých sériách čísel, ktoré môžu obsahovať alfanumerické znaky. Nie je potrebné používať žiadnu schému identifikácie."
+    },
+    "level": 0,
+    "dataType": "Identifier"
+  },
+  "BT-2": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoice issue date",
+      "sk": "Dátum vystavenia faktúry"
+    },
+    "description": {
+      "en": "The date when the Invoice was issued.",
+      "sk": "Dátum, kedy bola faktúra vystavená."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 0,
+    "dataType": "Date"
+  },
+  "BT-3": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoice type code",
+      "sk": "Kód typu faktúry"
+    },
+    "description": {
+      "en": "A code specifying the functional type of the Invoice.",
+      "sk": "Kód, ktorý špecifikuje funkčný typ faktúry."
+    },
+    "usageNote": {
+      "en": "Commercial invoices and credit notes are defined according the entries in UNTDID 1001 [6].\r\n Other entries of UNTDID 1001 [6] with specific invoices or credit notes may be used if applicable.",
+      "sk": "Obchodné faktúry a dobropisy sú definované podľa položiek číselníka UNTDID 1001 [6].\n Ostatné položky UNTDID 1001 [6] sa môžu u konkrétnych faktúr alebo dobropisov použiť podľa potreby."
+    },
+    "level": 0,
+    "dataType": "Code",
+    "codeLists": [
+      "UNCL1001-inv"
+    ]
+  },
+  "BT-5": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoice currency code",
+      "sk": "Kód meny faktúry"
+    },
+    "description": {
+      "en": "The currency in which all Invoice amounts are given, except for the Total VAT amount in accounting currency.",
+      "sk": "Mena, v ktorej sú uvádzané všetky sumy faktúry, okrem celkovej sumy DPH v účtovnej mene."
+    },
+    "usageNote": {
+      "en": "Only one currency shall be used in the Invoice, except for the Invoice total VAT amount in accounting currency (BT-111) in accordance with article 230 of Directive 2006/112/EC on VAT [2].\r\n The lists of valid currencies are registered with the ISO 4217 Maintenance Agency “Codes for the representation of currencies and funds”.",
+      "sk": "Na faktúre sa v súlade s článkom 230 Smernice 2006/112/ES o DPH [2] používa len jedna mena okrem Celkovej sumy DPH za faktúru v účtovnej mene (BT-111).\n Zoznamy platných mien sú registrované v agentúre pre vedenie kódov ISO 4217 v zozname „Kódy pre meny a fondy“."
+    },
+    "level": 0,
+    "dataType": "Code",
+    "codeLists": [
+      "ISO4217"
+    ]
+  },
+  "BT-6": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "VAT accounting currency code",
+      "sk": "Kód účtovnej meny DPH"
+    },
+    "description": {
+      "en": "The currency used for VAT accounting and reporting purposes as accepted or required in the country of the Seller.",
+      "sk": "Mena používaná na účtovanie o DPH a vykazovanie DPH, ktorá je akceptovaná alebo vyžadovaná v krajine predávajúceho."
+    },
+    "usageNote": {
+      "en": "Shall be used in combination with the Invoice total VAT amount in accounting currency (BT-111) when the VAT accounting currency code differs from the Invoice currency code.\r\n The lists of valid currencies are registered with the ISO 4217 Maintenance Agency “Codes for the representation of currencies and funds”. Please refer to Article 230 of the Council Directive 2006/112/EC [2] for more information.",
+      "sk": "Používa sa v kombinácii s Celkovou sumou DPH za faktúru v účtovnej mene (BT-111), ak sa líši kód účtovnej meny DPH od kódu meny faktúry.\n Zoznamy platných mien sú registrované v agentúre pre vedenie kódov ISO 4217 v zozname „Kódy pre meny a fondy“. Viac informácií pozri v článku 230 Smernice Rady 2006/112/ES [2]."
+    },
+    "level": 0,
+    "dataType": "Code",
+    "codeLists": [
+      "ISO4217"
+    ]
+  },
+  "BT-7": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Value added tax point date",
+      "sk": "Dátum uskutočnenia zdaniteľného plnenia"
+    },
+    "description": {
+      "en": "The date when the VAT becomes accountable for the Seller and for the Buyer in so far as that date can be determined and differs from the date of issue of the invoice, according to the VAT directive.",
+      "sk": "Dátum, kedy musí predávajúci a kupujúci zaúčtovať DPH, ak sa tento dátum dá určiť a ak sa líši od dátumu vystavenia faktúry podľa smernice o DPH."
+    },
+    "usageNote": {
+      "en": "The tax point is usually the date goods were supplied or services completed (the 'basic tax point'). There are some variations.\r\n Please refer to Article 226 (7) of the Council Directive 2006/112/EC [2] for more information.\r\n This element is required if the Value added tax point date is different from the Invoice issue date.\r\n Both Buyer and Seller should use the Tax Point Date when provided by the Seller. The use of BT-7 and BT-8 is mutually exclusive.",
+      "sk": "Dátum uskutočnenia zdaniteľného plnenia je obvykle dátum, kedy príde k dodaniu tovaru alebo poskytnutiu služby („základný okamih zdanenia“). Existujú určité odchýlky.\n Viac informácií pozri v článku 226 ods. 7 Smernice Rady 2006/112/ES [2].  Tento prvok sa vyžaduje, ak sa dátum uskutočnenia zdaniteľného plnenia líši od dátumu vystavenia faktúry.\n Kupujúci aj predávajúci by mali dátum uskutočnenia zdaniteľného plnenia používať, pokiaľ ho predávajúci uvedie.  Použitie BT-7 a BT-8 sa vzájomne vylučuje."
+    },
+    "level": 0,
+    "dataType": "Date"
+  },
+  "BT-8": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Value added tax point date code",
+      "sk": "Kód dátumu uskutočnenia zdaniteľného plnenia"
+    },
+    "description": {
+      "en": "The code of the date when the VAT becomes accountable for the Seller and for the Buyer.",
+      "sk": "Kód dátumu, kedy musí predávajúci a kupujúci zaúčtovať DPH."
+    },
+    "usageNote": {
+      "en": "The code shall distinguish between the following entries of UNTDID 2005 [6]:\r\n - Invoice document issue date\r\n - Delivery date, actual\r\n - Paid to dateThe Value added tax point date code is used if the Value added tax point date is not known when the invoice is issued. The use of BT-8 and BT-7 is mutually exclusive.",
+      "sk": "Kód rozlišuje nasledujúce položky UNTDID 2005 [6]:\n - Dátum vystavenia faktúry\n - Dátum dodania, skutočný\n - Zaplatené k dátumu. Kód dátumu uskutočnenia zdaniteľného plnenia sa použije, ak Dátum uskutočnenia zdaniteľného plnenia nie je pri vystavení faktúry známy. Použitie BT-8 a BT-7 sa vzájomne vylučuje."
+    },
+    "level": 0,
+    "dataType": "Code",
+    "codeLists": [
+      "UNCL2005"
+    ]
+  },
+  "BT-9": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Payment due date",
+      "sk": "Dátum splatnosti"
+    },
+    "description": {
+      "en": "The date when the payment is due.",
+      "sk": "Dátum, kedy je platba splatná."
+    },
+    "usageNote": {
+      "en": "The payment due date reflects the due date of the net payment. For partial payments it states the first net due date. The corresponding description of more complex payment terms can be stated in BT-20 Payment terms.",
+      "sk": "Dátum splatnosti vyjadruje dátum splatnosti netto. U čiastkových platieb uvádza dátum splatnosti prvej čistej platby. Zodpovedajúci popis zložitejších platobných podmienok možno uviesť v BT-20 Platobné podmienky."
+    },
+    "level": 0,
+    "dataType": "Date"
+  },
+  "BT-10": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Buyer reference",
+      "sk": "Referenčné označenie kupujúceho"
+    },
+    "description": {
+      "en": "An identifier assigned by the Buyer used for internal routing purposes.",
+      "sk": "Identifikátor priradený kupujúcim a používaný na účely interného smerovania."
+    },
+    "usageNote": {
+      "en": "The identifier is defined by the Buyer (e.g. contact ID, department, office id, project code), but provided by the Seller in the Invoice.",
+      "sk": "Identifikátor definuje kupujúci (napr. kontaktné ID, oddelenie, ID útvaru, kód projektu), ale predávajúci ho uvádza na faktúre."
+    },
+    "level": 0,
+    "dataType": "Text"
+  },
+  "BT-11": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Project reference",
+      "sk": "Referenčné označenie projektu"
+    },
+    "description": {
+      "en": "The identification of the project the invoice refers to",
+      "sk": "Identifikácia projektu, na ktorý sa vzťahuje faktúra."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 0,
+    "dataType": "Document reference"
+  },
+  "BT-12": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Contract reference",
+      "sk": "Referenčné označenie zmluvy"
+    },
+    "description": {
+      "en": "The identification of a contract.",
+      "sk": "Identifikácia zmluvy."
+    },
+    "usageNote": {
+      "en": "The contract identifier should be unique in the context of the specific trading relationship and for a defined time period.",
+      "sk": "Identifikátor zmluvy by mal byť jedinečný v kontexte konkrétneho obchodného vzťahu a na vymedzené časové obdobie."
+    },
+    "level": 0,
+    "dataType": "Document reference"
+  },
+  "BT-13": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Purchase order reference",
+      "sk": "Referenčné označenie objednávky"
+    },
+    "description": {
+      "en": "An identifier of a referenced purchase order, issued by the Buyer.",
+      "sk": "Identifikátor príslušnej objednávky vydaný kupujúcim."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 0,
+    "dataType": "Document reference"
+  },
+  "BT-14": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Sales order reference",
+      "sk": "Referenčné označenie predajnej zákazky"
+    },
+    "description": {
+      "en": "An identifier of a referenced sales order, issued by the Seller.",
+      "sk": "Identifikátor príslušnej predajnej zákazky vydaný predávajúcim."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 0,
+    "dataType": "Document reference"
+  },
+  "BT-15": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Receiving advice reference",
+      "sk": "Referenčné označenie potvrdenia príjmu tovaru"
+    },
+    "description": {
+      "en": "An identifier of a referenced receiving advice.",
+      "sk": "Identifikátor príslušného potvrdenia príjmu tovaru."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 0,
+    "dataType": "Document reference"
+  },
+  "BT-16": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Despatch advice reference",
+      "sk": "Referenčné označenie avíza o odoslaní tovaru"
+    },
+    "description": {
+      "en": "An identifier of a referenced despatch advice.",
+      "sk": "Identifikátor príslušného avíza o odoslaní tovaru."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 0,
+    "dataType": "Document reference"
+  },
+  "BT-17": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Tender or lot reference",
+      "sk": "Referenčné označenie ponuky"
+    },
+    "description": {
+      "en": "The identification of the call for tender or lot the invoice relates to.",
+      "sk": "Identifikácia výzvy na podanie ponuky, ku ktorej sa faktúra vzťahuje."
+    },
+    "usageNote": {
+      "en": "In some countries a reference to the call for tender that has led to the contract shall be provided.",
+      "sk": "V niektorých krajinách sa uvádza odkaz na výzvu na podanie ponúk, ktorá viedla k danej zákazke."
+    },
+    "level": 0,
+    "dataType": "Document reference"
+  },
+  "BT-18": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoiced object identifier",
+      "sk": "Identifikátor fakturovaného predmetu"
+    },
+    "description": {
+      "en": "An identifier for an object on which the invoice is based, given by the Seller.",
+      "sk": "Identifikátor predmetu, ktorý je základom faktúry, uvádza predávajúci."
+    },
+    "usageNote": {
+      "en": "It may be a subscription number, telephone number, meter point, vehicle, person etc., as applicable.",
+      "sk": "Môže ísť o číslo predplatného, telefónne číslo, merač spotreby, vozidlo, osobu atď., podľa potreby."
+    },
+    "level": 0,
+    "children": [
+      "BT-18-1"
+    ],
+    "dataType": "Identifier"
+  },
+  "BT-18-1": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Scheme identifier",
+      "sk": "Identifikátor schémy"
+    },
+    "description": {
+      "en": "The identification scheme identifier of the Invoiced object identifier.",
+      "sk": "Identifikátor schémy identifikácie pre identifikátor fakturovaného predmetu."
+    },
+    "usageNote": {
+      "en": "If it may be not clear for the receiver what scheme is used for the identifier, a conditional scheme identifier should be used that shall be chosen from the UNTDID 1153 code list [6] entries.",
+      "sk": "Príjemcovi nemusí byť jasné, aká schéma sa pre identifikátor používa, v tom prípade by sa mal použiť podmienený identifikátor schémy zvolený z položiek číselníka UNTDID 1153 [6]."
+    },
+    "level": 1,
+    "dataType": "Code",
+    "codeLists": [
+      "UNCL1153"
+    ]
+  },
+  "BT-19": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Buyer accounting reference",
+      "sk": "Referencia pre zaúčtovanie kupujúcemu"
+    },
+    "description": {
+      "en": "A textual value that specifies where to book the relevant data into the Buyer's financial accounts.",
+      "sk": "Textová hodnota, ktorá špecifikuje, kam sa príslušné údaje zaúčtujú vo finančnom účtovníctve kupujúceho."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 0,
+    "dataType": "Text"
+  },
+  "BT-20": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Payment terms",
+      "sk": "Platobné podmienky"
+    },
+    "description": {
+      "en": "A textual description of the payment terms that apply to the amount due for payment (Including description of possible penalties).",
+      "sk": "Textový popis platobných podmienok, ktoré platia pre splatnú sumu (vrátane popisu prípadného penále)."
+    },
+    "usageNote": {
+      "en": "This element may contain multiple lines and multiple terms.",
+      "sk": "Tento prvok môže obsahovať viac riadkov a viac termínov."
+    },
+    "level": 0,
+    "dataType": "Text"
+  },
+  "BG-1": {
+    "cardinality": {
+      "from": "0",
+      "to": "n"
+    },
+    "name": {
+      "en": "INVOICE NOTE",
+      "sk": "POZNÁMKA K FAKTÚRE"
+    },
+    "description": {
+      "en": "A group of business terms providing textual notes that are relevant for the invoice, together with an indication of the note subject.",
+      "sk": "Skupina obchodných termínov uvádzajúcich textové poznámky relevantné pre faktúru, spolu s uvedením subjektu poznámky."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 0,
+    "children": [
+      "BT-21",
+      "BT-22"
+    ]
+  },
+  "BT-21": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoice note subject code",
+      "sk": "Kód subjektu poznámky k faktúre"
+    },
+    "description": {
+      "en": "The subject of the textual note in BT-22.",
+      "sk": "Subjekt textovej poznámky v BT-22."
+    },
+    "usageNote": {
+      "en": "To be chosen from the entries in UNTDID 4451 [6].",
+      "sk": "Volí sa z položiek číselníka UNTDID 4451 [6]."
+    },
+    "level": 1,
+    "dataType": "Text"
+  },
+  "BT-22": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoice note",
+      "sk": "Poznámka k faktúre"
+    },
+    "description": {
+      "en": "A textual note that gives unstructured information that is relevant to the Invoice as a whole.",
+      "sk": "Textová poznámka uvádzajúca neštruktúrované informácie relevantné pre faktúru ako celok."
+    },
+    "usageNote": {
+      "en": "Such as the reason for any correction or assignment note in case the invoice has been factored",
+      "sk": "Napríklad dôvod opravy alebo poznámka o priradení v prípade faktoringu faktúry"
+    },
+    "level": 1,
+    "dataType": "Text"
+  },
+  "BG-2": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "PROCESS CONTROL",
+      "sk": "RIADENIE PROCESOV"
+    },
+    "description": {
+      "en": "A group of business terms providing information on the business process and rules applicable to the Invoice document.",
+      "sk": "Skupina obchodných termínov poskytujúcich informácie o obchodnom procese a pravidlách platných pre faktúru."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 0,
+    "children": [
+      "BT-23",
+      "BT-24"
+    ]
+  },
+  "BT-23": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Business process type",
+      "sk": "Typ obchodného procesu"
+    },
+    "description": {
+      "en": "Identifies the business process context in which the transaction appears, to enable the Buyer to process the Invoice in an appropriate way.",
+      "sk": "Identifikuje kontext obchodného procesu, v ktorom sa transakcia objavuje, aby mohol kupujúci riadne spracovať faktúru."
+    },
+    "usageNote": {
+      "en": "To be specified by the Buyer.",
+      "sk": "Špecifikuje kupujúci."
+    },
+    "level": 1,
+    "dataType": "Text"
+  },
+  "BT-24": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Specification identifier",
+      "sk": "Identifikátor špecifikácie"
+    },
+    "description": {
+      "en": "An identification of the specification containing the total set of rules regarding semantic content, cardinalities and business rules to which the data contained in the instance document conforms.",
+      "sk": "Identifikácia špecifikácie obsahujúca úplný súbor pravidiel týkajúcich sa sémantického obsahu, kardinalít a obchodných pravidiel, s ktorými sú údaje obsiahnuté v dokumente v zhode."
+    },
+    "usageNote": {
+      "en": "This identifies compliance or conformance to this document. Compliant invoices specify: urn:cen.eu:en16931:2017. Invoices, compliant to a user specification may identify that user specification here.\r\n No identification scheme is to be used.",
+      "sk": "Identifikuje súlad alebo zhodu s týmto dokumentom. Vyhovujúce faktúry špecifikujú: urn:cen.eu:en16931:2017. Faktúry vyhovujúce špecifikácii užívateľa môžu na tomto mieste danú špecifikáciu užívateľa identifikovať.\n Nie je potrebné používať žiadnu schému identifikácie."
+    },
+    "level": 1,
+    "dataType": "Identifier"
+  },
+  "BG-3": {
+    "cardinality": {
+      "from": "0",
+      "to": "n"
+    },
+    "name": {
+      "en": "PRECEDING INVOICE REFERENCE",
+      "sk": "REFERENČNÉ OZNAČENIE PREDCHÁDZAJÚCEJ FAKTÚRY"
+    },
+    "description": {
+      "en": "A group of business terms providing information on one or more preceding Invoices.",
+      "sk": "Skupina obchodných termínov poskytujúcich informácie o jednej alebo viacerých predchádzajúcich faktúrach."
+    },
+    "usageNote": {
+      "en": "To be used in case:\r\n - a preceding invoice is corrected\r\n - preceding partial invoices are referred to from a final invoice\r\n -preceding pre-payment invoices are referred to from a final invoice",
+      "sk": "Používa sa v prípade:\n - opravy predchádzajúcej faktúry\n - odkazu na predchádzajúce čiastkové faktúry v konečnej faktúre\n -odkazu na predchádzajúce zálohové faktúry v konečnej faktúre"
+    },
+    "level": 0,
+    "children": [
+      "BT-25",
+      "BT-26"
+    ]
+  },
+  "BT-25": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Preceding Invoice reference",
+      "sk": "Referenčné označenie predchádzajúcej faktúry"
+    },
+    "description": {
+      "en": "The identification of an Invoice that was previously sent by the Seller.",
+      "sk": "Identifikácia faktúry, ktorú predávajúci zaslal už predtým."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 1,
+    "dataType": "Document reference"
+  },
+  "BT-26": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Preceding Invoice issue date",
+      "sk": "Dátum vystavenia predchádzajúcej faktúry"
+    },
+    "description": {
+      "en": "The date when the Preceding Invoice was issued.",
+      "sk": "Dátum, kedy bola predchádzajúca faktúra vystavená."
+    },
+    "usageNote": {
+      "en": "The Preceding Invoice issue date shall be provided in case the Preceding Invoice identifier is not unique.",
+      "sk": "Dátum vystavenia predchádzajúcej faktúry sa musí uviesť v prípade, že identifikátor predchádzajúcej faktúry nie je jedinečný."
+    },
+    "level": 1,
+    "dataType": "Date"
+  },
+  "BG-4": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "SELLER",
+      "sk": "PREDÁVAJÚCI"
+    },
+    "description": {
+      "en": "A group of business terms providing information about the Seller.",
+      "sk": "Skupina obchodných termínov poskytujúcich informácie o predávajúcom."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 0,
+    "children": [
+      "BT-27",
+      "BT-28",
+      "BT-29",
+      "BT-30",
+      "BT-31",
+      "BT-32",
+      "BT-33",
+      "BT-34",
+      "BG-5",
+      "BG-6"
+    ]
+  },
+  "BT-27": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Seller name",
+      "sk": "Meno/názov predávajúceho"
+    },
+    "description": {
+      "en": "The full formal name by which the Seller is registered in the national registry of legal entities or as a Taxable person or otherwise trades as a person or persons.",
+      "sk": "Úplné oficiálne meno/názov, pod ktorým je predávajúci registrovaný v národnom registri právnických osôb alebo ako zdaniteľná osoba alebo pod ktorým inak podniká ako fyzická osoba (fyzické osoby)."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 1,
+    "dataType": "Text"
+  },
+  "BT-28": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Seller trading name",
+      "sk": "Obchodné meno/názov predávajúceho"
+    },
+    "description": {
+      "en": "A name by which the Seller is known, other than Seller name (also known as Business name).",
+      "sk": "Meno/názov, pod ktorým je predávajúci známy, odlišné od mena/názvu predávajúceho (uvádzané aj ako obchodné meno/názov)."
+    },
+    "usageNote": {
+      "en": "This may be used if different from the Seller name.",
+      "sk": "Môže sa použiť, ak sa líši od mena/názvu predávajúceho."
+    },
+    "level": 1,
+    "dataType": "Text"
+  },
+  "BT-29": {
+    "cardinality": {
+      "from": "0",
+      "to": "n"
+    },
+    "name": {
+      "en": "Seller identifier",
+      "sk": "Identifikátor predávajúceho"
+    },
+    "description": {
+      "en": "An identification of the Seller.",
+      "sk": "Identifikácia predávajúceho."
+    },
+    "usageNote": {
+      "en": "For many systems, the Seller identifier is a key piece of information. Multiple Seller identifiers may be assigned or specified. They may be differentiated by using various identification schemes. If no scheme is specified, it should be known by Buyer and Seller, e.g. a previously exchanged Buyer assigned identifier of the Seller.",
+      "sk": "U mnohých systémov je identifikátor predávajúceho hlavnou informáciou. Je možné priradiť alebo špecifikovať viac identifikátorov predávajúceho. Môžu sa rozlišovať použitím rôznych schém identifikácie. Ak schéma nie je špecifikovaná, mali by ho kupujúci a predávajúci poznať, napr. už predtým oznámený identifikátor predávajúceho, ktorý priradil kupujúci."
+    },
+    "level": 1,
+    "children": [
+      "BT-29-1"
+    ],
+    "dataType": "Identifier"
+  },
+  "BT-29-1": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Scheme identifier",
+      "sk": "Identifikátor schémy"
+    },
+    "description": {
+      "en": "The identification scheme identifier of the Seller identifier.",
+      "sk": "Identifikátor schémy identifikácie pre identifikátor predávajúceho."
+    },
+    "usageNote": {
+      "en": "If used, the identification scheme identifier shall be chosen from the entries of the list published by the ISO/IEC 6523 maintenance agency.",
+      "sk": "Ak sa použije, musí byť identifikátor schémy identifikácie zvolený z položiek zoznamu zverejneného agentúrou pre správu ISO/IEC 6523."
+    },
+    "level": 2,
+    "dataType": "Code",
+    "codeLists": [
+      "ICD",
+      "SEPA"
+    ]
+  },
+  "BT-30": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Seller legal registration identifier",
+      "sk": "Identifikátor zákonnej registrácie predávajúceho"
+    },
+    "description": {
+      "en": "An identifier issued by an official registrar that identifies the Seller as a legal entity or person.",
+      "sk": "Identifikátor vydaný oficiálnym registračným subjektom, ktorý identifikuje predávajúceho ako právnickú alebo fyzickú osobu."
+    },
+    "usageNote": {
+      "en": "If no identification scheme is specified, it should be known by Buyer and Seller.",
+      "sk": "Ak identifikačná schéma nie je špecifikovaná, mali by ho kupujúci a predávajúci poznať."
+    },
+    "level": 1,
+    "children": [
+      "BT-30-1"
+    ],
+    "dataType": "Identifier"
+  },
+  "BT-30-1": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Scheme identifier",
+      "sk": "Identifikátor schémy"
+    },
+    "description": {
+      "en": "The identification scheme identifier of the Seller legal registration identifier.",
+      "sk": "Identifikátor schémy identifikácie pre identifikátor zákonnej registrácie predávajúceho."
+    },
+    "usageNote": {
+      "en": "If used, the identification scheme shall be chosen from the entries of the list published by the ISO/IEC 6523 maintenance agency.",
+      "sk": "Ak sa použije, musí byť schéma identifikácie zvolená z položiek zoznamu zverejneného agentúrou pre správu ISO/IEC 6523."
+    },
+    "level": 2,
+    "dataType": "Code",
+    "codeLists": [
+      "ICD"
+    ]
+  },
+  "BT-31": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Seller VAT identifier",
+      "sk": "Identifikátor predávajúceho na účely DPH"
+    },
+    "description": {
+      "en": "The Seller's VAT identifier (also known as Seller VAT identification number).",
+      "sk": "Identifikátor predávajúceho na účely DPH (známy aj ako daňové identifikačné číslo predávajúceho pre DPH)."
+    },
+    "usageNote": {
+      "en": "VAT number prefixed by a country code. A VAT registered Supplier shall include his VAT ID, except when he uses a tax representative.",
+      "sk": "Daňové identifikačné číslo na účely DPH s predponou vyjadrujúcou kód krajiny. Predávajúci registrovaný na DPH uvedie svoje IČ  DPH, pokiaľ nevyužíva daňového zástupcu."
+    },
+    "level": 1,
+    "dataType": "Identifier"
+  },
+  "BT-32": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Seller tax registration identifier",
+      "sk": "Identifikátor daňovej registrácie predávajúceho"
+    },
+    "description": {
+      "en": "The local identification (defined by the Seller’s address) of the Seller for tax purposes or a reference that enables the Seller to state his registered tax status.",
+      "sk": "Miestna identifikácia predávajúceho (definovaná adresou predávajúceho) na daňové účely, alebo referenčný odkaz, ktorý predávajúcemu umožňuje uviesť jeho registrovaný daňový status."
+    },
+    "usageNote": {
+      "en": "This information may affect how the Buyer settles the payment (such as for social security fees). E.g. in some countries, if the Seller is not registered as a tax paying entity then the Buyer is required to withhold the amount of the tax and pay it on behalf of the Seller.",
+      "sk": "Tieto informácie môžu ovplyvniť spôsob úhrady platby kupujúcim (napr. príspevky na sociálne zabezpečenie). Napr. v niektorých krajinách platí, že ak predávajúci nie je registrovaný ako platca dane, je kupujúci povinný zraziť sumu dane a zaplatiť ju v mene predávajúceho."
+    },
+    "level": 1,
+    "dataType": "Identifier"
+  },
+  "BT-33": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Seller additional legal information",
+      "sk": "Dodatočné právne údaje predávajúceho"
+    },
+    "description": {
+      "en": "Additional legal information relevant for the Seller.",
+      "sk": "Dodatočné právne údaje relevantné pre predávajúceho."
+    },
+    "usageNote": {
+      "en": "Such as share capital.",
+      "sk": "Napríklad základný kapitál."
+    },
+    "level": 1,
+    "dataType": "Text"
+  },
+  "BT-34": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Seller electronic address",
+      "sk": "Elektronická adresa predávajúceho"
+    },
+    "description": {
+      "en": "Identifies the Seller's electronic address to which the application level response to the invoice may be delivered.",
+      "sk": "Identifikuje elektronickú adresu predávajúceho, na ktorú možno odoslať odozvu na faktúru na úrovni aplikácie."
+    },
+    "usageNote": {
+      "en": "The scheme identifier shall be chosen from a list to be maintained by the Connecting Europe Facility.",
+      "sk": ""
+    },
+    "level": 1,
+    "children": [
+      "BT-34-1"
+    ],
+    "dataType": "Identifier"
+  },
+  "BT-34-1": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Scheme identifier",
+      "sk": "Identifikátor schémy"
+    },
+    "description": {
+      "en": "The identification scheme identifier of the Seller electronic address.",
+      "sk": "Identifikátor schémy identifikácie pre elektronickú adresu predávajúceho."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": "Identifikátor schémy sa musí vybrať zo zoznamu, ktorý je vedený v rámci nástroja Spájame Európu."
+    },
+    "level": 2,
+    "dataType": "Code",
+    "codeLists": [
+      "eas"
+    ]
+  },
+  "BG-5": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "SELLER POSTAL ADDRESS",
+      "sk": "POŠTOVÁ ADRESA PREDÁVAJÚCEHO"
+    },
+    "description": {
+      "en": "A group of business terms providing information about the address of the Seller.",
+      "sk": "Skupina obchodných termínov poskytujúcich informácie o adrese predávajúceho."
+    },
+    "usageNote": {
+      "en": "Sufficient components of the address are to be filled to comply with legal requirements.",
+      "sk": "Treba vyplniť dostatočné prvky adresy na splnenie zákonných požiadaviek."
+    },
+    "level": 1,
+    "children": [
+      "BT-35",
+      "BT-36",
+      "BT-162",
+      "BT-37",
+      "BT-38",
+      "BT-39",
+      "BT-40"
+    ]
+  },
+  "BT-35": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Seller address line 1",
+      "sk": "Adresa predávajúceho riadok 1"
+    },
+    "description": {
+      "en": "The main address line in an address.",
+      "sk": "Hlavný riadok adresy v adrese."
+    },
+    "usageNote": {
+      "en": "Usually the street name and number or post office box.",
+      "sk": "Obvykle názov ulice a číslo alebo poštová priehradka."
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-36": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Seller address line 2",
+      "sk": "Adresa predávajúceho riadok 2"
+    },
+    "description": {
+      "en": "An additional address line in an address that can be used to give further details supplementing the main line.",
+      "sk": "Dodatočný riadok adresy v adrese, ktorý možno použiť na uvedenie ďalších podrobností doplňujúcich hlavný riadok."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-162": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Seller address line 3",
+      "sk": "Adresa predávajúceho riadok 3"
+    },
+    "description": {
+      "en": "An additional address line in an address that can be used to give further details supplementing the main line.",
+      "sk": "Dodatočný riadok adresy v adrese, ktorý možno použiť na uvedenie ďalších podrobností doplňujúcich hlavný riadok."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-37": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Seller city",
+      "sk": "Mesto predávajúceho"
+    },
+    "description": {
+      "en": "The common name of the city, town or village, where the Seller address is located.",
+      "sk": "Všeobecne používaný názov mesta alebo obce, kde sa nachádza adresa predávajúceho."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-38": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Seller post code",
+      "sk": "PSČ predávajúceho"
+    },
+    "description": {
+      "en": "The identifier for an addressable group of properties according to the relevant postal service.",
+      "sk": "Identifikátor adresovateľnej skupiny nemovitostí podľa príslušnej poštovej služby."
+    },
+    "usageNote": {
+      "en": "Such as a ZIP code or a post code.",
+      "sk": "Napríklad PSČ."
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-39": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Seller country subdivision",
+      "sk": "Nižší správny celok krajiny predávajúceho"
+    },
+    "description": {
+      "en": "The subdivision of a country.",
+      "sk": "Nižší správny celok krajiny."
+    },
+    "usageNote": {
+      "en": "Such as a region, a county, a state, a province, etc.",
+      "sk": "Napríklad kraj, okres, štát, provincia atď."
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-40": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Seller country code",
+      "sk": "Kód krajiny predávajúceho"
+    },
+    "description": {
+      "en": "A code that identifies the country.",
+      "sk": "Kód, ktorý identifikuje krajinu."
+    },
+    "usageNote": {
+      "en": "If no tax representative is specified, this is the country where VAT is liable. The lists of valid countries are registered with the EN ISO 3166-1 Maintenance agency, “Codes for the representation of names of countries and their subdivisions”.",
+      "sk": "Ak nie je špecifikovaný daňový zástupca,ide o krajinu, kde je splatná DPH. Zoznamy platných krajín sú registrované v agentúre pre správu kódov EN ISO 3166-1 „Kódy pre názvy krajín a ich častí“."
+    },
+    "level": 2,
+    "dataType": "Code",
+    "codeLists": [
+      "ISO3166"
+    ]
+  },
+  "BG-6": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "SELLER CONTACT",
+      "sk": "KONTAKTNÉ ÚDAJE PREDÁVAJÚCEHO"
+    },
+    "description": {
+      "en": "A group of business terms providing contact information about the Seller.",
+      "sk": "Skupina obchodných termínov poskytujúcich kontaktné informácie predávajúceho."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 1,
+    "children": [
+      "BT-41",
+      "BT-42",
+      "BT-43"
+    ]
+  },
+  "BT-41": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Seller contact point",
+      "sk": "Kontaktné miesto predávajúceho"
+    },
+    "description": {
+      "en": "A contact point for a legal entity or person.",
+      "sk": "Kontaktné miesto právnickej alebo fyzickej osoby."
+    },
+    "usageNote": {
+      "en": "Such as person name, contact identification, department or office identification.",
+      "sk": "Napríklad meno osoby, identifikácia kontaktu, oddelenia alebo kancelárie."
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-42": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Seller contact telephone number",
+      "sk": "Kontaktné telefónne číslo predávajúceho"
+    },
+    "description": {
+      "en": "A phone number for the contact point.",
+      "sk": "Telefónne číslo kontaktného miesta."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-43": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Seller contact email address",
+      "sk": "Kontaktná e-mailová adresa predávajúceho"
+    },
+    "description": {
+      "en": "An e-mail address for the contact point.",
+      "sk": "E-mailová adresa kontaktného miesta."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BG-7": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "BUYER",
+      "sk": "KUPUJÚCI"
+    },
+    "description": {
+      "en": "A group of business terms providing information about the Buyer.",
+      "sk": "Skupina obchodných termínov poskytujúcich informácie o kupujúcom."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 0,
+    "children": [
+      "BT-44",
+      "BT-45",
+      "BT-46",
+      "BT-47",
+      "BT-48",
+      "BT-49",
+      "BG-8",
+      "BG-9"
+    ]
+  },
+  "BT-44": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Buyer name",
+      "sk": "Meno/názov kupujúceho"
+    },
+    "description": {
+      "en": "The full name of the Buyer.",
+      "sk": "Celé meno/názov kupujúceho."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 1,
+    "dataType": "Text"
+  },
+  "BT-45": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Buyer trading name",
+      "sk": "Obchodné meno/názov kupujúceho"
+    },
+    "description": {
+      "en": "A name by which the Buyer is known, other than Buyer name (also known as Business name).",
+      "sk": "Meno/názov, pod ktorým je kupujúci známy, odlišné od mena/názvu kupujúceho (uvádzané aj ako obchodné meno/názov)."
+    },
+    "usageNote": {
+      "en": "This may be used if different from the Buyer name.",
+      "sk": "Môže sa použiť, ak sa líši od mena/názvu kupujúceho."
+    },
+    "level": 1,
+    "dataType": "Text"
+  },
+  "BT-46": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Buyer identifier",
+      "sk": "Identifikátor kupujúceho"
+    },
+    "description": {
+      "en": "An identifier of the Buyer.",
+      "sk": "Identifikátor daného kupujúceho."
+    },
+    "usageNote": {
+      "en": "If no scheme is specified, it should be known by Buyer and Seller, e.g. a previously exchanged Seller assigned identifier of the Buyer.",
+      "sk": "Ak schéma nie je špecifikovaná, mali by ho kupujúci a predávajúci poznať, napr. už predtým oznámený identifikátor kupujúceho, ktorý priradil predávajúci."
+    },
+    "level": 1,
+    "children": [
+      "BT-46-1"
+    ],
+    "dataType": "Identifier"
+  },
+  "BT-46-1": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Scheme identifier",
+      "sk": "Identifikátor schémy"
+    },
+    "description": {
+      "en": "The identification scheme identifier of the Buyer identifier.",
+      "sk": "Identifikátor schémy identifikácie pre identifikátor kupujúceho."
+    },
+    "usageNote": {
+      "en": "If used, the identification scheme shall be chosen from the entries of the list published by the ISO/IEC 6523 maintenance agency.",
+      "sk": "Ak sa použije, musí byť schéma identifikácie zvolená z položiek zoznamu zverejneného agentúrou pre správu ISO/IEC 6523."
+    },
+    "level": 2,
+    "dataType": "Code",
+    "codeLists": [
+      "ICD"
+    ]
+  },
+  "BT-47": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Buyer legal registration identifier",
+      "sk": "Identifikátor zákonnej registrácie kupujúceho"
+    },
+    "description": {
+      "en": "An identifier issued by an official registrar that identifies the Buyer as a legal entity or person.",
+      "sk": "Identifikátor vydaný oficiálnym registračným subjektom, ktorý identifikuje kupujúceho ako právnickú alebo fyzickú osobu."
+    },
+    "usageNote": {
+      "en": "If no identification scheme is specified, it should be known by Buyer and Seller, e.g. the identifier that is exclusively used in the applicable legal environment.",
+      "sk": "Ak schéma nie je špecifikovaná, mali by ho kupujúci a predávajúci poznať, napr. identifikátor, ktorý sa používa výhradne v príslušnom právnom prostredí."
+    },
+    "level": 1,
+    "children": [
+      "BT-47-1"
+    ],
+    "dataType": "Identifier"
+  },
+  "BT-47-1": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Scheme identifier",
+      "sk": "Identifikátor schémy"
+    },
+    "description": {
+      "en": "The identification scheme identifier of the Buyer legal registration identifier.",
+      "sk": "Identifikátor schémy identifikácie pre identifikátor zákonnej registrácie kupujúceho."
+    },
+    "usageNote": {
+      "en": "If used, the identification scheme shall be chosen from the entries of the list published by the ISO/IEC 6523 maintenance agency.",
+      "sk": "Ak sa použije, musí byť schéma identifikácie zvolená z položiek zoznamu zverejneného agentúrou pre správu ISO/IEC 6523."
+    },
+    "level": 2,
+    "dataType": "Code",
+    "codeLists": [
+      "ICD"
+    ]
+  },
+  "BT-48": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Buyer VAT identifier",
+      "sk": "Identifikátor kupujúceho na účely DPH"
+    },
+    "description": {
+      "en": "The Buyer's VAT identifier (also known as Buyer VAT identification number).",
+      "sk": "Identifikátor kupujúceho na účely DPH (známy aj ako daňové identifikačné číslo kupujúceho pre DPH)."
+    },
+    "usageNote": {
+      "en": "VAT number prefixed by a country code based on EN ISO 3166-1 \"Codes for the representation of names of countries and their subdivisions\"",
+      "sk": "Daňové identifikačné číslo na účely DPH s predponou vyjadrujúcou kód krajiny podľa EN ISO 3166-1 „Kódy pre názvy krajín a ich častí“."
+    },
+    "level": 1,
+    "dataType": "Identifier"
+  },
+  "BT-49": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Buyer electronic address",
+      "sk": "Elektronická adresa kupujúceho"
+    },
+    "description": {
+      "en": "Identifies the Buyer's electronic address to which the invoice is delivered.",
+      "sk": "Identifikuje elektronickú adresu kupujúceho, na ktorú sa doručuje faktúra."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 1,
+    "children": [
+      "BT-49-1"
+    ],
+    "dataType": "Identifier"
+  },
+  "BT-49-1": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Scheme identifier",
+      "sk": "Identifikátor schémy"
+    },
+    "description": {
+      "en": "The identification scheme identifier of the Buyer electronic address.",
+      "sk": "Identifikátor schémy identifikácie pre elektronickú adresu kupujúceho."
+    },
+    "usageNote": {
+      "en": "The scheme identifier shall be chosen from a list to be maintained by the Connecting Europe Facility.",
+      "sk": "Identifikátor schémy sa musí vybrať zo zoznamu, ktorý je vedený v rámci nástroja Spájame Európu."
+    },
+    "level": 2,
+    "dataType": "Code",
+    "codeLists": [
+      "eas"
+    ]
+  },
+  "BG-8": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "BUYER POSTAL ADDRESS",
+      "sk": "POŠTOVÁ ADRESA KUPUJÚCEHO"
+    },
+    "description": {
+      "en": "A group of business terms providing information about the postal address for the Buyer.",
+      "sk": "Skupina obchodných termínov poskytujúcich informácie o poštovej adrese kupujúceho."
+    },
+    "usageNote": {
+      "en": "Sufficient components of the address are to be filled to comply with legal requirements.",
+      "sk": "Treba vyplniť dostatočné prvky adresy na splnenie zákonných požiadaviek."
+    },
+    "level": 1,
+    "children": [
+      "BT-50",
+      "BT-51",
+      "BT-163",
+      "BT-52",
+      "BT-53",
+      "BT-54",
+      "BT-55"
+    ]
+  },
+  "BT-50": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Buyer address line 1",
+      "sk": "Adresa kupujúceho riadok 1"
+    },
+    "description": {
+      "en": "The main address line in an address.",
+      "sk": "Hlavný riadok adresy v adrese."
+    },
+    "usageNote": {
+      "en": "Usually the street name and number or post office box.",
+      "sk": "Obvykle názov ulice a číslo alebo poštová priehradka."
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-51": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Buyer address line 2",
+      "sk": "Adresa kupujúceho riadok 2"
+    },
+    "description": {
+      "en": "An additional address line in an address that can be used to give further details supplementing the main line.",
+      "sk": "Dodatočný riadok adresy v adrese, ktorý možno použiť na uvedenie ďalších podrobností doplňujúcich hlavný riadok."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-163": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Buyer address line 3",
+      "sk": "Adresa kupujúceho riadok 3"
+    },
+    "description": {
+      "en": "An additional address line in an address that can be used to give further details supplementing the main line.",
+      "sk": "Dodatočný riadok adresy v adrese, ktorý možno použiť na uvedenie ďalších podrobností doplňujúcich hlavný riadok."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-52": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Buyer city",
+      "sk": "Mesto kupujúceho"
+    },
+    "description": {
+      "en": "The common name of the city, town or village, where the Buyer's address is located.",
+      "sk": "Všeobecne používaný názov mesta alebo obce, kde sa nachádza adresa kupujúceho."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-53": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Buyer post code",
+      "sk": "PSČ kupujúceho"
+    },
+    "description": {
+      "en": "The identifier for an addressable group of properties according to the relevant postal service.",
+      "sk": "Identifikátor adresovateľnej skupiny nemovitostí podľa príslušnej poštovej služby."
+    },
+    "usageNote": {
+      "en": "Such as a ZIP code or a post code.",
+      "sk": "Napríklad PSČ."
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-54": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Buyer country subdivision",
+      "sk": "Nižší správny celok krajiny kupujúceho"
+    },
+    "description": {
+      "en": "The subdivision of a country.",
+      "sk": "Nižší správny celok krajiny."
+    },
+    "usageNote": {
+      "en": "Such as a region, a county, a state, a province, etc.",
+      "sk": "Napríklad kraj, okres, štát, provincia atď."
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-55": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Buyer country code",
+      "sk": "Kód krajiny kupujúceho"
+    },
+    "description": {
+      "en": "A code that identifies the country.",
+      "sk": "Kód, ktorý identifikuje krajinu."
+    },
+    "usageNote": {
+      "en": "The lists of valid countries are registered with the EN ISO 3166-1 Maintenance agency, “Codes for the representation of names of countries and their subdivisions”.",
+      "sk": "Zoznamy platných krajín sú registrované v agentúre pre správu kódov EN ISO 3166-1 „Kódy pre názvy krajín a ich častí“."
+    },
+    "level": 2,
+    "dataType": "Code",
+    "codeLists": [
+      "ISO3166"
+    ]
+  },
+  "BG-9": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "BUYER CONTACT",
+      "sk": "KONTAKTNÉ ÚDAJE KUPUJÚCEHO"
+    },
+    "description": {
+      "en": "A group of business terms providing contact information relevant for the Buyer.",
+      "sk": "Skupina obchodných termínov poskytujúcich kontaktné informácie týkajúce sa kupujúceho."
+    },
+    "usageNote": {
+      "en": "Contact details can be given by the Buyer at the time of the ordering or as master data exchanged prior to ordering. Contact details should not be used for the purpose of routing the received Invoice internally by the recipient; the Buyer reference identifier should be used for this purpose.",
+      "sk": "Kontaktné údaje môže kupujúci uviesť pri zadávaní objednávky, alebo ako kmeňové údaje vymieňané pred objednávkou. Kontaktné údaje by sa nemali využívať na účely interného smerovania prijatej faktúry zo strany príjemcu; na tento účel by sa mal použiť referenčný identifikátor kupujúceho."
+    },
+    "level": 1,
+    "children": [
+      "BT-56",
+      "BT-57",
+      "BT-58"
+    ]
+  },
+  "BT-56": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Buyer contact point",
+      "sk": "Kontaktné miesto kupujúceho"
+    },
+    "description": {
+      "en": "A contact point for a legal entity or person.",
+      "sk": "Kontaktné miesto právnickej alebo fyzickej osoby."
+    },
+    "usageNote": {
+      "en": "Such as person name, contact identification, department or office identification.",
+      "sk": "Napríklad meno osoby, identifikácia kontaktu, oddelenia alebo kancelárie."
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-57": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Buyer contact telephone number",
+      "sk": "Kontaktné telefónne číslo kupujúceho"
+    },
+    "description": {
+      "en": "A phone number for the contact point.",
+      "sk": "Telefónne číslo kontaktného miesta."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-58": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Buyer contact email address",
+      "sk": "Kontaktná e-mailová adresa kupujúceho"
+    },
+    "description": {
+      "en": "An e-mail address for the contact point.",
+      "sk": "E-mailová adresa kontaktného miesta."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BG-10": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "PAYEE",
+      "sk": "PRÍJEMCA PLATBY"
+    },
+    "description": {
+      "en": "A group of business terms providing information about the Payee, i.e. the role that receives the payment.",
+      "sk": "Skupina obchodných termínov, ktoré poskytujú informácie o príjemcovi platby, t.j. o role, ktorá prijíma platbu."
+    },
+    "usageNote": {
+      "en": "The role of Payee may be fulfilled by another party than the Seller, e.g. a factoring service.",
+      "sk": "Rolu príjemcu platby môže plniť iná strana než predávajúci, napr. poskytovateľ faktoringovej služby."
+    },
+    "level": 0,
+    "children": [
+      "BT-59",
+      "BT-60",
+      "BT-61"
+    ]
+  },
+  "BT-59": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Payee name",
+      "sk": "Meno/názov príjemcu platby"
+    },
+    "description": {
+      "en": "The name of the Payee.",
+      "sk": "Meno/názov príjemcu platby."
+    },
+    "usageNote": {
+      "en": "Shall be used when the Payee is different from the Seller. The Payee name may however be the same as the Seller name.",
+      "sk": "Použije sa, ak je príjemca platby odlišný od predávajúceho. Meno/názov príjemcu platby sa však môže zhodovať s menom/názvom predávajúceho."
+    },
+    "level": 1,
+    "dataType": "Text"
+  },
+  "BT-60": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Payee identifier",
+      "sk": "Identifikátor príjemcu platby"
+    },
+    "description": {
+      "en": "An identifier for the Payee.",
+      "sk": "Identifikátor daného príjemcu platby."
+    },
+    "usageNote": {
+      "en": "If no scheme is specified, it should be known by Buyer and Seller, e.g. a previously exchanged Buyer or Seller assigned identifier.",
+      "sk": "Ak schéma nie je špecifikovaná, mali by ho kupujúci a predávajúci poznať, napr. už predtým oznámený identifikátor príjemcu platby, ktorý priradil kupujúci alebo predávajúci."
+    },
+    "level": 1,
+    "children": [
+      "BT-60-1"
+    ],
+    "dataType": "Identifier"
+  },
+  "BT-60-1": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Scheme identifier",
+      "sk": "Identifikátor schémy"
+    },
+    "description": {
+      "en": "The identification scheme identifier of the Payee identifier.",
+      "sk": "Identifikátor schémy identifikácie pre identifikátor príjemcu platby."
+    },
+    "usageNote": {
+      "en": "If used, the identification scheme shall be chosen from the entries of the list published by the ISO/IEC 6523 maintenance agency.",
+      "sk": "Ak sa použije, musí byť schéma identifikácie zvolená z položiek zoznamu zverejneného agentúrou pre správu ISO/IEC 6523."
+    },
+    "level": 2,
+    "dataType": "Code",
+    "codeLists": [
+      "ICD",
+      "SEPA"
+    ]
+  },
+  "BT-61": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Payee legal registration identifier",
+      "sk": "Identifikátor zákonnej registrácie príjemcu platby"
+    },
+    "description": {
+      "en": "An identifier issued by an official registrar that identifies the Payee as a legal entity or person.",
+      "sk": "Identifikátor vydaný oficiálnym registračným subjektom, ktorý identifikuje príjemcu platby ako právnickú alebo fyzickú osobu."
+    },
+    "usageNote": {
+      "en": "If no scheme is specified, it should be known by Buyer and Seller, e.g. the identifier that is exclusively used in the applicable legal environment.",
+      "sk": "Ak schéma nie je špecifikovaná, mali by ho kupujúci a predávajúci poznať, napr. identifikátor, ktorý sa používa výhradne v príslušnom právnom prostredí."
+    },
+    "level": 1,
+    "children": [
+      "BT-61-1"
+    ],
+    "dataType": "Identifier"
+  },
+  "BT-61-1": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Scheme identifier",
+      "sk": "Identifikátor schémy"
+    },
+    "description": {
+      "en": "The identification scheme identifier of the Payee legal registration identifier.",
+      "sk": "Identifikátor schémy identifikácie pre identifikátor zákonnej registrácie príjemcu platby."
+    },
+    "usageNote": {
+      "en": "If used, the identification scheme shall be chosen from the entries of the list published by the ISO/IEC 6523 maintenance agency.",
+      "sk": "Ak sa použije, musí byť schéma identifikácie zvolená z položiek zoznamu zverejneného agentúrou pre správu ISO/IEC 6523."
+    },
+    "level": 2,
+    "dataType": "Code",
+    "codeLists": [
+      "ICD"
+    ]
+  },
+  "BG-11": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "SELLER TAX REPRESENTATIVE PARTY",
+      "sk": "DAŇOVÝ ZÁSTUPCA PREDÁVAJÚCEHO"
+    },
+    "description": {
+      "en": "A group of business terms providing information about the Seller's tax representative.",
+      "sk": "Skupina obchodných termínov poskytujúcich informácie o daňovom zástupcovi predávajúceho."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 0,
+    "children": [
+      "BT-62",
+      "BT-63",
+      "BG-12"
+    ]
+  },
+  "BT-62": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Seller tax representative name",
+      "sk": "Meno/názov daňového zástupcu predávajúceho"
+    },
+    "description": {
+      "en": "The full name of the Seller's tax representative party.",
+      "sk": "Celé meno/názov daňového zástupcu predávajúceho."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 1,
+    "dataType": "Text"
+  },
+  "BT-63": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Seller tax representative VAT identifier",
+      "sk": "Identifikátor daňového zástupcu predávajúceho na účely DPH"
+    },
+    "description": {
+      "en": "The VAT identifier of the Seller's tax representative party.",
+      "sk": "Identifikátor daňového zástupcu predávajúceho na účely DPH."
+    },
+    "usageNote": {
+      "en": "VAT number prefixed by a country code based on EN ISO 3166-1 \"Codes for the representation of names of countries and their subdivisions\".",
+      "sk": "Daňové identifikačné číslo na účely DPH s predponou vyjadrujúcou kód krajiny podľa EN ISO 3166-1 „Kódy pre názvy krajín a ich častí“."
+    },
+    "level": 1,
+    "dataType": "Identifier"
+  },
+  "BG-12": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "SELLER TAX REPRESENTATIVE POSTAL ADDRESS",
+      "sk": "POŠTOVÁ ADRESA DAŇOVÉHO ZÁSTUPCU PREDÁVAJÚCEHO"
+    },
+    "description": {
+      "en": "A group of business terms providing information about the postal address for the tax representative party.",
+      "sk": "Skupina obchodných termínov poskytujúcich informácie o poštovej adrese daňového zástupcu."
+    },
+    "usageNote": {
+      "en": "The Seller tax representative name/postal address shall be provided in the invoice, if the Seller has a tax representative who is liable to pay the VAT due. Sufficient components of the address are to be filled to comply with legal requirements.",
+      "sk": "Meno/poštová adresa daňového zástupcu predávajúceho sa na faktúre uvádza, ak má predávajúci daňového zástupcu, ktorý je povinný odviesť splatnú DPH. Treba vyplniť dostatočné prvky adresy na splnenie zákonných požiadaviek."
+    },
+    "level": 1,
+    "children": [
+      "BT-64",
+      "BT-65",
+      "BT-164",
+      "BT-66",
+      "BT-67",
+      "BT-68",
+      "BT-69"
+    ]
+  },
+  "BT-64": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Tax representative address line 1",
+      "sk": "Adresa daňového zástupcu riadok 1"
+    },
+    "description": {
+      "en": "The main address line in an address.",
+      "sk": "Hlavný riadok adresy v adrese."
+    },
+    "usageNote": {
+      "en": "Usually the street name and number or the post office box.",
+      "sk": "Obvykle názov ulice a číslo alebo poštová priehradka."
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-65": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Tax representative address line 2",
+      "sk": "Adresa daňového zástupcu riadok 2"
+    },
+    "description": {
+      "en": "An additional address line in an address that can be used to give further details supplementing the main line.",
+      "sk": "Dodatočný riadok adresy v adrese, ktorý možno použiť na uvedenie ďalších podrobností doplňujúcich hlavný riadok."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-164": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Tax representative address line 3",
+      "sk": "Adresa daňového zástupcu riadok 3"
+    },
+    "description": {
+      "en": "An additional address line in an address that can be used to give further details supplementing the main line.",
+      "sk": "Dodatočný riadok adresy v adrese, ktorý možno použiť na uvedenie ďalších podrobností doplňujúcich hlavný riadok."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-66": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Tax representative city",
+      "sk": "Mesto daňového zástupcu"
+    },
+    "description": {
+      "en": "The common name of the city, town or village, where the tax representative address is located.",
+      "sk": "Všeobecne používaný názov mesta alebo obce, kde sa nachádza adresa daňového zástupcu."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-67": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Tax representative post code",
+      "sk": "PSČ daňového zástupcu"
+    },
+    "description": {
+      "en": "The identifier for an addressable group of properties according to the relevant postal service.",
+      "sk": "Identifikátor adresovateľnej skupiny nemovitostí podľa príslušnej poštovej služby."
+    },
+    "usageNote": {
+      "en": "Such as a ZIP code or a post code.",
+      "sk": "Napríklad PSČ."
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-68": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Tax representative country subdivision",
+      "sk": "Nižší správny celok krajiny daňového zástupcu"
+    },
+    "description": {
+      "en": "The subdivision of a country.",
+      "sk": "Nižší správny celok krajiny."
+    },
+    "usageNote": {
+      "en": "Such as a region, a county, a state, a province, etc.",
+      "sk": "Napríklad kraj, okres, štát, provincia atď."
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-69": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Tax representative country code",
+      "sk": "Kód krajiny daňového zástupcu"
+    },
+    "description": {
+      "en": "A code that identifies the country.",
+      "sk": "Kód, ktorý identifikuje krajinu."
+    },
+    "usageNote": {
+      "en": "Country where VAT is liable. The lists of valid countries are registered with the EN ISO 3166-1 Maintenance agency, “Codes for the representation of names of countries and their subdivisions”.",
+      "sk": "Ide o krajinu, v ktorej je splatná DPH. Zoznamy platných krajín sú registrované v agentúre pre správu kódov EN ISO 3166-1 „Kódy pre názvy krajín a ich častí“."
+    },
+    "level": 2,
+    "dataType": "Code",
+    "codeLists": [
+      "ISO3166"
+    ]
+  },
+  "BG-13": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "DELIVERY INFORMATION",
+      "sk": "DODACIE ÚDAJE"
+    },
+    "description": {
+      "en": "A group of business terms providing information about where and when the goods and services invoiced are delivered.",
+      "sk": "Skupina obchodných termínov poskytujúcich informácie o tom, kam a kedy sú fakturované tovary a služby dodávané."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 0,
+    "children": [
+      "BT-70",
+      "BT-71",
+      "BT-72",
+      "BG-14",
+      "BG-15"
+    ]
+  },
+  "BT-70": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Deliver to party name",
+      "sk": "Názov subjektu určenia dodávky"
+    },
+    "description": {
+      "en": "The name of the party to which the goods and services are delivered.",
+      "sk": "Názov subjektu, ktorému sa dodáva tovar a služby"
+    },
+    "usageNote": {
+      "en": "Shall be used if the Deliver to party is different from the Buyer.",
+      "sk": "Použije sa, ak je subjekt určenia dodávky odlišný od kupujúceho."
+    },
+    "level": 1,
+    "dataType": "Text"
+  },
+  "BT-71": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Deliver to location identifier",
+      "sk": "Identifikátor miesta určenia dodávky"
+    },
+    "description": {
+      "en": "An identifier for the location at which the goods and services are delivered.",
+      "sk": "Identifikátor miesta, na ktoré sa dodáva tovar a služby."
+    },
+    "usageNote": {
+      "en": "If no scheme is specified, it should be known by Buyer and Seller, e.g. a previously exchanged Buyer or Seller assigned identifier.",
+      "sk": "Ak schéma nie je špecifikovaná, mali by ho kupujúci a predávajúci poznať, napr. už predtým oznámený identifikátor, ktorý priradil kupujúci alebo predávajúci."
+    },
+    "level": 1,
+    "children": [
+      "BT-71-1"
+    ],
+    "dataType": "Identifier"
+  },
+  "BT-71-1": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Scheme identifier",
+      "sk": "Identifikátor schémy"
+    },
+    "description": {
+      "en": "The identification scheme identifier of the Deliver to location identifier.",
+      "sk": "Identifikátor schémy identifikácie pre identifikátor miesta určenia dodávky."
+    },
+    "usageNote": {
+      "en": "If used, the identification scheme shall be chosen from the entries of the list published by the ISO/IEC 6523 maintenance agency.",
+      "sk": "Ak sa použije, musí byť schéma identifikácie zvolená z položiek zoznamu zverejneného agentúrou pre správu ISO/IEC 6523."
+    },
+    "level": 2,
+    "dataType": "Code",
+    "codeLists": [
+      "ICD"
+    ]
+  },
+  "BT-72": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Actual delivery date",
+      "sk": "Skutočný dátum dodávky"
+    },
+    "description": {
+      "en": "the date on which the supply of goods or services was made or completed.",
+      "sk": "Dátum, kedy bola dodávka tovaru alebo služieb vykonaná alebo dokončená."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 1,
+    "dataType": "Date"
+  },
+  "BG-14": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "INVOICING PERIOD",
+      "sk": "FAKTURAČNÉ OBDOBIE"
+    },
+    "description": {
+      "en": "A group of business terms providing information on the invoice period.",
+      "sk": "Skupina obchodných termínov poskytujúcich informácie o fakturačnom období."
+    },
+    "usageNote": {
+      "en": "Used to indicate when the period covered by the invoice starts and when it ends. Also called delivery period.",
+      "sk": "Používa sa na označenie začiatku a konca obdobia, na ktoré sa vzťahuje faktúra.  Označuje sa tiež ako obdobie dodania."
+    },
+    "level": 1,
+    "children": [
+      "BT-73",
+      "BT-74"
+    ]
+  },
+  "BT-73": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoicing period start date",
+      "sk": "Počiatočný dátum fakturačného obdobia"
+    },
+    "description": {
+      "en": "The date when the Invoice period starts.",
+      "sk": "Dátum, kedy začína fakturačné obdobie."
+    },
+    "usageNote": {
+      "en": "The initial date of delivery of goods or services.",
+      "sk": "Počiatočný dátum dodávky tovaru alebo služieb."
+    },
+    "level": 2,
+    "dataType": "Date"
+  },
+  "BT-74": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoicing period end date",
+      "sk": "Konečný dátum fakturačného obdobia"
+    },
+    "description": {
+      "en": "The date when the Invoice period ends.",
+      "sk": "Dátum, kedy končí fakturačné obdobie."
+    },
+    "usageNote": {
+      "en": "The date on which the delivery of goods or services was completed.",
+      "sk": "Dátum, kedy bola dodávka tovaru alebo služieb dokončená."
+    },
+    "level": 2,
+    "dataType": "Date"
+  },
+  "BG-15": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "DELIVER TO ADDRESS",
+      "sk": "DODACIA ADRESA"
+    },
+    "description": {
+      "en": "A group of business terms providing information about the address to which goods and services invoiced were or are delivered.",
+      "sk": "Skupina obchodných termínov poskytujúcich informácie o adrese, na ktorú sú alebo boli fakturované tovary a služby dodávané."
+    },
+    "usageNote": {
+      "en": "In the case of pick-up, the deliver to address is the pick-up address. Sufficient components of the address are to be filled to comply with legal requirements.",
+      "sk": "V prípade vyzdvihnutia v sklade je dodacou adresou adresa miesta vyzdvihnutia. Treba vyplniť dostatočné prvky adresy na splnenie zákonných požiadaviek."
+    },
+    "level": 1,
+    "children": [
+      "BT-75",
+      "BT-76",
+      "BT-165",
+      "BT-77",
+      "BT-78",
+      "BT-79",
+      "BT-80"
+    ]
+  },
+  "BT-75": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Deliver to address line 1",
+      "sk": "Dodacia adresa riadok 1"
+    },
+    "description": {
+      "en": "The main address line in an address.",
+      "sk": "Hlavný riadok adresy v adrese."
+    },
+    "usageNote": {
+      "en": "Usually the street name and number.",
+      "sk": "Obvykle názov ulice a číslo."
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-76": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Deliver to address line 2",
+      "sk": "Dodacia adresa riadok 2"
+    },
+    "description": {
+      "en": "An additional address line in an address that can be used to give further details supplementing the main line.",
+      "sk": "Dodatočný riadok adresy v adrese, ktorý možno použiť na uvedenie ďalších podrobností doplňujúcich hlavný riadok."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-165": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Deliver to address line 3",
+      "sk": "Dodacia adresa riadok 3"
+    },
+    "description": {
+      "en": "An additional address line in an address that can be used to give further details supplementing the main line.",
+      "sk": "Dodatočný riadok adresy v adrese, ktorý možno použiť na uvedenie ďalších podrobností doplňujúcich hlavný riadok."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-77": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Deliver to city",
+      "sk": "Mesto určenia dodávky"
+    },
+    "description": {
+      "en": "The common name of the city, town or village, where the deliver to address is located.",
+      "sk": "Všeobecne používaný názov mesta alebo obce, kde sa nachádza dodacia adresa."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-78": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Deliver to post code",
+      "sk": "PSČ miesta určenia dodávky"
+    },
+    "description": {
+      "en": "The identifier for an addressable group of properties according to the relevant postal service.",
+      "sk": "Identifikátor adresovateľnej skupiny nemovitostí podľa príslušnej poštovej služby."
+    },
+    "usageNote": {
+      "en": "Such as a ZIP code or a post code.",
+      "sk": "Napríklad PSČ."
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-79": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Deliver to country subdivision",
+      "sk": "Nižší správny celok krajiny určenia dodávky"
+    },
+    "description": {
+      "en": "The subdivision of a country.",
+      "sk": "Nižší správny celok krajiny."
+    },
+    "usageNote": {
+      "en": "Such as a region, a county, a state, a province, etc.",
+      "sk": "Napríklad kraj, okres, štát, provincia atď."
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-80": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Deliver to country code",
+      "sk": "Kód krajiny určenia dodávky"
+    },
+    "description": {
+      "en": "A code that identifies the country.",
+      "sk": "Kód, ktorý identifikuje krajinu."
+    },
+    "usageNote": {
+      "en": "The lists of valid countries are registered with the EN ISO 3166-1 Maintenance agency, “Codes for the representation of names of countries and their subdivisions”.",
+      "sk": "Zoznamy platných krajín sú registrované v agentúre pre správu kódov EN ISO 3166-1 „Kódy pre názvy krajín a ich častí“."
+    },
+    "level": 2,
+    "dataType": "Code",
+    "codeLists": [
+      "ISO3166"
+    ]
+  },
+  "BG-16": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "PAYMENT INSTRUCTIONS",
+      "sk": "POKYNY PRE PLATBU"
+    },
+    "description": {
+      "en": "A group of business terms providing information about the payment.",
+      "sk": "Skupina obchodných termínov poskytujúcich informácie o platbe."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 0,
+    "children": [
+      "BT-81",
+      "BT-82",
+      "BT-83",
+      "BG-17",
+      "BG-18",
+      "BG-19"
+    ]
+  },
+  "BT-81": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Payment means type code",
+      "sk": "Kód typu spôsobu platby"
+    },
+    "description": {
+      "en": "The means, expressed as code, for how a payment is expected to be or has been settled.",
+      "sk": "Spôsob, ktorým má byť alebo bola vykonaná platba, vyjadrený kódom."
+    },
+    "usageNote": {
+      "en": "Entries from the UNTDID 4461 code list [6] shall be used. Distinction should be made between SEPA and non-SEPA payments, and between credit payments, direct debits, card payments and other instruments.",
+      "sk": "Použijú sa položky z číselníka UNTDID 4461[6]. Treba rozlišovať medzi platbami SEPA a inými než SEPA a medzi platbami bezhotovostným prevodom, inkasom, platobnou kartou a inými nástrojmi."
+    },
+    "level": 1,
+    "dataType": "Code",
+    "codeLists": [
+      "UNCL4461"
+    ]
+  },
+  "BT-82": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Payment means text",
+      "sk": "Text spôsobu platby"
+    },
+    "description": {
+      "en": "The means, expressed as text, for how a payment is expected to be or has been settled.",
+      "sk": "Spôsob, ktorým má byť alebo bola vykonaná platba, vyjadrený textom."
+    },
+    "usageNote": {
+      "en": "Such as cash, credit transfer, direct debit, credit card, etc.",
+      "sk": "Napríklad v hotovosti, bezhotovostným prevodom, inkasom, kreditnou kartou atď."
+    },
+    "level": 1,
+    "dataType": "Text"
+  },
+  "BT-83": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Remittance information",
+      "sk": "Informácie o platbe"
+    },
+    "description": {
+      "en": "A textual value used to establish a link between the payment and the Invoice, issued by the Seller.",
+      "sk": "Textová hodnota používaná na stanovenie väzby medzi platbou a faktúrou, vydáva predávajúci."
+    },
+    "usageNote": {
+      "en": "Used for creditor's critical reconciliation information. This information element helps the Seller to assign an incoming payment to the relevant payment process. When specifying the textual value, which is commonly the invoice number of the invoice being paid, but may be another seller reference, the buyer should indicate this reference in his payment order when executing the payment. In a payment transaction this reference is transferred back to the Seller as Remittance Information.\r\n\r\nIn order to allow for automatic processing of cross-border SEPA payments, only Latin characters should be used in this field, with a maximum of 140 characters. Reference section 1.4 of the SEPA credit transfer and SEPA direct debit scheme implementation guides [13] and [14] for details of the allowed characters. Other rules may apply for SEPA payments within national borders.\r\n\r\nIf remittance information is structured according to the ISO 11649:2009 standard\r\n [16] for Structured RF Creditor Reference, it shall be mapped to the Structured Remittance Information Creditor Reference field in SEPA payments messages.\r\n If remittance information is structured according to the EACT standard for automated reconciliation [17], it shall be mapped to the Unstructured Remittance Information field in SEPA payments messages.”\r\n\r\nIf remittance information is to be mapped to the End To End Identification field or to the Structured Remittance Information Creditor Reference field in SEPA payments messages, then in addition to the Latin character set restriction, the content shall not start or end with a '/' and the content shall not contain '//'s. See reference [15].",
+      "sk": "Používa sa pre kritické údaje veriteľa na účely zosúhlasenia. Tento informačný prvok pomáha predávajúcemu priradiť prichádzajúcu platbu príslušnému platobnému procesu. Pri špecifikovaní textovej hodnoty, ktorou je obvykle číslo uhrádzanej faktúry, ale prípadne aj iný referenčný údaj predávajúceho, by mal kupujúci tento referenčný údaj uviesť vo svojom platobnom príkaze pri vykonávaní platby. V rámci platobnej transakcie sa tento referenčný údaj odovzdáva späť predávajúcemu ako informácie o platbe.\n\nNa automatické spracovanie cezhraničných SEPA platieb by v tomto poli mali byť použité len znaky latinky, s maximálnym počtom 140 znakov. Podrobnosti k povoleným znakom, pozri referenčný oddiel 1.4 pokynov na vykonávanie SEPA prevodov a SEPA inkasa [13] a [14]. V rámci hraníc štátov môžu pre SEPA platby platiť iné pravidlá.\n\nAk je informácia pre platbu štruktúrovaná podľa normy ISO 11649:2009 [16] pre štruktúrovanú referenciu príjemcu, bude v správach o SEPA platbách mapovaná do poľa Štruktúrovaná referencia príjemcu pre informáciu k platbe (Structured Remittance Information Creditor Reference).\n\nAk je informácia pre platbu štruktúrovaná podľa normy EACT pre automatické zosúhlasenie [17], bude v správach o SEPA platbách mapovaná do poľa Neštruktúrovaná informácia k platbe (Unstructured Remittance Information).\n\nAk má byť informácia pre platbu v správach o SEPA platbách mapovaná do poľa Identifikácia End To End (Identification End To End) alebo do poľa Štruktúrovaná referencia príjemcu pre informáciu k platbe (Structured Remittance Information Creditor Reference), potom okrem obmedzenia na súbor znakov latinky nesmie obsah začínať alebo končiť „/“ a nesmie obsahovať „//“.  Pozri odkaz [15].\n"
+    },
+    "level": 1,
+    "dataType": "Text"
+  },
+  "BG-17": {
+    "cardinality": {
+      "from": "0",
+      "to": "n"
+    },
+    "name": {
+      "en": "CREDIT TRANSFER",
+      "sk": "BEZHOTOVOSTNÝ PREVOD"
+    },
+    "description": {
+      "en": "A group of business terms to specify credit transfer payments.",
+      "sk": "Skupina obchodných termínov špecifikujúcich platby bezhotovostným prevodom."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 1,
+    "children": [
+      "BT-84",
+      "BT-85",
+      "BT-86"
+    ]
+  },
+  "BT-84": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Payment account identifier",
+      "sk": "Identifikátor platobného účtu"
+    },
+    "description": {
+      "en": "A unique identifier of the financial payment account, at a payment service provider, to which payment should be made.",
+      "sk": "Jedinečný identifikátor finančného platobného účtu u poskytovateľa platobných služieb, v prospech ktorého má byť vykonaná platba."
+    },
+    "usageNote": {
+      "en": "Such as IBAN (in case of a SEPA payment) or a national account number.",
+      "sk": "Napríklad IBAN (v prípade SEPA platby) alebo národné číslo účtu."
+    },
+    "level": 2,
+    "dataType": "Identifier"
+  },
+  "BT-85": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Payment account name",
+      "sk": "Názov platobného účtu"
+    },
+    "description": {
+      "en": "The name of the payment account, at a payment service provider, to which payment should be made.",
+      "sk": "Názov platobného účtu u poskytovateľa platobných služieb, v prospech ktorého má byť vykonaná platba."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-86": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Payment service provider identifier",
+      "sk": "Identifikátor poskytovateľa platobných služieb"
+    },
+    "description": {
+      "en": "An identifier for the payment service provider where a payment account is located.",
+      "sk": "Identifikátor poskytovateľa platobných služieb, u ktorého sa nachádza platobný účet."
+    },
+    "usageNote": {
+      "en": "Such as a BIC or a national clearing code where required. No identification scheme to be used.",
+      "sk": "Napríklad BIC alebo národný clearingový kód, podľa potreby. Nie je potrebné používať žiadnu schému identifikácie."
+    },
+    "level": 2,
+    "dataType": "Identifier"
+  },
+  "BG-18": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "PAYMENT CARD INFORMATION",
+      "sk": "INFORMÁCIE O PLATOBNEJ KARTE"
+    },
+    "description": {
+      "en": "A group of business terms providing information about card used for payment contemporaneous with invoice issuance.",
+      "sk": "Skupina obchodných termínov poskytujúcich informácie o karte použitej na platbu súčasne s vystavením faktúry."
+    },
+    "usageNote": {
+      "en": "Only used if the Buyer had opted to pay by using a payment card such as a credit or debit card.",
+      "sk": "Používa sa len v prípade, že sa kupujúci rozhodol platiť platobnou kartou, napríklad kreditnou alebo debetnou."
+    },
+    "level": 1,
+    "children": [
+      "BT-87",
+      "BT-88"
+    ]
+  },
+  "BT-87": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Payment card primary account number",
+      "sk": "Číslo primárneho účtu platobnej karty"
+    },
+    "description": {
+      "en": "The Primary Account Number (PAN) of the card used for payment.",
+      "sk": "Číslo primárneho účtu platobnej karty (Primary Account Number (PAN)) použitej na platbu."
+    },
+    "usageNote": {
+      "en": "In accordance with card payments security standards an invoice should never include a full card primary account number. At the moment PCI Security Standards Council has defined that the first 6 digits and last 4 digits are the maximum number of digits to be shown.",
+      "sk": "V súlade s normami v oblasti zabezpečenia kartových platieb by faktúra nemala nikdy obsahovať úplné číslo primárneho účtu platobnej karty. K dnešnému dňu Rada pre bezpečnostné normy PCI definovala, že maximálny počet uvádzaných číslic predstavuje prvých 6 číslic a posledné 4 číslice."
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-88": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Payment card holder name",
+      "sk": "Meno držiteľa platobnej karty"
+    },
+    "description": {
+      "en": "The name of the payment card holder.",
+      "sk": "Meno držiteľa platobnej karty."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BG-19": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "DIRECT DEBIT",
+      "sk": "INKASO"
+    },
+    "description": {
+      "en": "A group of business terms to specify a direct debit.",
+      "sk": "Skupina obchodných termínov špecifikujúcich platby inkasom."
+    },
+    "usageNote": {
+      "en": "This group may be used to give prior notice in the invoice that payment will be made through a SEPA or other direct debit initiated by the Seller, in accordance with the rules of the SEPA or other direct debit scheme.",
+      "sk": "Túto skupinu možno používať na to, aby sa vo faktúre vopred uviedlo, že platba bude vykonaná SEPA alebo iným inkasom iniciovaným zo strany predávajúceho v súlade s pravidlami stanovenými schémou SEPA alebo inou inkasnou schémou."
+    },
+    "level": 1,
+    "children": [
+      "BT-89",
+      "BT-90",
+      "BT-91"
+    ]
+  },
+  "BT-89": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Mandate reference identifier",
+      "sk": "Identifikátor referencie k mandátu"
+    },
+    "description": {
+      "en": "Unique identifier assigned by the Payee for referencing the direct debit mandate.",
+      "sk": "Jedinečný identifikátor, ktorý priraďuje príjemcu platby pre referenciu k inkasnému mandátu."
+    },
+    "usageNote": {
+      "en": "Used in order to pre-notify the Buyer of a SEPA direct debit.",
+      "sk": "Používa sa na predbežné informovanie kupujúceho o SEPA inkase."
+    },
+    "level": 2,
+    "dataType": "Identifier"
+  },
+  "BT-90": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Bank assigned creditor identifier",
+      "sk": "Bankou priradený identifikátor príjemcu"
+    },
+    "description": {
+      "en": "Unique banking reference identifier of the Payee or Seller assigned by the Payee or Seller bank.",
+      "sk": "Jedinečný referenčný identifikátor banky pre príjemcu platby alebo predávajúceho, ktorý priraďuje banka príjemcu platby alebo predávajúceho."
+    },
+    "usageNote": {
+      "en": "Used in order to pre-notify the Buyer of a SEPA direct debit.",
+      "sk": "Používa sa na predbežné informovanie kupujúceho o SEPA inkase."
+    },
+    "level": 2,
+    "dataType": "Identifier"
+  },
+  "BT-91": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Debited account identifier",
+      "sk": "Identifikátor účtu platcu"
+    },
+    "description": {
+      "en": "The account to be debited by the direct debit.",
+      "sk": "Účet, ktorý má byť zaťažený inkasom."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Identifier"
+  },
+  "BG-20": {
+    "cardinality": {
+      "from": "0",
+      "to": "n"
+    },
+    "name": {
+      "en": "DOCUMENT LEVEL ALLOWANCES",
+      "sk": "ZRÁŽKY NA ÚROVNI DOKLADU"
+    },
+    "description": {
+      "en": "A group of business terms providing information about allowances applicable to the Invoice as a whole.",
+      "sk": "Skupina obchodných termínov poskytujúcich informácie o zrážkach uplatnených na faktúru ako celok."
+    },
+    "usageNote": {
+      "en": "Deductions, such as withheld tax may also be specified in this group.",
+      "sk": "V tejto skupine je možné špecifikovať aj odpočty, napríklad daň vyberanú zrážkou."
+    },
+    "level": 0,
+    "children": [
+      "BT-92",
+      "BT-93",
+      "BT-94",
+      "BT-95",
+      "BT-96",
+      "BT-97",
+      "BT-98"
+    ]
+  },
+  "BT-92": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Document level allowance amount",
+      "sk": "Suma zrážky na úrovni dokladu"
+    },
+    "description": {
+      "en": "The amount of an allowance, without VAT.",
+      "sk": "Suma zrážky bez DPH."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 1,
+    "dataType": "Amount"
+  },
+  "BT-93": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Document level allowance base amount",
+      "sk": "Základ zrážky na úrovni dokladu"
+    },
+    "description": {
+      "en": "The base amount that may be used, in conjunction with the document level allowance percentage, to calculate the document level allowance amount.",
+      "sk": "Základná suma, ktorá môže byť v spojení s percentom zrážky na úrovni dokladu použitá na výpočet výšky zrážky na úrovni dokladu."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 1,
+    "dataType": "Amount"
+  },
+  "BT-94": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Document level allowance percentage",
+      "sk": "Percento zrážky na úrovni dokladu"
+    },
+    "description": {
+      "en": "The percentage that may be used, in conjunction with the document level allowance base amount, to calculate the document level allowance amount.",
+      "sk": "Percento, ktoré môže byť v spojení so základom zrážky na úrovni dokladu použité na výpočet výšky zrážky na úrovni dokladu."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 1,
+    "dataType": "Percentage"
+  },
+  "BT-95": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Document level allowance VAT category code",
+      "sk": "Kód kategórie DPH pre zrážku na úrovni dokladu"
+    },
+    "description": {
+      "en": "A coded identification of what VAT category applies to the document level allowance.",
+      "sk": "Kódom vyjadrená identifikácia kategórie DPH, ktorá platí pre zrážku na úrovni dokladu."
+    },
+    "usageNote": {
+      "en": "The following entries of UNTDID 5305 [6] are used (further clarification between brackets):\r\n - Standard rate (Liable for VAT in a standard way)\r\n - Zero rated goods (Liable for VAT with a percentage rate of zero)\r\n - Exempt from tax (VAT/IGIC/IPSI)\r\n - VAT Reverse Charge (Reverse charge VAT/IGIC/IPSI rules apply)\r\n - VAT exempt for intra community supply of goods (VAT/IGIC/IPSI not levied due to Intra-community supply rules)\r\n - Free export item, tax not charged (VAT/IGIC/IPSI not levied due to export outside of the EU)\r\n - Services outside scope of tax (Sale is not subject to VAT/IGIC/IPSI)\r\n - Canary Islands General Indirect Tax (Liable for IGIC tax)\r\n - Liable for IPSI (Ceuta/Melilla tax)",
+      "sk": "Používajú sa tieto položky UNTDID 5305 [6] (ďalšie vysvetlenie v zátvorkách):\n - Základná sadzba (podlieha DPH štandardným spôsobom)\n - Tovar s nulovou sadzbou (podlieha DPH v nulovej sadzbe)\n - Oslobodené od dane (DPH/IGIC/IPSI)\n - Prenesenie daňovej povinnosti (platia pravidlá pre prenesenie daňovej povinnosti DPH/IGIC/IPSI)\n - Oslobodené od DPH pre dodávku tovaru v rámci Spoločenstva (DPH/IGIC/IPSI sa podľa pravidiel pre dodávky tovaru v rámci Spoločenstva nevyberá)\n\n Vývoz oslobodený od dane (DPH/IGIC/IPSI sa nevyberá, ide o vývoz mimo EÚ)\n - Služby mimo pôsobnosti dane (predaj nepodlieha DPH/IGIC/IPSI)\n Všeobecná nepriama daň Kanárskych ostrovov (podlieha dani IGIC)\n - Podlieha IPSI (daň v Ceute/Melille)"
+    },
+    "level": 1,
+    "dataType": "Code",
+    "codeLists": [
+      "UNCL5305"
+    ]
+  },
+  "BT-96": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Document level allowance VAT rate",
+      "sk": "Sadzba DPH pre zrážku na úrovni dokladu"
+    },
+    "description": {
+      "en": "The VAT rate, represented as percentage that applies to the document level allowance.",
+      "sk": "Sadzba DPH vyjadrená ako percento, ktorá platí pre zrážku na úrovni dokladu."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 1,
+    "dataType": "Percentage"
+  },
+  "BT-97": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Document level allowance reason",
+      "sk": "Dôvod zrážky na úrovni dokladu"
+    },
+    "description": {
+      "en": "The reason for the document level allowance, expressed as text.",
+      "sk": "Dôvod zrážky na úrovni dokladu vyjadrený ako text."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 1,
+    "dataType": "Text"
+  },
+  "BT-98": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Document level allowance reason code",
+      "sk": "Kód dôvodu zrážky na úrovni dokladu"
+    },
+    "description": {
+      "en": "The reason for the document level allowance, expressed as a code.",
+      "sk": "Dôvod zrážky na úrovni dokladu vyjadrený ako kód."
+    },
+    "usageNote": {
+      "en": "Use entries of the UNTDID 5189 code list [6]. The Document level allowance reason code and the Document level allowance reason shall indicate the same allowance reason.",
+      "sk": "Použite položky z číselníka UNTDID 5189 [6]. Kód dôvodu zrážky na úrovni dokladu a dôvod zrážky na úrovni dokladu musí uvádzať rovnaký dôvod zrážky."
+    },
+    "level": 1,
+    "dataType": "Code",
+    "codeLists": [
+      "UNCL5189",
+      "UNCL7161"
+    ]
+  },
+  "BG-21": {
+    "cardinality": {
+      "from": "0",
+      "to": "n"
+    },
+    "name": {
+      "en": "DOCUMENT LEVEL CHARGES",
+      "sk": "PRIRÁŽKY NA ÚROVNI DOKLADU"
+    },
+    "description": {
+      "en": "A group of business terms providing information about charges and taxes other than VAT, applicable to the Invoice as a whole.",
+      "sk": "Skupina obchodných termínov poskytujúcich informácie o prirážkach a daniach iných než DPH uplatnených na faktúru ako celok."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 0,
+    "children": [
+      "BT-99",
+      "BT-100",
+      "BT-101",
+      "BT-102",
+      "BT-103",
+      "BT-104",
+      "BT-105"
+    ]
+  },
+  "BT-99": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Document level charge amount",
+      "sk": "Suma prirážky na úrovni dokladu"
+    },
+    "description": {
+      "en": "The amount of a charge, without VAT.",
+      "sk": "Suma prirážky bez DPH."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 1,
+    "dataType": "Amount"
+  },
+  "BT-100": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Document level charge base amount",
+      "sk": "Základ prirážky na úrovni dokladu"
+    },
+    "description": {
+      "en": "The base amount that may be used, in conjunction with the document level charge percentage, to calculate the document level charge amount.",
+      "sk": "Základná suma, ktorá môže byť v spojení s percentom prirážky na úrovni dokladu použitá na výpočet výšky prirážky na úrovni dokladu."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 1,
+    "dataType": "Amount"
+  },
+  "BT-101": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Document level charge percentage",
+      "sk": "Percento prirážky na úrovni dokladu"
+    },
+    "description": {
+      "en": "The percentage that may be used, in conjunction with the document level charge base amount, to calculate the document level charge amount.",
+      "sk": "Percento, ktoré môže byť v spojení so základom prirážky na úrovni dokladu použité na výpočet výšky prirážky na úrovni dokladu."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 1,
+    "dataType": "Percentage"
+  },
+  "BT-102": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Document level charge VAT category code",
+      "sk": "Kód kategórie DPH pre prirážku na úrovni dokladu"
+    },
+    "description": {
+      "en": "A coded identification of what VAT category applies to the document level charge.",
+      "sk": "Kódom vyjadrená identifikácia kategórie DPH, ktorá platí pre prirážku na úrovni dokladu."
+    },
+    "usageNote": {
+      "en": "The following entries of UNTDID 5305 [6] are used (further clarification between brackets):\r\n - Standard rate (Liable for VAT in a standard way)\r\n - Zero rated goods (Liable for VAT with a percentage rate of zero)\r\n - Exempt from tax (VAT/IGIC/IPSI)\r\n - VAT Reverse Charge (Reverse charge VAT/IGIC/IPSI rules apply)\r\n - VAT exempt for intra community supply of goods (VAT/IGIC/IPSI not levied due to Intra-community supply rules)\r\n - Free export item, tax not charged (VAT/IGIC/IPSI not levied due to export outside of the EU)\r\n - Services outside scope of tax (Sale is not subject to VAT/IGIC/IPSI)\r\n - Canary Islands General Indirect Tax (Liable for IGIC tax)\r\n - Liable for IPSI (Ceuta/Melilla tax)",
+      "sk": "Používajú sa tieto položky UNTDID 5305 [6] (ďalšie vysvetlenie v zátvorkách):\n - Základná sadzba (podlieha DPH štandardným spôsobom)\n - Tovar s nulovou sadzbou (podlieha DPH v nulovej sadzbe)\n - Prenesenie daňovej povinnosti (platia pravidlá pre prenesenie daňovej povinnosti DPH/IGIC/IPSI)\n - Oslobodené od dane (DPH/IGIC/IPSI)\n - Oslobodené od DPH pre dodávku tovaru v rámci Spoločenstva (DPH/IGIC/IPSI sa podľa pravidiel\npre dodávky tovaru v rámci Spoločenstva nevyberá)\n Vývoz oslobodený od dane (DPH/IGIC/IPSI sa nevyberá, ide o vývoz mimo EÚ)\n - Služby mimo pôsobnosti dane (predaj nepodlieha DPH/IGIC/IPSI)\n Všeobecná nepriama daň Kanárskych ostrovov (podlieha dani IGIC)\n - Podlieha IPSI (daň v Ceute/Melille)"
+    },
+    "level": 1,
+    "dataType": "Code",
+    "codeLists": [
+      "UNCL5305"
+    ]
+  },
+  "BT-103": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Document level charge VAT rate",
+      "sk": "Sadzba DPH pre prirážku na úrovni dokladu"
+    },
+    "description": {
+      "en": "The VAT rate, represented as percentage that applies to the document level charge.",
+      "sk": "Sadzba DPH vyjadrená ako percento, ktorá platí pre prirážku na úrovni dokladu."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 1,
+    "dataType": "Percentage"
+  },
+  "BT-104": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Document level charge reason",
+      "sk": "Dôvod prirážky na úrovni dokladu"
+    },
+    "description": {
+      "en": "The reason for the document level charge, expressed as text.",
+      "sk": "Dôvod prirážky na úrovni dokladu vyjadrený ako text."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 1,
+    "dataType": "Text"
+  },
+  "BT-105": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Document level charge reason code",
+      "sk": "Kód dôvodu prirážky na úrovni dokladu"
+    },
+    "description": {
+      "en": "The reason for the document level charge, expressed as a code.",
+      "sk": "Dôvod prirážky na úrovni dokladu vyjadrený ako kód."
+    },
+    "usageNote": {
+      "en": "Use entries of the UNTDID 7161 code list [6]. The Document level charge reason code and the Document level charge reason shall indicate the same charge reason.",
+      "sk": "Použite položky z číselníka UNTDID 7161 [6]. Kód dôvodu prirážky na úrovni dokladu a dôvod prirážky na úrovni dokladu musí uvádzať rovnaký dôvod prirážky."
+    },
+    "level": 1,
+    "dataType": "Code",
+    "codeLists": [
+      "UNCL5189",
+      "UNCL7161"
+    ]
+  },
+  "BG-22": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "DOCUMENT TOTALS",
+      "sk": "CELKOVÉ SÚČTY ZA DOKLAD"
+    },
+    "description": {
+      "en": "A group of business terms providing the monetary totals for the Invoice.",
+      "sk": "Skupina obchodných termínov uvádzajúcich celkové peňažné sumy za celú faktúru."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 0,
+    "children": [
+      "BT-106",
+      "BT-107",
+      "BT-108",
+      "BT-109",
+      "BT-110",
+      "BT-111",
+      "BT-112",
+      "BT-113",
+      "BT-114",
+      "BT-115"
+    ]
+  },
+  "BT-106": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Sum of Invoice line net amount",
+      "sk": "Súčet čistých súm riadkov faktúry"
+    },
+    "description": {
+      "en": "Sum of all Invoice line net amounts in the Invoice.",
+      "sk": "Súčet všetkých čistých súm riadkov faktúry."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 1,
+    "dataType": "Amount"
+  },
+  "BT-107": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Sum of allowances on document level",
+      "sk": "Súčet zrážok na úrovni dokladu"
+    },
+    "description": {
+      "en": "Sum of all allowances on document level in the Invoice.",
+      "sk": "Súčet všetkých zrážok na úrovni dokladu vo faktúre."
+    },
+    "usageNote": {
+      "en": "Allowances on line level are included in the Invoice line net amount which is summed up into the Sum of Invoice line net amount.",
+      "sk": "Zrážky na úrovni riadkov sú zahrnuté v čistých sumách riadkov faktúry, ktoré sú sčítané v Súčte čistých súm riadkov faktúry."
+    },
+    "level": 1,
+    "dataType": "Amount"
+  },
+  "BT-108": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Sum of charges on document level",
+      "sk": "Súčet prirážok na úrovni dokladu"
+    },
+    "description": {
+      "en": "Sum of all charges on document level in the Invoice.",
+      "sk": "Súčet všetkých prirážok na úrovni dokladu vo faktúre."
+    },
+    "usageNote": {
+      "en": "Charges on line level are included in the Invoice line net amount which is summed up into the Sum of Invoice line net amount.",
+      "sk": "Prirážky na úrovni riadkov sú zahrnuté v čistých sumách riadkov faktúry, ktoré sú sčítané v Súčte čistých súm riadkov faktúry."
+    },
+    "level": 1,
+    "dataType": "Amount"
+  },
+  "BT-109": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoice total amount without VAT",
+      "sk": "Celková suma faktúry bez DPH"
+    },
+    "description": {
+      "en": "The total amount of the Invoice without VAT.",
+      "sk": "Celková suma za faktúru bez DPH."
+    },
+    "usageNote": {
+      "en": "The Invoice total amount without VAT is the Sum of Invoice line net amount minus Sum of allowances on document level plus Sum of charges on document level.",
+      "sk": "Celková suma faktúry bez DPH je Súčet čistých súm riadkov faktúry mínus Súčet všetkých zrážok na úrovni dokladu plus Súčet všetkých prirážok na úrovni dokladu."
+    },
+    "level": 1,
+    "dataType": "Amount"
+  },
+  "BT-110": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoice total VAT amount",
+      "sk": "Celková suma DPH za faktúru"
+    },
+    "description": {
+      "en": "The total VAT amount for the Invoice.",
+      "sk": "Celková suma DPH za celú faktúru."
+    },
+    "usageNote": {
+      "en": "The Invoice total VAT amount is the sum of all VAT category tax amounts.",
+      "sk": "Celková suma DPH za faktúru je Súčtom všetkých súm dane za jednotlivé kategórie DPH."
+    },
+    "level": 1,
+    "dataType": "Amount"
+  },
+  "BT-111": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoice total VAT amount in accounting currency",
+      "sk": "Celková suma DPH za faktúru v účtovnej mene"
+    },
+    "description": {
+      "en": "The VAT total amount expressed in the accounting currency accepted or required in the country of the Seller.",
+      "sk": "Celková suma DPH vyjadrená v účtovnej mene prijímanej alebo požadovanej v krajine predávajúceho."
+    },
+    "usageNote": {
+      "en": "To be used when the VAT accounting currency (BT-6) differs from the Invoice currency code (BT-5) in accordance with article 230 of Directive 2006/112 / EC on VAT.\r\n The VAT amount in accounting currency is not used in the calculation of the Invoice totals.",
+      "sk": "Použije sa v prípade, že sa Kód účtovnej meny DPH (BT-6) líši od Kódu meny faktúry (BT-5) podľa článku 230 Smernice 2006/112/ES o DPH.\nSuma DPH v účtovnej mene sa nepoužíva pri výpočte celkových súm za faktúru."
+    },
+    "level": 1,
+    "dataType": "Amount"
+  },
+  "BT-112": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoice total amount with VAT",
+      "sk": "Celková suma faktúry vrátane DPH"
+    },
+    "description": {
+      "en": "The total amount of the Invoice with VAT.",
+      "sk": "Celková suma za faktúru s DPH."
+    },
+    "usageNote": {
+      "en": "The Invoice total amount with VAT is the Invoice total amount without VAT plus the Invoice total VAT amount.",
+      "sk": "Celková suma faktúry vrátane DPH je celková suma faktúry bez DPH plus celková suma DPH za faktúru."
+    },
+    "level": 1,
+    "dataType": "Amount"
+  },
+  "BT-113": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Paid amount",
+      "sk": "Zaplatená suma"
+    },
+    "description": {
+      "en": "The sum of amounts which have been paid in advance.",
+      "sk": "Súčet súm zaplatených ako záloha."
+    },
+    "usageNote": {
+      "en": "This amount is subtracted from the invoice total amount with VAT to calculate the amount due for payment.",
+      "sk": "Táto suma sa odčíta od celkovej sumy faktúry vrátane DPH na účely výpočtu splatnej sumy."
+    },
+    "level": 1,
+    "dataType": "Amount"
+  },
+  "BT-114": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Rounding amount",
+      "sk": "Suma zaokrúhlenia"
+    },
+    "description": {
+      "en": "The amount to be added to the invoice total to round the amount to be paid.",
+      "sk": "Suma pripočítavaná k celkovej sume za faktúru na zaokrúhlenie splatnej sumy."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 1,
+    "dataType": "Amount"
+  },
+  "BT-115": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Amount due for payment",
+      "sk": "Splatná suma na úhradu"
+    },
+    "description": {
+      "en": "The outstanding amount that is requested to be paid.",
+      "sk": "Neuhradená suma, ktorá má byť zaplatená."
+    },
+    "usageNote": {
+      "en": "This amount is the Invoice total amount with VAT minus the paid amount that has been paid in advance. The amount is zero in case of a fully paid Invoice. The amount may be negative; in that case the Seller owes the amount to the Buyer.",
+      "sk": "Táto suma vzniká ako celková suma faktúry vrátane DPH mínus suma zaplatená zálohovo vopred.  V prípade plne uhradenej faktúry je táto suma nulová. Suma môže byť záporná; v takom prípade dlhuje predávajúci túto sumu kupujúcemu."
+    },
+    "level": 1,
+    "dataType": "Amount"
+  },
+  "BG-23": {
+    "cardinality": {
+      "from": "1",
+      "to": "n"
+    },
+    "name": {
+      "en": "VAT BREAKDOWN",
+      "sk": "ROZDELENIE DPH"
+    },
+    "description": {
+      "en": "A group of business terms providing information about VAT breakdown by different categories, rates and exemption reasons",
+      "sk": "Skupina obchodných termínov poskytujúcich informácie o rozdelení DPH podľa rôznych kategórií, sadzieb a dôvodov oslobodenia."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 0,
+    "children": [
+      "BT-116",
+      "BT-117",
+      "BT-118",
+      "BT-119",
+      "BT-120",
+      "BT-121"
+    ]
+  },
+  "BT-116": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "VAT category taxable amount",
+      "sk": "Základ dane za kategóriu DPH"
+    },
+    "description": {
+      "en": "Sum of all taxable amounts subject to a specific VAT category code and VAT category rate (if the VAT category rate is applicable).",
+      "sk": "Súčet všetkých základov dane, pre ktoré platí konkrétny kód kategórie DPH a sadzba kategórie DPH (ak sa použije sadzba kategórie DPH)."
+    },
+    "usageNote": {
+      "en": "The sum of Invoice line net amount minus allowances plus charges on document level which are subject to a specific VAT category code and VAT category rate (if the VAT category rate is applicable).",
+      "sk": "Súčet čistej sumy v riadku faktúry mínus zrážky plus prirážky na úrovni dokladu, pre ktoré platí konkrétny kód kategórie DPH a sadzba kategórie DPH (ak sa použije sadzba kategórie DPH)."
+    },
+    "level": 1,
+    "dataType": "Amount"
+  },
+  "BT-117": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "VAT category tax amount",
+      "sk": "Suma dane za kategóriu DPH"
+    },
+    "description": {
+      "en": "The total VAT amount for a given VAT category.",
+      "sk": "Celková suma DPH za kategóriu DPH."
+    },
+    "usageNote": {
+      "en": "Calculated by multiplying the VAT category taxable amount with the VAT category rate for the relevant VAT category.",
+      "sk": "Vypočíta sa vynásobením základu dane za kategóriu DPH sadzbou kategórie DPH pre príslušnú kategóriu DPH."
+    },
+    "level": 1,
+    "dataType": "Amount"
+  },
+  "BT-118": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "VAT category code",
+      "sk": "Kód kategórie DPH"
+    },
+    "description": {
+      "en": "Coded identification of a VAT category.",
+      "sk": "Kódom vyjadrená identifikácia kategórie DPH."
+    },
+    "usageNote": {
+      "en": "The following entries of UNTDID 5305 [6] are used (further clarification between brackets):\r\n - Standard rate (Liable for VAT in a standard way)\r\n - Zero rated goods (Liable for VAT with a percentage rate of zero)\r\n - Exempt from tax (VAT/IGIC/IPSI)\r\n - VAT Reverse Charge (Reverse charge VAT/IGIC/IPSI rules apply)\r\n - VAT exempt for intra community supply of goods (VAT/IGIC/IPSI not levied due to Intra-community supply rules)\r\n - Free export item, tax not charged (VAT/IGIC/IPSI not levied due to export outside of the EU)\r\n - Services outside scope of tax (Sale is not subject to VAT/IGIC/IPSI)\r\n - Canary Islands General Indirect Tax (Liable for IGIC tax)\r\n - Liable for IPSI (Ceuta/Melilla tax)",
+      "sk": "Používajú sa tieto položky UNTDID 5305 [6] (ďalšie vysvetlenie v zátvorkách):\n - Základná sadzba (podlieha DPH štandardným spôsobom)\n - Tovar s nulovou sadzbou (podlieha DPH v nulovej sadzbe)\n - Oslobodené od dane (DPH/IGIC/IPSI)\n - Prenesenie daňovej povinnosti (platia pravidlá pre prenesenie daňovej povinnosti DPH/IGIC/IPSI)\n - Oslobodené od DPH pre dodávku tovaru v rámci Spoločenstva (DPH/IGIC/IPSI sa podľa pravidiel pre dodávky tovaru v rámci Spoločenstva nevyberá)\n - Vývoz oslobodený od dane (DPH/IGIC/IPSI sa nevyberá, ide o vývoz mimo EÚ)\n - Služby mimo pôsobnosti dane (predaj nepodlieha DPH/IGIC/IPSI)\n - Všeobecná nepriama daň Kanárskych ostrovov (podlieha dani IGIC)\n - Podlieha IPSI (daň v Ceute/Melille)"
+    },
+    "level": 1,
+    "dataType": "Code",
+    "codeLists": [
+      "UNCL5305"
+    ]
+  },
+  "BT-119": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "VAT category rate",
+      "sk": "Sadzba kategórie DPH"
+    },
+    "description": {
+      "en": "The VAT rate, represented as percentage that applies for the relevant VAT category.",
+      "sk": "Sadzba DPH vyjadrená ako percento, ktorá platí pre príslušnú kategóriu DPH."
+    },
+    "usageNote": {
+      "en": "The VAT category code and the VAT category rate shall be consistent.",
+      "sk": "Kód kategórie DPH a sadzba kategórie DPH musia byť v súlade."
+    },
+    "level": 1,
+    "dataType": "Percentage"
+  },
+  "BT-120": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "VAT exemption reason text",
+      "sk": "Text dôvodu oslobodenia od DPH"
+    },
+    "description": {
+      "en": "A textual statement of the reason why the amount is exempted from VAT or why no VAT is being charged",
+      "sk": "Textové vyjadrenie dôvodu, prečo je suma oslobodená od DPH, alebo prečo nie je účtovaná žiadna DPH."
+    },
+    "usageNote": {
+      "en": "Articles 226 items 11 to 15 Directive 2006/112/EC [2].",
+      "sk": "Čl. 226 body 11 až 15 Smernice 2006/112/ES [2]."
+    },
+    "level": 1,
+    "dataType": "Text"
+  },
+  "BT-121": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "VAT exemption reason code",
+      "sk": "Kód dôvodu oslobodenia od DPH"
+    },
+    "description": {
+      "en": "A coded statement of the reason for why the amount is exempted from VAT.",
+      "sk": "Kódom vyjadrený dôvod, prečo je suma oslobodená od DPH."
+    },
+    "usageNote": {
+      "en": "Code list issued and maintained by the Connecting Europe Facility.",
+      "sk": "Číselník vydaný a vedený v rámci nástroja Spájame Európu."
+    },
+    "level": 1,
+    "dataType": "Code",
+    "codeLists": [
+      "vatex"
+    ]
+  },
+  "BG-24": {
+    "cardinality": {
+      "from": "0",
+      "to": "n"
+    },
+    "name": {
+      "en": "ADDITIONAL SUPPORTING DOCUMENTS",
+      "sk": "DODATOČNÉ PODPORNÉ DOKUMENTY"
+    },
+    "description": {
+      "en": "A group of business terms providing information about additional supporting documents substantiating the claims made in the Invoice.",
+      "sk": "Skupina obchodných termínov poskytujúcich informácie o dodatočných podporných dokumentoch, ktoré dokladajú nároky uvedené vo faktúre."
+    },
+    "usageNote": {
+      "en": "The additional supporting documents can be used for both referencing a document number which is expected to be known by the receiver, an external document (referenced by a URL) or as an embedded document (such as a time report in pdf). The option to link to an external document will be needed, for example in the case of large attachments and/or when sensitive information, e.g. person-related services, has to be separated from the Invoice itself.",
+      "sk": "Dodatočné podporné dokumenty možno použiť na uvedenie referenčného čísla dokladu, ktoré by mal príjemca poznať, externého dokumentu (referencia formou URL), alebo vloženého dokumentu (napríklad výkazu práce v pdf). Možnosť odkazu na externý dokument bude potrebná napríklad v prípade veľkých príloh a/alebo v prípade, že je potrebné od faktúry oddeliť citlivé informácie, napr. služby viazané na konkrétnu osobu."
+    },
+    "level": 0,
+    "children": [
+      "BT-122",
+      "BT-123",
+      "BT-124",
+      "BT-125"
+    ]
+  },
+  "BT-122": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Supporting document reference",
+      "sk": "Odkaz na podporný dokument"
+    },
+    "description": {
+      "en": "An identifier of the supporting document.",
+      "sk": "Identifikátor podporného dokumentu."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 1,
+    "dataType": "Document reference"
+  },
+  "BT-123": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Supporting document description",
+      "sk": "Popis podporného dokumentu"
+    },
+    "description": {
+      "en": "A description of the supporting document.",
+      "sk": "Popis podporného dokumentu."
+    },
+    "usageNote": {
+      "en": "Such as: timesheet, usage report etc.",
+      "sk": "Napríklad: výkaz práce, výkaz spotreby atď."
+    },
+    "level": 1,
+    "dataType": "Text"
+  },
+  "BT-124": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "External document location",
+      "sk": "Umiestnenie externého dokumentu"
+    },
+    "description": {
+      "en": "The URL (Uniform Resource Locator) that identifies where the external document is located.",
+      "sk": "URL (Uniform Resource Locator) identifikujúci umiestnenie externého dokumentu."
+    },
+    "usageNote": {
+      "en": "A means of locating the resource including its primary access mechanism, e.g. http:// or ftp://.\r\n External document location shall be used if the Buyer requires additional information to support the Invoice.\r\n External documents do not form part of the invoice. Risks can be involved when accessing external documents.",
+      "sk": "Metóda určenia miesta zdroja vrátane jeho primárneho prístupového mechanizmu, napr. http:// alebo ftp://.  Umiestnenie externého dokumentu sa používa v prípade, že kupujúci požaduje dodatočné informácie na zdôvodnenie faktúry.  Externé dokumenty nie sú súčasťou faktúry.  Prístup k externým dokumentom môže byť spojený s určitými rizikami."
+    },
+    "level": 1,
+    "dataType": "Text"
+  },
+  "BT-125": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Attached document",
+      "sk": "Priložený dokument"
+    },
+    "description": {
+      "en": "An attached document embedded as binary object or sent together with the invoice.",
+      "sk": "Priložený dokument vložený ako binárny objekt alebo zaslaný spolu s faktúrou."
+    },
+    "usageNote": {
+      "en": "Attached document is used when documentation shall be stored with the Invoice for future reference or audit purposes.",
+      "sk": "Priložený dokument sa používa v prípade, že bude dokumentácia uložená s faktúrou na účely budúcej referencie alebo auditu."
+    },
+    "level": 1,
+    "children": [
+      "BT-125-1",
+      "BT-125-2"
+    ],
+    "dataType": "Binary object"
+  },
+  "BT-125-1": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Attached document Mime code",
+      "sk": "Priložený dokument typu MIME"
+    },
+    "description": {
+      "en": "The mime code of the attached document.",
+      "sk": "Typ MIME priloženého dokumentu."
+    },
+    "usageNote": {
+      "en": "Allowed mime codes:\r\n - application/pdf\r\n - image/png\r\n - image/jpeg\r\n - text/csv\r\n - application/vnd.openxmlformats- officedocument.spreadsheetml.sheet\r\n - application/vnd.oasis.opendocument. spreadsheet",
+      "sk": "Povolené typy MIME:\n - application/pdf\n - image/png\n - image/jpeg\n - text/csv\n - application/vnd.openxmlformats- officedocument.spreadsheetml.sheet\n - application/vnd.oasis.opendocument. Spreadsheet"
+    },
+    "level": 2,
+    "dataType": "Code",
+    "codeLists": [
+      "MimeCode"
+    ]
+  },
+  "BT-125-2": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Attached document Filename",
+      "sk": "Názov súboru priloženého dokumentu (Filename)"
+    },
+    "description": {
+      "en": "The file name of the attached document",
+      "sk": "Názov súboru priloženého dokumentu."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BG-25": {
+    "cardinality": {
+      "from": "1",
+      "to": "n"
+    },
+    "name": {
+      "en": "INVOICE LINE",
+      "sk": "RIADOK FAKTÚRY"
+    },
+    "description": {
+      "en": "A group of business terms providing information on individual Invoice lines.",
+      "sk": "Skupina obchodných termínov poskytujúcich informácie o jednotlivých riadkoch faktúry."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 0,
+    "children": [
+      "BT-126",
+      "BT-127",
+      "BT-128",
+      "BT-129",
+      "BT-130",
+      "BT-131",
+      "BT-132",
+      "BT-133",
+      "BG-26",
+      "BG-27",
+      "BG-28",
+      "BG-29",
+      "BG-30",
+      "BG-31"
+    ]
+  },
+  "BT-126": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoice line identifier",
+      "sk": "Identifikátor riadku faktúry"
+    },
+    "description": {
+      "en": "A unique identifier for the individual line within the Invoice.",
+      "sk": "Jedinečný identifikátor jednotlivého riadku v rámci faktúry."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 1,
+    "dataType": "Identifier"
+  },
+  "BT-127": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoice line note",
+      "sk": "Poznámka k riadku faktúry"
+    },
+    "description": {
+      "en": "A textual note that gives unstructured information that is relevant to the Invoice line.",
+      "sk": "Textová poznámka uvádzajúca neštruktúrované informácie relevantné pre príslušný riadok faktúry."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 1,
+    "dataType": "Text"
+  },
+  "BT-128": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoice line object identifier",
+      "sk": "Identifikátor predmetu v riadku faktúry"
+    },
+    "description": {
+      "en": "An identifier for an object on which the invoice line is based, given by the Seller.",
+      "sk": "Identifikátor predmetu, ktorý je základom v riadku faktúry, uvádza predávajúci."
+    },
+    "usageNote": {
+      "en": "It may be a subscription number, telephone number, meter point etc., as applicable.",
+      "sk": "Môže ísť o číslo predplatného, telefónne číslo, merač spotreby, atď., podľa potreby."
+    },
+    "level": 1,
+    "children": [
+      "BT-128-1"
+    ],
+    "dataType": "Identifier"
+  },
+  "BT-128-1": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Scheme identifier",
+      "sk": "Identifikátor schémy"
+    },
+    "description": {
+      "en": "The identification scheme identifier of the Invoice line object identifier.",
+      "sk": "Identifikátor schémy identifikácie pre identifikátor predmetu riadku faktúry."
+    },
+    "usageNote": {
+      "en": "If it may be not clear for the receiver what scheme is used for the identifier, a conditional scheme identifier should be used that shall be chosen from the UNTDID 1153 code list [6] entries.",
+      "sk": "Príjemcovi nemusí byť jasné, aká schéma sa pre identifikátor používa, v tom prípade by sa mal použiť podmienený identifikátor schémy zvolený z položiek číselníka UNTDID 1153 [6]."
+    },
+    "level": 2,
+    "dataType": "Code",
+    "codeLists": [
+      "UNCL1153"
+    ]
+  },
+  "BT-129": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoiced quantity",
+      "sk": "Fakturované množstvo"
+    },
+    "description": {
+      "en": "The quantity of items (goods or services) that is charged in the Invoice line.",
+      "sk": "Množstvo položiek (tovaru alebo služieb), ktoré je účtované v riadku faktúry."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 1,
+    "dataType": "Quantity"
+  },
+  "BT-130": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoiced quantity unit of measure code",
+      "sk": "Kód mernej jednotky fakturovaného množstva"
+    },
+    "description": {
+      "en": "The unit of measure that applies to the invoiced quantity.",
+      "sk": "Merná jednotka, ktorá platí pre fakturované množstvo."
+    },
+    "usageNote": {
+      "en": "The unit of measure shall be chosen from the lists in UN/ECE Recommendation N°. 20 “Codes for Units of Measure Used in International Trade” [7] and UN/ECE Recommendation N° 21 “Codes for Passengers, Types of Cargo, Packages and Packaging Materials (with Complementary Codes for Package Names)” [19] applying the method described in UN/ECE Rec N° 20 Intro 2.a). Note that in most cases it is not needed for Buyers and Sellers to implement these lists fully in their software. Sellers need only to support the units needed for their goods and services; Buyers only need to verify that the units used in the Invoice are equal to the units used in other documents (such as Contract, Catalogue, Order and Despatch advice).",
+      "sk": "Merná jednotka bude zvolená zo zoznamov v Odporúčaní OSN/ECE č. 20 Kódy merných jednotiek používaných v medzinárodnom obchode (Codes for Units of Measure Used in International Trade) [7] a Odporúčaní OSN/ECE č. 21 Kódy pre cestujúcich, druhy nákladu, baliace a obalové materiály (s doplnkovými kódmi pre názvy balení) (Codes for Passengers, Types of Cargo, Packages and Packaging Materials (with Complementary Codes for Package Names)) [19] s uplatnením metódy popísanej v Odporúčaní OSN/ECE č. 20 Úvode 2.a). Treba upozorniť, že vo väčšine prípadov nemusí kupujúci a predávajúci tieto zoznamy zavádzať do svojho softvéru v plnom rozsahu.  Predávajúci musí podporovať len jednotky potrebné pre jeho tovar a služby; kupujúci musí len overovať, že jednotky použité vo faktúre sa rovnajú jednotkám používaným v ostatných dokumentoch (napr. v zmluve, katalógu, objednávke a avíze o odoslaní tovaru)."
+    },
+    "level": 1,
+    "dataType": "Code",
+    "codeLists": [
+      "UNECERec20",
+      "UNECERec21"
+    ]
+  },
+  "BT-131": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoice line net amount",
+      "sk": "Čistá suma v riadku faktúry"
+    },
+    "description": {
+      "en": "The total amount of the Invoice line.",
+      "sk": "Celková suma v riadku faktúry."
+    },
+    "usageNote": {
+      "en": "The amount is “net” without VAT, i.e. inclusive of line level allowances and charges as well as other relevant taxes.",
+      "sk": "Suma je „čistá“ bez DPH, t.j. vrátane zrážok a prirážok a iných príslušných daní v riadku."
+    },
+    "level": 1,
+    "dataType": "Amount"
+  },
+  "BT-132": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Referenced purchase order line reference",
+      "sk": "Odkaz na označenie príslušného riadku objednávky"
+    },
+    "description": {
+      "en": "An identifier for a referenced line within a purchase order, issued by the Buyer.",
+      "sk": "Identifikátor príslušného riadku objednávky, vydané kupujúcim."
+    },
+    "usageNote": {
+      "en": "The purchase order identifier is referenced on document level.",
+      "sk": "Na identifikátor objednávky sa uvádza odkaz na úrovni dokladu."
+    },
+    "level": 1,
+    "dataType": "Document reference"
+  },
+  "BT-133": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoice line Buyer accounting reference",
+      "sk": "Riadok faktúry pre referenciu pre zaúčtovanie kupujúcemu"
+    },
+    "description": {
+      "en": "A textual value that specifies where to book the relevant data into the Buyer's financial accounts.",
+      "sk": "Textová hodnota, ktorá špecifikuje, kam sa príslušné údaje zaúčtujú vo finančnom účtovníctve kupujúceho."
+    },
+    "usageNote": {
+      "en": "If required, this reference shall be provided by the Buyer to the Seller prior to the issuing of the Invoice.",
+      "sk": "Na vyžiadanie poskytne túto referenciu kupujúci predávajúcemu pred vystavením faktúry."
+    },
+    "level": 1,
+    "dataType": "Text"
+  },
+  "BG-26": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "INVOICE LINE PERIOD",
+      "sk": "OBDOBIE V RIADKU FAKTÚRY"
+    },
+    "description": {
+      "en": "A group of business terms providing information about the period relevant for the Invoice line.",
+      "sk": "Skupina obchodných termínov poskytujúcich informácie o období, na ktoré sa vzťahuje riadok faktúry."
+    },
+    "usageNote": {
+      "en": "Is also called Invoice line delivery period.",
+      "sk": "Označuje sa tiež ako dodacia lehota v riadku faktúry."
+    },
+    "level": 1,
+    "children": [
+      "BT-134",
+      "BT-135"
+    ]
+  },
+  "BT-134": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoice line period start date",
+      "sk": "Počiatočný dátum obdobia v riadku faktúry"
+    },
+    "description": {
+      "en": "The date when the Invoice period for this Invoice line starts.",
+      "sk": "Dátum, kedy začína fakturačné obdobie v riadku faktúry."
+    },
+    "usageNote": {
+      "en": "The date is the first day of the period.",
+      "sk": "Dátum je prvý deň obdobia."
+    },
+    "level": 2,
+    "dataType": "Date"
+  },
+  "BT-135": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoice line period end date",
+      "sk": "Konečný dátum obdobia v riadku faktúry"
+    },
+    "description": {
+      "en": "The date when the Invoice period for this Invoice line ends.",
+      "sk": "Dátum, kedy končí fakturačné obdobie v riadku faktúry."
+    },
+    "usageNote": {
+      "en": "The date is the last day of the period.",
+      "sk": "Dátum je posledný deň obdobia."
+    },
+    "level": 2,
+    "dataType": "Date"
+  },
+  "BG-27": {
+    "cardinality": {
+      "from": "0",
+      "to": "n"
+    },
+    "name": {
+      "en": "INVOICE LINE ALLOWANCES",
+      "sk": "ZRÁŽKY V RIADKU FAKTÚRY"
+    },
+    "description": {
+      "en": "A group of business terms providing information about allowances applicable to the individual Invoice line.",
+      "sk": "Skupina obchodných termínov poskytujúcich informácie o zrážkach uplatnených na jednotlivý riadok faktúry."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 1,
+    "children": [
+      "BT-136",
+      "BT-137",
+      "BT-138",
+      "BT-139",
+      "BT-140"
+    ]
+  },
+  "BT-136": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoice line allowance amount",
+      "sk": "Suma zrážky v riadku faktúry"
+    },
+    "description": {
+      "en": "The amount of an allowance, without VAT.",
+      "sk": "Suma zrážky bez DPH."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Amount"
+  },
+  "BT-137": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoice line allowance base amount",
+      "sk": "Základ zrážky v riadku faktúry"
+    },
+    "description": {
+      "en": "The base amount that may be used, in conjunction with the Invoice line allowance percentage, to calculate the Invoice line allowance amount.",
+      "sk": "Základná suma, ktorá môže byť v spojení s percentom zrážky v riadku faktúry použitá na výpočet výšky zrážky v riadku faktúry."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Amount"
+  },
+  "BT-138": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoice line allowance percentage",
+      "sk": "Percento zrážky v riadku faktúry"
+    },
+    "description": {
+      "en": "The percentage that may be used, in conjunction with the Invoice line allowance base amount, to calculate the Invoice line allowance amount.",
+      "sk": "Percento, ktoré môže byť v spojení so základom zrážky v riadku faktúry použité na výpočet výšky zrážky v riadku faktúry."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Percentage"
+  },
+  "BT-139": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoice line allowance reason",
+      "sk": "Dôvod zrážky v riadku faktúry"
+    },
+    "description": {
+      "en": "The reason for the Invoice line allowance, expressed as text.",
+      "sk": "Dôvod zrážky v riadku faktúry vyjadrený ako text."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-140": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoice line allowance reason code",
+      "sk": "Kód dôvodu zrážky v riadku faktúry"
+    },
+    "description": {
+      "en": "The reason for the Invoice line allowance, expressed as a code.",
+      "sk": "Dôvod zrážky v riadku faktúry vyjadrený ako kód."
+    },
+    "usageNote": {
+      "en": "Use entries of the UNTDID 5189 code list [6]. The Invoice line level allowance reason code and the Invoice line level allowance reason shall indicate the same allowance reason.",
+      "sk": "Použite položky z číselníka UNTDID 5189 [6]. Kód dôvodu zrážky v riadku faktúry a dôvod zrážky v riadku faktúry musí uvádzať rovnaký dôvod zrážky."
+    },
+    "level": 2,
+    "dataType": "Code",
+    "codeLists": [
+      "UNCL5189",
+      "UNCL7161"
+    ]
+  },
+  "BG-28": {
+    "cardinality": {
+      "from": "0",
+      "to": "n"
+    },
+    "name": {
+      "en": "INVOICE LINE CHARGES",
+      "sk": "PRIRÁŽKY V RIADKU FAKTÚRY"
+    },
+    "description": {
+      "en": "A group of business terms providing information about charges and taxes other than VAT applicable to the individual Invoice line.",
+      "sk": "Skupina obchodných termínov poskytujúcich informácie o prirážkach a daniach iných než DPH uplatnených na jednotlivý riadok faktúry."
+    },
+    "usageNote": {
+      "en": "All charges and taxes are assumed to be liable to the same VAT rate as the Invoice line.",
+      "sk": "Predpokladá sa, že všetky prirážky a dane podliehajú rovnakej sadzbe DPH ako daný riadok faktúry."
+    },
+    "level": 1,
+    "children": [
+      "BT-141",
+      "BT-142",
+      "BT-143",
+      "BT-144",
+      "BT-145"
+    ]
+  },
+  "BT-141": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoice line charge amount",
+      "sk": "Suma prirážky v riadku faktúry"
+    },
+    "description": {
+      "en": "The amount of a charge, without VAT.",
+      "sk": "Suma prirážky bez DPH."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Amount"
+  },
+  "BT-142": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoice line charge base amount",
+      "sk": "Základ prirážky v riadku faktúry"
+    },
+    "description": {
+      "en": "The base amount that may be used, in conjunction with the Invoice line charge percentage, to calculate the Invoice line charge amount.",
+      "sk": "Základná suma, ktorá môže byť v spojení s percentom prirážky v riadku faktúry použitá na výpočet výšky prirážky v riadku faktúry."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Amount"
+  },
+  "BT-143": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoice line charge percentage",
+      "sk": "Percento prirážky v riadku faktúry"
+    },
+    "description": {
+      "en": "The percentage that may be used, in conjunction with the Invoice line charge base amount, to calculate the Invoice line charge amount.",
+      "sk": "Percento, ktoré môže byť v spojení so základom prirážky v riadku faktúry použité na výpočet výšky prirážky v riadku faktúry."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Percentage"
+  },
+  "BT-144": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoice line charge reason",
+      "sk": "Dôvod prirážky v riadku faktúry"
+    },
+    "description": {
+      "en": "The reason for the Invoice line charge, expressed as text.",
+      "sk": "Dôvod prirážky v riadku faktúry vyjadrený ako text."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-145": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoice line charge reason code",
+      "sk": "Kód dôvodu prirážky v riadku faktúry"
+    },
+    "description": {
+      "en": "The reason for the Invoice line charge, expressed as a code.",
+      "sk": "Dôvod prirážky v riadku faktúry vyjadrený ako kód."
+    },
+    "usageNote": {
+      "en": "Use entries of the UNTDID 7161 code list [6]. The Invoice line charge reason code and the Invoice line charge reason shall indicate the same charge reason.",
+      "sk": "Použite položky z číselníka UNTDID 7161 [6]. Kód dôvodu prirážky v riadku faktúry a dôvod prirážky v riadku faktúry musí uvádzať rovnaký dôvod prirážky."
+    },
+    "level": 2,
+    "dataType": "Code",
+    "codeLists": [
+      "UNCL5189",
+      "UNCL7161"
+    ]
+  },
+  "BG-29": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "PRICE DETAILS",
+      "sk": "CENOVÉ ÚDAJE"
+    },
+    "description": {
+      "en": "A group of business terms providing information about the price applied for the goods and services invoiced on the Invoice line.",
+      "sk": "Skupina obchodných termínov poskytujúcich informácie o cene uplatnenej na tovar a služby fakturované v riadku faktúry."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 1,
+    "children": [
+      "BT-146",
+      "BT-147",
+      "BT-148",
+      "BT-149",
+      "BT-150"
+    ]
+  },
+  "BT-146": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Item net price",
+      "sk": "Cena za položku netto"
+    },
+    "description": {
+      "en": "The price of an item, exclusive of VAT, after subtracting item price discount.",
+      "sk": "Cena za položku bez DPH po odčítaní zľavy z ceny."
+    },
+    "usageNote": {
+      "en": "The Item net price has to be equal with the Item gross price less the Item price discount.",
+      "sk": "Cena za položku netto sa musí rovnať cene za položku brutto zníženej o zľavu z ceny za položku."
+    },
+    "level": 2,
+    "dataType": "Unit price amount"
+  },
+  "BT-147": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Item price discount",
+      "sk": "Zľava z ceny za položku"
+    },
+    "description": {
+      "en": "The total discount subtracted from the Item gross price to calculate the Item net price.",
+      "sk": "Celková zľava odčítaná z ceny za položku brutto pre výpočet ceny za položku netto."
+    },
+    "usageNote": {
+      "en": "Only applies if the discount is provided per unit and if it is not included in the Item gross price.",
+      "sk": "Použije sa len v prípade, že sa zľava poskytuje na jednu položku a nie je zahrnutá v cene za položku brutto."
+    },
+    "level": 2,
+    "dataType": "Unit price amount"
+  },
+  "BT-148": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Item gross price",
+      "sk": "Cena za položku brutto"
+    },
+    "description": {
+      "en": "The unit price, exclusive of VAT, before subtracting Item price discount.",
+      "sk": "Cena za položku bez DPH pred odčítaním zľavy z ceny za položku."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Unit price amount"
+  },
+  "BT-149": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Item price base quantity",
+      "sk": "Základné množstvo ceny za položku"
+    },
+    "description": {
+      "en": "The number of item units to which the price applies.",
+      "sk": "Počet jednotiek položky, na ktoré sa cena uplatní."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Quantity"
+  },
+  "BT-150": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Item price base quantity unit of measure code",
+      "sk": "Kód mernej jednotky základného množstva ceny za položku"
+    },
+    "description": {
+      "en": "The unit of measure that applies to the Item price base quantity.",
+      "sk": "Merná jednotka, ktorá platí pre základné množstvo ceny za položku."
+    },
+    "usageNote": {
+      "en": "The Item price base quantity unit of measure shall be the same as the Invoiced quantity unit of measure (BT-130).",
+      "sk": "Merná jednotka základného množstva ceny za položku musí byť zhodná s mernou jednotkou Fakturovaného množstva (BT-130)."
+    },
+    "level": 2,
+    "dataType": "Code",
+    "codeLists": [
+      "UNECERec20",
+      "UNECERec21"
+    ]
+  },
+  "BG-30": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "LINE VAT INFORMATION",
+      "sk": "ÚDAJE O DPH V RIADKU"
+    },
+    "description": {
+      "en": "A group of business terms providing information about the VAT applicable for the goods and services invoiced on the Invoice line.",
+      "sk": "Skupina obchodných termínov poskytujúcich informácie o DPH platnej pre tovar a služby fakturované v riadku faktúry."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 1,
+    "children": [
+      "BT-151",
+      "BT-152"
+    ]
+  },
+  "BT-151": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoiced item VAT category code",
+      "sk": "Kód kategórie DPH fakturovanej položky"
+    },
+    "description": {
+      "en": "The VAT category code for the invoiced item.",
+      "sk": "Kód kategórie DPH pre fakturovanú položku."
+    },
+    "usageNote": {
+      "en": "The following entries of UNTDID 5305 [6] are used (further clarification between brackets):\r\n - Standard rate (Liable for VAT in a standard way)\r\n - Zero rated goods (Liable for VAT with a percentage rate of zero)\r\n - Exempt from tax (VAT/IGIC/IPSI)\r\n - VAT Reverse Charge (Reverse charge VAT/IGIC/IPSI rules apply)\r\n - VAT exempt for intra community supply of goods (VAT/IGIC/IPSI not levied due to Intra-community supply rules)\r\n - Free export item, tax not charged (VAT/IGIC/IPSI not levied due to export outside of the EU)\r\n - Services outside scope of tax (Sale is not subject to VAT/IGIC/IPSI)\r\n - Canary Islands General Indirect Tax (Liable for IGIC tax)\r\n - Liable for IPSI (Ceuta/Melilla tax)",
+      "sk": "Používajú sa tieto položky UNTDID 5305 [6] (ďalšie vysvetlenie v zátvorkách):\n - Základná sadzba (podlieha DPH štandardným spôsobom)\n - Tovar s nulovou sadzbou (podlieha DPH v nulovej sadzbe)\n - Oslobodené od dane (DPH/IGIC/IPSI)\n - Prenesenie daňovej povinnosti (platia pravidlá pre prenesenie daňovej povinnosti DPH/IGIC/IPSI)\n - Oslobodené od DPH pre dodávku tovaru v rámci Spoločenstva (DPH/IGIC/IPSI sa podľa pravidiel pre dodávky tovaru v rámci Spoločenstva nevyberá)\n - Vývoz oslobodený od dane (DPH/IGIC/IPSI sa nevyberá, ide o vývoz mimo EÚ)\n - Služby mimo pôsobnosti dane (predaj nepodlieha DPH/IGIC/IPSI)\n - Všeobecná nepriama daň Kanárskych ostrovov (podlieha dani IGIC)\n - Podlieha IPSI (daň v Ceute/Melille)"
+    },
+    "level": 2,
+    "dataType": "Code",
+    "codeLists": [
+      "UNCL5305"
+    ]
+  },
+  "BT-152": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Invoiced item VAT rate",
+      "sk": "Sadzba DPH fakturovanej položky"
+    },
+    "description": {
+      "en": "The VAT rate, represented as percentage that applies to the invoiced item.",
+      "sk": "Sadzba DPH vyjadrená ako percento, ktorá platí pre fakturovanú položku."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Percent"
+  },
+  "BG-31": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "ITEM INFORMATION",
+      "sk": "INFORMÁCIE O POLOŽKÁCH"
+    },
+    "description": {
+      "en": "A group of business terms providing information about the goods and services invoiced.",
+      "sk": "Skupina obchodných termínov poskytujúcich informácie o fakturovanom tovare a službách."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 1,
+    "children": [
+      "BT-153",
+      "BT-154",
+      "BT-155",
+      "BT-156",
+      "BT-157",
+      "BT-158",
+      "BT-159",
+      "BG-32"
+    ]
+  },
+  "BT-153": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Item name",
+      "sk": "Názov položky"
+    },
+    "description": {
+      "en": "A name for an item.",
+      "sk": "Názov pre položku."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-154": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Item description",
+      "sk": "Popis položky"
+    },
+    "description": {
+      "en": "A description for an item.",
+      "sk": "Popis pre položku."
+    },
+    "usageNote": {
+      "en": "The Item description allows for describing the item and its features in more detail than the Item name.",
+      "sk": "Popis položky umožňuje popísať položku a jej vlastnosti podrobnejšie než názov položky."
+    },
+    "level": 2,
+    "dataType": "Text"
+  },
+  "BT-155": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Item Seller's identifier",
+      "sk": "Identifikátor položky predávajúceho"
+    },
+    "description": {
+      "en": "An identifier, assigned by the Seller, for the item.",
+      "sk": "Identifikátor, ktorý položke priradí predávajúci."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Identifier"
+  },
+  "BT-156": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Item Buyer's identifier",
+      "sk": "Identifikátor položky kupujúceho"
+    },
+    "description": {
+      "en": "An identifier, assigned by the Buyer, for the item.",
+      "sk": "Identifikátor, ktorý položke priradí kupujúci."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "dataType": "Identifier"
+  },
+  "BT-157": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Item standard identifier",
+      "sk": "Identifikátor štandardu položky"
+    },
+    "description": {
+      "en": "An item identifier based on a registered scheme.",
+      "sk": "Identifikátor položky odvodený z registrovanej schémy."
+    },
+    "usageNote": {
+      "en": "The identification scheme shall be identified from the entries of the list published by the ISO/IEC 6523 maintenance agency.",
+      "sk": ""
+    },
+    "level": 2,
+    "children": [
+      "BT-157-1"
+    ],
+    "dataType": "Identifier"
+  },
+  "BT-157-1": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Scheme identifier",
+      "sk": "Identifikátor schémy"
+    },
+    "description": {
+      "en": "The identification scheme identifier of the Item standard identifier",
+      "sk": "Identifikátor schémy identifikácie pre identifikátor štandardu položky."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": "Schéma identifikácie musí byť zvolená z položiek zoznamu zverejneného agentúrou pre správu ISO/IEC 6523."
+    },
+    "level": 3,
+    "dataType": "Code",
+    "codeLists": [
+      "ICD"
+    ]
+  },
+  "BT-158": {
+    "cardinality": {
+      "from": "0",
+      "to": "n"
+    },
+    "name": {
+      "en": "Item classification identifier",
+      "sk": "Identifikátor klasifikácie položky"
+    },
+    "description": {
+      "en": "A code for classifying the item by its type or nature.",
+      "sk": "Kód pre klasifikáciu položky podľa jej typu a povahy."
+    },
+    "usageNote": {
+      "en": "Classification codes are used to allow grouping of similar items for a various purposes e.g. public procurement (CPV), e- Commerce (UNSPSC) etc.",
+      "sk": "Klasifikačné kódy sa používajú na zoskupenie podobných položiek na rôzne účely, napr. verejné obstarávanie (CPV), e-Commerce (UNSPSC) atď."
+    },
+    "level": 2,
+    "children": [
+      "BT-158-1",
+      "BT-158-2"
+    ],
+    "dataType": "Identifier"
+  },
+  "BT-158-1": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Scheme identifier",
+      "sk": "Identifikátor schémy"
+    },
+    "description": {
+      "en": "The identification scheme identifier of the Item classification identifier",
+      "sk": "Identifikátor schémy identifikácie pre identifikátor klasifikácie položky."
+    },
+    "usageNote": {
+      "en": "The identification scheme shall be chosen from the entries in UNTDID 7143 [6].",
+      "sk": "Schéma identifikácie musí byť zvolená z položiek UNTDID 7143 [6]."
+    },
+    "level": 3,
+    "dataType": "Code",
+    "codeLists": [
+      "UNCL7143"
+    ]
+  },
+  "BT-158-2": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Scheme version identifier",
+      "sk": "Identifikátor verzie schémy"
+    },
+    "description": {
+      "en": "The version of the identification scheme.",
+      "sk": "Verzia schémy identifikácie."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 3,
+    "dataType": "Identifier"
+  },
+  "BT-159": {
+    "cardinality": {
+      "from": "0",
+      "to": "1"
+    },
+    "name": {
+      "en": "Item country of origin",
+      "sk": "Krajina pôvodu položky"
+    },
+    "description": {
+      "en": "The code identifying the country from which the item originates.",
+      "sk": "Kód identifikujúci krajinu pôvodu položky."
+    },
+    "usageNote": {
+      "en": "The lists of valid countries are registered with the EN ISO 3166-1 Maintenance agency, “Codes for the representation of names of countries and their subdivisions”.",
+      "sk": "Zoznamy platných krajín sú registrované v agentúre pre správu kódov EN ISO 3166-1 „Kódy pre názvy krajín a ich častí“."
+    },
+    "level": 2,
+    "dataType": "Code",
+    "codeLists": [
+      "ISO3166"
+    ]
+  },
+  "BG-32": {
+    "cardinality": {
+      "from": "0",
+      "to": "n"
+    },
+    "name": {
+      "en": "ITEM ATTRIBUTES",
+      "sk": "ATRIBÚTY POLOŽKY"
+    },
+    "description": {
+      "en": "A group of business terms providing information about properties of the goods and services invoiced.",
+      "sk": "Skupina obchodných termínov poskytujúcich informácie o vlastnostiach fakturovaného tovaru a služieb."
+    },
+    "usageNote": {
+      "en": "",
+      "sk": ""
+    },
+    "level": 2,
+    "children": [
+      "BT-160",
+      "BT-161"
+    ]
+  },
+  "BT-160": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Item attribute name",
+      "sk": "Názov atribútu položky"
+    },
+    "description": {
+      "en": "The name of the attribute or property of the item.",
+      "sk": "Názov atribútu alebo vlastnosti položky."
+    },
+    "usageNote": {
+      "en": "Such as “Colour”.",
+      "sk": "Napríklad „Farba“."
+    },
+    "level": 3,
+    "dataType": "Text"
+  },
+  "BT-161": {
+    "cardinality": {
+      "from": "1",
+      "to": "1"
+    },
+    "name": {
+      "en": "Item attribute value",
+      "sk": "Hodnota atribútu položky"
+    },
+    "description": {
+      "en": "The value of the attribute or property of the item.",
+      "sk": "Hodnota atribútu alebo vlastnosti položky."
+    },
+    "usageNote": {
+      "en": "Such as “Red”.",
+      "sk": "Napríklad „Červená“."
+    },
+    "level": 3,
+    "dataType": "Text"
+  }
+}

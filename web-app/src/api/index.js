@@ -2,12 +2,14 @@ import {CONFIG} from '../appSettings'
 import ApiError from './ApiError'
 import createUsersApi from './users'
 import createInvoicesApi from './invoices'
+import createDocumentationApi from './documentation'
 
 export default class Api {
 
   constructor() {
     this.users = createUsersApi(this)
     this.invoices = createInvoicesApi(this)
+    this.documentation = createDocumentationApi(this)
   }
 
   login = (token) =>
@@ -19,13 +21,6 @@ export default class Api {
     })
 
   logout = () => this.apiRequest({route: '/logout'})
-
-  getUblInvoiceDocumentation = () =>
-    this.apiRequest({route: '/data/schemas/ubl2.1/invoice-documentation.json'})
-  getUblCreditNoteDocumentation = () =>
-    this.apiRequest({route: '/data/schemas/ubl2.1/creditNote-documentation.json'})
-  getUblRulesDocumentation = () => this.apiRequest({route: '/data/schemas/ubl2.1/rules-documentation.json'})
-  getCodeLists = () => this.apiRequest({route: '/data/codeLists.json'})
 
   apiRequest = (params) => {
     // Add authorization header if logged in
