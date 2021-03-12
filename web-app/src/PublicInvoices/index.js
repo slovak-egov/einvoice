@@ -9,7 +9,6 @@ export default () => {
     <InvoiceList
       title={t('topBar.publicInvoices')}
       path={['publicInvoicesScreen']}
-      areCustomFilterFieldsValid={() => true}
       getInvoicesAction={getPublicInvoices}
     />
   )

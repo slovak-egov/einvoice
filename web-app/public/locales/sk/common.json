@@ -5,8 +5,8 @@
   "close": "Zavrieť",
   "reset": "Vynulovať",
   "invoice": {
-    "sender": "Odosielateľ",
-    "receiver": "Prijímateľ",
+    "supplier": "Dodávateľ",
+    "customer": "Zákazník",
     "issueDate": "Dátum vydania",
     "amount": "Cena",
     "amountWithoutVat": "Cena bez DPH",
@@ -15,10 +15,8 @@
     "createdAt": "Vytvorené o",
     "supplierIco": "IČO dodávateľa",
     "customerIco": "IČO zákazníka",
-    "public": "Verejne prístupné",
     "notificationsSent": "Notifikácie odoslané",
-    "format": "Formát",
-    "type": "Typ"
+    "format": "Formát"
   },
   "cancel": "Zrušiť",
   "save": "Uložiť",
@@ -46,8 +44,6 @@
     "empty": "Žiadne záznamy"
   },
   "invoiceType": "Typ faktúry",
-  "received": "Prijaté",
-  "supplied": "Odoslané",
   "download": "Stiahnuť",
   "loadMore": "Načítaj viac",
   "invoiceDocumentation": "Dokumentácia faktúr",
@@ -147,12 +143,6 @@
       "title": "Faktúra bola vytvorená",
       "buttons": ["Vytvoriť ďalšiu", "Pozrieť detail"]
     }
-  },
-  "partiesTypes": {
-    "name": "Typ obchodných strán",
-    "slovakParties": "Slovenské strany",
-    "foreignSupplier": "Zahraničný dodávateľ",
-    "foreignCustomer": "Zahraničný zákazník"
   },
   "invoiceTypes": {
     "invoice": "Faktúra",

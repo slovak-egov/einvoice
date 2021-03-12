@@ -213,16 +213,6 @@ paths:
           required: true
           schema:
             type: integer
-        - name: supplied
-          in: query
-          description: Request invoices supplied by IČO requested user has access to
-          schema:
-            type: boolean
-        - name: received
-          in: query
-          description: Request invoices received by IČO requested user has acccess to
-          schema:
-            type: boolean
         - $ref: '#/components/parameters/Ico'
         - $ref: '#/components/parameters/InvoiceFormat'
         - $ref: '#/components/parameters/StartId'

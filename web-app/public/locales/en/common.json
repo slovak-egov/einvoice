@@ -5,8 +5,8 @@
   "close": "Close",
   "reset": "Reset",
   "invoice": {
-    "sender": "Sender",
-    "receiver": "Receiver",
+    "supplier": "Supplier",
+    "customer": "Customer",
     "issueDate": "Issue date",
     "amount": "Amount",
     "amountWithoutVat": "Amount without VAT",
@@ -15,10 +15,8 @@
     "createdAt": "Created at",
     "supplierIco": "Supplier IČO",
     "customerIco": "Customer IČO",
-    "public": "Public",
     "notificationsSent": "Notifications sent",
-    "format": "Format",
-    "type": "Type"
+    "format": "Format"
   },
   "cancel": "Cancel",
   "save": "Save",
@@ -46,8 +44,6 @@
     "empty": "Empty list"
   },
   "invoiceType": "Invoice type",
-  "received": "Received",
-  "supplied": "Supplied",
   "download": "Download",
   "loadMore": "Load more",
   "invoiceDocumentation": "Invoice documentation",
@@ -147,12 +143,6 @@
       "title": "Invoice was created",
       "buttons": ["Create another", "Check detail"]
     }
-  },
-  "partiesTypes": {
-    "name": "Parties type",
-    "slovakParties": "Slovak parties",
-    "foreignSupplier": "Foreign supplier",
-    "foreignCustomer": "Foreign customer"
   },
   "invoiceTypes": {
     "invoice": "Invoice",
