@@ -40,6 +40,10 @@ func (v *invoiceValidator) Validate(ctx goContext.Context, xml []byte, format, l
 		return err
 	}
 
+	if language == "" {
+		language = "en"
+	}
+
 	res, err := v.client.Post(
 		fmt.Sprintf("%s?format=%s&lang=%s", v.url, format, language),
 		"application/json",

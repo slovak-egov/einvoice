@@ -1,11 +1,8 @@
 import {dropRight, get} from 'lodash'
 import {formDataSelector, FORM_PATH, FORM_TYPE_PATH, getFormInitialState} from './state'
-import {
-  setInvoiceSubmissionData, setInvoiceSubmissionFormat, setInvoiceSubmissionDocumentType,
-} from '../actions'
+import {setInvoiceSubmissionData} from '../actions'
 import {loadingWrapper, setData} from '../../helpers/actions'
 import {generateInvoice} from '../../utils/invoiceGenerator'
-import {invoiceFormats} from '../../utils/constants'
 
 export const setFormField = (path) => setData([...FORM_PATH, ...path])
 export const setFormType = setData(FORM_TYPE_PATH)
@@ -40,7 +37,5 @@ export const submitInvoiceForm = (invoiceType, rootPath) => loadingWrapper(
     const xml = await generateInvoice(get(invoiceForm, [...rootPath, 0]), invoiceType)
     const invoiceFile = new File([xml], `${invoiceType}.xml`, {type: 'application/xml'})
     dispatch(setInvoiceSubmissionData(invoiceFile))
-    dispatch(setInvoiceSubmissionFormat(invoiceFormats.UBL))
-    dispatch(setInvoiceSubmissionDocumentType(invoiceType))
   }
 )

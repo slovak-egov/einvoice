@@ -35,7 +35,7 @@
 					<cbc:Line>Address-line3</cbc:Line>
 				</cac:AddressLine>
 				<cac:Country>
-					<cbc:IdentificationCode>SE</cbc:IdentificationCode>
+					<cbc:IdentificationCode>SK</cbc:IdentificationCode>
 				</cac:Country>
 			</cac:PostalAddress>
 			<cac:PartyTaxScheme>
@@ -62,6 +62,7 @@
 			</cac:Contact>
 		</cac:Party>
 	</cac:AccountingSupplierParty>
+
 	<cac:AccountingCustomerParty>
 		<cac:Party>
 			<cbc:EndpointID schemeID="0007">1234512345</cbc:EndpointID>
@@ -81,7 +82,7 @@
 					<cbc:Line>Building 4 (rad3)</cbc:Line>
 				</cac:AddressLine>
 				<cac:Country>
-					<cbc:IdentificationCode>SE</cbc:IdentificationCode>
+					<cbc:IdentificationCode>SK</cbc:IdentificationCode>
 				</cac:Country>
 			</cac:PostalAddress>
 			<cac:PartyTaxScheme>

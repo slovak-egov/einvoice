@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"mime/multipart"
 	"net/http"
 	"os"
 	"reflect"
@@ -26,23 +25,12 @@ func TestCreateInvoice(t *testing.T) {
 	sessionToken := testutil.CreateToken(ctx, t, a.cache, user)
 
 	var requestBody bytes.Buffer
-	multipartWriter := multipart.NewWriter(&requestBody)
-	if err := multipartWriter.WriteField("format", entity.UblFormat); err != nil {
-		t.Error(err)
-	}
 
-	invoiceWriter, err := multipartWriter.CreateFormFile("invoice", "invoice.xml")
-	if err != nil {
-		t.Error(err)
-	}
 	invoice, err := os.ReadFile("../../data/examples/ubl2.1/invoice.xml")
 	if err != nil {
 		t.Error(err)
 	}
-	if _, err = invoiceWriter.Write(invoice); err != nil {
-		t.Error(err)
-	}
-	if err = multipartWriter.Close(); err != nil {
+	if _, err = requestBody.Write(invoice); err != nil {
 		t.Error(err)
 	}
 
@@ -50,7 +38,7 @@ func TestCreateInvoice(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	req.Header.Set("Content-Type", multipartWriter.FormDataContentType())
+	req.Header.Set("Content-Type", "application/xml")
 
 	response := testutil.ExecuteAuthRequest(a, req, sessionToken)
 	assert.Equal(t, http.StatusCreated, response.Code)
@@ -112,45 +100,31 @@ func TestRateLimiter(t *testing.T) {
 	sessionToken := testutil.CreateToken(ctx, t, a.cache, user)
 
 	var requestBody bytes.Buffer
-	multipartWriter := multipart.NewWriter(&requestBody)
-	if err := multipartWriter.WriteField("format", entity.UblFormat); err != nil {
-		t.Error(err)
-	}
-	if err := multipartWriter.WriteField("test", "true"); err != nil {
-		t.Error(err)
-	}
 
-	invoiceWriter, err := multipartWriter.CreateFormFile("invoice", "invoice.xml")
-	if err != nil {
-		t.Error(err)
-	}
 	invoice, err := os.ReadFile("../../data/examples/ubl2.1/invoice.xml")
 	if err != nil {
 		t.Error(err)
 	}
-	if _, err = invoiceWriter.Write(invoice); err != nil {
-		t.Error(err)
-	}
-	if err = multipartWriter.Close(); err != nil {
+	if _, err = requestBody.Write(invoice); err != nil {
 		t.Error(err)
 	}
 	body := requestBody.Bytes()
 
-	req, err := http.NewRequest("POST", "/invoices", bytes.NewReader(body))
+	req, err := http.NewRequest("POST", "/invoices/test", bytes.NewReader(body))
 	if err != nil {
 		t.Error(err)
 	}
-	req.Header.Set("Content-Type", multipartWriter.FormDataContentType())
+	req.Header.Set("Content-Type", "application/xml")
 
 	response := testutil.ExecuteAuthRequest(a, req, sessionToken)
 	assert.Equal(t, http.StatusCreated, response.Code)
 
 	// Limit for creating test invoices was reached, creating another test invoice should be rejected
-	req, err = http.NewRequest("POST", "/invoices", bytes.NewReader(body))
+	req, err = http.NewRequest("POST", "/invoices/test", bytes.NewReader(body))
 	if err != nil {
 		t.Error(err)
 	}
-	req.Header.Set("Content-Type", multipartWriter.FormDataContentType())
+	req.Header.Set("Content-Type", "application/xml")
 
 	response = testutil.ExecuteAuthRequest(a, req, sessionToken)
 	assert.Equal(t, http.StatusTooManyRequests, response.Code)

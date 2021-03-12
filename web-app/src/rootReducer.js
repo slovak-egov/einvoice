@@ -1,5 +1,5 @@
 import {forwardReducerTo} from './utils/helpers'
-import {invoiceFormats, invoiceTypes, partiesTypes} from './utils/constants'
+import {invoiceTypes} from './utils/constants'
 
 const getInitialState = () => ({
   invoices: {},
@@ -9,10 +9,7 @@ const getInitialState = () => ({
   loadingRequests: 0,
   createInvoiceScreen: {
     submission: {
-      format: invoiceFormats.UBL,
-      partiesType: partiesTypes.SLOVAK,
       test: false,
-      documentType: invoiceTypes.INVOICE,
     },
     form: {
       type: invoiceTypes.INVOICE,

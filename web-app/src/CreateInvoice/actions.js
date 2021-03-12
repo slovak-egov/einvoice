@@ -2,27 +2,20 @@ import swal from 'sweetalert'
 import {INVOICE_SUBMISSION_PATH} from './state'
 import {setInvoices} from '../cache/invoices/actions'
 import {loadingWrapper, setData} from '../helpers/actions'
-import {invoiceFormats, partiesTypes, invoiceTypes} from '../utils/constants'
 import i18n from '../i18n'
 
-export const setInvoiceSubmissionFormat = setData([...INVOICE_SUBMISSION_PATH, 'format'])
 export const setInvoiceSubmissionData = setData([...INVOICE_SUBMISSION_PATH, 'invoice'])
 export const setInvoiceSubmissionTest = setData([...INVOICE_SUBMISSION_PATH, 'test'])
-export const setInvoiceSubmissionDocumentType = setData([...INVOICE_SUBMISSION_PATH, 'documentType'])
-export const setPartiesType = setData([...INVOICE_SUBMISSION_PATH, 'partiesType'])
 
 export const resetInvoiceSubmission = setData(INVOICE_SUBMISSION_PATH)({
   invoice: null,
-  format: invoiceFormats.UBL,
-  partiesType: partiesTypes.SLOVAK,
   test: false,
-  documentType: invoiceTypes.INVOICE,
 })
 
-export const createInvoice = (data) => loadingWrapper(
+export const createInvoice = (data, test, language) => loadingWrapper(
   async (dispatch, getState, {api}) => {
     try {
-      const invoice = await api.invoices.create(data)
+      const invoice = await api.invoices.create(data, test, language)
       dispatch(setInvoices({
         [invoice.id]: invoice,
       }))
@@ -53,10 +46,10 @@ export const createInvoice = (data) => loadingWrapper(
   }
 )
 
-export const getInvoiceVisualization = (data) => loadingWrapper(
+export const getInvoiceVisualization = (data, language) => loadingWrapper(
   async (dispatch, getState, {api}) => {
     try {
-      return await api.invoices.createVisualization(data)
+      return await api.invoices.createVisualization(data, language)
     } catch (error) {
       await swal({
         title: error.message,

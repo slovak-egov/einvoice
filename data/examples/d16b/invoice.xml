@@ -88,7 +88,7 @@
                     <ram:PostcodeCode>3825 AL</ram:PostcodeCode>
                     <ram:LineOne>Lindeboomseweg 41</ram:LineOne>
                     <ram:CityName>Amersfoort</ram:CityName>
-                    <ram:CountryID>NL</ram:CountryID>
+                    <ram:CountryID>SK</ram:CountryID>
                 </ram:PostalTradeAddress>
                 <ram:SpecifiedTaxRegistration>
                     <ram:ID schemeID="VA">NL809163160B01</ram:ID>
@@ -101,7 +101,7 @@
                     <ram:PostcodeCode>2402 NR</ram:PostcodeCode>
                     <ram:LineOne>Henry Dunantweg 42</ram:LineOne>
                     <ram:CityName>Alphen aan den Rijn</ram:CityName>
-                    <ram:CountryID>NL</ram:CountryID>
+                    <ram:CountryID>SK</ram:CountryID>
                 </ram:PostalTradeAddress>
             </ram:BuyerTradeParty>
             <ram:ContractReferencedDocument>

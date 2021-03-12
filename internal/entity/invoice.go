@@ -20,6 +20,8 @@ const (
 
 	InvoiceDocumentType    = "invoice"
 	CreditNoteDocumentType = "creditNote"
+
+	Slovakia = "SK"
 )
 
 var InvoiceFormats = []string{UblFormat, D16bFormat}
@@ -34,10 +36,22 @@ type Invoice struct {
 	Amount              float64       `json:"amount"`
 	AmountWithoutVat    float64       `json:"amountWithoutVat"`
 	SupplierIco         string        `json:"supplierIco"`
+	SupplierCountry     string        `json:"-" pg:"-"`
 	CustomerIco         string        `json:"customerIco"`
+	CustomerCountry     string        `json:"-" pg:"-"`
 	CreatedAt           time.Time     `json:"createdAt"`
 	IssueDate           timeutil.Date `json:"issueDate"`
 	CreatedBy           int           `json:"createdBy"` // User id of invoice creator
 	Test                bool          `json:"test"`
 	NotificationsStatus string        `json:"notificationsStatus"`
+}
+
+func (invoice *Invoice) GetInvoicePartiesType() string {
+	if invoice.SupplierCountry == Slovakia && invoice.CustomerCountry == Slovakia {
+		return SlovakInvoiceParties
+	} else if invoice.SupplierCountry != Slovakia {
+		return ForeignSupplierParty
+	} else {
+		return ForeignCustomerParty
+	}
 }

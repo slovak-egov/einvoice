@@ -21,4 +21,9 @@ type ublParty struct {
 	PartyName struct {
 		Name string
 	}
+	PostalAddress struct {
+		Country struct {
+			IdentificationCode string
+		}
+	}
 }

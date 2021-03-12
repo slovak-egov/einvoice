@@ -11,20 +11,26 @@ export default (api) => {
 
   const getMeta = (id) => prepareRequest({route: `/${id}`})
 
-  const create = (formData) =>
+  const create = (body, test, language) =>
     prepareRequest({
       method: 'POST',
-      route: '',
-      data: formData,
+      route: test ? '/test' : '',
+      data: body,
       jsonBody: false,
+      headers: {
+        'Accept-Language': language,
+      },
     })
 
-  const createVisualization = (formData) =>
+  const createVisualization = (body, language) =>
     prepareRequest({
       method: 'POST',
       route: '/visualization',
-      data: formData,
+      data: body,
       jsonBody: false,
+      headers: {
+        'Accept-Language': language,
+      },
     })
 
   return {
