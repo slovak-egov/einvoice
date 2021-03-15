@@ -92,7 +92,7 @@ func CreateInvoiceNotificationMessage(
 		Header: Header{
 			MessageInfo: MessageInfo{
 				Class:         "EGOV_DOCUMENT",
-				PospID:        "Doc.GeneralAgenda",
+				PospID:        "Doc.GeneralAgendaFiction",
 				PospVersion:   "1.2",
 				MessageID:     msgId,
 				CorrelationID: msgId,
