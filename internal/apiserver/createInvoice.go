@@ -14,31 +14,33 @@ import (
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
-func (a *App) parseAndValidateInvoice(req *http.Request) ([]byte, string, error) {
+func (a *App) parseAndValidateInvoice(res http.ResponseWriter, req *http.Request) ([]byte, string, error) {
+	// Limit payload size to ~32MB
+	req.Body = http.MaxBytesReader(res, req.Body, 1 << 25)
 	invoice, err := io.ReadAll(req.Body)
 	if err != nil {
 		context.GetLogger(req.Context()).
 			WithField("error", err.Error()).
 			Debug("app.parseInvoice.failed")
 
-		return nil, "", InvoiceError("invoice.parsingError").WithDetail(err)
+		return nil, "", InvoiceError("parsingError").WithDetail(err)
 	}
 
 	format, documentType, err := a.xsdValidator.GetFormatAndType(invoice)
 	if err != nil {
-		return nil, "", InvoiceError("invoice.format.invalid").WithDetail(err)
+		return nil, "", InvoiceError("format.invalid").WithDetail(err)
 	}
 
 	language := req.Header.Get("Accept-Language")
 
 	// Validate invoice format
 	if err = a.xsdValidator.Validate(invoice, format, documentType); err != nil {
-		return nil, "", InvoiceError("xsd.validation.failed").WithDetail(err)
+		return nil, "", InvoiceError("xsdValidation.failed").WithDetail(err)
 	}
-	// In future possibly adjust validation according to partiesType
+
 	if err = a.invoiceValidator.Validate(req.Context(), invoice, format, language); err != nil {
 		if _, ok := err.(*invoiceValidator.ValidationError); ok {
-			return nil, "", handlerutil.NewBadRequestError("invoice.validation.failed").WithDetail(err)
+			return nil, "", InvoiceError("rulesValidation.failed").WithDetail(err)
 		} else if _, ok := err.(*invoiceValidator.RequestError); ok {
 			return nil, "", handlerutil.NewFailedDependencyError("invoice.validation.request.failed")
 		} else {
@@ -58,9 +60,9 @@ func validateInvoice(ctx goContext.Context, db *db.Connector, inv *entity.Invoic
 	}
 }
 
-func (a *App) createInvoice(testInvoice bool) func(res http.ResponseWriter, req *http.Request) error {
+func (a *App) createInvoice(test bool) func(res http.ResponseWriter, req *http.Request) error {
 	return func(res http.ResponseWriter, req *http.Request) error {
-		invoice, format, err := a.parseAndValidateInvoice(req)
+		invoice, format, err := a.parseAndValidateInvoice(res, req)
 		if err != nil {
 			return err
 		}
@@ -74,7 +76,7 @@ func (a *App) createInvoice(testInvoice bool) func(res http.ResponseWriter, req 
 
 		// Add creator Id, test flag
 		metadata.CreatedBy = userId
-		metadata.Test = testInvoice
+		metadata.Test = test
 
 		partiesType := metadata.GetInvoicePartiesType()
 
@@ -86,7 +88,7 @@ func (a *App) createInvoice(testInvoice bool) func(res http.ResponseWriter, req 
 		}
 
 		// Limit number of created test invoices
-		if testInvoice {
+		if test {
 			counter, err := a.cache.IncrementTestInvoiceCounter(req.Context(), userId)
 			if err != nil {
 				return err

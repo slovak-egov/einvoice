@@ -8,7 +8,7 @@ import (
 )
 
 func (a *App) createVisualization(res http.ResponseWriter, req *http.Request) error {
-	invoice, _, err := a.parseAndValidateInvoice(req)
+	invoice, _, err := a.parseAndValidateInvoice(res, req)
 	if err != nil {
 		return err
 	}

@@ -34,17 +34,13 @@
 | authorization.bearer.invalid | 401 | Cannot parse bearer token | |
 | authorization.upvs.request.failed | 424 | ÚPVS login request failed | |
 | invoice.payload.invalid | 400 | Cannot parse data | Error message |
-| invoice.file.parsingError | 400 | Cannot parse invoice file | Error message |
-| invoice.test.invalid | 400 | Cannot parse *test* field | Error message |
-| invoice.partiesType.unknown | 400 | *partiesType* should be one of slovakParties, foreignSupplier, foreignCustomer | |
-| invoice.format.missing | 400 | Missing *format* field | |
-| invoice.format.unknown | 400 | *format* must be ubl2.1 or d16b | |
+| invoice.parsingError | 400 | Cannot parse invoice XML | Error message |
+| invoice.format.invalid | 400 | *format* of submitted invoice must be either ubl2.1 or d16b | |
 | invoice.language.unknown | 400 | *language* must be en or sk | |
-| invoice.xsd.validation.failed | 400 | Xml file must follow XSD schema | Error message |
-| invoice.validation.failed | 400 | Invoice must contain all required fields | All violated rules in extra field "rules" |
+| invoice.xsdValidation.failed | 400 | Xml file must follow XSD schema | Error message |
+| invoice.rulesValidation.failed | 400 | Invoice must contain all required fields | All violated rules in extra field "rules" |
 | invoice.validator.request.failed | 424 | Request to invoice validation server failed | |
 | invoice.create.permission.missing | 403 | Missing permissions for creating invoices with posted IČO | |
-| invoice.view.permission.missing | 403 | Missing permissions for requested invoice | |
 | invoice.param.parsingError | 400 | Cannot parse params | Error message |
 | invoice.param.invalid | 400 | Params validation failed | Error message |
 | invoice.param.id.invalid | 400 | Invoice id must be integer | Error message |
