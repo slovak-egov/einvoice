@@ -13,6 +13,7 @@ import (
 	"github.com/slovak-egov/einvoice/internal/entity"
 	"github.com/slovak-egov/einvoice/pkg/context"
 	"github.com/slovak-egov/einvoice/pkg/dbutil"
+	"github.com/slovak-egov/einvoice/pkg/timeutil"
 )
 
 type PublicInvoicesOptions struct {
@@ -24,11 +25,23 @@ type PublicInvoicesOptions struct {
 	Order            string
 	Amount           AmountOptions
 	AmountWithoutVat AmountOptions
+	IssueDate        DateOptions
+	CreatedAt        TimeOptions
 }
 
 type AmountOptions struct {
 	From *float64
 	To   *float64
+}
+
+type DateOptions struct {
+	From *timeutil.Date
+	To   *timeutil.Date
+}
+
+type TimeOptions struct {
+	From *time.Time
+	To   *time.Time
 }
 
 func (o *PublicInvoicesOptions) Validate(maxLimit int) error {
@@ -97,11 +110,27 @@ func (o *PublicInvoicesOptions) buildQuery(query *orm.Query) *orm.Query {
 		query = query.Order("id DESC")
 	}
 
+	if o.IssueDate.From != nil {
+		query = query.Where("issue_date >= ?", o.IssueDate.From)
+	}
+
+	if o.IssueDate.To != nil {
+		query = query.Where("issue_date <= ?", o.IssueDate.To)
+	}
+
+	if o.CreatedAt.From != nil {
+		query = query.Where("created_at >= ?", o.CreatedAt.From)
+	}
+
+	if o.CreatedAt.To != nil {
+		query = query.Where("created_at <= ?", o.CreatedAt.To)
+	}
+
 	return query.Limit(o.Limit + 1)
 }
 
 type UserInvoicesOptions struct {
-	UserId   int
+	UserId int
 	*PublicInvoicesOptions
 }
 
@@ -149,9 +178,8 @@ func (c *Connector) GetUserInvoices(ctx goContext.Context, options *UserInvoices
 	query := c.GetDb(ctx).Model(&invoices).
 		With("accessible_uris", c.accessibleUrisQuery(ctx, options.UserId)).
 		WhereGroup(func(q *orm.Query) (*orm.Query, error) {
-			return q.
-				WhereOr("'ico://sk/' || customer_ico IN (?)", c.GetDb(ctx).Model().Table("accessible_uris")).
-				WhereOr("'ico://sk/' || supplier_ico IN (?)", c.GetDb(ctx).Model().Table("accessible_uris")),
+			return q.WhereOr("'ico://sk/' || customer_ico IN (?)", c.GetDb(ctx).Model().Table("accessible_uris")).
+					WhereOr("'ico://sk/' || supplier_ico IN (?)", c.GetDb(ctx).Model().Table("accessible_uris")),
 				nil
 		})
 
