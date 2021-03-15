@@ -331,7 +331,9 @@ paths:
         content:
           application/xml:
             schema:
-              $ref: '#/components/schemas/Invoice'
+              type: object
+              xml:
+                name: Invoice
       responses:
         '200':
           description: Successful response

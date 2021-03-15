@@ -1,8 +1,8 @@
 package xsdValidator
 
 import (
+	"encoding/xml"
 	"errors"
-	"strings"
 
 	"github.com/lestrrat-go/libxml2"
 	"github.com/lestrrat-go/libxml2/xsd"
@@ -69,18 +69,18 @@ func (v *XsdValidator) Validate(src []byte, format, documentType string) error {
 	return nil
 }
 
-func (v *XsdValidator) GetFormatAndType(src []byte) (string, string, error) {
-	xml, err := libxml2.Parse(src)
-	if err != nil {
-		return "", "", err
-	}
-	root, err := xml.FirstChild()
-	if err != nil {
-		return "", "", err
-	}
-	rootNameParts := strings.Split(root.NodeName(), ":")
+type rootTag struct {
+	XMLName xml.Name
+}
 
-	switch rootNameParts[len(rootNameParts)-1] {
+func (v *XsdValidator) GetFormatAndType(rawInvoice []byte) (string, string, error) {
+	invoiceRootTag := &rootTag{}
+	err := xml.Unmarshal(rawInvoice, &invoiceRootTag)
+	if err != nil {
+		return "", "", err
+	}
+
+	switch invoiceRootTag.XMLName.Local {
 	case "Invoice":
 		return entity.UblFormat, entity.InvoiceDocumentType, nil
 	case "CreditNote":
