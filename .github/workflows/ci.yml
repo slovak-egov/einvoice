@@ -12,15 +12,8 @@ jobs:
         uses: actions/checkout@v2
       - name: Download eslint config
         run: cd web-app && npm i eslint-config-vacuumlabs
-      - name: Lint Code Base
-        uses: docker://github/super-linter:v3
-        env:
-          VALIDATE_ALL_CODEBASE: false
-          VALIDATE_GO: false
-          VALIDATE_JAVASCRIPT_STANDARD: false
-          JAVASCRIPT_ES_CONFIG_FILE: ../../../github/workspace/web-app/.eslintrc
-          DEFAULT_BRANCH: main
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Lint JS
+        run: cd web-app && npm run eslint
   tests:
     name: Tests
     runs-on: ubuntu-latest
