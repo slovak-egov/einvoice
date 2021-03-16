@@ -1,6 +1,6 @@
 # CEN/TC 434 - EN-16931 - Validation artefacts
 
-Original can be found [here](https://github.com/ConnectingEurope/eInvoicing-EN16931/tree/677968e068f35e249cffda04e6eea0782219fb24).
+Original can be found [here](https://github.com/ConnectingEurope/eInvoicing-EN16931/tree/c6725e16c40ee756d406a9766de0c1417312119c).
 
 After changing any of schematron files regenerate XSLT and create SaxonJS schema:
 Installation of maven & npm is required before running script.

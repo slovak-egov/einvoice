@@ -652,7 +652,8 @@
             },
             "dataType": "Identifier",
             "businessTerms": [
-              "BT-18, BT-122"
+              "BT-18",
+              "BT-122"
             ],
             "rules": [
               "BR-52"
@@ -965,7 +966,8 @@
                     },
                     "dataType": "Identifier",
                     "businessTerms": [
-                      "BT-29, BT-90"
+                      "BT-29",
+                      "BT-90"
                     ],
                     "rules": [
                       "BR-CO-26"
@@ -1247,7 +1249,8 @@
                     },
                     "dataType": "Identifier",
                     "businessTerms": [
-                      "BT-31, BT-32"
+                      "BT-31",
+                      "BT-32"
                     ],
                     "rules": [
                       "BR-CO-09",
@@ -2121,7 +2124,8 @@
                 },
                 "dataType": "Text",
                 "businessTerms": [
-                  "BT-60, BT-90"
+                  "BT-60",
+                  "BT-90"
                 ],
                 "attributes": {
                   "schemeID": {
@@ -3294,7 +3298,8 @@
           "sk": "TBD"
         },
         "businessTerms": [
-          "BG-20, BG-21"
+          "BG-20",
+          "BG-21"
         ],
         "children": {
           "cbc:ChargeIndicator": {
@@ -3326,7 +3331,8 @@
             },
             "dataType": "Code",
             "businessTerms": [
-              "BT-98, BT-105"
+              "BT-98",
+              "BT-105"
             ],
             "codeLists": [
               "UNCL5189",
@@ -3358,7 +3364,8 @@
             },
             "dataType": "Text",
             "businessTerms": [
-              "BT-97, BT-104"
+              "BT-97",
+              "BT-104"
             ],
             "rules": [
               "BR-33",
@@ -3622,7 +3629,8 @@
             },
             "dataType": "Amount",
             "businessTerms": [
-              "BT-110, BT-111"
+              "BT-110",
+              "BT-111"
             ],
             "rules": [
               "BR-53",
@@ -4673,7 +4681,8 @@
               "sk": "TBD"
             },
             "businessTerms": [
-              "BG-27, BG-28"
+              "BG-27",
+              "BG-28"
             ],
             "rules": [
               "BR-CO-23",
@@ -4709,7 +4718,8 @@
                 },
                 "dataType": "Code",
                 "businessTerms": [
-                  "BT-140, BT-145"
+                  "BT-140",
+                  "BT-145"
                 ],
                 "codeLists": [
                   "UNCL5189",
@@ -4739,7 +4749,8 @@
                 },
                 "dataType": "Text",
                 "businessTerms": [
-                  "BT-139, BT-144"
+                  "BT-139",
+                  "BT-144"
                 ],
                 "rules": [
                   "BR-42",
