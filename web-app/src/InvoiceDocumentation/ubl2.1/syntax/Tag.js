@@ -72,7 +72,14 @@ export default ({rootDocs}) => {
         </Row>}
         {docs.businessTerms && <Row>
           <Col className="font-weight-bold" sm="3">{t('invoiceDocs.businessTerms')}</Col>
-          <Col sm="9">{docs.businessTerms}</Col>
+          <Col sm="9">
+            {docs.businessTerms.map((term, i) => (
+              <Fragment key={i}>
+                {i !== 0 && <span>, </span>}
+                <Link to={`/invoice-documentation/businessTerms/${term}`}>{term}</Link>
+              </Fragment>
+            ))}
+          </Col>
         </Row>}
         {docs.codeLists && <Row>
           <Col className="font-weight-bold" sm="3">{t('invoiceDocs.codeLists')}</Col>
