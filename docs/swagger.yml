@@ -361,7 +361,8 @@ paths:
           description: Invoice ID
           required: true
           schema:
-            type: integer
+            type: string
+            format: uuid
       responses:
         '200':
           description: Successfull response
@@ -384,7 +385,8 @@ paths:
           description: Invoice ID
           required: true
           schema:
-            type: integer
+            type: string
+            format: uuid
       responses:
         '200':
           description: Successful response
@@ -407,7 +409,8 @@ paths:
           description: Invoice ID
           required: true
           schema:
-            type: integer
+            type: string
+            format: uuid
       responses:
         '200':
           description: Successful response
@@ -484,7 +487,8 @@ components:
       type: object
       properties:
         nextId:
-          type: integer
+          type: string
+          format: uuid
           nullable: true
         invoices:
           type: array
