@@ -1,6 +1,6 @@
 # Invoice validator
 
-Use `node v14.15.4`
+Use `node v15`
 
 First install dependencies
 ```shell
