@@ -34,7 +34,7 @@ func (c *Connector) GetAndUpdateNotNotifiedInvoices(ctx goContext.Context, limit
 	return invoices, nil
 }
 
-func (c *Connector) UpdateNotificationStatus(ctx goContext.Context, invoiceIds []int, status string) error {
+func (c *Connector) UpdateNotificationStatus(ctx goContext.Context, invoiceIds []string, status string) error {
 	query := c.GetDb(ctx).
 		Model(&entity.Invoice{}).
 		Set("notifications_status = ?", status).

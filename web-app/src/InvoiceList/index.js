@@ -30,7 +30,7 @@ export default ({getInvoicesAction, path, title}) => {
           <Table striped hover responsive size="sm">
             <thead>
               <tr>
-                <th>ID</th>
+                <th>#</th>
                 <th>{t('invoice.supplierIco')}</th>
                 <th>{t('invoice.customerIco')}</th>
                 <th>{t('invoice.issueDate')}</th>
@@ -42,7 +42,7 @@ export default ({getInvoicesAction, path, title}) => {
             <tbody>
               {invoiceIds.map((invoiceId, i) => (
                 <tr key={i} className={classnames({'text-secondary': invoices[invoiceId].test})}>
-                  <td>{invoiceId}</td>
+                  <td>{i + 1}</td>
                   <td>{invoices[invoiceId].supplierIco}</td>
                   <td>{invoices[invoiceId].customerIco}</td>
                   <td>{invoices[invoiceId].issueDate}</td>

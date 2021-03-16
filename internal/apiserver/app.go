@@ -78,9 +78,9 @@ func (a *App) initializeHandlers() {
 
 	invoicesRouter := apiRouter.PathPrefix("/invoices").Subrouter()
 	registerHandler(invoicesRouter, "GET", "", a.getPublicInvoices)
-	registerHandler(invoicesRouter, "GET", "/{id:[0-9]+}", a.getInvoice)
-	registerHandler(invoicesRouter, "GET", "/{id:[0-9]+}/detail", a.getInvoiceXml)
-	registerHandler(invoicesRouter, "GET", "/{id:[0-9]+}/visualization", a.getInvoiceVisualization)
+	registerHandler(invoicesRouter, "GET", "/{id}", a.getInvoice)
+	registerHandler(invoicesRouter, "GET", "/{id}/detail", a.getInvoiceXml)
+	registerHandler(invoicesRouter, "GET", "/{id}/visualization", a.getInvoiceVisualization)
 	registerHandler(invoicesRouter, "POST", "", a.createInvoice(false))
 	registerHandler(invoicesRouter, "POST", "/test", a.createInvoice(true))
 

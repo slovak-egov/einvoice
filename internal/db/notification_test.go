@@ -10,7 +10,7 @@ import (
 	"github.com/slovak-egov/einvoice/internal/testutil"
 )
 
-func assertInvoiceNotificationStatus(t *testing.T, id int, status string) {
+func assertInvoiceNotificationStatus(t *testing.T, id string, status string) {
 	inv, err := connector.GetInvoice(ctx, id)
 	if err != nil {
 		t.Fatal(err)
@@ -22,11 +22,16 @@ func assertInvoiceNotificationStatus(t *testing.T, id int, status string) {
 func TestGetAndUpdateNotNotifiedInvoices(t *testing.T) {
 	t.Cleanup(testutil.CleanDb(ctx, t, connector.Connector))
 
-	inv1 := testutil.CreateInvoice(ctx, t, connector.Connector)
-	inv2 := testutil.CreateInvoice(ctx, t, connector.Connector)
-	inv3 := testutil.CreateInvoice(ctx, t, connector.Connector)
-	inv4 := testutil.CreateInvoice(ctx, t, connector.Connector)
-	inv5 := testutil.CreateInvoice(ctx, t, connector.Connector)
+	ids := []string{
+		"01776d7e-4661-138a-26e3-437102097b13", "01776d7e-4661-138a-26e3-437102097b14",
+		"01776d7e-4661-138a-26e3-437102097b15", "01776d7e-4661-138a-26e3-437102097b16",
+		"01776d7e-4661-138a-26e3-437102097b17",
+	}
+	testutil.CreateInvoice(ctx, t, connector.Connector, ids[0])
+	testutil.CreateInvoice(ctx, t, connector.Connector, ids[1])
+	testutil.CreateInvoice(ctx, t, connector.Connector, ids[2])
+	testutil.CreateInvoice(ctx, t, connector.Connector, ids[3])
+	testutil.CreateInvoice(ctx, t, connector.Connector, ids[4])
 
 	stopTx1 := make(chan bool, 1)
 	startTx2 := make(chan bool, 1)
@@ -43,7 +48,7 @@ func TestGetAndUpdateNotNotifiedInvoices(t *testing.T) {
 			}
 
 			assert.Equal(t, 2, len(invoices))
-			assert.ElementsMatch(t, []int{inv1.Id, inv2.Id}, []int{invoices[0].Id, invoices[1].Id})
+			assert.ElementsMatch(t, []string{ids[0], ids[1]}, []string{invoices[0].Id, invoices[1].Id})
 
 			startTx2 <- true
 			<-stopTx1
@@ -70,7 +75,7 @@ func TestGetAndUpdateNotNotifiedInvoices(t *testing.T) {
 			}
 
 			assert.Equal(t, 2, len(invoices))
-			assert.ElementsMatch(t, []int{inv3.Id, inv4.Id}, []int{invoices[0].Id, invoices[1].Id})
+			assert.ElementsMatch(t, []string{ids[2], ids[3]}, []string{invoices[0].Id, invoices[1].Id})
 
 			<-stopTx2
 			return nil
@@ -87,26 +92,30 @@ func TestGetAndUpdateNotNotifiedInvoices(t *testing.T) {
 	<-finishedTx1
 	<-finishedTx2
 
-	assertInvoiceNotificationStatus(t, inv1.Id, entity.NotificationStatusSending)
-	assertInvoiceNotificationStatus(t, inv2.Id, entity.NotificationStatusSending)
-	assertInvoiceNotificationStatus(t, inv3.Id, entity.NotificationStatusSending)
-	assertInvoiceNotificationStatus(t, inv4.Id, entity.NotificationStatusSending)
-	assertInvoiceNotificationStatus(t, inv5.Id, entity.NotificationStatusNotSent)
+	assertInvoiceNotificationStatus(t, ids[0], entity.NotificationStatusSending)
+	assertInvoiceNotificationStatus(t, ids[1], entity.NotificationStatusSending)
+	assertInvoiceNotificationStatus(t, ids[2], entity.NotificationStatusSending)
+	assertInvoiceNotificationStatus(t, ids[3], entity.NotificationStatusSending)
+	assertInvoiceNotificationStatus(t, ids[4], entity.NotificationStatusNotSent)
 }
 
 func TestUpdateNotificationStatus(t *testing.T) {
 	t.Cleanup(testutil.CleanDb(ctx, t, connector.Connector))
 
-	inv1 := testutil.CreateInvoice(ctx, t, connector.Connector)
-	inv2 := testutil.CreateInvoice(ctx, t, connector.Connector)
-	inv3 := testutil.CreateInvoice(ctx, t, connector.Connector)
+	ids := []string{
+		"01776d7e-4661-138a-26e3-437102097b13", "01776d7e-4661-138a-26e3-437102097b14",
+		"01776d7e-4661-138a-26e3-437102097b15",
+	}
+	testutil.CreateInvoice(ctx, t, connector.Connector, ids[0])
+	testutil.CreateInvoice(ctx, t, connector.Connector, ids[1])
+	testutil.CreateInvoice(ctx, t, connector.Connector, ids[2])
 
-	err := connector.UpdateNotificationStatus(ctx, []int{inv1.Id, inv2.Id}, entity.NotificationStatusSent)
+	err := connector.UpdateNotificationStatus(ctx, []string{ids[0], ids[1]}, entity.NotificationStatusSent)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	assertInvoiceNotificationStatus(t, inv1.Id, entity.NotificationStatusSent)
-	assertInvoiceNotificationStatus(t, inv2.Id, entity.NotificationStatusSent)
-	assertInvoiceNotificationStatus(t, inv3.Id, entity.NotificationStatusNotSent)
+	assertInvoiceNotificationStatus(t, ids[0], entity.NotificationStatusSent)
+	assertInvoiceNotificationStatus(t, ids[1], entity.NotificationStatusSent)
+	assertInvoiceNotificationStatus(t, ids[2], entity.NotificationStatusNotSent)
 }

@@ -64,8 +64,8 @@ func (w *Worker) checkInvoices() {
 		return
 	}
 
-	notifiedInvoiceIds := []int{}
-	notNotifiedInvoiceIds := []int{}
+	notifiedInvoiceIds := []string{}
+	notNotifiedInvoiceIds := []string{}
 
 	// send invoices notifications
 	for _, invoice := range invoices {
@@ -91,7 +91,9 @@ func (w *Worker) checkInvoices() {
 	if len(notNotifiedInvoiceIds) > 0 {
 		err := w.db.UpdateNotificationStatus(ctx, notNotifiedInvoiceIds, entity.NotificationStatusNotSent)
 		if err == nil {
-			context.GetLogger(ctx).WithField("invoiceIds", notifiedInvoiceIds).Error("worker.checkInvoices.notNotified")
+			context.GetLogger(ctx).
+				WithField("invoiceIds", notNotifiedInvoiceIds).
+				Error("worker.checkInvoices.notNotified")
 		}
 	}
 }
@@ -105,7 +107,10 @@ func (w *Worker) notifyInvoiceParties(ctx goContext.Context, invoice entity.Invo
 	invoiceXml, err := w.storage.GetInvoice(ctx, invoice.Id)
 	if err != nil {
 		context.GetLogger(ctx).
-			WithField("invoiceId", invoice.Id).
+			WithFields(log.Fields{
+				"invoiceId": invoice.Id,
+				"error": err.Error(),
+			}).
 			Error("worker.checkInvoices.notifyInvoiceParties.getXml.failed")
 
 		return err
@@ -114,7 +119,10 @@ func (w *Worker) notifyInvoiceParties(ctx goContext.Context, invoice entity.Invo
 	invoiceZip, err := visualization.GenerateZip(invoiceXml)
 	if err != nil {
 		context.GetLogger(ctx).
-			WithField("invoiceId", invoice.Id).
+			WithFields(log.Fields{
+				"invoiceId": invoice.Id,
+				"error": err.Error(),
+			}).
 			Error("worker.checkInvoices.notifyInvoiceParties.generatePdf.failed")
 
 		return err
@@ -123,7 +131,10 @@ func (w *Worker) notifyInvoiceParties(ctx goContext.Context, invoice entity.Invo
 	invoiceZipBytes, err := io.ReadAll(invoiceZip)
 	if err != nil {
 		context.GetLogger(ctx).
-			WithField("invoiceId", invoice.Id).
+			WithFields(log.Fields{
+				"invoiceId": invoice.Id,
+				"error": err.Error(),
+			}).
 			Error("worker.checkInvoices.notifyInvoiceParties.createVisualization.failed")
 
 		return err

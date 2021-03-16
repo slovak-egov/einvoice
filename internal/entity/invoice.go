@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/slovak-egov/einvoice/pkg/timeutil"
+	"github.com/slovak-egov/einvoice/pkg/ulid"
 )
 
 const (
@@ -29,7 +30,8 @@ var InvoicePartiesTypes = []string{SlovakInvoiceParties, ForeignSupplierParty, F
 var DocumentTypes = []string{InvoiceDocumentType, CreditNoteDocumentType}
 
 type Invoice struct {
-	Id                  int           `json:"id"`
+	Id                  string        `json:"id"`
+	CreatedAt           *time.Time    `json:"createdAt,omitempty" pg:"-"`
 	Sender              string        `json:"sender"`
 	Receiver            string        `json:"receiver"`
 	Format              string        `json:"format"`
@@ -39,17 +41,26 @@ type Invoice struct {
 	SupplierCountry     string        `json:"-" pg:"-"`
 	CustomerIco         string        `json:"customerIco"`
 	CustomerCountry     string        `json:"-" pg:"-"`
-	CreatedAt           time.Time     `json:"createdAt"`
 	IssueDate           timeutil.Date `json:"issueDate"`
 	CreatedBy           int           `json:"createdBy"` // User id of invoice creator
 	Test                bool          `json:"test"`
 	NotificationsStatus string        `json:"notificationsStatus"`
 }
 
-func (invoice *Invoice) GetInvoicePartiesType() string {
-	if invoice.SupplierCountry == Slovakia && invoice.CustomerCountry == Slovakia {
+// Derive created at from id
+func (i *Invoice) CalculateCreatedAt() {
+	parsedId, err := ulid.Parse(i.Id)
+	if err != nil {
+		panic(err)
+	}
+	createdAt := parsedId.Time()
+	i.CreatedAt = &createdAt
+}
+
+func (i *Invoice) GetInvoicePartiesType() string {
+	if i.SupplierCountry == Slovakia && i.CustomerCountry == Slovakia {
 		return SlovakInvoiceParties
-	} else if invoice.SupplierCountry != Slovakia {
+	} else if i.SupplierCountry != Slovakia {
 		return ForeignSupplierParty
 	} else {
 		return ForeignCustomerParty

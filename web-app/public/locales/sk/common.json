@@ -11,7 +11,7 @@
     "uploadTime": "Čas nahratia do systému",
     "amount": "Cena",
     "amountWithoutVat": "Cena bez DPH",
-    "createdAt": "Vytvorené o",
+    "uploadedAt": "Vytvorené o",
     "supplierIco": "IČO dodávateľa",
     "customerIco": "IČO zákazníka",
     "notificationsSent": "Notifikácie odoslané",

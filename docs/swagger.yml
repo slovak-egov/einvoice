@@ -505,8 +505,8 @@ components:
       type: object
       properties:
         id:
-          type: integer
-          example: 1
+          type: string
+          format: uuid
         sender:
           type: string
           example: SubjectA
@@ -588,7 +588,8 @@ components:
       in: query
       description: Entity id where service start search
       schema:
-        type: integer
+        type: string
+        format: uuid
     InvoiceFormat:
       name: format
       in: query

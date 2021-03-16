@@ -61,7 +61,7 @@ export default () => {
           <Redirect exact from="/invoice-tools" to="/invoice-tools/form" />
           <Route path="/invoice-tools" component={CreateInvoice} />
           <Route exact path="/invoices" component={PublicInvoices} />
-          <Route exact path="/invoices/:id([0-9]+)" component={InvoiceDetail} />
+          <Route exact path="/invoices/:id" component={InvoiceDetail} />
           <Route path="/invoice-documentation" component={InvoiceDocumentation} />
           <Route component={NotFound} />
         </Switch>

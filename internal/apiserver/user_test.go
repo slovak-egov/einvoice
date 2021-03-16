@@ -34,7 +34,10 @@ func TestGetUser(t *testing.T) {
 	}
 	for _, tt := range flagtests {
 		t.Run(tt.name, func(t *testing.T) {
-			req, _ := http.NewRequest("GET", fmt.Sprintf("/users/%d", user.Id), nil)
+			req, err := http.NewRequest("GET", fmt.Sprintf("/users/%d", user.Id), nil)
+			if err != nil {
+				t.Error(err)
+			}
 			response := testutil.ExecuteAuthRequest(a, req, tt.token)
 
 			assert.Equal(t, tt.responseStatus, response.Code)
@@ -81,7 +84,10 @@ func TestPatchUser(t *testing.T) {
 			if err != nil {
 				t.Errorf("Request body serialization failed with error %s", err)
 			}
-			req, _ := http.NewRequest("PATCH", fmt.Sprintf("/users/%d", user.Id), bytes.NewReader(requestBody))
+			req, err := http.NewRequest("PATCH", fmt.Sprintf("/users/%d", user.Id), bytes.NewReader(requestBody))
+			if err != nil {
+				t.Error(err)
+			}
 			response := testutil.ExecuteAuthRequest(a, req, sessionToken)
 
 			assert.Equal(t, http.StatusOK, response.Code)

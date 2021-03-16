@@ -12,11 +12,14 @@ import (
 
 type TestInvoiceOption = func(*entity.Invoice)
 
-func CreateInvoice(ctx goContext.Context, t *testing.T, connector *dbutil.Connector, opts ...TestInvoiceOption) *entity.Invoice {
+func CreateInvoice(
+	ctx goContext.Context, t *testing.T, connector *dbutil.Connector, id string, opts ...TestInvoiceOption,
+) *entity.Invoice {
 	t.Helper()
 
 	user := CreateUser(ctx, t, connector, "")
 	invoice := &entity.Invoice{
+		Id:               id,
 		Sender:           "sender",
 		Receiver:         "receiver",
 		Format:           entity.UblFormat,
@@ -59,11 +62,5 @@ func WithAmountWithoutTax(amount float64) TestInvoiceOption {
 func WithIssueDate(date timeutil.Date) TestInvoiceOption {
 	return func(invoice *entity.Invoice) {
 		invoice.IssueDate = date
-	}
-}
-
-func WithCreatedAt(time time.Time) TestInvoiceOption {
-	return func(invoice *entity.Invoice) {
-		invoice.CreatedAt = time
 	}
 }

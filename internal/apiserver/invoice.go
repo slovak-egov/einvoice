@@ -6,7 +6,6 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"strconv"
 
 	"github.com/gorilla/mux"
 
@@ -16,11 +15,12 @@ import (
 	"github.com/slovak-egov/einvoice/internal/storage"
 	"github.com/slovak-egov/einvoice/pkg/dbutil"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
+	"github.com/slovak-egov/einvoice/pkg/ulid"
 )
 
 type PagedInvoices struct {
 	Invoices []entity.Invoice `json:"invoices"`
-	NextId   *int             `json:"nextId"`
+	NextId   *string          `json:"nextId"`
 }
 
 func NewPagedInvoices(invoices []entity.Invoice, limit int) *PagedInvoices {
@@ -35,12 +35,9 @@ func NewPublicInvoicesOptions(params url.Values, maxLimit int) (*db.PublicInvoic
 	options := &db.PublicInvoicesOptions{
 		Formats: params["format"],
 		Ico:     params.Get("ico"),
+		StartId: params.Get("startId"),
 	}
 	var err error
-	options.StartId, err = getOptionalInt(params.Get("startId"), 0)
-	if err != nil {
-		return nil, fmt.Errorf("startId: %w", err)
-	}
 	options.Limit, err = getOptionalInt(params.Get("limit"), maxLimit)
 	if err != nil {
 		return nil, fmt.Errorf("limit: %w", err)
@@ -104,11 +101,21 @@ func (a *App) getPublicInvoices(res http.ResponseWriter, req *http.Request) erro
 		return err
 	}
 
+	// Add createdAt timestamp for every invoice, createdAt is encoded in ID
+	for i := range invoices {
+		invoices[i].CalculateCreatedAt()
+	}
+
 	handlerutil.RespondWithJSON(res, http.StatusOK, NewPagedInvoices(invoices, requestOptions.Limit))
 	return nil
 }
 
-func (a *App) getInvoiceFromDb(ctx goContext.Context, id int) (*entity.Invoice, error) {
+func (a *App) getInvoiceFromDb(ctx goContext.Context, id string) (*entity.Invoice, error) {
+	// check if ID is valid
+	_, err := ulid.Parse(id)
+	if err != nil {
+		return nil, handlerutil.NewNotFoundError("invoice.id.invalid")
+	}
 	invoice, err := a.db.GetInvoice(ctx, id)
 	if err != nil {
 		if _, ok := err.(*dbutil.NotFoundError); ok {
@@ -119,7 +126,7 @@ func (a *App) getInvoiceFromDb(ctx goContext.Context, id int) (*entity.Invoice, 
 	return invoice, nil
 }
 
-func (a *App) getInvoiceFromStorage(ctx goContext.Context, id int) ([]byte, error) {
+func (a *App) getInvoiceFromStorage(ctx goContext.Context, id string) ([]byte, error) {
 	invoice, err := a.storage.GetInvoice(ctx, id)
 	if err != nil {
 		if _, ok := err.(*storage.NotFoundError); ok {
@@ -131,30 +138,23 @@ func (a *App) getInvoiceFromStorage(ctx goContext.Context, id int) ([]byte, erro
 }
 
 func (a *App) getInvoice(res http.ResponseWriter, req *http.Request) error {
-	vars := mux.Vars(req)
-	id, err := strconv.Atoi(vars["id"])
-	if err != nil {
-		return InvoiceError("param.id.invalid").WithDetail(err)
-	}
-
-	invoice, err := a.getInvoiceFromDb(req.Context(), id)
+	invoice, err := a.getInvoiceFromDb(req.Context(), mux.Vars(req)["id"])
 	if err != nil {
 		return err
 	}
+
+	// Add createdAt timestamp, createdAt is encoded in ID
+	invoice.CalculateCreatedAt()
 
 	handlerutil.RespondWithJSON(res, http.StatusOK, invoice)
 	return nil
 }
 
 func (a *App) getInvoiceXml(res http.ResponseWriter, req *http.Request) error {
-	vars := mux.Vars(req)
-	id, err := strconv.Atoi(vars["id"])
-	if err != nil {
-		return InvoiceError("params.id.invalid")
-	}
+	id := mux.Vars(req)["id"]
 
 	// DB is source of truth, so we have to check if invoice exists in DB
-	_, err = a.getInvoiceFromDb(req.Context(), id)
+	_, err := a.getInvoiceFromDb(req.Context(), id)
 	if err != nil {
 		return err
 	}
@@ -165,21 +165,17 @@ func (a *App) getInvoiceXml(res http.ResponseWriter, req *http.Request) error {
 	}
 
 	res.Header().Set("Content-Type", "application/xml")
-	res.Header().Set("Content-Disposition", "attachment; filename=invoice-"+vars["id"]+".xml")
+	res.Header().Set("Content-Disposition", "attachment; filename=invoice:"+id+".xml")
 	res.WriteHeader(http.StatusOK)
 	_, err = res.Write(invoice)
 	return err
 }
 
 func (a *App) getInvoiceVisualization(res http.ResponseWriter, req *http.Request) error {
-	vars := mux.Vars(req)
-	id, err := strconv.Atoi(vars["id"])
-	if err != nil {
-		return InvoiceError("params.id.invalid")
-	}
+	id := mux.Vars(req)["id"]
 
 	// DB is source of truth, so we have to check if invoice exists in DB
-	_, err = a.getInvoiceFromDb(req.Context(), id)
+	_, err := a.getInvoiceFromDb(req.Context(), id)
 	if err != nil {
 		return err
 	}
@@ -195,7 +191,7 @@ func (a *App) getInvoiceVisualization(res http.ResponseWriter, req *http.Request
 	}
 
 	res.Header().Set("Content-Type", "application/zip")
-	res.Header().Set("Content-Disposition", "attachment; filename=invoice-"+vars["id"]+".zip")
+	res.Header().Set("Content-Disposition", "attachment; filename=invoice:"+id+".zip")
 	res.WriteHeader(http.StatusOK)
 	_, err = io.Copy(res, data)
 	return err
@@ -230,6 +226,11 @@ func (a *App) getUserInvoices(res http.ResponseWriter, req *http.Request) error 
 	invoices, err := a.db.GetUserInvoices(req.Context(), requestOptions)
 	if err != nil {
 		return err
+	}
+
+	// Add createdAt timestamp for every invoice, createdAt is encoded in ID
+	for i := range invoices {
+		invoices[i].CalculateCreatedAt()
 	}
 
 	handlerutil.RespondWithJSON(res, http.StatusOK, NewPagedInvoices(invoices, requestOptions.Limit))
