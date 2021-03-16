@@ -4427,6 +4427,7 @@
                   "en": "Currency",
                   "sk": "TBD"
                 },
+                "dataType": "Code",
                 "codeLists": [
                   "ISO4217"
                 ]
