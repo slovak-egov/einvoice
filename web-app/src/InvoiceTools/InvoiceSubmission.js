@@ -1,7 +1,7 @@
 import {useCallback} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {useHistory} from 'react-router-dom'
-import {Card, Col, Form, FormCheck, Row} from 'react-bootstrap'
+import {Col, Form, FormCheck, Row} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import save from 'save-file'
 import {Button} from '../helpers/idsk'
@@ -55,65 +55,61 @@ export default ({showSubmission, title}) => {
   const getRawInvoice = useCallback(() => save(invoice), [invoice])
 
   return (
-    <Card className="m-1">
-      <Card.Header className="bg-primary text-white text-center" as="h3">
-        {t(title)}
-      </Card.Header>
-      <Card.Body>
-        <Row>
+    <>
+      <h1 className="govuk-heading-l">{t(title)}</h1>
+      <Row>
+        <Col sm>
+          <Form.Group>
+            <Form.Label>{t('invoiceTypes.invoice')}</Form.Label>
+            <div>
+              <FileUploader
+                file={invoice?.name}
+                accept=".xml"
+                buttonStyle={{margin: 0}}
+                buttonText={t('upload')}
+                uploadFile={updateInvoiceData}
+                deleteFile={clearInvoiceData}
+              />
+            </div>
+          </Form.Group>
+        </Col>
+        {showSubmission && <>
           <Col sm>
             <Form.Group>
-              <Form.Label>{t('invoiceTypes.invoice')}</Form.Label>
-              <div>
-                <FileUploader
-                  fileName={invoice?.name}
-                  accept=".xml"
-                  buttonStyle={{margin: 0}}
-                  buttonText={t('upload')}
-                  uploadFile={updateInvoiceData}
-                  deleteFile={clearInvoiceData}
-                />
-              </div>
+              <Form.Label>Test</Form.Label>
+              <FormCheck
+                type="checkbox"
+                checked={test}
+                onChange={toggleTest}
+              />
             </Form.Group>
           </Col>
-          {showSubmission && <>
-            <Col sm>
-              <Form.Group>
-                <Form.Label>Test</Form.Label>
-                <FormCheck
-                  type="checkbox"
-                  checked={test}
-                  onChange={toggleTest}
-                />
-              </Form.Group>
-            </Col>
-          </>}
-        </Row>
-        <div className="govuk-button-group" style={{justifyContent: 'center'}}>
-          <Button
-            className="govuk-button--secondary"
-            onClick={getRawInvoice}
-            disabled={!invoice}
-          >
-            {t('download')} XML
-          </Button>
-          <Button
-            className="govuk-button--secondary"
-            onClick={visualizeInvoice}
-            disabled={!invoice}
-          >
-            {t('downloadVisualization')}
-          </Button>
-          {showSubmission && <ConfirmationButton
-            onClick={submitInvoice}
-            confirmationTitle={t('confirmationQuestions.submitInvoice.title')}
-            confirmationText={t('confirmationQuestions.submitInvoice.text')}
-            disabled={!invoice}
-          >
-            {t('submit')}
-          </ConfirmationButton>}
-        </div>
-      </Card.Body>
-    </Card>
+        </>}
+      </Row>
+      <div className="govuk-button-group">
+        <Button
+          className="govuk-button--secondary"
+          onClick={getRawInvoice}
+          disabled={!invoice}
+        >
+          {t('download')} XML
+        </Button>
+        <Button
+          className="govuk-button--secondary"
+          onClick={visualizeInvoice}
+          disabled={!invoice}
+        >
+          {t('downloadVisualization')}
+        </Button>
+        {showSubmission && <ConfirmationButton
+          onClick={submitInvoice}
+          confirmationTitle={t('confirmationQuestions.submitInvoice.title')}
+          confirmationText={t('confirmationQuestions.submitInvoice.text')}
+          disabled={!invoice}
+        >
+          {t('submit')}
+        </ConfirmationButton>}
+      </div>
+    </>
   )
 }

@@ -2,7 +2,7 @@ import {useCallback, useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {useHistory} from 'react-router-dom'
 import {useTranslation} from 'react-i18next'
-import {Card, Col, Form, Row} from 'react-bootstrap'
+import {Form} from 'react-bootstrap'
 import {get} from 'lodash'
 import {Button} from '../../helpers/idsk'
 import TagGroup from './TagGroup'
@@ -97,38 +97,30 @@ export default () => {
   const allLoaded = areCodeListsLoaded && isDocsLoaded && isFormLoaded
 
   return (
-    <Card className="m-1">
-      <Card.Header className="bg-primary text-center" as="h3">
-        <Row className="d-block d-sm-none text-white">{t('form')}</Row>
-        <Row className="mb-0">
-          <Col>
-            <Form.Control
-              as="select"
-              className="w-auto"
-              value={formType}
-              onChange={changeFormType}
-            >
-              {Object.values(invoiceTypes).map((type) => (
-                <option key={type} value={type}>{t(`invoiceTypes.${type}`)}</option>
-              ))}
-            </Form.Control>
-          </Col>
-          <Col className="d-none d-sm-block text-white">{t('form')}</Col>
-          <Col className="d-flex">
-            <ConfirmationButton
-              variant="danger"
-              className="ml-auto govuk-button--warning"
-              confirmationTitle={t('confirmationQuestions.resetForm.title')}
-              confirmationText={t('confirmationQuestions.resetForm.text')}
-              onClick={resetForm}
-            >
-              {t('reset')}
-            </ConfirmationButton>
-          </Col>
-        </Row>
-      </Card.Header>
+    <>
+      <div className="govuk-button-group">
+        <h1 className="govuk-heading-l">{t('form')}</h1>
+        <ConfirmationButton
+          className="ml-auto govuk-button--warning"
+          confirmationTitle={t('confirmationQuestions.resetForm.title')}
+          confirmationText={t('confirmationQuestions.resetForm.text')}
+          onClick={resetForm}
+        >
+          {t('reset')}
+        </ConfirmationButton>
+      </div>
+      <Form.Control
+        as="select"
+        className="w-auto"
+        value={formType}
+        onChange={changeFormType}
+      >
+        {Object.values(invoiceTypes).map((type) => (
+          <option key={type} value={type}>{t(`invoiceTypes.${type}`)}</option>
+        ))}
+      </Form.Control>
       {/*Render once data are loaded*/}
-      {allLoaded && <Card.Body>
+      {allLoaded && <>
         <TagGroup
           path={invoiceTypeData[formType].rootPath}
           formData={get(formData, invoiceTypeData[formType].rootPath)}
@@ -150,7 +142,7 @@ export default () => {
             {t('generateInvoice')}
           </Button>
         </div>
-      </Card.Body>}
-    </Card>
+      </>}
+    </>
   )
 }

@@ -1,6 +1,6 @@
 import {useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
-import {Card, Col, Form, Row} from 'react-bootstrap'
+import {Col, Form, Row} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import {format as formatDate, parseISO} from 'date-fns'
 import {Button} from '../helpers/idsk'
@@ -53,15 +53,12 @@ export default ({history, match: {params: {id}}}) => {
   } = invoice
 
   return (
-    <Card className="m-1">
-      <Card.Header className="bg-primary text-white text-center d-sm-flex" as="h3">
-        <Col />
-        <Col>{t('invoiceTypes.invoice')}</Col>
-        <Col className="d-sm-flex">
-          <Button className="ml-auto govuk-button--warning" onClick={history.goBack}>{t('close')}</Button>
-        </Col>
-      </Card.Header>
-      <Card.Body>
+    <>
+      <div className="govuk-back-link" onClick={history.goBack} style={{cursor: 'pointer'}}>
+        {t('back')}
+      </div>
+      <>
+        <h1 className="govuk-heading-l">{t('invoiceTypes.invoice')}</h1>
         <div>
           <Row>
             <Col>
@@ -123,7 +120,7 @@ export default ({history, match: {params: {id}}}) => {
             {`${t('download')} ZIP`}
           </Button>
         </div>
-      </Card.Body>
-    </Card>
+      </>
+    </>
   )
 }

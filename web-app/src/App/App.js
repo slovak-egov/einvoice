@@ -10,7 +10,7 @@ import LandingPage from '../LandingPage'
 import FAQ from '../LandingPage/FAQ'
 import TopBar from '../TopBar'
 import Footer from '../Footer'
-import CreateInvoice from '../CreateInvoice'
+import InvoiceTools from '../InvoiceTools'
 import InvoiceDetail from '../InvoiceDetail'
 import AccountSettings from '../AccountSettings'
 import {AuthRoute} from '../helpers/Auth'
@@ -59,7 +59,7 @@ export default () => {
             <MyInvoices />
           </AuthRoute>
           <Redirect exact from="/invoice-tools" to="/invoice-tools/form" />
-          <Route path="/invoice-tools" component={CreateInvoice} />
+          <Route path="/invoice-tools" component={InvoiceTools} />
           <Route exact path="/invoices" component={PublicInvoices} />
           <Route exact path="/invoices/:id" component={InvoiceDetail} />
           <Route path="/invoiceDocumentation" component={InvoiceDocumentation} />
