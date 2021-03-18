@@ -101,3 +101,9 @@ $govuk-assets-path: "~@id-sk/frontend/govuk/assets/";
     }
   }
 }
+
+.d-none-mobile {
+  @include govuk-media-query($until: tablet) {
+    display: none;
+  }
+}

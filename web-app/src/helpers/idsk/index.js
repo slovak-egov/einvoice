@@ -1,3 +1,5 @@
 export {default as Breadcrumb} from './Breadcrumb'
 export {default as Button} from './Button'
+export {default as CrossRoads} from './CrossRoads'
 export {default as Link} from './Link'
+export {default as Table} from './Table'

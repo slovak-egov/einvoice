@@ -1,5 +1,5 @@
 import {useSelector} from 'react-redux'
-import {Card, Col, Row} from 'react-bootstrap'
+import {Col, Row} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import NotFound from '../../../helpers/NotFound'
 import {ubl21RuleSelector} from '../../../cache/documentation/state'
@@ -14,28 +14,24 @@ export default ({match}) => {
   if (rule == null) return <NotFound />
 
   return (
-    <Card>
-      <Card.Header className="bg-primary text-white text-center" as="h3">
-        {ruleId}
-      </Card.Header>
-      <Card.Body>
-        <Row>
-          <Col className="font-weight-bold" sm="3">{t('invoiceDocs.rules.message')}</Col>
-          <Col sm="9">{rule.message[i18n.language]}</Col>
-        </Row>
-        <Row>
-          <Col className="font-weight-bold" sm="3">{t('invoiceDocs.rules.context')}</Col>
-          <Col sm="9"><code>{rule.context}</code></Col>
-        </Row>
-        <Row>
-          <Col className="font-weight-bold" sm="3">{t('invoiceDocs.rules.test')}</Col>
-          <Col sm="9"><code>{rule.test}</code></Col>
-        </Row>
-        <Row>
-          <Col className="font-weight-bold" sm="3">{t('invoiceDocs.rules.flag')}</Col>
-          <Col sm="9">{t(`invoiceDocs.rules.flags.${rule.flag}`)}</Col>
-        </Row>
-      </Card.Body>
-    </Card>
+    <>
+      <h1 className="govuk-heading-l">{ruleId}</h1>
+      <Row>
+        <Col className="font-weight-bold" sm="3">{t('invoiceDocs.rules.message')}</Col>
+        <Col sm="9">{rule.message[i18n.language]}</Col>
+      </Row>
+      <Row>
+        <Col className="font-weight-bold" sm="3">{t('invoiceDocs.rules.context')}</Col>
+        <Col sm="9"><code>{rule.context}</code></Col>
+      </Row>
+      <Row>
+        <Col className="font-weight-bold" sm="3">{t('invoiceDocs.rules.test')}</Col>
+        <Col sm="9"><code>{rule.test}</code></Col>
+      </Row>
+      <Row>
+        <Col className="font-weight-bold" sm="3">{t('invoiceDocs.rules.flag')}</Col>
+        <Col sm="9">{t(`invoiceDocs.rules.flags.${rule.flag}`)}</Col>
+      </Row>
+    </>
   )
 }
