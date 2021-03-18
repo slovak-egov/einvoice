@@ -1,9 +1,9 @@
 import {useCallback, useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {useTranslation} from 'react-i18next'
-import {Table} from 'react-bootstrap'
 import {useHistory} from 'react-router-dom'
 import {format as formatDate, parseISO} from 'date-fns'
+import {Table} from '../../helpers/idsk'
 import {draftsSelector} from '../../cache/drafts/state'
 import {deleteDraft, getDrafts} from '../../cache/drafts/actions'
 import {initializeDraftForm} from '../form/actions'
@@ -27,27 +27,29 @@ export default () => {
     }, [dispatch]
   )
 
+  // Data is still loading
+  if (drafts == null) return null
+
   return (
     <>
       <h1 className="govuk-heading-l">{t('drafts')}</h1>
-      <Table striped hover responsive size="sm">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>{t('invoiceDocs.name')}</th>
-            <th className="d-none d-md-table-cell">{t('invoice.uploadedAt')}</th>
-            <th />
-          </tr>
-        </thead>
-        <tbody>
-          {drafts && drafts.map((draft, i) => (
-            <tr key={i}>
-              <td>{i + 1}</td>
-              <td>{draft.name}</td>
-              <td className="d-none d-md-table-cell">
-                {formatDate(parseISO(draft.createdAt), 'yyyy-MM-dd HH:mm')}
-              </td>
-              <td className="govuk-button-group" style={{float: 'right', marginRight: '0'}}>
+      <Table
+        head={[
+          {children: '#'},
+          {children: t('invoiceDocs.name')},
+          {children: t('invoice.uploadedAt'), className: 'd-none-mobile'},
+          {children: ''},
+        ]}
+        rows={drafts.map((draft, i) => [
+          {children: i + 1},
+          {children: draft.name},
+          {
+            children: formatDate(parseISO(draft.createdAt), 'yyyy-MM-dd HH:mm'),
+            className: 'd-none-mobile',
+          },
+          {
+            children: (
+              <>
                 <ConfirmationButton
                   onClick={() => openDraft(draft.id)}
                   confirmationTitle={t('confirmationQuestions.openDraft.title')}
@@ -63,11 +65,11 @@ export default () => {
                 >
                   {t('delete')}
                 </ConfirmationButton>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+              </>
+            ),
+          },
+        ])}
+      />
     </>
   )
 }

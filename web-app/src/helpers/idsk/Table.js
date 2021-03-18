@@ -28,8 +28,8 @@ const Header = ({head}) => (
   </thead>
 )
 
-export default ({className, firstCellIsHeader, head, rows, ...props}) => {
-  return (
+export default ({className, firstCellIsHeader, head, rows, ...props}) => (
+  <div style={{overflowX: 'auto'}}>
     <table className={classNames('govuk-table', className)} {...props}>
       {head && <Header head={head} />}
       <tbody className="govuk-table__body">
@@ -71,5 +71,5 @@ export default ({className, firstCellIsHeader, head, rows, ...props}) => {
         ))}
       </tbody>
     </table>
-  )
-}
+  </div>
+)
