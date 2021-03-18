@@ -78,3 +78,26 @@ $govuk-assets-path: "~@id-sk/frontend/govuk/assets/";
     }
   }
 }
+
+// Missing class in https://github.com/alphagov/govuk-frontend/blob/803da2c92d1a73401ac506b2dc8a393fae940508/src/govuk/components/breadcrumbs/_index.scss
+.govuk-breadcrumbs--collapse-on-mobile {
+  @include govuk-media-query($until: tablet) {
+    .govuk-breadcrumbs__list-item {
+      display: none;
+
+      &:first-child,
+      &:last-child {
+        display: inline-block;
+      }
+
+      &:before {
+        top: 6px;
+        margin: 0;
+      }
+    }
+
+    .govuk-breadcrumbs__list {
+      display: flex;
+    }
+  }
+}

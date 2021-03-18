@@ -1,48 +1,50 @@
-import {Link, Route, Switch, useLocation} from 'react-router-dom'
-import {Breadcrumb} from 'react-bootstrap'
+import {useMemo} from 'react'
+import {Route, Switch} from 'react-router-dom'
 import {useTranslation} from 'react-i18next'
+import {Breadcrumb} from '../helpers/idsk'
 import Syntax from './ubl2.1/syntax'
 import BusinessTerms from './businessTerms'
 import Home from './Home'
 import CodeLists from './codeLists'
 import Rules from './ubl2.1/rules'
 
-const UrlBreadcrumbItems = () => {
-  const {t} = useTranslation('common')
-  const location = useLocation()
-
+const getBreadcrumbItems = ({t, pathname}) => {
   let currentPrefix = ''
-  const urlParts = location.pathname.slice(1).split('/')
-
   const result = []
+  const urlParts = pathname.slice(1).split('/')
+
   for (const [i, part] of urlParts.entries()) {
     currentPrefix = `${currentPrefix}/${part}`
-    result.push(
-      <Breadcrumb.Item
-        key={i}
-        linkAs={Link}
-        linkProps={{to: currentPrefix}}
-        active={i === urlParts.length - 1}
-      >
-        {i > 1 ? part : t(`invoiceDocs.${part}`)}
-      </Breadcrumb.Item>
-    )
+    result.push({
+      children: i > 1 ? part : t(`invoiceDocs.${part}`),
+      to: i !== urlParts.length - 1 && currentPrefix,
+    })
   }
+
   return result
 }
 
-export default ({match}) => (
-  <div className="m-1">
-    <Breadcrumb>
-      <UrlBreadcrumbItems />
-    </Breadcrumb>
-    <Switch>
-      <Route path={`${match.url}/ublInvoice`} component={Syntax} />
-      <Route path={`${match.url}/ublCreditNote`} component={Syntax} />
-      <Route path={`${match.url}/businessTerms`} component={BusinessTerms} />
-      <Route path={`${match.url}/codeLists`} component={CodeLists} />
-      <Route path={`${match.url}/ublRules`} component={Rules} />
-      <Route component={Home} />
-    </Switch>
-  </div>
-)
+export default ({location, match}) => {
+  const {t} = useTranslation('common')
+  const breadcrumbItems = useMemo(
+    () => getBreadcrumbItems({t, pathname: location.pathname}),
+    [location.pathname, t],
+  )
+
+  return (
+    <div className="m-1">
+      <Breadcrumb
+        collapseOnMobile
+        items={breadcrumbItems}
+      />
+      <Switch>
+        <Route path={`${match.url}/ublInvoice`} component={Syntax} />
+        <Route path={`${match.url}/ublCreditNote`} component={Syntax} />
+        <Route path={`${match.url}/businessTerms`} component={BusinessTerms} />
+        <Route path={`${match.url}/codeLists`} component={CodeLists} />
+        <Route path={`${match.url}/ublRules`} component={Rules} />
+        <Route component={Home} />
+      </Switch>
+    </div>
+  )
+}
