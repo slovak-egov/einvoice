@@ -102,6 +102,11 @@ $govuk-assets-path: "~@id-sk/frontend/govuk/assets/";
   }
 }
 
+// Temporary fix until translations are available
+.govuk-accordion__open-all {
+  display: none !important;
+}
+
 .d-none-mobile {
   @include govuk-media-query($until: tablet) {
     display: none;
