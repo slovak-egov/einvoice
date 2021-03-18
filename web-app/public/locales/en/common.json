@@ -172,5 +172,10 @@
   "drafts": "Drafts",
   "open": "Open",
   "saveAsDraft": "Save as draft",
-  "createDraft": "Create draft"
+  "createDraft": "Create draft",
+  "footer": [
+    "Created inline with the",
+    "Single Design manual of electronic services.",
+    "The site is operated by the Ministry of Finance of the Slovak Republic."
+  ]
 }

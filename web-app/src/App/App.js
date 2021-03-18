@@ -9,10 +9,10 @@ import MyInvoices from '../MyInvoices'
 import LandingPage from '../LandingPage'
 import FAQ from '../LandingPage/FAQ'
 import TopBar from '../TopBar'
-import Footer from '../Footer'
 import InvoiceTools from '../InvoiceTools'
 import InvoiceDetail from '../InvoiceDetail'
 import AccountSettings from '../AccountSettings'
+import {Footer} from '../helpers/idsk'
 import {AuthRoute} from '../helpers/Auth'
 import LoadingModal from '../helpers/LoadingModal'
 import NotFound from '../helpers/NotFound'
@@ -23,6 +23,12 @@ import {getMyInfo} from '../cache/users/actions'
 
 // Load slovak translations for time
 registerLocale('sk', sk)
+
+const footerNavigation = [
+  {title: 'FAQ', to: '/faq'},
+  {title: 'invoiceDocumentation', to: '/invoiceDocumentation'},
+  {title: 'Github', href: 'https://github.com/slovak-egov/einvoice', target: '_blank'},
+]
 
 export default () => {
   const isLoading = useSelector(isLoadingSelector)
@@ -67,7 +73,7 @@ export default () => {
         </Switch>
       </div>
       {isLoading && <LoadingModal />}
-      <Footer />
+      <Footer navigation={footerNavigation} />
     </div>
   )
 }

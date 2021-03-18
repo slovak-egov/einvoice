@@ -172,5 +172,10 @@
   "drafts": "Koncepty",
   "open": "Otvoriť",
   "saveAsDraft": "Uložiť ako koncept",
-  "createDraft": "Vytvoriť koncept"
+  "createDraft": "Vytvoriť koncept",
+  "footer": [
+    "Vytvorené v súlade s",
+    "Jednotným dizajn manuálom elektronických služieb",
+    "Prevádzkovateľom služby je Ministerstvo financií Slovenskej republiky."
+  ]
 }
