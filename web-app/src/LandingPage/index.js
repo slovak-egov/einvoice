@@ -1,5 +1,12 @@
 import {useTranslation} from 'react-i18next'
+import {PhaseBanner} from '../helpers/idsk'
 import {exampleInvoiceUrl, invoiceFormats, swaggerUrl} from '../utils/constants'
+
+const getPhase = (hostname) => {
+  if (hostname.startsWith('dev')) return 'dev'
+  else if (hostname.startsWith('fix')) return 'fix'
+  else return null
+}
 
 const Announcement = ({children, title}) => (
   <>
@@ -11,11 +18,17 @@ const Announcement = ({children, title}) => (
 
 export default () => {
   const {t} = useTranslation('LandingPage')
+  const phase = getPhase(window.location.hostname)
   return (
     <>
+      {phase && <PhaseBanner
+        tag={{
+          children: phase,
+        }}
+      >
+        {t(`phase.${phase}`)}
+      </PhaseBanner>}
       <h1 className="govuk-heading-xl">{t('title')}</h1>
-      {window.location.hostname.startsWith('dev') && <h2 className="text-danger">{t('devVersion')}</h2>}
-      {window.location.hostname.startsWith('fix') && <h2 className="text-danger">{t('fixVersion')}</h2>}
       <div>
         <span>{t('introduction')}:</span>
         <ol>
