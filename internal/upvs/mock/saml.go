@@ -10,12 +10,12 @@ import (
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
-var users = map[string]string{
-	"rc://sk/8314451298_tisici_janko": "./internal/upvs/mock/data/userJankoTisici.json",
-	"ico://sk/11190993":               "./internal/upvs/mock/data/userPO190993.json",
+var usersSaml = map[string]string{
+	"rc://sk/8314451298_tisici_janko": "./internal/upvs/mock/data/samlJankoTisici.xml",
+	"ico://sk/11190993":               "./internal/upvs/mock/data/samlPO190993.xml",
 }
 
-func (a *App) handleUserInfo(res http.ResponseWriter, req *http.Request) error {
+func (a *App) handleSaml(res http.ResponseWriter, req *http.Request) error {
 	header := req.Header.Get("Authorization")
 	parts := strings.Split(header, " ")
 
@@ -64,7 +64,7 @@ func (a *App) handleUserInfo(res http.ResponseWriter, req *http.Request) error {
 	}
 
 	sub := oboClaims["sub"].(string)
-	userFile, ok := users[sub]
+	userFile, ok := usersSaml[sub]
 	if !ok {
 		return handlerutil.NewAuthorizationError("user.unknown")
 	}

@@ -1,0 +1,155 @@
+<saml:Assertion ID="id-xdgRU8YCogeW93aus4bt7coqKO80Q5KTj-DN25qp" IssueInstant="2021-03-18T09:43:05Z" Version="2.0" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://auth.vyvoj.upvs.globaltel.sk/oam/fed</saml:Issuer>
+    <dsig:Signature>
+        <dsig:SignedInfo>
+            <dsig:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+            <dsig:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+            <dsig:Reference URI="#id-xdgRU8YCogeW93aus4bt7coqKO80Q5KTj-DN25qp">
+                <dsig:Transforms>
+                    <dsig:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+                    <dsig:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+                </dsig:Transforms>
+                <dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+                <dsig:DigestValue>dWndtqe2WpKjOT4b4D4oBvScfxX3M8aoDXBT1NSpDv8=</dsig:DigestValue>
+            </dsig:Reference>
+        </dsig:SignedInfo>
+        <dsig:SignatureValue>dLmm3I91fA7btH+gyGNsfAPtgTPLobexpnC+T+B9YdMjj79dq1HYMZ6gTfbUMUaKkt46vDzTqb3fz+hEbVRUI7HYaU9yU6T3c8LmbM3Ul2L6tDUJIMoVLk5a4HwOoZ1+3mjMFydyrXKwLvmN7KSWGlALJWhhqu3KEBz4nBCv50Mww3WZ2O5tzpIW3iCfCCa2JoXCtuVqiwVre+V2DisPcoeLGER2+1L1ISHkN6BQ3YHrDQN4EkDP+qEQBuuXWZfE/ZW/wJqpjHe57itnHWAIJblaHEtLULJzImrojQMV1hcTb40JeIN12bR+ssz5TDyCRxfYIcm7/uNNK3KBA/aCvg==</dsig:SignatureValue>
+        <dsig:KeyInfo>
+            <dsig:X509Data>
+                <dsig:X509Certificate>MIIDZDCCAkygAwIBAgIKfc3CAAAAAAADYzANBgkqhkiG9w0BAQsFADAaMRgwFgYDVQQDEw9jYS5zbG92ZW5za28uc2swHhcNMjAwOTE2MDYyMzIwWhcNMjMwOTE2MDYzMzIwWjAtMQswCQYDVQQGEwJTSzEeMBwGA1UEAxMVaWRwLnVwdnNwLXZ5dm9qLmxvY2FsMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsxD6+U8Mbdfm/JwIjramYRBVknWnOIm98FRWJNNWuFOR9+J6+7ocfT+7iF4TkxTXgF+UukI63qPy2WcJA6iZcGuVwmwtC1jYtkrzayKgAG0Ql6fnuWTnAowA8kZyxo2abLWlorrd69wd1Yath5w3JxfR7iVwEwxvZ+dzQKhi0LJg1jMgMvBIX/Kb+q0396nT25KXf3VfPe5Wua7HAKIJLL5vlrH20eTDO5HwrFVFS5rGJ2ZmDvkJ4TmR7Q7kmxJg0nx/IfwkmAzXplMCPduiNzTiwW3gkcu8s0Hikz3zMwikzE5atvNlBqU4m1Yevz73P6BTJP79SL9xEJ8amOJFhwIDAQABo4GYMIGVMA4GA1UdDwEB/wQEAwIE8DATBgNVHSUEDDAKBggrBgEFBQcDAjAdBgNVHQ4EFgQUZjkDb0g02Cl3ZooGOqddmbuenzkwHwYDVR0jBBgwFoAUKlO3Thprk0Xf6VQr2tu4TpoSzoYwDAYDVR0TAQH/BAIwADAgBgNVHREEGTAXghVpZHAudXB2c3Atdnl2b2oubG9jYWwwDQYJKoZIhvcNAQELBQADggEBAE9VgxMT8WMnvwuLpl3nl46yZ0CODngg1tv+kTxe55TmstJDe3/ECwUQaKdJdfIWiBvStozZyQptDoi4vqmXeCykUp+Tfw6WOEq11c849rACTjbnINhIBvUVpqPvWWUUXyjhAuXqM+lxsSOpeLBUoUWcnhce/VBfx6qsdvZOOdscsl4eQbspAlhcA8Aq+zZQQYhjpLysymyFWi+ZPcYUMfPse3iDhS3m2hxWFqEc+xJjeFF/c028byvuXH6sWBUMosocRTsVbGs9aLDaBxoO/ILcavcytXlB6iXJnkC9QFNqorkCKYrKMaTqs5ED9qBApVEY8FdeNnbF9lyoE528NZA=</dsig:X509Certificate>
+            </dsig:X509Data>
+        </dsig:KeyInfo>
+    </dsig:Signature>
+    <saml:Subject>
+        <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient" NameQualifier="https://auth.vyvoj.upvs.globaltel.sk/oam/fed" SPNameQualifier="https://dev.upvs.einvoice.mfsr.sk">id-48whT-9-mixkLeumAICpOJwu1MW0ei-zSIMXRAGJ</saml:NameID>
+        <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
+            <saml:SubjectConfirmationData InResponseTo="_9b860871-9b51-4e43-b07b-87857e096d18" NotOnOrAfter="2021-03-18T10:03:05Z" Recipient="https://dev.upvs.einvoice.mfsr.sk/auth/saml/callback"/>
+        </saml:SubjectConfirmation>
+    </saml:Subject>
+    <saml:Conditions NotBefore="2021-03-18T09:43:05Z" NotOnOrAfter="2021-03-18T10:03:05Z">
+        <saml:AudienceRestriction>
+            <saml:Audience>https://dev.upvs.einvoice.mfsr.sk</saml:Audience>
+        </saml:AudienceRestriction>
+    </saml:Conditions>
+    <saml:AuthnStatement AuthnInstant="2021-03-18T09:43:05Z" SessionIndex="id-nt-5rp5fJ4pdJsxQto3ZClJ8GZOwinahc23lHpx-" SessionNotOnOrAfter="2021-03-18T10:03:05Z">
+        <saml:AuthnContext>
+            <saml:AuthnContextClassRef>urn:upvs:qaalevel:1</saml:AuthnContextClassRef>
+        </saml:AuthnContext>
+    </saml:AuthnStatement>
+    <saml:AttributeStatement>
+        <saml:Attribute Name="DerivedFromID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xsi:nil="true"/>
+        </saml:Attribute>
+        <saml:Attribute Name="SubjectIDSector" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">SECTOR_UPVS</saml:AttributeValue>
+        </saml:Attribute>
+        <saml:Attribute Name="Actor.AuthResourceType" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">1</saml:AttributeValue>
+        </saml:Attribute>
+        <saml:Attribute Name="Actor.AuthResourceSubType" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"/>
+        </saml:Attribute>
+        <saml:Attribute Name="Subject.FormattedName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">PO 190993</saml:AttributeValue>
+        </saml:Attribute>
+        <saml:Attribute Name="QAALevel" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">1</saml:AttributeValue>
+        </saml:Attribute>
+        <saml:Attribute Name="SubjectID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">ico://sk/11190993</saml:AttributeValue>
+        </saml:Attribute>
+        <saml:Attribute Name="AssertionType" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">WEBSSO</saml:AttributeValue>
+        </saml:Attribute>
+        <saml:Attribute Name="Subject.eDeskRemoteURI" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"/>
+        </saml:Attribute>
+        <saml:Attribute Name="DelegationMediatorID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">10018882</saml:AttributeValue>
+        </saml:Attribute>
+        <saml:Attribute Name="Subject.IdentityType" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">2</saml:AttributeValue>
+        </saml:Attribute>
+        <saml:Attribute Name="Actor.PCO" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">8314451298</saml:AttributeValue>
+        </saml:Attribute>
+        <saml:Attribute Name="Subject.FirstName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"/>
+        </saml:Attribute>
+        <saml:Attribute Name="Actor.FormattedName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">Janko Tisíci</saml:AttributeValue>
+        </saml:Attribute>
+        <saml:Attribute Name="Subject.PCO" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"/>
+        </saml:Attribute>
+        <saml:Attribute Name="Subject.TerminationDate" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"/>
+        </saml:Attribute>
+        <saml:Attribute Name="Actor.Username" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">E0000046137</saml:AttributeValue>
+        </saml:Attribute>
+        <saml:Attribute Name="Actor.Email" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"/>
+        </saml:Attribute>
+        <saml:Attribute Name="Actor.LastName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">Tisíci</saml:AttributeValue>
+        </saml:Attribute>
+        <saml:Attribute Name="DelegationType" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">0</saml:AttributeValue>
+        </saml:Attribute>
+        <saml:Attribute Name="Actor.IdentityType" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">1</saml:AttributeValue>
+        </saml:Attribute>
+        <saml:Attribute Name="Actor.FirstName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">Janko</saml:AttributeValue>
+        </saml:Attribute>
+        <saml:Attribute Name="Subject.eDeskStatus" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">DELIVERABLE</saml:AttributeValue>
+        </saml:Attribute>
+        <saml:Attribute Name="Actor.UPVSIdentityID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">2DE0C756-63EA-4B4E-9B38-955453A6A580</saml:AttributeValue>
+        </saml:Attribute>
+        <saml:Attribute Name="Subject.ICO" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">11190993</saml:AttributeValue>
+        </saml:Attribute>
+        <saml:Attribute Name="ActorID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">rc://sk/8314451298_tisici_janko</saml:AttributeValue>
+        </saml:Attribute>
+        <saml:Attribute Name="Subject.UPVSIdentityID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">1C4D51E4-0061-4DFB-A8D8-463F24D89940</saml:AttributeValue>
+        </saml:Attribute>
+        <saml:Attribute Name="Roles" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">R_IAM_SZCO</saml:AttributeValue>
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">R_MDURZ_READER</saml:AttributeValue>
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">R_MDURZ_WRITER</saml:AttributeValue>
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">GR_IAM_LEGAL_ENTITY</saml:AttributeValue>
+        </saml:Attribute>
+        <saml:Attribute Name="Actor.REIdentityId" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"/>
+        </saml:Attribute>
+        <saml:Attribute Name="Subject.PreferredLanguage" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"/>
+        </saml:Attribute>
+        <saml:Attribute Name="Subject.REIdentityId" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">252072</saml:AttributeValue>
+        </saml:Attribute>
+        <saml:Attribute Name="Subject.LastName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"/>
+        </saml:Attribute>
+        <saml:Attribute Name="Actor.PreferredLanguage" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"/>
+        </saml:Attribute>
+        <saml:Attribute Name="Subject.Email" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"/>
+        </saml:Attribute>
+        <saml:Attribute Name="ActorIDSector" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">SECTOR_UPVS</saml:AttributeValue>
+        </saml:Attribute>
+        <saml:Attribute Name="Subject.eDeskNumber" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">E0000079788</saml:AttributeValue>
+        </saml:Attribute>
+        <saml:Attribute Name="DerivedFrom.UPVSIdentityID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"/>
+        </saml:Attribute>
+    </saml:AttributeStatement>
+</saml:Assertion>
