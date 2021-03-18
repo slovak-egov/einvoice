@@ -18,13 +18,18 @@ func (a *App) handleLogin(res http.ResponseWriter, req *http.Request) error {
 		return AuthInvalidTypeError
 	}
 
-	upvsUser, err := a.upvs.GetUser(req.Context(), oboToken.Value)
+	upvsUser, samlToken, err := a.upvs.GetLoggedUserInfo(req.Context(), oboToken.Value)
 	if _, ok := err.(*upvs.InvalidTokenError); ok {
 		return UnauthorizedError
 	} else if _, ok := err.(*upvs.UpvsError); ok {
 		return UpvsError("request.failed")
 	} else if err != nil {
 		return err
+	}
+
+	// Only executive manager can log in as company
+	if samlToken.ActorUPVSIdentityID != samlToken.SubjectUPVSIdentityID && samlToken.DelegationType != 0 {
+		return handlerutil.NewForbiddenError("authorization.upvs.forbiddenSubstitutionType")
 	}
 
 	user, err := a.db.GetOrCreateUser(req.Context(), upvsUser.Uri, upvsUser.Name)

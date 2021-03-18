@@ -30,7 +30,7 @@ func (c *Connector) SendInvoiceNotification(ctx goContext.Context, skTalkMessage
 
 	response, err := c.sendRequest(
 		ctx,
-		&Request{
+		&request{
 			"POST",
 			"/api/sktalk/receive",
 			map[string]string{
