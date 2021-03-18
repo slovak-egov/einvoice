@@ -27,8 +27,9 @@ func (a *App) handleLogin(res http.ResponseWriter, req *http.Request) error {
 		return err
 	}
 
+	// Only executive manager can log in as company
 	if samlToken.ActorUPVSIdentityID != samlToken.SubjectUPVSIdentityID && samlToken.DelegationType != 0 {
-		return handlerutil.NewForbiddenError("authorization.upvs.wrongSubstitutionType")
+		return handlerutil.NewForbiddenError("authorization.upvs.forbiddenSubstitutionType")
 	}
 
 	user, err := a.db.GetOrCreateUser(req.Context(), upvsUser.Uri, upvsUser.Name)

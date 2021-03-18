@@ -33,7 +33,7 @@
 | authorization.apiKey.sign.invalid | 401 | Signature is invalid | |
 | authorization.bearer.invalid | 401 | Cannot parse bearer token | |
 | authorization.upvs.request.failed | 424 | ÚPVS login request failed | |
-| authorization.upvs.wrongSubstitutionType | 403 | ÚPVS delegation type for substitution must be 0 | | 
+| authorization.upvs.forbiddenSubstitutionType | 403 | ÚPVS delegation type for substitution must be 0 | | 
 | invoice.payload.invalid | 400 | Cannot parse data | Error message |
 | invoice.id.invalid | 400 | ID should be in UUID format | Error message |
 | invoice.parsingError | 400 | Cannot parse invoice XML | Error message |
