@@ -60,7 +60,7 @@
     "title": "Processing request"
   },
   "invoiceDocs": {
-    "home": "Home",
+    "invoiceDocumentation": "Documentation",
     "cardinality": {
       "full": "Cardinality",
       "short": "Card"

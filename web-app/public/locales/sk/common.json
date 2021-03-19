@@ -60,7 +60,7 @@
     "title": "Spracúvam žiadosť"
   },
   "invoiceDocs": {
-    "home": "Domov",
+    "invoiceDocumentation": "Dokumentácia",
     "cardinality": {
       "full": "Kardinalita",
       "short": "Kard"

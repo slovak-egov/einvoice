@@ -17,7 +17,7 @@ const Home = ({codeLists}) => {
       <Card.Body>
         <ListGroup>
           {Object.keys(codeLists).map((codeList, index) => (
-            <ListGroup.Item key={index} as={Link} to={`/invoice-documentation/codeLists/${codeList}`} action>
+            <ListGroup.Item key={index} as={Link} to={`/invoiceDocumentation/codeLists/${codeList}`} action>
               {codeList}
             </ListGroup.Item>
           ))}

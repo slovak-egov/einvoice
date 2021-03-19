@@ -9,7 +9,7 @@ export default ({data, identifier}) => {
   return (
     <Card>
       <Card.Header className="bg-primary text-white text-center" as="h3">
-        {data.title}
+        {data.title[i18n.language]}
       </Card.Header>
       <Card.Body>
         <Row>

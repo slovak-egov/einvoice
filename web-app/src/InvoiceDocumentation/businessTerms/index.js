@@ -30,7 +30,7 @@ const Home = ({businessTerms}) => {
                 <td style={{width: '5%'}}>{displayCardinality(term.cardinality)}</td>
                 <td className="w-25">
                   <span>{'• '.repeat(term.level)}</span>
-                  <Link to={`/invoice-documentation/businessTerms/${id}`}>{id}</Link>
+                  <Link to={`/invoiceDocumentation/businessTerms/${id}`}>{id}</Link>
                 </td>
                 <td className="d-none d-sm-table-cell">
                   <strong>{term.name[i18n.language]}</strong>

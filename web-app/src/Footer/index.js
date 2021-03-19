@@ -10,7 +10,7 @@ export default () => {
       <NavLink to="/faq" className="footer-link">
         FAQ
       </NavLink>
-      <NavLink to="/invoice-documentation" className="footer-link">
+      <NavLink to="/invoiceDocumentation" className="footer-link">
         {t('invoiceDocumentation')}
       </NavLink>
       <a href="https://github.com/slovak-egov/einvoice" target="_blank" className="footer-link">
