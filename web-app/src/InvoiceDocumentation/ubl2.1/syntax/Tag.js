@@ -76,7 +76,7 @@ export default ({rootDocs}) => {
             {docs.businessTerms.map((term, i) => (
               <Fragment key={i}>
                 {i !== 0 && <span>, </span>}
-                <Link to={`/invoice-documentation/businessTerms/${term}`}>{term}</Link>
+                <Link to={`/invoiceDocumentation/businessTerms/${term}`}>{term}</Link>
               </Fragment>
             ))}
           </Col>
@@ -87,7 +87,7 @@ export default ({rootDocs}) => {
             {docs.codeLists.map((codeList, i) => (
               <Fragment key={i}>
                 {i !== 0 && <span>, </span>}
-                <Link to={`/invoice-documentation/codeLists/${codeList}`}>{codeList}</Link>
+                <Link to={`/invoiceDocumentation/codeLists/${codeList}`}>{codeList}</Link>
               </Fragment>
             ))}
           </Col>

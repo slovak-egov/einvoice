@@ -62,7 +62,7 @@ export default () => {
           <Route path="/invoice-tools" component={CreateInvoice} />
           <Route exact path="/invoices" component={PublicInvoices} />
           <Route exact path="/invoices/:id" component={InvoiceDetail} />
-          <Route path="/invoice-documentation" component={InvoiceDocumentation} />
+          <Route path="/invoiceDocumentation" component={InvoiceDocumentation} />
           <Route component={NotFound} />
         </Switch>
       </div>

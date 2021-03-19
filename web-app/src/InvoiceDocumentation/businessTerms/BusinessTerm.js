@@ -1,3 +1,4 @@
+import {Fragment} from 'react'
 import {useSelector} from 'react-redux'
 import {useTranslation} from 'react-i18next'
 import {Link} from 'react-router-dom'
@@ -24,7 +25,7 @@ const ChildrenTable = ({childrenIds}) => {
           <tr key={id}>
             <td>{displayCardinality(businessTerms[id].cardinality)}</td>
             <td>
-              <Link to={`/invoice-documentation/businessTerms/${id}`}>{id}</Link>
+              <Link to={`/invoiceDocumentation/businessTerms/${id}`}>{id}</Link>
             </td>
             <td>{businessTerms[id].description[i18n.language]}</td>
           </tr>
@@ -62,10 +63,10 @@ export default ({data, id}) => {
           <Col className="font-weight-bold" sm="3">{t('invoiceDocs.codeLists')}</Col>
           <Col sm="9">
             {data.codeLists.map((codeList, i) => (
-              <>
+              <Fragment key={i}>
                 {i !== 0 && <span>, </span>}
-                <Link key={i} to={`/invoice-documentation/codeLists/${codeList}`}>{codeList}</Link>
-              </>
+                <Link to={`/invoiceDocumentation/codeLists/${codeList}`}>{codeList}</Link>
+              </Fragment>
             ))}
           </Col>
         </Row>}
