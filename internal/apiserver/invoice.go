@@ -33,9 +33,11 @@ func NewPagedInvoices(invoices []entity.Invoice, limit int) *PagedInvoices {
 
 func NewPublicInvoicesOptions(params url.Values, maxLimit int) (*db.PublicInvoicesOptions, error) {
 	options := &db.PublicInvoicesOptions{
-		Formats: params["format"],
-		Ico:     params.Get("ico"),
-		StartId: params.Get("startId"),
+		Formats:      params["format"],
+		Ico:          params.Get("ico"),
+		StartId:      params.Get("startId"),
+		SupplierName: params.Get("supplierName"),
+		CustomerName: params.Get("customerName"),
 	}
 	var err error
 	options.Limit, err = getOptionalInt(params.Get("limit"), maxLimit)

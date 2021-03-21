@@ -29,6 +29,9 @@ export default ({getInvoices}) => {
   const [uploadTimeFrom, setUploadTimeFrom] = useState(parseTime(queryParams.get('uploadTimeFrom')))
   const [uploadTimeTo, setUploadTimeTo] = useState(parseTime(queryParams.get('uploadTimeTo')))
 
+  const [customerName, setCustomerName] = useState(queryParams.get('customerName'))
+  const [supplierName, setSupplierName] = useState(queryParams.get('supplierName'))
+
   const [ico, setIco] = useState(queryParams.get('ico'))
 
   // Triggering search with new filters is done by redirect
@@ -52,11 +55,15 @@ export default ({getInvoices}) => {
       if (uploadTimeFrom != null) newQueryParams.set('uploadTimeFrom', formatTime(uploadTimeFrom))
       if (uploadTimeTo != null) newQueryParams.set('uploadTimeTo', formatTime(uploadTimeTo))
 
+      if (customerName != null) newQueryParams.set('customerName', customerName)
+      if (supplierName != null) newQueryParams.set('supplierName', supplierName)
+
       history.push(`${pathname}?${newQueryParams}`)
     },
     [
       history, ico, pathname, test, amountFrom, amountTo, amountWithoutVatFrom, amountWithoutVatTo,
       issueDateFrom, issueDateTo, uploadTimeFrom, uploadTimeTo, ublFormat, d16bFormat,
+      customerName, supplierName,
     ],
   )
 
@@ -126,6 +133,40 @@ export default ({getInvoices}) => {
                     <InputGroup.Checkbox
                       checked={ico != null}
                       onChange={() => setIco(ico == null ? '' : null)}
+                    />
+                  </InputGroup.Append>
+                </InputGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col md>
+                <strong className="filter-heading">{t('invoice.supplier')}</strong>
+                <InputGroup style={{maxWidth: '230px'}}>
+                  <Form.Control
+                    value={supplierName || ''}
+                    onChange={(e) => setSupplierName(e.target.value)}
+                    readOnly={supplierName == null}
+                  />
+                  <InputGroup.Append>
+                    <InputGroup.Checkbox
+                      checked={supplierName != null}
+                      onChange={() => setSupplierName(supplierName == null ? '' : null)}
+                    />
+                  </InputGroup.Append>
+                </InputGroup>
+              </Col>
+              <Col md>
+                <strong className="filter-heading">{t('invoice.customer')}</strong>
+                <InputGroup style={{maxWidth: '230px'}}>
+                  <Form.Control
+                    value={customerName || ''}
+                    onChange={(e) => setCustomerName(e.target.value)}
+                    readOnly={customerName == null}
+                  />
+                  <InputGroup.Append>
+                    <InputGroup.Checkbox
+                      checked={customerName != null}
+                      onChange={() => setCustomerName(customerName == null ? '' : null)}
                     />
                   </InputGroup.Append>
                 </InputGroup>
