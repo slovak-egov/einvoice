@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/slovak-egov/einvoice/internal/apiserver/invoiceValidator"
 	"github.com/slovak-egov/einvoice/internal/apiserver/metadataExtractor"
+	"github.com/slovak-egov/einvoice/internal/apiserver/rulesValidator"
 	"github.com/slovak-egov/einvoice/internal/db"
 	"github.com/slovak-egov/einvoice/internal/entity"
 	"github.com/slovak-egov/einvoice/pkg/context"
@@ -40,10 +40,10 @@ func (a *App) parseAndValidateInvoice(res http.ResponseWriter, req *http.Request
 		return nil, "", InvoiceError("xsdValidation.failed").WithDetail(err)
 	}
 
-	if err = a.invoiceValidator.Validate(req.Context(), invoice, format, language); err != nil {
-		if _, ok := err.(*invoiceValidator.ValidationError); ok {
+	if err = a.rulesValidator.Validate(req.Context(), invoice, format, language); err != nil {
+		if _, ok := err.(*rulesValidator.ValidationError); ok {
 			return nil, "", InvoiceError("rulesValidation.failed").WithDetail(err)
-		} else if _, ok := err.(*invoiceValidator.RequestError); ok {
+		} else if _, ok := err.(*rulesValidator.RequestError); ok {
 			return nil, "", handlerutil.NewFailedDependencyError("invoice.validation.request.failed")
 		} else {
 			return nil, "", err
