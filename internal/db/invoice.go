@@ -28,6 +28,8 @@ type PublicInvoicesOptions struct {
 	AmountWithoutVat AmountOptions
 	IssueDate        DateOptions
 	CreatedAt        TimeOptions
+	CustomerName     string
+	SupplierName     string
 }
 
 type AmountOptions struct {
@@ -125,6 +127,14 @@ func (o *PublicInvoicesOptions) buildQuery(query *orm.Query) *orm.Query {
 
 	if o.CreatedAt.To != nil {
 		query = query.Where("id <= ?", ulid.NewLast(*o.CreatedAt.To).String())
+	}
+
+	if o.CustomerName != "" {
+		query = query.Where("receiver ILIKE ?", "%"+o.CustomerName+"%")
+	}
+
+	if o.SupplierName != "" {
+		query = query.Where("sender ILIKE ?", "%"+o.SupplierName+"%")
 	}
 
 	return query.Limit(o.Limit + 1)

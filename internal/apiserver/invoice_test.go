@@ -30,6 +30,8 @@ func TestGetInvoices(t *testing.T) {
 		testutil.WithAmount(100),
 		testutil.WithAmountWithoutTax(50),
 		testutil.WithIssueDate(timeutil.Date{time.Date(2021, 1, 1, 0, 0, 0, 0, time.UTC)}),
+		testutil.WithCustomerName("Customer 1"),
+		testutil.WithSupplierName("Supplier 1"),
 	)
 	testutil.CreateInvoice(
 		ctx, t, a.db.Connector, ids[1],
@@ -37,12 +39,16 @@ func TestGetInvoices(t *testing.T) {
 		testutil.WithAmount(200),
 		testutil.WithAmountWithoutTax(150),
 		testutil.WithIssueDate(timeutil.Date{time.Date(2021, 1, 2, 0, 0, 0, 0, time.UTC)}),
+		testutil.WithCustomerName("Customer 2"),
+		testutil.WithSupplierName("Supplier 2"),
 	)
 	testutil.CreateInvoice(
 		ctx, t, a.db.Connector, ids[2],
 		testutil.WithAmount(300),
 		testutil.WithAmountWithoutTax(250),
 		testutil.WithIssueDate(timeutil.Date{time.Date(2021, 1, 3, 0, 0, 0, 0, time.UTC)}),
+		testutil.WithCustomerName("Customer 3"),
+		testutil.WithSupplierName("Supplier 3"),
 	)
 
 	var flagtests = []struct {
@@ -81,6 +87,14 @@ func TestGetInvoices(t *testing.T) {
 			[]string{ids[1]},
 			nil,
 		},
+		{"?test=true&customerName=cust", []string{ids[2], ids[1], ids[0]}, nil},
+		{"?test=true&customerName=tome", []string{ids[2], ids[1], ids[0]}, nil},
+		{"?test=true&customerName=mer%202", []string{ids[1]}, nil},
+		{"?test=true&customerName=x", []string{}, nil},
+		{"?test=true&supplierName=supp", []string{ids[2], ids[1], ids[0]}, nil},
+		{"?test=true&supplierName=ppli", []string{ids[2], ids[1], ids[0]}, nil},
+		{"?test=true&supplierName=ier%202", []string{ids[1]}, nil},
+		{"?test=true&supplierName=x", []string{}, nil},
 	}
 	// Run tests
 	for _, tt := range flagtests {
@@ -94,7 +108,10 @@ func TestGetInvoices(t *testing.T) {
 			assert.Equal(t, http.StatusOK, response.Code)
 
 			var parsedResponse PagedInvoices
-			json.Unmarshal(response.Body.Bytes(), &parsedResponse)
+			err = json.Unmarshal(response.Body.Bytes(), &parsedResponse)
+			if err != nil {
+				t.Error(err)
+			}
 
 			assert.Equal(t, len(tt.responseInvoices), len(parsedResponse.Invoices))
 

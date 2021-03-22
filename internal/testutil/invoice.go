@@ -64,3 +64,15 @@ func WithIssueDate(date timeutil.Date) TestInvoiceOption {
 		invoice.IssueDate = date
 	}
 }
+
+func WithCustomerName(name string) TestInvoiceOption {
+	return func(invoice *entity.Invoice) {
+		invoice.Receiver = name
+	}
+}
+
+func WithSupplierName(name string) TestInvoiceOption {
+	return func(invoice *entity.Invoice) {
+		invoice.Sender = name
+	}
+}

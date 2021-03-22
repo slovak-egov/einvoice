@@ -229,6 +229,8 @@ paths:
         - $ref: '#/components/parameters/IssueDateTo'
         - $ref: '#/components/parameters/UploadTimeFrom'
         - $ref: '#/components/parameters/UploadTimeTo'
+        - $ref: '#/components/parameters/CustomerName'
+        - $ref: '#/components/parameters/SupplierName'
       security:
         - sessionAuth: []
         - apiKeyAuth: []
@@ -260,6 +262,8 @@ paths:
         - $ref: '#/components/parameters/IssueDateTo'
         - $ref: '#/components/parameters/UploadTimeFrom'
         - $ref: '#/components/parameters/UploadTimeTo'
+        - $ref: '#/components/parameters/CustomerName'
+        - $ref: '#/components/parameters/SupplierName'
       responses:
         '200':
           description: Successfull response
@@ -666,6 +670,20 @@ components:
         type: string
         format: date
         example: '2021-01-02T15:04:05.999+00:00'
+    CustomerName:
+      name: customerName
+      in: query
+      description: Select invoices with customer name containing this value
+      schema:
+        type: string
+        example: 'Company 1'
+    SupplierName:
+      name: supplierName
+      in: query
+      description: Select invoices with supplier name containing this value
+      schema:
+        type: string
+        example: 'Company 1'
     Language:
       name: Accept-Language
       in: header
