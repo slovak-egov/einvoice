@@ -59,6 +59,10 @@ export default ({rootDocs}) => {
       <Card.Body>
         <p className="lead">{docs.description[i18n.language]}</p>
         <Row>
+          <Col className="font-weight-bold" sm="3">{t('invoiceDocs.name')}</Col>
+          <Col sm="9">{docs.name[i18n.language]}</Col>
+        </Row>
+        <Row>
           <Col className="font-weight-bold" sm="3">{t('invoiceDocs.cardinality.full')}</Col>
           <Col sm="9">{displayCardinality(docs.cardinality)}</Col>
         </Row>
