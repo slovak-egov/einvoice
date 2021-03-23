@@ -17,8 +17,8 @@ import (
 )
 
 func (a *App) parseAndValidateInvoice(res http.ResponseWriter, req *http.Request) ([]byte, string, error) {
-	// Limit payload size to ~32MB
-	req.Body = http.MaxBytesReader(res, req.Body, 1 << 25)
+	// Limit payload size
+	req.Body = http.MaxBytesReader(res, req.Body, a.config.MaxInvoiceSize)
 	invoice, err := io.ReadAll(req.Body)
 	if err != nil {
 		context.GetLogger(req.Context()).

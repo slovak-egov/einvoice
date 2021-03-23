@@ -6,7 +6,7 @@ import {getXPathQuery, getErrorMessage, getSchema} from './helpers.mjs'
 
 const app = express()
 
-app.use(express.json())
+app.use(express.json({limit: '10mb'}))
 
 app.post('/', async (req, res) => {
   if (!Object.values(invoiceFormats).includes(req.query.format)) {
