@@ -22,6 +22,20 @@ func ParseInt(varName string, defaultValue int) int {
 	return parsedVar
 }
 
+func ParseInt64(varName string, defaultValue int64) int64 {
+	parsedVar, parseError := strconv.ParseInt(
+		Getenv(varName, strconv.FormatInt(defaultValue, 10)), 10, 64,
+	)
+	if parseError != nil {
+		log.WithFields(log.Fields{
+			"env": varName,
+			"error": parseError,
+		}).Fatal("environment.parseInt64.error")
+	}
+
+	return parsedVar
+}
+
 func Getenv(varName, defaultValue string) string {
 	envVar, ok := os.LookupEnv(varName)
 

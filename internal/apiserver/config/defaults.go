@@ -45,6 +45,7 @@ var devConfig = Configuration{
 		MaxExpiration: 10 * time.Minute,
 		JtiExpiration: 15 * time.Minute,
 	},
+	MaxInvoiceSize: 1 << 23,
 }
 
 var prodConfig = Configuration{
@@ -80,6 +81,7 @@ var prodConfig = Configuration{
 		JtiExpiration: 15 * time.Minute,
 	},
 	LocalStorageBasePath: "/storage",
+	MaxInvoiceSize: 1 << 23,
 }
 
 var testConfig = Configuration{
@@ -110,4 +112,5 @@ var testConfig = Configuration{
 		MaxExpiration: 10 * time.Minute,
 		JtiExpiration: 15 * time.Minute,
 	},
+	MaxInvoiceSize: 1 << 23,
 }
