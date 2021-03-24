@@ -2,12 +2,13 @@ package cache
 
 import "fmt"
 
-type TokenNotFoundError struct {
-	token string
+type NotFoundError struct {
+	name string
+	id   string
 }
 
-func (e *TokenNotFoundError) Error() string {
-	return fmt.Sprintf("Token not found %s", e.token)
+func (e *NotFoundError) Error() string {
+	return fmt.Sprintf("%s %s not found", e.name, e.id)
 }
 
 type JtiExistsError struct {
@@ -15,5 +16,5 @@ type JtiExistsError struct {
 }
 
 func (e *JtiExistsError) Error() string {
-	return fmt.Sprintf("Jti exists %s", e.jti)
+	return fmt.Sprintf("Jti %s already exists", e.jti)
 }

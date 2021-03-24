@@ -10,6 +10,7 @@ tags:
   - name: Auth
   - name: Users
   - name: Invoices
+  - name: Drafts
 paths:
   /login:
     get:
@@ -299,7 +300,7 @@ paths:
           $ref: '#/components/responses/Error'
         '403':
           $ref: '#/components/responses/Error'
-        '429':
+        '424':
           $ref: '#/components/responses/Error'
   /invoices/test:
     post:
@@ -330,7 +331,7 @@ paths:
           $ref: '#/components/responses/Error'
         '403':
           $ref: '#/components/responses/Error'
-        '429':
+        '424':
           $ref: '#/components/responses/Error'
 
   /invoices/visualization:
@@ -428,6 +429,78 @@ paths:
         '403':
           $ref: '#/components/responses/Error'
         '404':
+          $ref: '#/components/responses/Error'
+  /drafts:
+    get:
+      tags:
+        - Drafts
+      security:
+        - sessionAuth: []
+      summary: Get my invoice drafts
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Drafts'
+        '403':
+          $ref: '#/components/responses/Error'
+    post:
+      tags:
+        - Drafts
+      security:
+        - sessionAuth: []
+      summary: Create my invoice draft
+      requestBody:
+        description: "Draft of invoice form"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                data:
+                  type: object
+      responses:
+        '201':
+          description: Draft created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Draft'
+        '400':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+  /drafts/{draftId}:
+    delete:
+      tags:
+        - Drafts
+      security:
+        - sessionAuth: []
+      summary: Delete draft
+      parameters:
+        - name: draftId
+          in: path
+          description: Draft ID
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: ID of deleted draft
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+        '403':
           $ref: '#/components/responses/Error'
 components:
   securitySchemes:
@@ -558,6 +631,23 @@ components:
       items:
         type: integer
         description: Organization ID (IČO)
+    Drafts:
+      type: array
+      items:
+        $ref: '#/components/schemas/Draft'
+    Draft:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        data:
+          type: object
     Error:
       type: object
       properties:

@@ -12,9 +12,10 @@ import (
 )
 
 type Cache struct {
-	userTokenExpiration              time.Duration
 	client                           *redis.Client
+	userTokenExpiration              time.Duration
 	testInvoiceRateLimiterExpiration time.Duration
+	draftExpiration                  time.Duration
 }
 
 func NewRedis(cacheConfig Configuration) *Cache {
@@ -35,22 +36,24 @@ func NewRedis(cacheConfig Configuration) *Cache {
 	}
 
 	return &Cache{
-		userTokenExpiration:              cacheConfig.SessionTokenExpiration,
 		client:                           rdb,
+		userTokenExpiration:              cacheConfig.SessionTokenExpiration,
 		testInvoiceRateLimiterExpiration: cacheConfig.TestInvoiceRateLimiterExpiration,
+		draftExpiration:                  cacheConfig.DraftExpiration,
 	}
 }
 
 func userIdKey(token string) string {
-	return fmt.Sprintf("token:%s", token)
+	return fmt.Sprintf("sessionToken:%s", token)
 }
 
 func (r *Cache) SaveUserToken(ctx goContext.Context, token string, userId int) error {
 	err := r.client.Set(ctx, userIdKey(token), userId, r.userTokenExpiration).Err()
 	if err != nil {
 		context.GetLogger(ctx).WithFields(log.Fields{
-			"token":  token,
+			"sessionToken": token,
 			"userId": userId,
+			"error": err,
 		}).Error("redis.saveUserToken.failed")
 		return err
 	}
@@ -61,7 +64,7 @@ func (r *Cache) GetUserId(ctx goContext.Context, token string) (int, error) {
 	id, err := r.client.Get(ctx, userIdKey(token)).Int()
 	if err == redis.Nil {
 		context.GetLogger(ctx).WithField("token", token).Debug("redis.getUserId.token.notFound")
-		return 0, &TokenNotFoundError{token}
+		return 0, &NotFoundError{"Token", token}
 	} else if err != nil {
 		context.GetLogger(ctx).WithField("token", token).Error("redis.getUserId.failed")
 		return 0, err
@@ -69,7 +72,10 @@ func (r *Cache) GetUserId(ctx goContext.Context, token string) (int, error) {
 
 	err = r.client.Expire(ctx, userIdKey(token), r.userTokenExpiration).Err()
 	if err != nil {
-		context.GetLogger(ctx).WithField("token", token).Error("redis.getUserId.prolongExpiration.failed")
+		context.GetLogger(ctx).WithFields(log.Fields{
+			"token": token,
+			"error": err,
+		}).Error("redis.getUserId.prolongExpiration.failed")
 		return 0, err
 	}
 
@@ -79,18 +85,21 @@ func (r *Cache) GetUserId(ctx goContext.Context, token string) (int, error) {
 func (r *Cache) RemoveUserToken(ctx goContext.Context, token string) error {
 	res, err := r.client.Del(ctx, userIdKey(token)).Result()
 	if err != nil {
-		context.GetLogger(ctx).WithField("token", token).Error("redis.removeUserToken.failed")
+		context.GetLogger(ctx).WithFields(log.Fields{
+			"token": token,
+			"error": err,
+		}).Error("redis.removeUserToken.failed")
 		return err
 	} else if res != 1 {
 		context.GetLogger(ctx).WithField("token", token).Debug("redis.removeUserToken.notFound")
-		return &TokenNotFoundError{token}
+		return &NotFoundError{"Token", token}
 	}
 
 	return nil
 }
 
 func jtiKey(userId int, jti string) string {
-	return fmt.Sprintf("userId:%d:jti:%s", userId, jti)
+	return fmt.Sprintf("user:%d:jti:%s", userId, jti)
 }
 
 func (r *Cache) SaveJti(ctx goContext.Context, userId int, jti string, expiration time.Duration) error {
@@ -109,7 +118,7 @@ func (r *Cache) FlushAll(ctx goContext.Context) error {
 }
 
 func testInvoiceRateLimiterKey(userId int) string {
-	return fmt.Sprintf("test:invoices:userId:%d", userId)
+	return fmt.Sprintf("testInvoices:user:%d", userId)
 }
 
 /*
@@ -139,4 +148,49 @@ func (r *Cache) IncrementTestInvoiceCounter(ctx goContext.Context, userId int) (
 	}
 
 	return int(counter), nil
+}
+
+func draftsKey(userId int) string {
+	return fmt.Sprintf("user:%d:drafts", userId)
+}
+
+func (r *Cache) SaveDraft(ctx goContext.Context, draftId, name string) error {
+	err := r.client.HSet(ctx, draftsKey(context.GetUserId(ctx)), draftId, name).Err()
+	if err != nil {
+		context.GetLogger(ctx).WithFields(log.Fields{
+			"draftId": draftId,
+			"userId": context.GetUserId(ctx),
+			"error": err,
+		}).Error("redis.saveDraft.failed")
+		return err
+	}
+	return nil
+}
+
+func (r *Cache) DeleteDraft(ctx goContext.Context, draftId string) error {
+	res, err := r.client.HDel(ctx, draftsKey(context.GetUserId(ctx)), draftId).Result()
+	if err != nil {
+		context.GetLogger(ctx).WithFields(log.Fields{
+			"draftId": draftId,
+			"userId": context.GetUserId(ctx),
+			"error": err,
+		}).Error("redis.deleteDraft.failed")
+		return err
+	} else if res != 1 {
+		context.GetLogger(ctx).WithField("draftId", draftId).Debug("redis.deleteDraft.notFound")
+		return &NotFoundError{"Draft", draftId}
+	}
+
+	return nil
+}
+
+func (r *Cache) GetDrafts(ctx goContext.Context) (map[string]string, error) {
+	ids, err := r.client.HGetAll(ctx, draftsKey(context.GetUserId(ctx))).Result()
+	if err != nil {
+		context.GetLogger(ctx).WithField("userId", context.GetUserId(ctx)).Error("redis.getDrafts.failed")
+		return nil, err
+	}
+
+
+	return ids, nil
 }

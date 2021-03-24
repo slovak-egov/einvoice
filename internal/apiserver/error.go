@@ -46,3 +46,7 @@ func UserError(msg string) *handlerutil.HttpError {
 func UpvsError(msg string) *handlerutil.HttpError {
 	return handlerutil.NewFailedDependencyError("authorization.upvs." + msg)
 }
+
+func DraftError(msg string) *handlerutil.HttpError {
+	return handlerutil.NewBadRequestError("draft." + msg)
+}
