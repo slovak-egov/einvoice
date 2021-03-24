@@ -44,7 +44,7 @@ func New(ubl21XsdPath, d16bXsdPath string) *XsdValidator {
 }
 
 func (v *XsdValidator) Validate(src []byte, format, documentType string) error {
-	xml, err := libxml2.Parse(src)
+	invoiceXml, err := libxml2.Parse(src)
 	if err != nil {
 		return err
 	}
@@ -62,7 +62,7 @@ func (v *XsdValidator) Validate(src []byte, format, documentType string) error {
 		schema = v.d16bSchema
 	}
 
-	if err = schema.Validate(xml); err != nil {
+	if err = schema.Validate(invoiceXml); err != nil {
 		return ValidationError{err.(xsd.SchemaValidationError).Errors()}
 	}
 

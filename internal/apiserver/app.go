@@ -9,7 +9,7 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	"github.com/slovak-egov/einvoice/internal/apiserver/config"
-	"github.com/slovak-egov/einvoice/internal/apiserver/invoiceValidator"
+	"github.com/slovak-egov/einvoice/internal/apiserver/rulesValidator"
 	"github.com/slovak-egov/einvoice/internal/apiserver/xsdValidator"
 	"github.com/slovak-egov/einvoice/internal/cache"
 	"github.com/slovak-egov/einvoice/internal/db"
@@ -25,28 +25,28 @@ var corsOptions = []muxHandlers.CORSOption{
 }
 
 type App struct {
-	config           *config.Configuration
-	router           *mux.Router
-	db               *db.Connector
-	storage          *storage.LocalStorage
-	xsdValidator     *xsdValidator.XsdValidator
-	cache            *cache.Cache
-	upvs             *upvs.Connector
-	invoiceValidator invoiceValidator.InvoiceValidator
+	config         *config.Configuration
+	router         *mux.Router
+	db             *db.Connector
+	storage        *storage.LocalStorage
+	xsdValidator   *xsdValidator.XsdValidator
+	cache          *cache.Cache
+	upvs           *upvs.Connector
+	rulesValidator rulesValidator.Validator
 }
 
 func NewApp() *App {
 	appConfig := config.New()
 
 	a := &App{
-		config:           appConfig,
-		router:           mux.NewRouter(),
-		db:               db.NewConnector(appConfig.Db),
-		storage:          storage.New(appConfig.LocalStorageBasePath),
-		xsdValidator:     xsdValidator.New(appConfig.Ubl21XsdPath, appConfig.D16bXsdPath),
-		cache:            cache.NewRedis(appConfig.Cache),
-		upvs:             upvs.New(appConfig.Upvs),
-		invoiceValidator: invoiceValidator.New(appConfig.ValidationServerUrl),
+		config:         appConfig,
+		router:         mux.NewRouter(),
+		db:             db.NewConnector(appConfig.Db),
+		storage:        storage.New(appConfig.LocalStorageBasePath),
+		xsdValidator:   xsdValidator.New(appConfig.Ubl21XsdPath, appConfig.D16bXsdPath),
+		cache:          cache.NewRedis(appConfig.Cache),
+		upvs:           upvs.New(appConfig.Upvs),
+		rulesValidator: rulesValidator.New(appConfig.ValidationServerUrl),
 	}
 
 	a.initializeHandlers()
