@@ -463,7 +463,15 @@ paths:
                   type: string
                 data:
                   type: object
-                  description: Redux state of invoice form
+                  properties:
+                    type:
+                      type: string
+                      enum:
+                        - invoice
+                        - creditNote
+                    data:
+                      type: object
+                      description: Redux state of invoice form
       responses:
         '201':
           description: Draft created
@@ -486,11 +494,20 @@ paths:
         - $ref: '#/components/parameters/DraftId'
       responses:
         '200':
-          description: Redux state of invoice form
+          description: Draft
           content:
             application/json:
               schema:
                 type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                      - invoice
+                      - creditNote
+                  data:
+                    type: object
+                    description: Redux state of invoice form
     delete:
       tags:
         - Drafts
@@ -658,6 +675,15 @@ components:
           format: date-time
         data:
           type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - invoice
+                - creditNote
+            data:
+              type: object
+              description: Redux state of invoice form
     Error:
       type: object
       properties:

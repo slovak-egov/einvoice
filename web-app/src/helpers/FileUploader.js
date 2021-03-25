@@ -22,11 +22,11 @@ const FileUploader = ({accept, buttonStyle, buttonText, uploadFile}) => {
   )
 }
 
-export default ({accept, buttonStyle, buttonText, deleteFile, file, uploadFile}) =>
-  file ? (
+export default ({accept, buttonStyle, buttonText, deleteFile, fileName, uploadFile}) =>
+  fileName ? (
     <InputGroup>
       <Form.Control
-        value={file.name}
+        value={fileName}
         readOnly
         style={{maxWidth: '200px'}}
       />

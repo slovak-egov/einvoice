@@ -3,6 +3,7 @@ import ApiError from './ApiError'
 import createUsersApi from './users'
 import createInvoicesApi from './invoices'
 import createDocumentationApi from './documentation'
+import createDraftsApi from './drafts'
 
 export default class Api {
 
@@ -10,6 +11,7 @@ export default class Api {
     this.users = createUsersApi(this)
     this.invoices = createInvoicesApi(this)
     this.documentation = createDocumentationApi(this)
+    this.drafts = createDraftsApi(this)
   }
 
   login = (token) =>

@@ -1,7 +1,7 @@
 import {useCallback} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {Link, useLocation} from 'react-router-dom'
-import {Card, Table} from 'react-bootstrap'
+import {Button, Card, Table} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import classnames from 'classnames'
 import {get} from 'lodash'
@@ -55,15 +55,10 @@ export default ({getInvoicesAction, path, title}) => {
               ))}
             </tbody>
           </Table>
-          {nextId && <div
-            className="text-primary d-flex border border-primary rounded-lg"
-            style={{cursor: 'pointer'}}
-            onClick={() => getInvoices(search, nextId)}
-          >
-            <div className="m-auto">
+          {nextId &&
+            <Button variant="outline-primary" block onClick={() => getInvoices(search, nextId)}>
               {t('loadMore')}
-            </div>
-          </div>}
+            </Button>}
         </>}
       </Card.Body>
     </Card>

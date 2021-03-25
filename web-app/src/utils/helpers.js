@@ -1,6 +1,6 @@
 import {get} from 'lodash'
 import {set} from 'object-path-immutable'
-import {format, parseISO} from 'date-fns'
+import {format, parse, parseISO} from 'date-fns'
 
 /*
  * Forward reducer transform to a particular state path.
@@ -29,5 +29,6 @@ export const clearEventTarget = (e) => {
 export const capitalizeFirstChar = (s) => s.charAt(0).toUpperCase() + s.substring(1)
 
 export const formatTime = (date) => format(date, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx")
-export const formatDate = (date) => format(date, 'yyyy-MM-dd')
+export const formatDate = (date) => date && format(date, 'yyyy-MM-dd')
 export const parseTime = (value) => value && parseISO(value)
+export const parseDate = (value) => value && parse(value, 'yyyy-MM-dd', new Date())
