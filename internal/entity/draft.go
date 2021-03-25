@@ -20,6 +20,6 @@ func (d *Draft) CalculateCreatedAt() {
 	if err != nil {
 		panic(err)
 	}
-	createdAt := parsedId.Time()
+	createdAt := parsedId.Time().UTC()
 	d.CreatedAt = &createdAt
 }
