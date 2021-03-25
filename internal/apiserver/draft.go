@@ -100,6 +100,13 @@ func (a *App) deleteMyDraft(res http.ResponseWriter, req *http.Request) error {
 		}
 		return err
 	}
+	err = a.storage.DeleteDraft(req.Context(), draftId)
+	if err != nil {
+		if _, ok := err.(*storage.NotFoundError); ok {
+			return handlerutil.NewNotFoundError("draft.notFound")
+		}
+		return err
+	}
 	handlerutil.RespondWithJSON(res, http.StatusOK, map[string]string{"id": draftId})
 	return nil
 }
