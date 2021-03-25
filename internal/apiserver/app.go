@@ -93,6 +93,13 @@ func (a *App) initializeHandlers() {
 	registerHandler(usersRouter, "DELETE", "/substitutes", a.removeUserSubstitutes)
 	registerHandler(usersRouter, "GET", "/invoices", a.getUserInvoices)
 	registerHandler(usersRouter, "GET", "/organizations", a.getUserOrganizations)
+
+	draftsRouter := apiRouter.PathPrefix("/drafts").Subrouter()
+	draftsRouter.Use(requireUserMiddleware)
+	registerHandler(draftsRouter, "GET", "", a.getMyDrafts)
+	registerHandler(draftsRouter, "POST", "", a.createMyDraft)
+	registerHandler(draftsRouter, "GET", "/{id}", a.getMyDraft)
+	registerHandler(draftsRouter, "DELETE", "/{id}", a.deleteMyDraft)
 }
 
 func (a *App) Run() {

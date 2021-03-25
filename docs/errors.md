@@ -54,3 +54,6 @@
 | user.parsingError | 400 | Cannot parse user data | Error message |
 | user.validation.failed | 400 | User data validation failed | Error message |
 | invoice.test.rateLimit | 429 | Rate limit for creating test invoices reached | |
+| draft.notFound | 404 | Draft not found | |
+| draft.body.parsingError | 400 | Cannot parse data | Error message |
+| draft.name.missing | 400 | Draft name cannot be not empty | |

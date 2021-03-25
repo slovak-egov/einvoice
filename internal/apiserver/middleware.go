@@ -31,7 +31,7 @@ func (a *App) userIdentificationMiddleware(next http.Handler) http.Handler {
 				}
 
 				if err != nil {
-					if _, ok := err.(*cache.TokenNotFoundError); ok {
+					if _, ok := err.(*cache.NotFoundError); ok {
 						return UnauthorizedError
 					}
 					return err

@@ -6,11 +6,18 @@ import (
 )
 
 func RespondWithJSON(res http.ResponseWriter, code int, payload interface{}) {
-	response, _ := json.Marshal(payload)
+	response, err := json.Marshal(payload)
+	if err != nil {
+		panic(err)
+	}
 
 	res.Header().Set("Content-Type", "application/json")
 	res.WriteHeader(code)
-	res.Write(response)
+
+	_, err = res.Write(response)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func respondWithError(res http.ResponseWriter, code int, message, detail string) {
@@ -25,7 +32,7 @@ func ErrorRecovery(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 		defer func() {
 			if err := recover(); err != nil {
-				respondWithError(res, http.StatusInternalServerError, "Something went wrong","")
+				respondWithError(res, http.StatusInternalServerError, "Something went wrong", "")
 			}
 		}()
 		next.ServeHTTP(res, req)

@@ -11,6 +11,7 @@ type Configuration struct {
 	Port                             int
 	Password                         string
 	SessionTokenExpiration           time.Duration
+	DraftExpiration                  time.Duration
 	TestInvoiceRateLimiterExpiration time.Duration
 	TestInvoiceRateLimiterThreshold  int
 }
@@ -23,6 +24,7 @@ func NewConfig(defaultConfig Configuration) Configuration {
 		SessionTokenExpiration: environment.ParseDuration(
 			"SESSION_TOKEN_EXPIRATION", defaultConfig.SessionTokenExpiration,
 		),
+		DraftExpiration: environment.ParseDuration("DRAFT_EXPIRATION", defaultConfig.DraftExpiration),
 		TestInvoiceRateLimiterExpiration: environment.ParseDuration(
 			"TEST_INVOICE_RATE_LIMITER_EXPIRATION", defaultConfig.TestInvoiceRateLimiterExpiration,
 		),
