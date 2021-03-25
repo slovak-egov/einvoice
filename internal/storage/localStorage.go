@@ -4,7 +4,6 @@ import (
 	goContext "context"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 
 	log "github.com/sirupsen/logrus"
@@ -103,7 +102,7 @@ func (storage *LocalStorage) DeleteDraft(ctx goContext.Context, id string) error
 }
 
 func (storage *LocalStorage) DeleteAll() error {
-	dir, err := ioutil.ReadDir(storage.basePath)
+	dir, err := os.ReadDir(storage.basePath)
 	if err != nil {
 		return err
 	}

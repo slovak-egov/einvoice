@@ -6,7 +6,10 @@ import (
 )
 
 func RespondWithJSON(res http.ResponseWriter, code int, payload interface{}) {
-	response, _ := json.Marshal(payload)
+	response, err := json.Marshal(payload)
+	if err != nil {
+		panic(err)
+	}
 
 	RespondWithRawJSON(res, code, response)
 }
@@ -14,7 +17,10 @@ func RespondWithJSON(res http.ResponseWriter, code int, payload interface{}) {
 func RespondWithRawJSON(res http.ResponseWriter, code int, payload []byte) {
 	res.Header().Set("Content-Type", "application/json")
 	res.WriteHeader(code)
-	res.Write(payload)
+	_, err := res.Write(payload)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func respondWithError(res http.ResponseWriter, code int, message, detail string) {

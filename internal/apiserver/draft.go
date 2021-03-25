@@ -3,6 +3,7 @@ package apiserver
 import (
 	"encoding/json"
 	"net/http"
+	"sort"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -19,16 +20,18 @@ func (a *App) getMyDrafts(res http.ResponseWriter, req *http.Request) error {
 	if err != nil {
 		return err
 	}
-	response := []entity.Draft{}
+	response := []*entity.Draft{}
 	for id, name := range draftsMetadata {
-		draft := entity.Draft{
+		draft := &entity.Draft{
 			Id:   id,
 			Name: name,
 		}
 		draft.CalculateCreatedAt()
 		response = append(response, draft)
 	}
-
+	sort.Slice(response, func(i, j int) bool {
+		return response[i].Id < response[j].Id
+	})
 	handlerutil.RespondWithJSON(res, http.StatusOK, response)
 	return nil
 }
@@ -65,6 +68,10 @@ func (a *App) createMyDraft(res http.ResponseWriter, req *http.Request) error {
 
 	if err := decoder.Decode(&requestBody); err != nil {
 		return DraftError("body.parsingError").WithDetail(err)
+	}
+
+	if requestBody.Name == "" {
+		return DraftError("name.missing")
 	}
 
 	requestBody.Id = ulid.New(time.Now().UTC()).String()
