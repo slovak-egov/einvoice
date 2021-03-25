@@ -8,9 +8,13 @@ import (
 func RespondWithJSON(res http.ResponseWriter, code int, payload interface{}) {
 	response, _ := json.Marshal(payload)
 
+	RespondWithRawJSON(res, code, response)
+}
+
+func RespondWithRawJSON(res http.ResponseWriter, code int, payload []byte) {
 	res.Header().Set("Content-Type", "application/json")
 	res.WriteHeader(code)
-	res.Write(response)
+	res.Write(payload)
 }
 
 func respondWithError(res http.ResponseWriter, code int, message, detail string) {
@@ -25,7 +29,7 @@ func ErrorRecovery(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 		defer func() {
 			if err := recover(); err != nil {
-				respondWithError(res, http.StatusInternalServerError, "Something went wrong","")
+				respondWithError(res, http.StatusInternalServerError, "Something went wrong", "")
 			}
 		}()
 		next.ServeHTTP(res, req)

@@ -52,8 +52,8 @@ func (r *Cache) SaveUserToken(ctx goContext.Context, token string, userId int) e
 	if err != nil {
 		context.GetLogger(ctx).WithFields(log.Fields{
 			"sessionToken": token,
-			"userId": userId,
-			"error": err,
+			"userId":       userId,
+			"error":        err,
 		}).Error("redis.saveUserToken.failed")
 		return err
 	}
@@ -159,8 +159,8 @@ func (r *Cache) SaveDraft(ctx goContext.Context, draftId, name string) error {
 	if err != nil {
 		context.GetLogger(ctx).WithFields(log.Fields{
 			"draftId": draftId,
-			"userId": context.GetUserId(ctx),
-			"error": err,
+			"userId":  context.GetUserId(ctx),
+			"error":   err,
 		}).Error("redis.saveDraft.failed")
 		return err
 	}
@@ -172,12 +172,15 @@ func (r *Cache) DeleteDraft(ctx goContext.Context, draftId string) error {
 	if err != nil {
 		context.GetLogger(ctx).WithFields(log.Fields{
 			"draftId": draftId,
-			"userId": context.GetUserId(ctx),
-			"error": err,
+			"userId":  context.GetUserId(ctx),
+			"error":   err,
 		}).Error("redis.deleteDraft.failed")
 		return err
 	} else if res != 1 {
-		context.GetLogger(ctx).WithField("draftId", draftId).Debug("redis.deleteDraft.notFound")
+		context.GetLogger(ctx).WithFields(log.Fields{
+			"draftId": draftId,
+			"userId":  context.GetUserId(ctx),
+		}).Debug("redis.deleteDraft.notFound")
 		return &NotFoundError{"Draft", draftId}
 	}
 
@@ -191,6 +194,25 @@ func (r *Cache) GetDrafts(ctx goContext.Context) (map[string]string, error) {
 		return nil, err
 	}
 
-
 	return ids, nil
+}
+
+func (r *Cache) GetDraft(ctx goContext.Context, draftId string) (string, error) {
+	draftName, err := r.client.HGet(ctx, draftsKey(context.GetUserId(ctx)), draftId).Result()
+	if err != nil {
+		context.GetLogger(ctx).WithFields(log.Fields{
+			"draftId": draftId,
+			"userId":  context.GetUserId(ctx),
+			"error":   err,
+		}).Error("redis.getDraft.failed")
+		return "", err
+	} else if draftName == "" {
+		context.GetLogger(ctx).WithFields(log.Fields{
+			"draftId": draftId,
+			"userId":  context.GetUserId(ctx),
+		}).Debug("redis.getDraft.notFound")
+		return "", &NotFoundError{"Draft", draftId}
+	}
+
+	return draftName, nil
 }

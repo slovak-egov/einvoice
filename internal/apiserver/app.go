@@ -98,6 +98,7 @@ func (a *App) initializeHandlers() {
 	draftsRouter.Use(requireUserMiddleware)
 	registerHandler(draftsRouter, "GET", "", a.getMyDrafts)
 	registerHandler(draftsRouter, "POST", "", a.createMyDraft)
+	registerHandler(draftsRouter, "GET", "/{id}", a.getMyDraft)
 	registerHandler(draftsRouter, "DELETE", "/{id}", a.deleteMyDraft)
 }
 

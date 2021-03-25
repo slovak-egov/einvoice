@@ -475,6 +475,21 @@ paths:
         '403':
           $ref: '#/components/responses/Error'
   /drafts/{draftId}:
+    get:
+      tags:
+        - Drafts
+      security:
+        - sessionAuth: []
+      summary: Get draft content
+      parameters:
+        - $ref: '#/components/parameters/DraftId'
+      responses:
+        '200':
+          description: Draft content
+          content:
+            application/json:
+              schema:
+                type: object
     delete:
       tags:
         - Drafts
@@ -482,13 +497,7 @@ paths:
         - sessionAuth: []
       summary: Delete draft
       parameters:
-        - name: draftId
-          in: path
-          description: Draft ID
-          required: true
-          schema:
-            type: string
-            format: uuid
+        - $ref: '#/components/parameters/DraftId'
       responses:
         '200':
           description: ID of deleted draft
@@ -779,6 +788,14 @@ components:
       in: header
       schema:
         $ref: '#/components/schemas/Languages'
+    DraftId:
+      name: draftId
+      in: path
+      description: Draft ID
+      required: true
+      schema:
+        type: string
+        format: uuid
   requestBodies:
     PatchUser:
       content:

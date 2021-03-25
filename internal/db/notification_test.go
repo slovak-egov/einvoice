@@ -43,15 +43,16 @@ func TestGetAndUpdateNotNotifiedInvoices(t *testing.T) {
 
 		err := connector.RunInTransaction(ctx, func(ctx goContext.Context) error {
 			invoices, err := connector.GetAndUpdateNotNotifiedInvoices(ctx, 2)
-			if err != nil {
-				return err
-			}
-
-			assert.Equal(t, 2, len(invoices))
-			assert.ElementsMatch(t, []string{ids[0], ids[1]}, []string{invoices[0].Id, invoices[1].Id})
 
 			startTx2 <- true
 			<-stopTx1
+
+			if err != nil {
+				return err
+			}
+			assert.Equal(t, 2, len(invoices))
+			assert.ElementsMatch(t, []string{ids[0], ids[1]}, []string{invoices[0].Id, invoices[1].Id})
+
 			return nil
 		})
 
@@ -70,14 +71,15 @@ func TestGetAndUpdateNotNotifiedInvoices(t *testing.T) {
 
 		err := connector.RunInTransaction(ctx, func(ctx goContext.Context) error {
 			invoices, err := connector.GetAndUpdateNotNotifiedInvoices(ctx, 2)
+
+			<-stopTx2
+
 			if err != nil {
 				return err
 			}
-
 			assert.Equal(t, 2, len(invoices))
 			assert.ElementsMatch(t, []string{ids[2], ids[3]}, []string{invoices[0].Id, invoices[1].Id})
 
-			<-stopTx2
 			return nil
 		})
 
