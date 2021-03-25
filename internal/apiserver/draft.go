@@ -30,7 +30,7 @@ func (a *App) getMyDrafts(res http.ResponseWriter, req *http.Request) error {
 		response = append(response, draft)
 	}
 	sort.Slice(response, func(i, j int) bool {
-		return response[i].Id < response[j].Id
+		return response[i].Id > response[j].Id
 	})
 	handlerutil.RespondWithJSON(res, http.StatusOK, response)
 	return nil
@@ -55,12 +55,12 @@ func (a *App) getMyDraft(res http.ResponseWriter, req *http.Request) error {
 		return err
 	}
 
-	handlerutil.RespondWithRawJSON(res, http.StatusOK, draftData)
+	handlerutil.RespondWithJSON(res, http.StatusOK, json.RawMessage(draftData))
 	return nil
 }
 
 func (a *App) createMyDraft(res http.ResponseWriter, req *http.Request) error {
-	req.Body = http.MaxBytesReader(res, req.Body, a.config.MaxDraftSize)
+	req.Body = http.MaxBytesReader(res, req.Body, a.config.MaxInvoiceSize)
 	var requestBody entity.Draft
 
 	decoder := json.NewDecoder(req.Body)

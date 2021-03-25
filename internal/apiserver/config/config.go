@@ -35,7 +35,6 @@ type Configuration struct {
 	Logger               loggerutil.Configuration
 	ValidationServerUrl  string
 	MaxInvoiceSize       int64
-	MaxDraftSize         int64
 }
 
 func New() *Configuration {
@@ -79,8 +78,7 @@ func New() *Configuration {
 
 	config.ValidationServerUrl = environment.Getenv("VALIDATION_SERVER_URL", config.ValidationServerUrl)
 
-	config.MaxInvoiceSize = int64(environment.ParseInt64("MAX_INVOICE_SIZE", config.MaxInvoiceSize))
-	config.MaxDraftSize = int64(environment.ParseInt64("MAX_DRAFT_SIZE", config.MaxDraftSize))
+	config.MaxInvoiceSize = environment.ParseInt64("MAX_INVOICE_SIZE", config.MaxInvoiceSize)
 
 	log.Info("config.loaded")
 

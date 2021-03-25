@@ -11,13 +11,10 @@ func RespondWithJSON(res http.ResponseWriter, code int, payload interface{}) {
 		panic(err)
 	}
 
-	RespondWithRawJSON(res, code, response)
-}
-
-func RespondWithRawJSON(res http.ResponseWriter, code int, payload []byte) {
 	res.Header().Set("Content-Type", "application/json")
 	res.WriteHeader(code)
-	_, err := res.Write(payload)
+
+	_, err = res.Write(response)
 	if err != nil {
 		panic(err)
 	}
