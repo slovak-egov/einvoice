@@ -118,6 +118,14 @@
     "resetForm": {
       "title": "Reset form",
       "text": "Do you really want to reset this form?"
+    },
+    "deleteDraft": {
+      "title": "Delete draft",
+      "text": "Do you really want to delete this invoice draft?"
+    },
+    "openDraft": {
+      "title": "Open draft",
+      "text": "Opening this draft, your current form data will be overwritten"
     }
   },
   "errorMessages": {
@@ -138,6 +146,10 @@
     "getUblRulesDocs": "UBL2.1 rules could not be fetched",
     "getBusinessTerms": "Business terms docs could not be fetched",
     "getCodeLists": "Code lists could not be fetched",
+    "getDrafts": "Invoice drafts could not be fetched",
+    "getDraft": "Draft {{id}} could not be fetched",
+    "deleteDraft": "Invoice draft could not be deleted",
+    "createDraft": "Invoice draft could not be created",
     "unsupportedMimeType": "You tried to upload file with unsupported media type",
     "emptyField": "This field cannot be empty"
   },
@@ -152,5 +164,9 @@
     "creditNote": "Credit note"
   },
   "errorCount": "Error count",
-  "time": "Time"
+  "time": "Time",
+  "drafts": "Drafts",
+  "open": "Open",
+  "saveAsDraft": "Save as draft",
+  "createDraft": "Create draft"
 }

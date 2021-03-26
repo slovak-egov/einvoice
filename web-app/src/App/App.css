@@ -17,11 +17,6 @@ body {
     background-color: darkblue;
 }
 
-.table tr td {
-    vertical-align: middle;
-    margin: 3px;
-}
-
 .datepicker-width {
     max-width: 150px;
 }

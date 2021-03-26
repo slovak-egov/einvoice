@@ -5,6 +5,7 @@ import {useTranslation} from 'react-i18next'
 import {Button, Card, Col, Form, Row} from 'react-bootstrap'
 import {get} from 'lodash'
 import TagGroup from './TagGroup'
+import CreateDraftModal from './CreateDraftModal'
 import {formTypeSelector, formDataSelector, isFormInitialized} from './state'
 import {initializeFormState, setFormType, submitInvoiceForm} from './actions'
 import {
@@ -15,6 +16,7 @@ import {
   ublInvoiceDocsSelector,
 } from '../../cache/documentation/state'
 import {getCodeLists, getUblCreditNoteDocs, getUblInvoiceDocs} from '../../cache/documentation/actions'
+import {createDraft} from '../../cache/drafts/actions'
 import {invoiceTypes} from '../../utils/constants'
 import ConfirmationButton from '../../helpers/ConfirmationButton'
 
@@ -45,6 +47,7 @@ export default () => {
   const dispatch = useDispatch()
 
   const [errorCount, setErrorCount] = useState(0)
+  const [showCreateDraftModal, setShowCreateDraftModal] = useState(false)
 
   // We need to have separate useEffects, so requests can be done in parallel
   useEffect(() => {
@@ -77,7 +80,18 @@ export default () => {
     async () => {
       await dispatch(submitInvoiceForm(formType, invoiceTypeData[formType].rootPath))
       history.push('/invoice-tools/submission')
-    }, [dispatch, formType])
+    },
+    [dispatch, formType],
+  )
+
+  const confirmDraft = (name) =>
+    async () => {
+      if (await dispatch(createDraft(name, formType, formData[formType]))) {
+        history.push('/invoice-tools/drafts')
+      }
+    }
+
+  const allLoaded = areCodeListsLoaded && isDocsLoaded && isFormLoaded
 
   return (
     <Card className="m-1">
@@ -111,7 +125,7 @@ export default () => {
         </Row>
       </Card.Header>
       {/*Render once data are loaded*/}
-      {isFormLoaded && <Card.Body>
+      {allLoaded && <Card.Body>
         <TagGroup
           path={invoiceTypeData[formType].rootPath}
           formData={get(formData, invoiceTypeData[formType].rootPath)}
@@ -119,7 +133,15 @@ export default () => {
           setErrorCount={setErrorCount}
         />
         <div className="d-flex mt-1">
-          <Button variant="primary" className="ml-auto" onClick={submit} disabled={errorCount !== 0}>
+          <Button variant="secondary" className="ml-auto" onClick={() => setShowCreateDraftModal(true)}>
+            {t('saveAsDraft')}
+          </Button>
+          {showCreateDraftModal &&
+            <CreateDraftModal
+              cancel={() => setShowCreateDraftModal(false)}
+              confirm={confirmDraft}
+            />}
+          <Button variant="success" onClick={submit} disabled={errorCount !== 0}>
             {t('generateInvoice')}
           </Button>
         </div>

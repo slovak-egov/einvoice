@@ -118,6 +118,14 @@
     "resetForm": {
       "title": "Vynulovanie formulára",
       "text": "Naozaj chcete vynulovať formulár?"
+    },
+    "deleteDraft": {
+      "title": "Vymazať koncept",
+      "text": "Naozaj chcete vymazať tento koncept faktúry?"
+    },
+    "openDraft": {
+      "title": "Otvoriť koncept",
+      "text": "Pri otvorení tohto konceptu sa prepíšu súčasné údaje formulára"
     }
   },
   "errorMessages": {
@@ -138,6 +146,10 @@
     "getUblRulesDocs": "Dokumentáciu UBL pravidiel sa nepodarilo načítať",
     "getBusinessTerms": "Dokumentáciu obchodných pravidiel sa nepodarilo načítať",
     "getCodeLists": "Zoznamy kódov sa nepodarilo načítať",
+    "getDrafts": "Koncepty faktúr sa nepodarilo načítať",
+    "getDraft": "Koncept {{id}} nebolo možné načítať",
+    "deleteDraft": "Koncept faktúry sa nepodarilo vymazať",
+    "createDraft": "Koncept faktúry sa nepodarilo vytvoriť",
     "unsupportedMimeType": "Pokúsili ste sa nahrať súbor nepodporovaného typu",
     "emptyField": "Toto políčko nemôže byť prázdne"
   },
@@ -152,5 +164,9 @@
     "creditNote": "Dobropis"
   },
   "errorCount": "Počet chýb",
-  "time": "Čas"
+  "time": "Čas",
+  "drafts": "Koncepty",
+  "open": "Otvoriť",
+  "saveAsDraft": "Uložiť ako koncept",
+  "createDraft": "Vytvoriť koncept"
 }

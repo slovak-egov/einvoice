@@ -1,6 +1,5 @@
 import {isEmpty} from 'lodash'
-import {format as formatDate} from 'date-fns'
-import {capitalizeFirstChar, fileToBase64} from './helpers'
+import {capitalizeFirstChar} from './helpers'
 import {rootAttributes} from './constants'
 
 const generateInvoiceXml = async (name, data, indent, additionalAttributes) => {
@@ -18,13 +17,7 @@ const generateInvoiceXml = async (name, data, indent, additionalAttributes) => {
 
   // Text inside of tag
   if (data.text != null) {
-    let innerXml = data.text
-    if (innerXml instanceof Date) {
-      innerXml = formatDate(innerXml, 'yyyy-MM-dd')
-    } else if (innerXml instanceof File) {
-      innerXml = await fileToBase64(innerXml)
-    }
-    return `${openingTag}${innerXml}</${name}>`
+    return `${openingTag}${data.text}</${name}>`
   }
 
   const rows = [openingTag]

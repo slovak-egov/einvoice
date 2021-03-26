@@ -1,4 +1,4 @@
-import {useCallback, useEffect} from 'react'
+import {useCallback, useEffect, useMemo} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {useTranslation} from 'react-i18next'
 import {Button, Form} from 'react-bootstrap'
@@ -11,6 +11,7 @@ import {formFieldSelector} from './state'
 import {setFormField} from './actions'
 import {codeListsSelector} from '../../cache/documentation/state'
 import {allowedAttachmentMimeTypes, dataTypes} from '../../utils/constants'
+import {fileToBase64, formatDate, parseDate} from '../../utils/helpers'
 
 const fileToState = (file, name, mime) => ({
   text: file,
@@ -22,7 +23,13 @@ const fileToState = (file, name, mime) => ({
 
 export default ({canDelete, dropField, docs, path, setErrorCount}) => {
   const {t, i18n} = useTranslation('common')
-  const value = useSelector(formFieldSelector(path)) || ''
+  // Uploading file is special case
+  // We allow field to change its parent, it will set mime type and filename too
+  const pathToUpdate = useMemo(
+    () => docs.dataType === dataTypes.BINARY_OBJECT ? path.slice(0, -1) : path,
+    [docs.dataType, path],
+  )
+  const value = useSelector(formFieldSelector(pathToUpdate)) || ''
   const dispatch = useDispatch()
   const isInvalid = value === ''
 
@@ -34,12 +41,8 @@ export default ({canDelete, dropField, docs, path, setErrorCount}) => {
   )
 
   const updateField = useCallback(
-    (value) => {
-      // Uploading file is special case
-      // We allow field to change its parent, it will set mime type and filename too
-      const pathToUpdate = docs.dataType === dataTypes.BINARY_OBJECT ? path.slice(0, -1) : path
-      dispatch(setFormField(pathToUpdate)(value))
-    }, [dispatch, docs.dataType, path]
+    (value) => dispatch(setFormField(pathToUpdate)(value)),
+    [dispatch, pathToUpdate],
   )
 
   return (
@@ -68,14 +71,18 @@ export default ({canDelete, dropField, docs, path, setErrorCount}) => {
 const FieldInput = ({codeListIds, dataType, isInvalid, updateField, value}) => {
   const {t} = useTranslation('common')
   const getValue = useCallback(
-    (e) => {
+    async (e) => {
       switch (dataType) {
-        case dataTypes.DATE: return e
+        case dataTypes.DATE: return formatDate(e)
         case dataTypes.BINARY_OBJECT:
           if (allowedAttachmentMimeTypes.includes(e.target.files[0].type)) {
-            return fileToState(e.target.files[0], e.target.files[0].name, e.target.files[0].type)
+            return fileToState(
+              await fileToBase64(e.target.files[0]),
+              e.target.files[0].name,
+              e.target.files[0].type
+            )
           } else {
-            swal({
+            await swal({
               title: t('errorMessages.unsupportedMimeType'),
               icon: 'error',
             })
@@ -115,7 +122,7 @@ const FieldInput = ({codeListIds, dataType, isInvalid, updateField, value}) => {
     [dataType]
   )
   const onChange = useCallback(
-    (e) => updateField(getValue(e)), [getValue, updateField],
+    async (e) => updateField(await getValue(e)), [getValue, updateField],
   )
   const codeLists = useSelector(codeListsSelector)
 
@@ -123,7 +130,7 @@ const FieldInput = ({codeListIds, dataType, isInvalid, updateField, value}) => {
     case dataTypes.DATE:
       return (
         <DatePicker
-          selected={value}
+          selected={parseDate(value)}
           onChange={onChange}
           className={classnames({'is-invalid': isInvalid})}
           dateFormat="yyyy-MM-dd"
@@ -136,7 +143,7 @@ const FieldInput = ({codeListIds, dataType, isInvalid, updateField, value}) => {
           buttonText={t('upload')}
           uploadFile={onChange}
           deleteFile={() => updateField(fileToState('', '', ''))}
-          file={value}
+          fileName={value.attributes.filename[0].text}
         />
       )
     case dataTypes.PERCENTAGE:
