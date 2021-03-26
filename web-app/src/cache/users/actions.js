@@ -72,8 +72,10 @@ export const login = (token) => (
       dispatch(setLogging(false))
       return true
     } catch (error) {
+      const logoutUrl = getLogoutUrl()
+      dispatch(removeLoggedUser())
       if (error.message === upvsForbiddenSubstitutionError) {
-        const logout = await swal({
+        const shouldLogout = await swal({
           title: i18n.t('errorMessages.failedLogin'),
           text: i18n.t('errorMessages.forbiddenSubstitution'),
           icon: 'error',
@@ -88,17 +90,11 @@ export const login = (token) => (
             },
           },
         })
-        if (logout) {
+        if (shouldLogout) {
           // TODO: make it nicer
-          const logoutUrl = getLogoutUrl()
-          dispatch(removeLoggedUser())
           window.location.href = logoutUrl
-        } else {
-          dispatch(removeLoggedUser())
-          return false
         }
       } else {
-        dispatch(removeLoggedUser())
         await swal({
           title: i18n.t('errorMessages.failedLogin'),
           text: error.message,

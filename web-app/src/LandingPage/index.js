@@ -61,6 +61,11 @@ export default () => {
             </ul>
             <div>{t('announcements.2.body.1')}:</div>
             <ul>
+              <li>{t('announcements.2.user')}: <strong>E0000046141</strong></li>
+              <li>{t('announcements.2.password')}: <strong>PopradTa3@</strong></li>
+            </ul>
+            <div>{t('announcements.2.body.2')}:</div>
+            <ul>
               <li>
                 <a href={exampleInvoiceUrl(invoiceFormats.D16B, 'invoice')} target="_blank">
                   {t('announcements.2.links.0')}
@@ -93,8 +98,8 @@ export default () => {
               </li>
             </ul>
             <div>
-              {t('announcements.2.body.2')}&nbsp;
-              <a href="https://edesk.vyvoj.upvs.globaltel.sk" target="_blank">{t('announcements.2.body.3')}</a>
+              {t('announcements.2.body.3')}&nbsp;
+              <a href="https://edesk.vyvoj.upvs.globaltel.sk" target="_blank">{t('announcements.2.body.4')}</a>
             </div>
           </Announcement>
           <Announcement title="API">
