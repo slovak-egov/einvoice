@@ -15,7 +15,7 @@ export const getLogoutUrl = () =>
 export const exampleInvoiceUrl = (format, name) =>
   `${CONFIG.apiServerUrl}/data/examples/${format}/${name}.xml`
 
-// keep in sync with internal/entity/invoice.go
+// Keep in sync with internal/entity/invoice.go
 export const notificationStates = {
   NOT_SENT: 'not_sent',
   SENT: 'sent',
@@ -47,3 +47,6 @@ export const dataTypes = {
   DATE: 'Date',
   CODE: 'Code',
 }
+
+// Error code for forbidden substitution type, see docs/errors.md
+export const upvsForbiddenSubstitutionError = 'authorization.upvs.forbiddenSubstitutionType'

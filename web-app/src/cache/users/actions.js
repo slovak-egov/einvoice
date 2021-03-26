@@ -1,6 +1,7 @@
 import swal from 'sweetalert'
 import {loadingWrapper, setData} from '../../helpers/actions'
 import i18n from '../../i18n'
+import {getLogoutUrl, upvsForbiddenSubstitutionError} from '../../utils/constants'
 
 const setLogging = setData(['logging'])
 const setLoggedUserId = setData(['loggedUserId'])
@@ -62,21 +63,44 @@ export const updateUser = (data) => loadingWrapper(
 export const login = (token) => (
   async (dispatch, getState, {api}) => {
     try {
+      localStorage.setItem('oboToken', token)
       const userData = await api.login(token)
       localStorage.setItem('sessionToken', userData.token)
       localStorage.setItem('userId', userData.id)
-      localStorage.setItem('oboToken', token)
       dispatch(setUser(userData.id)(userData))
       dispatch(setLoggedUserId(userData.id))
       dispatch(setLogging(false))
       return true
     } catch (error) {
+      const logoutUrl = getLogoutUrl()
       dispatch(removeLoggedUser())
-      await swal({
-        title: i18n.t('errorMessages.failedLogin'),
-        text: error.message,
-        icon: 'error',
-      })
+      if (error.message === upvsForbiddenSubstitutionError) {
+        const shouldLogout = await swal({
+          title: i18n.t('errorMessages.failedLogin'),
+          text: i18n.t('errorMessages.forbiddenSubstitution'),
+          icon: 'error',
+          buttons: {
+            logout: {
+              text: i18n.t('auth.upvsLogout'),
+              value: true,
+            },
+            close: {
+              text: i18n.t('close'),
+              value: false,
+            },
+          },
+        })
+        if (shouldLogout) {
+          // TODO: make it nicer
+          window.location.href = logoutUrl
+        }
+      } else {
+        await swal({
+          title: i18n.t('errorMessages.failedLogin'),
+          text: error.message,
+          icon: 'error',
+        })
+      }
       return false
     }
   }
