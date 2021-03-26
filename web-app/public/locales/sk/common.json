@@ -50,7 +50,8 @@
   "invoiceDocumentation": "Dokumentácia faktúr",
   "auth": {
     "title": "Nepovolený prístup",
-    "description": "Nemáte povolenie na prezeranie tejto stránky"
+    "description": "Nemáte povolenie na prezeranie tejto stránky",
+    "upvsLogout": "Odhlásiť zo slovensko.sk"
   },
   "notfound": {
     "title": "Nenájdené",
@@ -151,6 +152,5 @@
     "creditNote": "Dobropis"
   },
   "errorCount": "Počet chýb",
-  "time": "Čas",
-  "upvsLogout": "Odhlásiť zo slovensko.sk"
+  "time": "Čas"
 }

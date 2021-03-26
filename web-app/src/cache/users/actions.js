@@ -79,7 +79,7 @@ export const login = (token) => (
           icon: 'error',
           buttons: {
             logout: {
-              text: i18n.t('upvsLogout'),
+              text: i18n.t('auth.upvsLogout'),
               value: true,
             },
             close: {

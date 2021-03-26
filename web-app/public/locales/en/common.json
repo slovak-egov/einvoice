@@ -50,7 +50,8 @@
   "invoiceDocumentation": "Invoice documentation",
   "auth": {
     "title": "Unauthorized access",
-    "description": "You have no permission to view this page"
+    "description": "You have no permission to view this page",
+    "upvsLogout": "Logout from slovensko.sk"
   },
   "notfound": {
     "title": "Not found",
@@ -151,6 +152,5 @@
     "creditNote": "Credit note"
   },
   "errorCount": "Error count",
-  "time": "Time",
-  "upvsLogout": "Logout from slovensko.sk"
+  "time": "Time"
 }
