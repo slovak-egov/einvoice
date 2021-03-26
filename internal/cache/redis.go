@@ -15,7 +15,6 @@ type Cache struct {
 	client                           *redis.Client
 	userTokenExpiration              time.Duration
 	testInvoiceRateLimiterExpiration time.Duration
-	draftExpiration                  time.Duration
 }
 
 func NewRedis(cacheConfig Configuration) *Cache {
@@ -39,7 +38,6 @@ func NewRedis(cacheConfig Configuration) *Cache {
 		client:                           rdb,
 		userTokenExpiration:              cacheConfig.SessionTokenExpiration,
 		testInvoiceRateLimiterExpiration: cacheConfig.TestInvoiceRateLimiterExpiration,
-		draftExpiration:                  cacheConfig.DraftExpiration,
 	}
 }
 

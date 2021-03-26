@@ -20,7 +20,7 @@ import (
 
 // Get drafts metadata for user and clean old drafts
 func (a *App) getDraftsMetadataForUser(ctx goContext.Context) ([]*entity.Draft, error) {
-	expirationThreshold := time.Now().Add(-a.config.Cache.DraftExpiration)
+	expirationThreshold := time.Now().Add(-a.config.DraftExpiration)
 
 	draftsMetadata, err := a.cache.GetDrafts(ctx)
 	if err != nil {
@@ -59,6 +59,7 @@ func (a *App) getMyDrafts(res http.ResponseWriter, req *http.Request) error {
 		return err
 	}
 
+	// Sort drafts from newest to oldest
 	sort.Slice(drafts, func(i, j int) bool {
 		return drafts[i].Id > drafts[j].Id
 	})
@@ -97,7 +98,7 @@ func (a *App) createMyDraft(res http.ResponseWriter, req *http.Request) error {
 	if err != nil {
 		return err
 	}
-	if len(drafts) >= a.config.Cache.DraftsLimit {
+	if len(drafts) >= a.config.DraftsLimit {
 		return handlerutil.NewTooManyRequestsError("draft.limit.reached")
 	}
 
