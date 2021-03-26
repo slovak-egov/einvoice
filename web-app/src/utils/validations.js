@@ -11,11 +11,12 @@ const isTimeIntervalValid = (low, high) =>
   (low == null || high == null || low <= high) && low !== '' && high !== ''
 
 export const isInvoicesFilterValid = ({
-  ublFormat, d16bFormat, ico, amountFrom, amountTo, amountWithoutVatFrom, amountWithoutVatTo,
-  issueDateFrom, issueDateTo, uploadTimeFrom, uploadTimeTo,
+  ublFormat, d16bFormat, amountFrom, amountTo, amountWithoutVatFrom, amountWithoutVatTo,
+  issueDateFrom, issueDateTo, uploadTimeFrom, uploadTimeTo, customerIco, supplierIco,
 }) =>
   areFormatsValid(ublFormat, d16bFormat) &&
-  isIcoValid(ico) &&
+  isIcoValid(customerIco) &&
+  isIcoValid(supplierIco) &&
   isAmountValid(amountFrom) &&
   isAmountValid(amountTo) &&
   isAmountValid(amountWithoutVatFrom) &&

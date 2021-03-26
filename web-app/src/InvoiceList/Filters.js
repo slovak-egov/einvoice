@@ -31,8 +31,8 @@ export default ({getInvoices}) => {
 
   const [customerName, setCustomerName] = useState(queryParams.get('customerName'))
   const [supplierName, setSupplierName] = useState(queryParams.get('supplierName'))
-
-  const [ico, setIco] = useState(queryParams.get('ico'))
+  const [customerIco, setCustomerIco] = useState(queryParams.get('customerIco'))
+  const [supplierIco, setSupplierIco] = useState(queryParams.get('supplierIco'))
 
   // Triggering search with new filters is done by redirect
   // Page itself is responsible to fetch proper data
@@ -44,7 +44,6 @@ export default ({getInvoices}) => {
       if (ublFormat) newQueryParams.append('format', invoiceFormats.UBL)
       if (d16bFormat) newQueryParams.append('format', invoiceFormats.D16B)
 
-      if (ico != null) newQueryParams.set('ico', ico)
       if (amountFrom != null) newQueryParams.set('amountFrom', amountFrom)
       if (amountTo != null) newQueryParams.set('amountTo', amountTo)
       if (amountWithoutVatFrom != null) newQueryParams.set('amountWithoutVatFrom', amountWithoutVatFrom)
@@ -57,19 +56,21 @@ export default ({getInvoices}) => {
 
       if (customerName != null) newQueryParams.set('customerName', customerName)
       if (supplierName != null) newQueryParams.set('supplierName', supplierName)
+      if (customerIco != null) newQueryParams.set('customerIco', customerIco)
+      if (supplierIco != null) newQueryParams.set('supplierIco', supplierIco)
 
       history.push(`${pathname}?${newQueryParams}`)
     },
     [
-      history, ico, pathname, test, amountFrom, amountTo, amountWithoutVatFrom, amountWithoutVatTo,
+      history, pathname, test, amountFrom, amountTo, amountWithoutVatFrom, amountWithoutVatTo,
       issueDateFrom, issueDateTo, uploadTimeFrom, uploadTimeTo, ublFormat, d16bFormat,
-      customerName, supplierName,
+      customerName, supplierName, customerIco, supplierIco,
     ],
   )
 
   const searchEnabled = isInvoicesFilterValid({
-    ublFormat, d16bFormat, ico, amountFrom, amountTo, amountWithoutVatFrom, amountWithoutVatTo,
-    issueDateFrom, issueDateTo, uploadTimeFrom, uploadTimeTo,
+    ublFormat, d16bFormat, amountFrom, amountTo, amountWithoutVatFrom, amountWithoutVatTo,
+    issueDateFrom, issueDateTo, uploadTimeFrom, uploadTimeTo, customerIco, supplierIco,
   })
 
   // When query URL parameters change try to fetch proper data
@@ -121,18 +122,34 @@ export default ({getInvoices}) => {
               </Col>
             </Row>
             <Row>
-              <Col>
-                <strong className="filter-heading">IČO</strong>
+              <Col md>
+                <strong className="filter-heading">{t('invoice.supplierIco')}</strong>
                 <InputGroup style={{maxWidth: '140px'}}>
                   <Form.Control
-                    value={ico || ''}
-                    onChange={(e) => setIco(keepDigitsOnly(e.target.value))}
-                    readOnly={ico == null}
+                    value={supplierIco || ''}
+                    onChange={(e) => setSupplierIco(keepDigitsOnly(e.target.value))}
+                    readOnly={supplierIco == null}
                   />
                   <InputGroup.Append>
                     <InputGroup.Checkbox
-                      checked={ico != null}
-                      onChange={() => setIco(ico == null ? '' : null)}
+                      checked={supplierIco != null}
+                      onChange={() => setSupplierIco(supplierIco == null ? '' : null)}
+                    />
+                  </InputGroup.Append>
+                </InputGroup>
+              </Col>
+              <Col md>
+                <strong className="filter-heading">{t('invoice.customerIco')}</strong>
+                <InputGroup style={{maxWidth: '140px'}}>
+                  <Form.Control
+                    value={customerIco || ''}
+                    onChange={(e) => setCustomerIco(keepDigitsOnly(e.target.value))}
+                    readOnly={customerIco == null}
+                  />
+                  <InputGroup.Append>
+                    <InputGroup.Checkbox
+                      checked={customerIco != null}
+                      onChange={() => setCustomerIco(customerIco == null ? '' : null)}
                     />
                   </InputGroup.Append>
                 </InputGroup>

@@ -76,3 +76,15 @@ func WithSupplierName(name string) TestInvoiceOption {
 		invoice.Sender = name
 	}
 }
+
+func WithCustomerIco(ico string) TestInvoiceOption {
+	return func(invoice *entity.Invoice) {
+		invoice.CustomerIco = ico
+	}
+}
+
+func WithSupplierIco(ico string) TestInvoiceOption {
+	return func(invoice *entity.Invoice) {
+		invoice.SupplierIco = ico
+	}
+}
