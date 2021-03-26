@@ -121,6 +121,7 @@
   },
   "errorMessages": {
     "failedLogin": "Prihlásenie neúspešné",
+    "forbiddenSubstitution": "Nepovolený typ zastupovania",
     "updateUser": "Údaje používateľa sa nepodarilo aktualizovať",
     "getUserOrganizationIds": "Nepodarilo sa načítať IČO, ktoré používateľ zastupuje",
     "getUserSubstitutes": "Používateľových náhradníkov sa nepodarilo načítať",
@@ -150,5 +151,6 @@
     "creditNote": "Dobropis"
   },
   "errorCount": "Počet chýb",
-  "time": "Čas"
+  "time": "Čas",
+  "upvsLogout": "Odhlásiť zo slovensko.sk"
 }

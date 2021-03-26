@@ -63,27 +63,42 @@ export const updateUser = (data) => loadingWrapper(
 export const login = (token) => (
   async (dispatch, getState, {api}) => {
     try {
+      localStorage.setItem('oboToken', token)
       const userData = await api.login(token)
       localStorage.setItem('sessionToken', userData.token)
       localStorage.setItem('userId', userData.id)
-      localStorage.setItem('oboToken', token)
       dispatch(setUser(userData.id)(userData))
       dispatch(setLoggedUserId(userData.id))
       dispatch(setLogging(false))
       return true
     } catch (error) {
-      dispatch(removeLoggedUser())
       if (error.message === upvsForbiddenSubstitutionError) {
-        await swal({
+        const logout = await swal({
           title: i18n.t('errorMessages.failedLogin'),
-          text: error.message,
+          text: i18n.t('errorMessages.forbiddenSubstitution'),
           icon: 'error',
-          button: i18n.t('topBar.logout'),
-        }).then(() => {
-          // TODO: make it nicer
-          window.location = getLogoutUrl(token)
+          buttons: {
+            logout: {
+              text: i18n.t('upvsLogout'),
+              value: true,
+            },
+            close: {
+              text: i18n.t('close'),
+              value: false,
+            },
+          },
         })
+        if (logout) {
+          // TODO: make it nicer
+          const logoutUrl = getLogoutUrl()
+          dispatch(removeLoggedUser())
+          window.location.href = logoutUrl
+        } else {
+          dispatch(removeLoggedUser())
+          return false
+        }
       } else {
+        dispatch(removeLoggedUser())
         await swal({
           title: i18n.t('errorMessages.failedLogin'),
           text: error.message,

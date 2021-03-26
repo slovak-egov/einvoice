@@ -121,6 +121,7 @@
   },
   "errorMessages": {
     "failedLogin": "Login failed",
+    "forbiddenSubstitution": "Forbidden substitution type",
     "updateUser": "User data could not be updated",
     "getUserOrganizationIds": "User organization IDs (IČO) could not be fetched",
     "getUserSubstitutes": "User substitutes could not be fetched",
@@ -150,5 +151,6 @@
     "creditNote": "Credit note"
   },
   "errorCount": "Error count",
-  "time": "Time"
+  "time": "Time",
+  "upvsLogout": "Logout from slovensko.sk"
 }
