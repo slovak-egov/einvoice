@@ -9,7 +9,12 @@ example:
 export JELASTIC_HOME=~/jelastic
 ```
 
-deploy applications
+Login. Authentication will be called after first cli command, for example:
+```shell script
+$JELASTIC_HOME/environment/control/getenvs
+``` 
+
+Deploy applications:
 ```shell script
 ./dev-scripts/jelastic/deploy.sh ${service_name}
 ```

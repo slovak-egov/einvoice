@@ -3,6 +3,7 @@ package apiserver
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"testing"
 	"time"
@@ -190,4 +191,31 @@ func TestDraft(t *testing.T) {
 		assert.Equal(t, http.StatusOK, response.Code)
 		assert.Equal(t, response.Body.String(), "[]")
 	})
+}
+
+func TestDraftsLimit(t *testing.T) {
+	t.Cleanup(testutil.CleanDb(ctx, t, a.db.Connector))
+	t.Cleanup(testutil.CleanCache(ctx, t, a.cache))
+	t.Cleanup(testutil.CleanStorage(t, a.storage))
+
+	user := testutil.CreateUser(ctx, t, a.db.Connector, "")
+	sessionToken := testutil.CreateToken(ctx, t, a.cache, user)
+
+	for i := 0; i < 5; i++ {
+		req, err := http.NewRequest("POST", "/drafts", bytes.NewReader([]byte(fmt.Sprintf(`{"name": "draft-%d", "data": {}}`, i))))
+		if err != nil {
+			t.Error(err)
+		}
+
+		response := testutil.ExecuteAuthRequest(a, req, sessionToken)
+		assert.Equal(t, http.StatusCreated, response.Code)
+	}
+
+	req, err := http.NewRequest("POST", "/drafts", bytes.NewReader([]byte(`{"name": "draft-x", "data": {}}`)))
+	if err != nil {
+		t.Error(err)
+	}
+
+	response := testutil.ExecuteAuthRequest(a, req, sessionToken)
+	assert.Equal(t, http.StatusTooManyRequests, response.Code)
 }

@@ -78,6 +78,17 @@ func (a *App) getMyDraft(res http.ResponseWriter, req *http.Request) error {
 }
 
 func (a *App) createMyDraft(res http.ResponseWriter, req *http.Request) error {
+	ctx := req.Context()
+
+	// Limit number of drafts
+	drafts, err := a.cache.GetDrafts(ctx)
+	if err != nil {
+		return err
+	}
+	if len(drafts) >= a.config.Cache.DraftsLimit {
+		return handlerutil.NewTooManyRequestsError("draft.limit.reached")
+	}
+
 	req.Body = http.MaxBytesReader(res, req.Body, a.config.MaxInvoiceSize)
 	var requestBody entity.Draft
 
@@ -95,12 +106,12 @@ func (a *App) createMyDraft(res http.ResponseWriter, req *http.Request) error {
 	requestBody.Id = ulid.New(time.Now().UTC()).String()
 	requestBody.CalculateCreatedAt()
 
-	err := a.storage.SaveDraft(req.Context(), requestBody.Id, requestBody.Data)
+	err = a.storage.SaveDraft(ctx, requestBody.Id, requestBody.Data)
 	if err != nil {
 		return err
 	}
 
-	err = a.cache.SaveDraft(req.Context(), requestBody.Id, requestBody.Name)
+	err = a.cache.SaveDraft(ctx, requestBody.Id, requestBody.Name)
 	if err != nil {
 		return err
 	}
