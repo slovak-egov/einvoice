@@ -50,7 +50,8 @@
   "invoiceDocumentation": "Dokumentácia faktúr",
   "auth": {
     "title": "Nepovolený prístup",
-    "description": "Nemáte povolenie na prezeranie tejto stránky"
+    "description": "Nemáte povolenie na prezeranie tejto stránky",
+    "upvsLogout": "Odhlásiť zo slovensko.sk"
   },
   "notfound": {
     "title": "Nenájdené",
@@ -129,6 +130,7 @@
   },
   "errorMessages": {
     "failedLogin": "Prihlásenie neúspešné",
+    "forbiddenSubstitution": "Nepovolený typ zastupovania",
     "updateUser": "Údaje používateľa sa nepodarilo aktualizovať",
     "getUserOrganizationIds": "Nepodarilo sa načítať IČO, ktoré používateľ zastupuje",
     "getUserSubstitutes": "Používateľových náhradníkov sa nepodarilo načítať",

@@ -19,6 +19,7 @@
       "title": "Try it out",
       "body": [
         "Try to log in using",
+        "Try to log in with insufficient substitution permissions",
         "Try submitting your own invoice or one of these examples",
         "Notifications about invoice creation are sent to",
         "ÚPVS mailboxes"
