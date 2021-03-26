@@ -11,6 +11,7 @@ import (
 
 	"github.com/slovak-egov/einvoice/internal/entity"
 	"github.com/slovak-egov/einvoice/internal/testutil"
+	"github.com/slovak-egov/einvoice/pkg/ulid"
 )
 
 func TestGetMyDrafts(t *testing.T) {
@@ -21,10 +22,10 @@ func TestGetMyDrafts(t *testing.T) {
 	user := testutil.CreateUser(ctx, t, a.db.Connector, "")
 	sessionToken := testutil.CreateToken(ctx, t, a.cache, user)
 
-	draft1 := testutil.CreateDraft(ctx, t, a.storage, a.cache, user.Id, "d1", "")
-	draft2 := testutil.CreateDraft(ctx, t, a.storage, a.cache, user.Id, "d2", "")
-	draft3 := testutil.CreateDraft(ctx, t, a.storage, a.cache, user.Id, "d3", "")
-	testutil.CreateDraft(ctx, t, a.storage, a.cache, user.Id+1, "d4", "")
+	draft1 := testutil.CreateDraft(ctx, t, a.storage, a.cache, user.Id, "d1", "", "")
+	draft2 := testutil.CreateDraft(ctx, t, a.storage, a.cache, user.Id, "d2", "", "")
+	draft3 := testutil.CreateDraft(ctx, t, a.storage, a.cache, user.Id, "d3", "", "")
+	testutil.CreateDraft(ctx, t, a.storage, a.cache, user.Id+1, "d4", "", "")
 
 	req, err := http.NewRequest("GET", "/drafts", nil)
 	if err != nil {
@@ -45,13 +46,54 @@ func TestGetMyDrafts(t *testing.T) {
 	assert.ElementsMatch(t, drafts, responseData)
 }
 
-func TestDraft(t *testing.T) {
+func TestDraftsExpiration(t *testing.T) {
 	t.Cleanup(testutil.CleanDb(ctx, t, a.db.Connector))
 	t.Cleanup(testutil.CleanCache(ctx, t, a.cache))
 	t.Cleanup(testutil.CleanStorage(t, a.storage))
 
 	user := testutil.CreateUser(ctx, t, a.db.Connector, "")
 	sessionToken := testutil.CreateToken(ctx, t, a.cache, user)
+
+	id1 := ulid.New(time.Now()).String()
+	id2 := ulid.New(time.Now().Add(-24 * time.Hour)).String()
+	draft1 := testutil.CreateDraft(ctx, t, a.storage, a.cache, user.Id, "d1", "", id1)
+	draft2 := testutil.CreateDraft(ctx, t, a.storage, a.cache, user.Id, "d2", "", id2)
+
+	req, err := http.NewRequest("GET", "/drafts", nil)
+	if err != nil {
+		t.Error(err)
+	}
+
+	response := testutil.ExecuteAuthRequest(a, req, sessionToken)
+	assert.Equal(t, http.StatusOK, response.Code)
+	var responseData []*entity.Draft
+	if err = json.Unmarshal(response.Body.Bytes(), &responseData); err != nil {
+		t.Error(err)
+	}
+
+	draft1.Data = nil
+	assert.ElementsMatch(t, []*entity.Draft{draft1}, responseData)
+
+	req, err = http.NewRequest("GET", "/drafts/"+draft2.Id, nil)
+	if err != nil {
+		t.Error(err)
+	}
+
+	response = testutil.ExecuteAuthRequest(a, req, sessionToken)
+	assert.Equal(t, http.StatusNotFound, response.Code)
+
+}
+
+func TestDraft(t *testing.T) {
+	t.Cleanup(testutil.CleanDb(ctx, t, a.db.Connector))
+	t.Cleanup(testutil.CleanCache(ctx, t, a.cache))
+	t.Cleanup(testutil.CleanStorage(t, a.storage))
+
+	user := testutil.CreateUser(ctx, t, a.db.Connector, "10000001")
+	sessionToken := testutil.CreateToken(ctx, t, a.cache, user)
+
+	user2 := testutil.CreateUser(ctx, t, a.db.Connector, "10000002")
+	sessionToken2 := testutil.CreateToken(ctx, t, a.cache, user2)
 
 	var createdDraft entity.Draft
 
@@ -90,6 +132,17 @@ func TestDraft(t *testing.T) {
 		assert.Equal(t, entity.Draft{createdDraft.Id, createdDraft.CreatedAt, createdDraft.Name, nil}, drafts[0])
 	})
 
+	t.Run("Get all drafts for user without drafts", func(t *testing.T) {
+		req, err := http.NewRequest("GET", "/drafts", nil)
+		if err != nil {
+			t.Error(err)
+		}
+
+		response := testutil.ExecuteAuthRequest(a, req, sessionToken2)
+		assert.Equal(t, http.StatusOK, response.Code)
+		assert.Equal(t, response.Body.String(), "[]")
+	})
+
 	t.Run("Get draft content", func(t *testing.T) {
 		req, err := http.NewRequest("GET", "/drafts/"+createdDraft.Id, nil)
 		if err != nil {
@@ -99,6 +152,16 @@ func TestDraft(t *testing.T) {
 		response := testutil.ExecuteAuthRequest(a, req, sessionToken)
 		assert.Equal(t, http.StatusOK, response.Code)
 		assert.Equal(t, string(createdDraft.Data), string(response.Body.Bytes()))
+	})
+
+	t.Run("Try to get unknown draft", func(t *testing.T) {
+		req, err := http.NewRequest("GET", "/drafts/"+ulid.New(time.Now()).String(), nil)
+		if err != nil {
+			t.Error(err)
+		}
+
+		response := testutil.ExecuteAuthRequest(a, req, sessionToken)
+		assert.Equal(t, http.StatusNotFound, response.Code)
 	})
 
 	t.Run("Delete draft", func(t *testing.T) {

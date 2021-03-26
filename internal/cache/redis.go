@@ -168,20 +168,20 @@ func (r *Cache) SaveDraft(ctx goContext.Context, draftId, name string) error {
 }
 
 func (r *Cache) DeleteDraft(ctx goContext.Context, draftId string) error {
-	res, err := r.client.HDel(ctx, draftsKey(context.GetUserId(ctx)), draftId).Result()
-	if err != nil {
+	err := r.client.HDel(ctx, draftsKey(context.GetUserId(ctx)), draftId).Err()
+	if err == redis.Nil {
+		context.GetLogger(ctx).WithFields(log.Fields{
+			"draftId": draftId,
+			"userId":  context.GetUserId(ctx),
+		}).Debug("redis.deleteDraft.notFound")
+		return &NotFoundError{"Draft", draftId}
+	} else if err != nil {
 		context.GetLogger(ctx).WithFields(log.Fields{
 			"draftId": draftId,
 			"userId":  context.GetUserId(ctx),
 			"error":   err,
 		}).Error("redis.deleteDraft.failed")
 		return err
-	} else if res != 1 {
-		context.GetLogger(ctx).WithFields(log.Fields{
-			"draftId": draftId,
-			"userId":  context.GetUserId(ctx),
-		}).Debug("redis.deleteDraft.notFound")
-		return &NotFoundError{"Draft", draftId}
 	}
 
 	return nil
@@ -199,19 +199,19 @@ func (r *Cache) GetDrafts(ctx goContext.Context) (map[string]string, error) {
 
 func (r *Cache) GetDraft(ctx goContext.Context, draftId string) (string, error) {
 	draftName, err := r.client.HGet(ctx, draftsKey(context.GetUserId(ctx)), draftId).Result()
-	if err != nil {
+	if err == redis.Nil {
+		context.GetLogger(ctx).WithFields(log.Fields{
+			"draftId": draftId,
+			"userId":  context.GetUserId(ctx),
+		}).Debug("redis.getDraft.notFound")
+		return "", &NotFoundError{"Draft", draftId}
+	} else if err != nil {
 		context.GetLogger(ctx).WithFields(log.Fields{
 			"draftId": draftId,
 			"userId":  context.GetUserId(ctx),
 			"error":   err,
 		}).Error("redis.getDraft.failed")
 		return "", err
-	} else if draftName == "" {
-		context.GetLogger(ctx).WithFields(log.Fields{
-			"draftId": draftId,
-			"userId":  context.GetUserId(ctx),
-		}).Debug("redis.getDraft.notFound")
-		return "", &NotFoundError{"Draft", draftId}
 	}
 
 	return draftName, nil

@@ -1,25 +1,32 @@
 package apiserver
 
 import (
+	goContext "context"
 	"encoding/json"
 	"net/http"
 	"sort"
 	"time"
 
 	"github.com/gorilla/mux"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/slovak-egov/einvoice/internal/cache"
 	"github.com/slovak-egov/einvoice/internal/entity"
 	"github.com/slovak-egov/einvoice/internal/storage"
+	"github.com/slovak-egov/einvoice/pkg/context"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 	"github.com/slovak-egov/einvoice/pkg/ulid"
 )
 
 func (a *App) getMyDrafts(res http.ResponseWriter, req *http.Request) error {
-	draftsMetadata, err := a.cache.GetDrafts(req.Context())
+	ctx := req.Context()
+	expirationThreshold := time.Now().Add(-a.config.Cache.DraftExpiration)
+
+	draftsMetadata, err := a.cache.GetDrafts(ctx)
 	if err != nil {
 		return err
 	}
+
 	response := []*entity.Draft{}
 	for id, name := range draftsMetadata {
 		draft := &entity.Draft{
@@ -27,7 +34,18 @@ func (a *App) getMyDrafts(res http.ResponseWriter, req *http.Request) error {
 			Name: name,
 		}
 		draft.CalculateCreatedAt()
-		response = append(response, draft)
+
+		if draft.CreatedAt.Before(expirationThreshold) {
+			if err = a.deleteDraft(ctx, id); err != nil {
+				log.WithFields(log.Fields{
+					"draftId": id,
+					"userId":  context.GetUserId(ctx),
+					"error":   err,
+				}).Error("draft.expiration.delete.failed")
+			}
+		} else {
+			response = append(response, draft)
+		}
 	}
 	sort.Slice(response, func(i, j int) bool {
 		return response[i].Id > response[j].Id
@@ -93,20 +111,25 @@ func (a *App) createMyDraft(res http.ResponseWriter, req *http.Request) error {
 
 func (a *App) deleteMyDraft(res http.ResponseWriter, req *http.Request) error {
 	draftId := mux.Vars(req)["id"]
-	err := a.cache.DeleteDraft(req.Context(), draftId)
+	err := a.deleteDraft(req.Context(), draftId)
 	if err != nil {
 		if _, ok := err.(*cache.NotFoundError); ok {
 			return handlerutil.NewNotFoundError("draft.notFound")
-		}
-		return err
-	}
-	err = a.storage.DeleteDraft(req.Context(), draftId)
-	if err != nil {
-		if _, ok := err.(*storage.NotFoundError); ok {
+		} else if _, ok := err.(*storage.NotFoundError); ok {
 			return handlerutil.NewNotFoundError("draft.notFound")
 		}
 		return err
 	}
 	handlerutil.RespondWithJSON(res, http.StatusOK, map[string]string{"id": draftId})
+	return nil
+}
+
+func (a *App) deleteDraft(ctx goContext.Context, draftId string) error {
+	if err := a.cache.DeleteDraft(ctx, draftId); err != nil {
+		return err
+	}
+	if err := a.storage.DeleteDraft(ctx, draftId); err != nil {
+		return err
+	}
 	return nil
 }
