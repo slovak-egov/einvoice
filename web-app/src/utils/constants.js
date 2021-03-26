@@ -9,8 +9,8 @@ export const invoiceFormats = {
 export const swaggerUrl = 'https://generator.swagger.io/?url=https://raw.githubusercontent.com/slovak-egov/einvoice/main/docs/swagger.yml'
 
 // This needs to be function, so URL is generated with current localStorage content
-export const getLogoutUrl = () =>
-  `${CONFIG.apiServerUrl}/upvs/logout?token=${localStorage.getItem('oboToken')}&callback=${CONFIG.logoutCallbackUrl}`
+export const getLogoutUrl = (oboToken) =>
+  `${CONFIG.apiServerUrl}/upvs/logout?token=${oboToken || localStorage.getItem('oboToken')}&callback=${CONFIG.logoutCallbackUrl}`
 
 export const exampleInvoiceUrl = (format, name) =>
   `${CONFIG.apiServerUrl}/data/examples/${format}/${name}.xml`
@@ -47,3 +47,5 @@ export const dataTypes = {
   DATE: 'Date',
   CODE: 'Code',
 }
+
+export const upvsForbiddenSubstitutionError = 'authorization.upvs.forbiddenSubstitutionType'

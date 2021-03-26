@@ -35,7 +35,9 @@ const LogoutCallback = ({history}) => {
 
   useEffect(() => {
     (async () => {
-      await dispatch(logout())
+      if (localStorage.getItem('sessionToken')) {
+        await dispatch(logout())
+      }
       history.push('/')
     })()
   })

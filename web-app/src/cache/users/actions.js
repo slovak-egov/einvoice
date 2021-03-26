@@ -1,6 +1,7 @@
 import swal from 'sweetalert'
 import {loadingWrapper, setData} from '../../helpers/actions'
 import i18n from '../../i18n'
+import {getLogoutUrl, upvsForbiddenSubstitutionError} from '../../utils/constants'
 
 const setLogging = setData(['logging'])
 const setLoggedUserId = setData(['loggedUserId'])
@@ -72,11 +73,23 @@ export const login = (token) => (
       return true
     } catch (error) {
       dispatch(removeLoggedUser())
-      await swal({
-        title: i18n.t('errorMessages.failedLogin'),
-        text: error.message,
-        icon: 'error',
-      })
+      if (error.message === upvsForbiddenSubstitutionError) {
+        await swal({
+          title: i18n.t('errorMessages.failedLogin'),
+          text: error.message,
+          icon: 'error',
+          button: i18n.t('topBar.logout'),
+        }).then(() => {
+          // TODO: make it nicer
+          window.location = getLogoutUrl(token)
+        })
+      } else {
+        await swal({
+          title: i18n.t('errorMessages.failedLogin'),
+          text: error.message,
+          icon: 'error',
+        })
+      }
       return false
     }
   }
