@@ -18,16 +18,16 @@ import (
 	"github.com/slovak-egov/einvoice/pkg/ulid"
 )
 
-func (a *App) getMyDrafts(res http.ResponseWriter, req *http.Request) error {
-	ctx := req.Context()
+// Get drafts metadata for user and clean old drafts
+func (a *App) getDraftsMetadataForUser(ctx goContext.Context) ([]*entity.Draft, error) {
 	expirationThreshold := time.Now().Add(-a.config.Cache.DraftExpiration)
 
 	draftsMetadata, err := a.cache.GetDrafts(ctx)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	response := []*entity.Draft{}
+	result := []*entity.Draft{}
 	for id, name := range draftsMetadata {
 		draft := &entity.Draft{
 			Id:   id,
@@ -44,13 +44,25 @@ func (a *App) getMyDrafts(res http.ResponseWriter, req *http.Request) error {
 				}).Error("draft.expiration.delete.failed")
 			}
 		} else {
-			response = append(response, draft)
+			result = append(result, draft)
 		}
 	}
-	sort.Slice(response, func(i, j int) bool {
-		return response[i].Id > response[j].Id
+
+	return result, nil
+}
+
+func (a *App) getMyDrafts(res http.ResponseWriter, req *http.Request) error {
+	ctx := req.Context()
+
+	drafts, err := a.getDraftsMetadataForUser(ctx)
+	if err != nil {
+		return err
+	}
+
+	sort.Slice(drafts, func(i, j int) bool {
+		return drafts[i].Id > drafts[j].Id
 	})
-	handlerutil.RespondWithJSON(res, http.StatusOK, response)
+	handlerutil.RespondWithJSON(res, http.StatusOK, drafts)
 	return nil
 }
 
@@ -81,7 +93,7 @@ func (a *App) createMyDraft(res http.ResponseWriter, req *http.Request) error {
 	ctx := req.Context()
 
 	// Limit number of drafts
-	drafts, err := a.cache.GetDrafts(ctx)
+	drafts, err := a.getDraftsMetadataForUser(ctx)
 	if err != nil {
 		return err
 	}

@@ -109,7 +109,7 @@ var testConfig = Configuration{
 		Port:                             6379,
 		SessionTokenExpiration:           1 * time.Hour,
 		DraftExpiration:                  1 * time.Hour,
-		DraftsLimit:                      5,
+		DraftsLimit:                      2,
 		TestInvoiceRateLimiterExpiration: 24 * time.Hour,
 		TestInvoiceRateLimiterThreshold:  1,
 	},

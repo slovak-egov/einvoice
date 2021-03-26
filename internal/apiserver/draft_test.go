@@ -23,9 +23,9 @@ func TestGetMyDrafts(t *testing.T) {
 	user := testutil.CreateUser(ctx, t, a.db.Connector, "")
 	sessionToken := testutil.CreateToken(ctx, t, a.cache, user)
 
-	draft1 := testutil.CreateDraft(ctx, t, a.storage, a.cache, user.Id, "d1", "", "")
-	draft2 := testutil.CreateDraft(ctx, t, a.storage, a.cache, user.Id, "d2", "", "")
-	draft3 := testutil.CreateDraft(ctx, t, a.storage, a.cache, user.Id, "d3", "", "")
+	draft1 := testutil.CreateDraft(ctx, t, a.storage, a.cache, user.Id, "d1", "", ulid.New(time.Now().Add(-1*time.Minute)).String())
+	draft2 := testutil.CreateDraft(ctx, t, a.storage, a.cache, user.Id, "d2", "", ulid.New(time.Now().Add(-2*time.Minute)).String())
+	draft3 := testutil.CreateDraft(ctx, t, a.storage, a.cache, user.Id, "d3", "", ulid.New(time.Now().Add(-3*time.Minute)).String())
 	testutil.CreateDraft(ctx, t, a.storage, a.cache, user.Id+1, "d4", "", "")
 
 	req, err := http.NewRequest("GET", "/drafts", nil)
@@ -35,16 +35,16 @@ func TestGetMyDrafts(t *testing.T) {
 
 	response := testutil.ExecuteAuthRequest(a, req, sessionToken)
 	assert.Equal(t, http.StatusOK, response.Code)
-	var responseData []*entity.Draft
+	var responseData []entity.Draft
 	if err = json.Unmarshal(response.Body.Bytes(), &responseData); err != nil {
 		t.Error(err)
 	}
 
-	drafts := []*entity.Draft{draft1, draft2, draft3}
+	drafts := []entity.Draft{*draft1, *draft2, *draft3}
 	for i := range drafts {
 		drafts[i].Data = nil
 	}
-	assert.ElementsMatch(t, drafts, responseData)
+	assert.Equal(t, drafts, responseData)
 }
 
 func TestDraftsExpiration(t *testing.T) {
@@ -67,13 +67,13 @@ func TestDraftsExpiration(t *testing.T) {
 
 	response := testutil.ExecuteAuthRequest(a, req, sessionToken)
 	assert.Equal(t, http.StatusOK, response.Code)
-	var responseData []*entity.Draft
+	var responseData []entity.Draft
 	if err = json.Unmarshal(response.Body.Bytes(), &responseData); err != nil {
 		t.Error(err)
 	}
 
 	draft1.Data = nil
-	assert.ElementsMatch(t, []*entity.Draft{draft1}, responseData)
+	assert.Equal(t, []entity.Draft{*draft1}, responseData)
 
 	req, err = http.NewRequest("GET", "/drafts/"+draft2.Id, nil)
 	if err != nil {
@@ -82,7 +82,6 @@ func TestDraftsExpiration(t *testing.T) {
 
 	response = testutil.ExecuteAuthRequest(a, req, sessionToken)
 	assert.Equal(t, http.StatusNotFound, response.Code)
-
 }
 
 func TestDraft(t *testing.T) {
@@ -201,7 +200,7 @@ func TestDraftsLimit(t *testing.T) {
 	user := testutil.CreateUser(ctx, t, a.db.Connector, "")
 	sessionToken := testutil.CreateToken(ctx, t, a.cache, user)
 
-	for i := 0; i < 5; i++ {
+	for i := 0; i < 2; i++ {
 		req, err := http.NewRequest("POST", "/drafts", bytes.NewReader([]byte(fmt.Sprintf(`{"name": "draft-%d", "data": {}}`, i))))
 		if err != nil {
 			t.Error(err)
