@@ -4,6 +4,8 @@ import {Button} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import InvoiceSubmission from './InvoiceSubmission'
 import Form from './form'
+import Drafts from './drafts'
+import {AuthRoute} from '../helpers/Auth'
 import {isUserLogged} from '../cache/users/state'
 
 export default ({match}) => {
@@ -13,6 +15,9 @@ export default ({match}) => {
   return (
     <div className="m-1">
       <div className="row justify-content-center">
+        {isLogged && <NavLink to={`${match.url}/drafts`} activeClassName="selected">
+          <Button variant="primary" size="lg">{t('drafts')}</Button>
+        </NavLink>}
         <NavLink to={`${match.url}/form`} activeClassName="selected">
           <Button variant="primary" size="lg">{t('form')}</Button>
         </NavLink>
@@ -21,6 +26,9 @@ export default ({match}) => {
         </NavLink>
       </div>
       <Switch>
+        <AuthRoute path={`${match.url}/drafts`}>
+          <Drafts />
+        </AuthRoute>
         <Route path={`${match.url}/form`} component={Form} />
         <Route path={`${match.url}/submission`}>
           <InvoiceSubmission showSubmission={isLogged} title={title} />
