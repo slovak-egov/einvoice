@@ -34,7 +34,6 @@ var devConfig = Configuration{
 		Host:                             "localhost",
 		Port:                             6379,
 		SessionTokenExpiration:           24 * time.Hour,
-		DraftExpiration:                  24 * time.Hour,
 		TestInvoiceRateLimiterExpiration: 24 * time.Hour,
 		TestInvoiceRateLimiterThreshold:  20,
 	},
@@ -46,7 +45,9 @@ var devConfig = Configuration{
 		MaxExpiration: 10 * time.Minute,
 		JtiExpiration: 15 * time.Minute,
 	},
-	MaxInvoiceSize: 1 << 23,
+	MaxInvoiceSize:  1 << 23,
+	DraftExpiration: 24 * time.Hour,
+	DraftsLimit:     10,
 }
 
 var prodConfig = Configuration{
@@ -70,7 +71,6 @@ var prodConfig = Configuration{
 	Cache: cache.Configuration{
 		Port:                             6379,
 		SessionTokenExpiration:           1 * time.Hour,
-		DraftExpiration:                  7 * 24 * time.Hour,
 		TestInvoiceRateLimiterExpiration: 24 * time.Hour,
 		TestInvoiceRateLimiterThreshold:  20,
 	},
@@ -84,6 +84,8 @@ var prodConfig = Configuration{
 	},
 	LocalStorageBasePath: "/storage",
 	MaxInvoiceSize:       1 << 23,
+	DraftExpiration:      7 * 24 * time.Hour,
+	DraftsLimit:          10,
 }
 
 var testConfig = Configuration{
@@ -106,7 +108,6 @@ var testConfig = Configuration{
 		Host:                             "localhost",
 		Port:                             6379,
 		SessionTokenExpiration:           1 * time.Hour,
-		DraftExpiration:                  1 * time.Hour,
 		TestInvoiceRateLimiterExpiration: 24 * time.Hour,
 		TestInvoiceRateLimiterThreshold:  1,
 	},
@@ -115,5 +116,7 @@ var testConfig = Configuration{
 		MaxExpiration: 10 * time.Minute,
 		JtiExpiration: 15 * time.Minute,
 	},
-	MaxInvoiceSize: 1 << 23,
+	MaxInvoiceSize:  1 << 23,
+	DraftExpiration: 1 * time.Hour,
+	DraftsLimit:     2,
 }
