@@ -216,7 +216,6 @@ paths:
           required: true
           schema:
             type: integer
-        - $ref: '#/components/parameters/Ico'
         - $ref: '#/components/parameters/InvoiceFormat'
         - $ref: '#/components/parameters/StartId'
         - $ref: '#/components/parameters/Order'
@@ -232,6 +231,8 @@ paths:
         - $ref: '#/components/parameters/UploadTimeTo'
         - $ref: '#/components/parameters/CustomerName'
         - $ref: '#/components/parameters/SupplierName'
+        - $ref: '#/components/parameters/CustomerIco'
+        - $ref: '#/components/parameters/SupplierIco'
       security:
         - sessionAuth: []
         - apiKeyAuth: []
@@ -254,7 +255,6 @@ paths:
         - $ref: '#/components/parameters/Order'
         - $ref: '#/components/parameters/Limit'
         - $ref: '#/components/parameters/TestInvoice'
-        - $ref: '#/components/parameters/Ico'
         - $ref: '#/components/parameters/AmountFrom'
         - $ref: '#/components/parameters/AmountTo'
         - $ref: '#/components/parameters/AmountWithoutVatFrom'
@@ -265,6 +265,8 @@ paths:
         - $ref: '#/components/parameters/UploadTimeTo'
         - $ref: '#/components/parameters/CustomerName'
         - $ref: '#/components/parameters/SupplierName'
+        - $ref: '#/components/parameters/CustomerIco'
+        - $ref: '#/components/parameters/SupplierIco'
       responses:
         '200':
           description: Successfull response
@@ -736,12 +738,6 @@ components:
         type: array
         items:
           $ref: '#/components/schemas/InvoiceFormat'
-    Ico:
-      name: ico
-      in: query
-      description: Request entities related to given IČO. If not provided, all will be considered
-      schema:
-        type: string
     AmountFrom:
       name: amountFrom
       in: query
@@ -812,6 +808,20 @@ components:
       schema:
         type: string
         example: 'Company 1'
+    CustomerIco:
+      name: customerIco
+      in: query
+      description: Filter invoices by customer IČO
+      schema:
+        type: string
+        example: '11190993'
+    SupplierIco:
+      name: supplierIco
+      in: query
+      description: Filter invoices by supplier IČO
+      schema:
+        type: string
+        example: '11190993'
     Language:
       name: Accept-Language
       in: header

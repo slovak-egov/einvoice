@@ -22,7 +22,6 @@ type PublicInvoicesOptions struct {
 	StartId          string
 	Limit            int
 	Test             bool
-	Ico              string
 	Order            string
 	Amount           AmountOptions
 	AmountWithoutVat AmountOptions
@@ -30,6 +29,8 @@ type PublicInvoicesOptions struct {
 	CreatedAt        TimeOptions
 	CustomerName     string
 	SupplierName     string
+	CustomerIco      string
+	SupplierIco      string
 }
 
 type AmountOptions struct {
@@ -80,11 +81,12 @@ func (o *PublicInvoicesOptions) buildQuery(query *orm.Query) *orm.Query {
 		query = query.Where("test = FALSE")
 	}
 
-	if o.Ico != "" {
-		// Keep only invoices, given ICO was involved
-		query = query.WhereGroup(func(q *orm.Query) (*orm.Query, error) {
-			return q.WhereOr("supplier_ico = ?", o.Ico).WhereOr("customer_ico = ?", o.Ico), nil
-		})
+	if o.CustomerIco != "" {
+		query = query.Where("customer_ico = ?", o.CustomerIco)
+	}
+
+	if o.SupplierIco != "" {
+		query = query.Where("supplier_ico = ?", o.SupplierIco)
 	}
 
 	if o.Amount.From != nil {

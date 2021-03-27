@@ -32,6 +32,8 @@ func TestGetInvoices(t *testing.T) {
 		testutil.WithIssueDate(timeutil.Date{time.Date(2021, 1, 1, 0, 0, 0, 0, time.UTC)}),
 		testutil.WithCustomerName("Customer 1"),
 		testutil.WithSupplierName("Supplier 1"),
+		testutil.WithCustomerIco("11111111"),
+		testutil.WithSupplierIco("22222222"),
 	)
 	testutil.CreateInvoice(
 		ctx, t, a.db.Connector, ids[1],
@@ -41,6 +43,8 @@ func TestGetInvoices(t *testing.T) {
 		testutil.WithIssueDate(timeutil.Date{time.Date(2021, 1, 2, 0, 0, 0, 0, time.UTC)}),
 		testutil.WithCustomerName("Customer 2"),
 		testutil.WithSupplierName("Supplier 2"),
+		testutil.WithCustomerIco("11111111"),
+		testutil.WithSupplierIco("33333333"),
 	)
 	testutil.CreateInvoice(
 		ctx, t, a.db.Connector, ids[2],
@@ -49,6 +53,8 @@ func TestGetInvoices(t *testing.T) {
 		testutil.WithIssueDate(timeutil.Date{time.Date(2021, 1, 3, 0, 0, 0, 0, time.UTC)}),
 		testutil.WithCustomerName("Customer 3"),
 		testutil.WithSupplierName("Supplier 3"),
+		testutil.WithCustomerIco("44444444"),
+		testutil.WithSupplierIco("33333333"),
 	)
 
 	var flagtests = []struct {
@@ -59,7 +65,6 @@ func TestGetInvoices(t *testing.T) {
 		{"", []string{ids[2], ids[0]}, nil},
 		{"?test=true&ico=11111111", []string{ids[2], ids[1], ids[0]}, nil},
 		{"?format=d16b", nil, nil},
-		{"?ico=11111112", nil, nil},
 		{fmt.Sprintf("?startId=%s&limit=1", ids[2]), []string{ids[2]}, &ids[0]},
 		{fmt.Sprintf("?startId=%s", ids[0]), []string{ids[0]}, nil},
 		{fmt.Sprintf("?startId=%s&order=asc", ids[0]), []string{ids[0], ids[2]}, nil},
@@ -95,6 +100,12 @@ func TestGetInvoices(t *testing.T) {
 		{"?test=true&supplierName=ppli", []string{ids[2], ids[1], ids[0]}, nil},
 		{"?test=true&supplierName=ier%202", []string{ids[1]}, nil},
 		{"?test=true&supplierName=x", []string{}, nil},
+		{"?test=true&customerIco=11111111", []string{ids[1], ids[0]}, nil},
+		{"?test=true&customerIco=44444444", []string{ids[2]}, nil},
+		{"?test=true&customerIco=99999999", []string{}, nil},
+		{"?test=true&supplierIco=22222222", []string{ids[0]}, nil},
+		{"?test=true&supplierIco=33333333", []string{ids[2], ids[1]}, nil},
+		{"?test=true&supplierIco=99999999", []string{}, nil},
 	}
 	// Run tests
 	for _, tt := range flagtests {
