@@ -57,3 +57,4 @@
 | draft.notFound | 404 | Draft not found | |
 | draft.body.parsingError | 400 | Cannot parse data | Error message |
 | draft.name.missing | 400 | Draft name cannot be not empty | |
+| draft.limit.reached | 429 | User reached maximal number of drafts | |

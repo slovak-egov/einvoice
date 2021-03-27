@@ -12,11 +12,14 @@ import (
 	"github.com/slovak-egov/einvoice/pkg/ulid"
 )
 
-func CreateDraft(ctx goContext.Context, t *testing.T, storage *storage.LocalStorage, cache *cache.Cache, userId int, name, data string) *entity.Draft {
+func CreateDraft(ctx goContext.Context, t *testing.T, storage *storage.LocalStorage, cache *cache.Cache, userId int, name, data, id string) *entity.Draft {
 	ctx = context.AddUserId(ctx, userId)
 
+	if id == "" {
+		id = ulid.New(time.Now().UTC()).String()
+	}
 	draft := &entity.Draft{
-		Id:   ulid.New(time.Now().UTC()).String(),
+		Id:   id,
 		Name: name,
 		Data: []byte(data),
 	}

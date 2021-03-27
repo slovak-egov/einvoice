@@ -1,38 +1,69 @@
 package apiserver
 
 import (
+	goContext "context"
 	"encoding/json"
 	"net/http"
 	"sort"
 	"time"
 
 	"github.com/gorilla/mux"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/slovak-egov/einvoice/internal/cache"
 	"github.com/slovak-egov/einvoice/internal/entity"
 	"github.com/slovak-egov/einvoice/internal/storage"
+	"github.com/slovak-egov/einvoice/pkg/context"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 	"github.com/slovak-egov/einvoice/pkg/ulid"
 )
 
-func (a *App) getMyDrafts(res http.ResponseWriter, req *http.Request) error {
-	draftsMetadata, err := a.cache.GetDrafts(req.Context())
+// Get drafts metadata for user and clean old drafts
+func (a *App) getDraftsMetadataForUser(ctx goContext.Context) ([]*entity.Draft, error) {
+	expirationThreshold := time.Now().Add(-a.config.DraftExpiration)
+
+	draftsMetadata, err := a.cache.GetDrafts(ctx)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	response := []*entity.Draft{}
+
+	result := []*entity.Draft{}
 	for id, name := range draftsMetadata {
 		draft := &entity.Draft{
 			Id:   id,
 			Name: name,
 		}
 		draft.CalculateCreatedAt()
-		response = append(response, draft)
+
+		if draft.CreatedAt.Before(expirationThreshold) {
+			if err = a.deleteDraft(ctx, id); err != nil {
+				log.WithFields(log.Fields{
+					"draftId": id,
+					"userId":  context.GetUserId(ctx),
+					"error":   err,
+				}).Error("draft.expiration.delete.failed")
+			}
+		} else {
+			result = append(result, draft)
+		}
 	}
-	sort.Slice(response, func(i, j int) bool {
-		return response[i].Id > response[j].Id
+
+	return result, nil
+}
+
+func (a *App) getMyDrafts(res http.ResponseWriter, req *http.Request) error {
+	ctx := req.Context()
+
+	drafts, err := a.getDraftsMetadataForUser(ctx)
+	if err != nil {
+		return err
+	}
+
+	// Sort drafts from newest to oldest
+	sort.Slice(drafts, func(i, j int) bool {
+		return drafts[i].Id > drafts[j].Id
 	})
-	handlerutil.RespondWithJSON(res, http.StatusOK, response)
+	handlerutil.RespondWithJSON(res, http.StatusOK, drafts)
 	return nil
 }
 
@@ -60,6 +91,17 @@ func (a *App) getMyDraft(res http.ResponseWriter, req *http.Request) error {
 }
 
 func (a *App) createMyDraft(res http.ResponseWriter, req *http.Request) error {
+	ctx := req.Context()
+
+	// Limit number of drafts
+	drafts, err := a.getDraftsMetadataForUser(ctx)
+	if err != nil {
+		return err
+	}
+	if len(drafts) >= a.config.DraftsLimit {
+		return handlerutil.NewTooManyRequestsError("draft.limit.reached")
+	}
+
 	req.Body = http.MaxBytesReader(res, req.Body, a.config.MaxInvoiceSize)
 	var requestBody entity.Draft
 
@@ -77,12 +119,12 @@ func (a *App) createMyDraft(res http.ResponseWriter, req *http.Request) error {
 	requestBody.Id = ulid.New(time.Now().UTC()).String()
 	requestBody.CalculateCreatedAt()
 
-	err := a.storage.SaveDraft(req.Context(), requestBody.Id, requestBody.Data)
+	err = a.storage.SaveDraft(ctx, requestBody.Id, requestBody.Data)
 	if err != nil {
 		return err
 	}
 
-	err = a.cache.SaveDraft(req.Context(), requestBody.Id, requestBody.Name)
+	err = a.cache.SaveDraft(ctx, requestBody.Id, requestBody.Name)
 	if err != nil {
 		return err
 	}
@@ -93,20 +135,25 @@ func (a *App) createMyDraft(res http.ResponseWriter, req *http.Request) error {
 
 func (a *App) deleteMyDraft(res http.ResponseWriter, req *http.Request) error {
 	draftId := mux.Vars(req)["id"]
-	err := a.cache.DeleteDraft(req.Context(), draftId)
+	err := a.deleteDraft(req.Context(), draftId)
 	if err != nil {
 		if _, ok := err.(*cache.NotFoundError); ok {
 			return handlerutil.NewNotFoundError("draft.notFound")
-		}
-		return err
-	}
-	err = a.storage.DeleteDraft(req.Context(), draftId)
-	if err != nil {
-		if _, ok := err.(*storage.NotFoundError); ok {
+		} else if _, ok := err.(*storage.NotFoundError); ok {
 			return handlerutil.NewNotFoundError("draft.notFound")
 		}
 		return err
 	}
 	handlerutil.RespondWithJSON(res, http.StatusOK, map[string]string{"id": draftId})
+	return nil
+}
+
+func (a *App) deleteDraft(ctx goContext.Context, draftId string) error {
+	if err := a.cache.DeleteDraft(ctx, draftId); err != nil {
+		return err
+	}
+	if err := a.storage.DeleteDraft(ctx, draftId); err != nil {
+		return err
+	}
 	return nil
 }
