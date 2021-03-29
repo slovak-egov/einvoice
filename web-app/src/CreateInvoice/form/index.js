@@ -6,6 +6,7 @@ import {Button, Card, Col, Form, Row} from 'react-bootstrap'
 import {get} from 'lodash'
 import TagGroup from './TagGroup'
 import CreateDraftModal from './CreateDraftModal'
+import ConfirmationButton from '../../helpers/ConfirmationButton'
 import {formTypeSelector, formDataSelector, isFormInitialized} from './state'
 import {initializeFormState, setFormType, submitInvoiceForm} from './actions'
 import {
@@ -17,8 +18,8 @@ import {
 } from '../../cache/documentation/state'
 import {getCodeLists, getUblCreditNoteDocs, getUblInvoiceDocs} from '../../cache/documentation/actions'
 import {createDraft} from '../../cache/drafts/actions'
+import {isUserLogged} from '../../cache/users/state'
 import {invoiceTypes} from '../../utils/constants'
-import ConfirmationButton from '../../helpers/ConfirmationButton'
 
 const invoiceTypeData = {
   [invoiceTypes.INVOICE]: {
@@ -38,6 +39,7 @@ const invoiceTypeData = {
 export default () => {
   const {t} = useTranslation('common')
   const history = useHistory()
+  const isLogged = useSelector(isUserLogged)
   const formType = useSelector(formTypeSelector)
   const isDocsLoaded = useSelector(invoiceTypeData[formType].isLoadedSelector)
   const areCodeListsLoaded = useSelector(areCodeListsLoadedSelector)
@@ -132,19 +134,21 @@ export default () => {
           docs={docs[invoiceTypeData[formType].rootPath[1]]}
           setErrorCount={setErrorCount}
         />
-        <div className="d-flex mt-1">
-          <Button variant="secondary" className="ml-auto" onClick={() => setShowCreateDraftModal(true)}>
-            {t('saveAsDraft')}
-          </Button>
+        <Row className="justify-content-end flex-column flex-sm-row mx-0">
+          {isLogged &&
+            <Button variant="secondary" className="mt-1" onClick={() => setShowCreateDraftModal(true)}>
+              {t('saveAsDraft')}
+            </Button>
+          }
           {showCreateDraftModal &&
             <CreateDraftModal
               cancel={() => setShowCreateDraftModal(false)}
               confirm={confirmDraft}
             />}
-          <Button variant="success" onClick={submit} disabled={errorCount !== 0}>
+          <Button variant="success" className="mt-1" onClick={submit} disabled={errorCount !== 0}>
             {t('generateInvoice')}
           </Button>
-        </div>
+        </Row>
       </Card.Body>}
     </Card>
   )
