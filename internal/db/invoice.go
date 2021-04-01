@@ -34,8 +34,9 @@ type PublicInvoicesOptions struct {
 }
 
 type AmountOptions struct {
-	From *float64
-	To   *float64
+	From     *float64
+	To       *float64
+	Currency string
 }
 
 type DateOptions struct {
@@ -99,6 +100,10 @@ func (o *PublicInvoicesOptions) buildQuery(query *orm.Query) *orm.Query {
 		query = query.Where("amount <= ?", o.Amount.To)
 	}
 
+	if o.Amount.Currency != "" {
+		query = query.Where("amount_currency = ?", o.Amount.Currency)
+	}
+
 	if o.AmountWithoutVat.From != nil {
 		// Filter out invoices with amount without vat less then requested limit
 		query = query.Where("amount_without_vat >= ?", o.AmountWithoutVat.From)
@@ -107,6 +112,10 @@ func (o *PublicInvoicesOptions) buildQuery(query *orm.Query) *orm.Query {
 	if o.AmountWithoutVat.To != nil {
 		// Filter out invoices with amount without vat greater then requested limit
 		query = query.Where("amount_without_vat <= ?", o.AmountWithoutVat.To)
+	}
+
+	if o.AmountWithoutVat.Currency != "" {
+		query = query.Where("amount_without_vat_currency = ?", o.AmountWithoutVat.Currency)
 	}
 
 	if o.Order == dbutil.AscOrder {

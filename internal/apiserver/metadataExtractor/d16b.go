@@ -12,6 +12,7 @@ type d16bInvoice struct {
 			BuyerTradeParty  d16bParty
 		}
 		ApplicableHeaderTradeSettlement struct {
+			InvoiceCurrencyCode                             string
 			SpecifiedTradeSettlementHeaderMonetarySummation struct {
 				GrandTotalAmount    float64
 				TaxBasisTotalAmount float64

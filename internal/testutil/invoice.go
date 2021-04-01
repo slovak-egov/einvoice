@@ -19,17 +19,19 @@ func CreateInvoice(
 
 	user := CreateUser(ctx, t, connector, "")
 	invoice := &entity.Invoice{
-		Id:               id,
-		Sender:           "sender",
-		Receiver:         "receiver",
-		Format:           entity.UblFormat,
-		Amount:           10,
-		AmountWithoutVat: 8,
-		CustomerIco:      "11111111",
-		SupplierIco:      "22222222",
-		CreatedBy:        user.Id,
-		IssueDate:        timeutil.Date{time.Date(2011, 9, 22, 0, 0, 0, 0, time.UTC)},
-		Test:             false,
+		Id:                       id,
+		Sender:                   "sender",
+		Receiver:                 "receiver",
+		Format:                   entity.UblFormat,
+		Amount:                   10,
+		AmountCurrency:           "EUR",
+		AmountWithoutVat:         8,
+		AmountWithoutVatCurrency: "EUR",
+		CustomerIco:              "11111111",
+		SupplierIco:              "22222222",
+		CreatedBy:                user.Id,
+		IssueDate:                timeutil.Date{time.Date(2011, 9, 22, 0, 0, 0, 0, time.UTC)},
+		Test:                     false,
 	}
 
 	for _, opt := range opts {
@@ -53,9 +55,21 @@ func WithAmount(amount float64) TestInvoiceOption {
 	}
 }
 
-func WithAmountWithoutTax(amount float64) TestInvoiceOption {
+func WithAmountCurrency(currency string) TestInvoiceOption {
+	return func(invoice *entity.Invoice) {
+		invoice.AmountCurrency = currency
+	}
+}
+
+func WithAmountWithoutVat(amount float64) TestInvoiceOption {
 	return func(invoice *entity.Invoice) {
 		invoice.AmountWithoutVat = amount
+	}
+}
+
+func WithAmountWithoutVatCurrency(currency string) TestInvoiceOption {
+	return func(invoice *entity.Invoice) {
+		invoice.AmountWithoutVatCurrency = currency
 	}
 }
 

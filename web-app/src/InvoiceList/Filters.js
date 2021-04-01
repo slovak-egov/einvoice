@@ -7,12 +7,25 @@ import DatePicker from '../helpers/DatePicker'
 import {invoiceFormats} from '../utils/constants'
 import {formatDate, formatTime, parseTime} from '../utils/helpers'
 import {isInvoicesFilterValid, keepDigitsOnly, keepFloatCharactersOnly} from '../utils/validations'
+import {areCodeListsLoadedSelector, codeListsSelector} from '../cache/documentation/state'
+import {useDispatch, useSelector} from 'react-redux'
+import {getCodeLists} from '../cache/documentation/actions'
 
 export default ({getInvoices}) => {
   const {t} = useTranslation('common')
   const history = useHistory()
   const {pathname, search} = useLocation()
   const queryParams = new URLSearchParams(search)
+
+  const isCodeListsLoaded = useSelector(areCodeListsLoadedSelector)
+  const codeLists = useSelector(codeListsSelector)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (!isCodeListsLoaded) {
+      dispatch(getCodeLists())
+    }
+  }, [dispatch, isCodeListsLoaded])
 
   const [test, setTest] = useState(queryParams.get('test') === 'true')
 
@@ -21,8 +34,10 @@ export default ({getInvoices}) => {
 
   const [amountFrom, setAmountFrom] = useState(queryParams.get('amountFrom'))
   const [amountTo, setAmountTo] = useState(queryParams.get('amountTo'))
+  const [amountCurrency, setAmountCurrency] = useState(queryParams.get('amountCurrency'))
   const [amountWithoutVatFrom, setAmountWithoutVatFrom] = useState(queryParams.get('amountWithoutVatFrom'))
   const [amountWithoutVatTo, setAmountWithoutVatTo] = useState(queryParams.get('amountWithoutVatTo'))
+  const [amountWithoutVatCurrency, setAmountWithoutVatCurrency] = useState(queryParams.get('amountWithoutVatCurrency'))
 
   const [issueDateFrom, setIssueDateFrom] = useState(parseTime(queryParams.get('issueDateFrom')))
   const [issueDateTo, setIssueDateTo] = useState(parseTime(queryParams.get('issueDateTo')))
@@ -46,8 +61,10 @@ export default ({getInvoices}) => {
 
       if (amountFrom != null) newQueryParams.set('amountFrom', amountFrom)
       if (amountTo != null) newQueryParams.set('amountTo', amountTo)
+      if (amountCurrency != null) newQueryParams.set('amountCurrency', amountCurrency)
       if (amountWithoutVatFrom != null) newQueryParams.set('amountWithoutVatFrom', amountWithoutVatFrom)
       if (amountWithoutVatTo != null) newQueryParams.set('amountWithoutVatTo', amountWithoutVatTo)
+      if (amountWithoutVatCurrency != null) newQueryParams.set('amountWithoutVatCurrency', amountWithoutVatCurrency)
 
       if (issueDateFrom != null) newQueryParams.set('issueDateFrom', formatDate(issueDateFrom))
       if (issueDateTo != null) newQueryParams.set('issueDateTo', formatDate(issueDateTo))
@@ -62,15 +79,16 @@ export default ({getInvoices}) => {
       history.push(`${pathname}?${newQueryParams}`)
     },
     [
-      history, pathname, test, amountFrom, amountTo, amountWithoutVatFrom, amountWithoutVatTo,
-      issueDateFrom, issueDateTo, uploadTimeFrom, uploadTimeTo, ublFormat, d16bFormat,
-      customerName, supplierName, customerIco, supplierIco,
+      history, pathname, test, amountFrom, amountTo, amountCurrency, amountWithoutVatFrom,
+      amountWithoutVatTo, amountWithoutVatCurrency, issueDateFrom, issueDateTo, uploadTimeFrom, uploadTimeTo,
+      ublFormat, d16bFormat, customerName, supplierName, customerIco, supplierIco,
     ],
   )
 
   const searchEnabled = isInvoicesFilterValid({
-    ublFormat, d16bFormat, amountFrom, amountTo, amountWithoutVatFrom, amountWithoutVatTo,
-    issueDateFrom, issueDateTo, uploadTimeFrom, uploadTimeTo, customerIco, supplierIco,
+    ublFormat, d16bFormat, amountFrom, amountTo, amountCurrency,
+    amountWithoutVatFrom, amountWithoutVatTo, amountWithoutVatCurrency,
+    issueDateFrom, issueDateTo, uploadTimeFrom, uploadTimeTo, customerIco, supplierIco, codeLists,
   })
 
   // When query URL parameters change try to fetch proper data
@@ -193,7 +211,7 @@ export default ({getInvoices}) => {
               <Col md>
                 <strong className="filter-heading">{t('invoice.amount')}</strong>
                 <InputGroup>
-                  <Form.Label style={{width: '40px'}}>{t('invoice.intervalStart')}</Form.Label>
+                  <Form.Label style={{width: '70px'}}>{t('invoice.intervalStart')}</Form.Label>
                   <Form.Control
                     style={{maxWidth: '150px'}}
                     value={amountFrom || ''}
@@ -208,7 +226,7 @@ export default ({getInvoices}) => {
                   </InputGroup.Append>
                 </InputGroup>
                 <InputGroup>
-                  <Form.Label style={{width: '40px'}}>{t('invoice.intervalEnd')}</Form.Label>
+                  <Form.Label style={{width: '70px'}}>{t('invoice.intervalEnd')}</Form.Label>
                   <Form.Control
                     style={{maxWidth: '150px'}}
                     value={amountTo || ''}
@@ -222,11 +240,32 @@ export default ({getInvoices}) => {
                     />
                   </InputGroup.Append>
                 </InputGroup>
+                <InputGroup>
+                  <Form.Label style={{width: '70px'}}>{t('invoice.currency')}</Form.Label>
+                  <Form.Control
+                    as="select"
+                    style={{maxWidth: '150px'}}
+                    value={amountCurrency || ''}
+                    onChange={(e) => setAmountCurrency(e.target.value)}
+                    disabled={amountCurrency == null}
+                  >
+                    <option />
+                    {codeLists && Object.keys(codeLists.ISO4217.codes).map((code, i) => (
+                      <option key={i} value={code}>{code}</option>
+                    ))}
+                  </Form.Control>
+                  <InputGroup.Append>
+                    <InputGroup.Checkbox
+                      checked={amountCurrency != null}
+                      onChange={() => setAmountCurrency(amountCurrency == null ? '' : null)}
+                    />
+                  </InputGroup.Append>
+                </InputGroup>
               </Col>
               <Col md>
                 <strong className="filter-heading">{t('invoice.amountWithoutVat')}</strong>
                 <InputGroup>
-                  <Form.Label style={{width: '40px'}}>{t('invoice.intervalStart')}</Form.Label>
+                  <Form.Label style={{width: '70px'}}>{t('invoice.intervalStart')}</Form.Label>
                   <Form.Control
                     style={{maxWidth: '150px'}}
                     value={amountWithoutVatFrom || ''}
@@ -243,7 +282,7 @@ export default ({getInvoices}) => {
                   </InputGroup.Append>
                 </InputGroup>
                 <InputGroup>
-                  <Form.Label style={{width: '40px'}}>{t('invoice.intervalEnd')}</Form.Label>
+                  <Form.Label style={{width: '70px'}}>{t('invoice.intervalEnd')}</Form.Label>
                   <Form.Control
                     style={{maxWidth: '150px'}}
                     value={amountWithoutVatTo || ''}
@@ -254,6 +293,27 @@ export default ({getInvoices}) => {
                     <InputGroup.Checkbox
                       checked={amountWithoutVatTo != null}
                       onChange={() => setAmountWithoutVatTo(amountWithoutVatTo == null ? '' : null)}
+                    />
+                  </InputGroup.Append>
+                </InputGroup>
+                <InputGroup>
+                  <Form.Label style={{width: '70px'}}>{t('invoice.currency')}</Form.Label>
+                  <Form.Control
+                    as="select"
+                    style={{maxWidth: '150px'}}
+                    value={amountWithoutVatCurrency || ''}
+                    onChange={(e) => setAmountWithoutVatCurrency(e.target.value)}
+                    disabled={amountWithoutVatCurrency == null}
+                  >
+                    <option />
+                    {codeLists && Object.keys(codeLists.ISO4217.codes).map((code, i) => (
+                      <option key={i} value={code}>{code}</option>
+                    ))}
+                  </Form.Control>
+                  <InputGroup.Append>
+                    <InputGroup.Checkbox
+                      checked={amountWithoutVatCurrency != null}
+                      onChange={() => setAmountWithoutVatCurrency(amountWithoutVatCurrency == null ? '' : null)}
                     />
                   </InputGroup.Append>
                 </InputGroup>

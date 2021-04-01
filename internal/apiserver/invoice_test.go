@@ -28,7 +28,9 @@ func TestGetInvoices(t *testing.T) {
 	testutil.CreateInvoice(
 		ctx, t, a.db.Connector, ids[0],
 		testutil.WithAmount(100),
-		testutil.WithAmountWithoutTax(50),
+		testutil.WithAmountCurrency("EUR"),
+		testutil.WithAmountWithoutVat(50),
+		testutil.WithAmountWithoutVatCurrency("EUR"),
 		testutil.WithIssueDate(timeutil.Date{time.Date(2021, 1, 1, 0, 0, 0, 0, time.UTC)}),
 		testutil.WithCustomerName("Customer 1"),
 		testutil.WithSupplierName("Supplier 1"),
@@ -39,7 +41,9 @@ func TestGetInvoices(t *testing.T) {
 		ctx, t, a.db.Connector, ids[1],
 		testutil.WithTest,
 		testutil.WithAmount(200),
-		testutil.WithAmountWithoutTax(150),
+		testutil.WithAmountCurrency("CZK"),
+		testutil.WithAmountWithoutVat(150),
+		testutil.WithAmountWithoutVatCurrency("EUR"),
 		testutil.WithIssueDate(timeutil.Date{time.Date(2021, 1, 2, 0, 0, 0, 0, time.UTC)}),
 		testutil.WithCustomerName("Customer 2"),
 		testutil.WithSupplierName("Supplier 2"),
@@ -49,7 +53,9 @@ func TestGetInvoices(t *testing.T) {
 	testutil.CreateInvoice(
 		ctx, t, a.db.Connector, ids[2],
 		testutil.WithAmount(300),
-		testutil.WithAmountWithoutTax(250),
+		testutil.WithAmountCurrency("EUR"),
+		testutil.WithAmountWithoutVat(250),
+		testutil.WithAmountWithoutVatCurrency("CZK"),
 		testutil.WithIssueDate(timeutil.Date{time.Date(2021, 1, 3, 0, 0, 0, 0, time.UTC)}),
 		testutil.WithCustomerName("Customer 3"),
 		testutil.WithSupplierName("Supplier 3"),
@@ -106,6 +112,12 @@ func TestGetInvoices(t *testing.T) {
 		{"?test=true&supplierIco=22222222", []string{ids[0]}, nil},
 		{"?test=true&supplierIco=33333333", []string{ids[2], ids[1]}, nil},
 		{"?test=true&supplierIco=99999999", []string{}, nil},
+		{"?test=true&amountCurrency=EUR", []string{ids[2], ids[0]}, nil},
+		{"?test=true&amountCurrency=CZK", []string{ids[1]}, nil},
+		{"?test=true&amountCurrency=SVK", []string{}, nil},
+		{"?test=true&amountWithoutVatCurrency=EUR", []string{ids[1], ids[0]}, nil},
+		{"?test=true&amountWithoutVatCurrency=CZK", []string{ids[2]}, nil},
+		{"?test=true&amountWithoutVatCurrency=SVK", []string{}, nil},
 	}
 	// Run tests
 	for _, tt := range flagtests {

@@ -2,6 +2,7 @@ package metadataExtractor
 
 import (
 	"encoding/xml"
+	"strconv"
 
 	"github.com/slovak-egov/einvoice/internal/entity"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
@@ -31,17 +32,29 @@ func parseUblInvoice(rawInvoice []byte) (*entity.Invoice, error) {
 		return nil, err
 	}
 
+	amount, err := strconv.ParseFloat(invoice.LegalMonetaryTotal.TaxInclusiveAmount.Value, 64)
+	if err != nil {
+		return nil, err
+	}
+
+	amountWithoutVat, err := strconv.ParseFloat(invoice.LegalMonetaryTotal.TaxExclusiveAmount.Value, 64)
+	if err != nil {
+		return nil, err
+	}
+
 	return &entity.Invoice{
-		Format:           entity.UblFormat,
-		Sender:           invoice.AccountingSupplierParty.Party.PartyName.Name,
-		SupplierIco:      invoice.AccountingSupplierParty.Party.PartyIdentification.ID,
-		SupplierCountry:  invoice.AccountingSupplierParty.Party.PostalAddress.Country.IdentificationCode,
-		Receiver:         invoice.AccountingCustomerParty.Party.PartyName.Name,
-		CustomerIco:      invoice.AccountingCustomerParty.Party.PartyIdentification.ID,
-		CustomerCountry:  invoice.AccountingCustomerParty.Party.PostalAddress.Country.IdentificationCode,
-		Amount:           invoice.LegalMonetaryTotal.TaxInclusiveAmount,
-		AmountWithoutVat: invoice.LegalMonetaryTotal.TaxExclusiveAmount,
-		IssueDate:        *issueDate,
+		Format:                   entity.UblFormat,
+		Sender:                   invoice.AccountingSupplierParty.Party.PartyName.Name,
+		SupplierIco:              invoice.AccountingSupplierParty.Party.PartyIdentification.ID,
+		SupplierCountry:          invoice.AccountingSupplierParty.Party.PostalAddress.Country.IdentificationCode,
+		Receiver:                 invoice.AccountingCustomerParty.Party.PartyName.Name,
+		CustomerIco:              invoice.AccountingCustomerParty.Party.PartyIdentification.ID,
+		CustomerCountry:          invoice.AccountingCustomerParty.Party.PostalAddress.Country.IdentificationCode,
+		Amount:                   amount,
+		AmountCurrency:           invoice.LegalMonetaryTotal.TaxInclusiveAmount.CurrencyID,
+		AmountWithoutVat:         amountWithoutVat,
+		AmountWithoutVatCurrency: invoice.LegalMonetaryTotal.TaxExclusiveAmount.CurrencyID,
+		IssueDate:                *issueDate,
 	}, nil
 }
 
@@ -61,15 +74,17 @@ func parseD16bInvoice(rawInvoice []byte) (*entity.Invoice, error) {
 	}
 
 	return &entity.Invoice{
-		Format:           entity.D16bFormat,
-		Sender:           invoice.SupplyChainTradeTransaction.ApplicableHeaderTradeAgreement.SellerTradeParty.Name,
-		SupplierIco:      invoice.SupplyChainTradeTransaction.ApplicableHeaderTradeAgreement.SellerTradeParty.ID,
-		SupplierCountry:  invoice.SupplyChainTradeTransaction.ApplicableHeaderTradeAgreement.SellerTradeParty.PostalTradeAddress.CountryID,
-		Receiver:         invoice.SupplyChainTradeTransaction.ApplicableHeaderTradeAgreement.BuyerTradeParty.Name,
-		CustomerIco:      invoice.SupplyChainTradeTransaction.ApplicableHeaderTradeAgreement.BuyerTradeParty.ID,
-		CustomerCountry:  invoice.SupplyChainTradeTransaction.ApplicableHeaderTradeAgreement.BuyerTradeParty.PostalTradeAddress.CountryID,
-		Amount:           invoice.SupplyChainTradeTransaction.ApplicableHeaderTradeSettlement.SpecifiedTradeSettlementHeaderMonetarySummation.GrandTotalAmount,
-		AmountWithoutVat: invoice.SupplyChainTradeTransaction.ApplicableHeaderTradeSettlement.SpecifiedTradeSettlementHeaderMonetarySummation.TaxBasisTotalAmount,
-		IssueDate:        *issueDate,
+		Format:                   entity.D16bFormat,
+		Sender:                   invoice.SupplyChainTradeTransaction.ApplicableHeaderTradeAgreement.SellerTradeParty.Name,
+		SupplierIco:              invoice.SupplyChainTradeTransaction.ApplicableHeaderTradeAgreement.SellerTradeParty.ID,
+		SupplierCountry:          invoice.SupplyChainTradeTransaction.ApplicableHeaderTradeAgreement.SellerTradeParty.PostalTradeAddress.CountryID,
+		Receiver:                 invoice.SupplyChainTradeTransaction.ApplicableHeaderTradeAgreement.BuyerTradeParty.Name,
+		CustomerIco:              invoice.SupplyChainTradeTransaction.ApplicableHeaderTradeAgreement.BuyerTradeParty.ID,
+		CustomerCountry:          invoice.SupplyChainTradeTransaction.ApplicableHeaderTradeAgreement.BuyerTradeParty.PostalTradeAddress.CountryID,
+		Amount:                   invoice.SupplyChainTradeTransaction.ApplicableHeaderTradeSettlement.SpecifiedTradeSettlementHeaderMonetarySummation.GrandTotalAmount,
+		AmountCurrency:           invoice.SupplyChainTradeTransaction.ApplicableHeaderTradeSettlement.InvoiceCurrencyCode,
+		AmountWithoutVat:         invoice.SupplyChainTradeTransaction.ApplicableHeaderTradeSettlement.SpecifiedTradeSettlementHeaderMonetarySummation.TaxBasisTotalAmount,
+		AmountWithoutVatCurrency: invoice.SupplyChainTradeTransaction.ApplicableHeaderTradeSettlement.InvoiceCurrencyCode,
+		IssueDate:                *issueDate,
 	}, nil
 }

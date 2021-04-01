@@ -17,7 +17,8 @@
     "notificationsSent": "Notifikácie odoslané",
     "format": "Formát",
     "intervalStart": "Od",
-    "intervalEnd": "Do"
+    "intervalEnd": "Do",
+    "currency":  "Mena"
   },
   "cancel": "Zrušiť",
   "save": "Uložiť",

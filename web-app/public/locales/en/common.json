@@ -17,7 +17,8 @@
     "notificationsSent": "Notifications sent",
     "format": "Format",
     "intervalStart": "From",
-    "intervalEnd": "To"
+    "intervalEnd": "To",
+    "currency":  "Currency"
   },
   "cancel": "Cancel",
   "save": "Save",
