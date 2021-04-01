@@ -2,9 +2,8 @@ import {useCallback, useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {useHistory} from 'react-router-dom'
 import {useTranslation} from 'react-i18next'
-import {Form} from 'react-bootstrap'
 import {get} from 'lodash'
-import {Button} from '../../helpers/idsk'
+import {Button, Radios} from '../../helpers/idsk'
 import TagGroup from './TagGroup'
 import CreateDraftModal from './CreateDraftModal'
 import ConfirmationButton from '../../helpers/ConfirmationButton'
@@ -109,16 +108,15 @@ export default () => {
           {t('reset')}
         </ConfirmationButton>
       </div>
-      <Form.Control
-        as="select"
-        className="w-auto"
+      <Radios
+        className="govuk-radios--inline"
         value={formType}
         onChange={changeFormType}
-      >
-        {Object.values(invoiceTypes).map((type) => (
-          <option key={type} value={type}>{t(`invoiceTypes.${type}`)}</option>
-        ))}
-      </Form.Control>
+        items={Object.values(invoiceTypes).map((type) => ({
+          children: t(`invoiceTypes.${type}`),
+          value: type,
+        }))}
+      />
       {/*Render once data are loaded*/}
       {allLoaded && <>
         <TagGroup
