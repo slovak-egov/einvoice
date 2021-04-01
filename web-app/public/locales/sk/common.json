@@ -155,7 +155,8 @@
     "deleteDraft": "Koncept faktúry sa nepodarilo vymazať",
     "createDraft": "Koncept faktúry sa nepodarilo vytvoriť",
     "unsupportedMimeType": "Pokúsili ste sa nahrať súbor nepodporovaného typu",
-    "emptyField": "Toto políčko nemôže byť prázdne"
+    "emptyField": "Toto políčko nemôže byť prázdne",
+    "noneSelected": "Zvoľte aspoň jednu možnosť"
   },
   "successMessages": {
     "createInvoice": {

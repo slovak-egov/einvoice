@@ -155,7 +155,8 @@
     "deleteDraft": "Invoice draft could not be deleted",
     "createDraft": "Invoice draft could not be created",
     "unsupportedMimeType": "You tried to upload file with unsupported media type",
-    "emptyField": "This field cannot be empty"
+    "emptyField": "This field cannot be empty",
+    "noneSelected": "You have to select at least one option"
   },
   "successMessages": {
     "createInvoice": {

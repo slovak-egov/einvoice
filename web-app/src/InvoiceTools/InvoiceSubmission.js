@@ -1,10 +1,9 @@
 import {useCallback} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {useHistory} from 'react-router-dom'
-import {Col, Form, FormCheck, Row} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import save from 'save-file'
-import {Button} from '../helpers/idsk'
+import {Button, Checkboxes, Label} from '../helpers/idsk'
 import ConfirmationButton from '../helpers/ConfirmationButton'
 import FileUploader from '../helpers/FileUploader'
 import {
@@ -57,34 +56,31 @@ export default ({showSubmission, title}) => {
   return (
     <>
       <h1 className="govuk-heading-l">{t(title)}</h1>
-      <Row>
-        <Col sm>
-          <Form.Group>
-            <Form.Label>{t('invoiceTypes.invoice')}</Form.Label>
-            <div>
-              <FileUploader
-                fileName={invoice?.name}
-                accept=".xml"
-                buttonText={t('upload')}
-                uploadFile={updateInvoiceData}
-                deleteFile={clearInvoiceData}
-              />
-            </div>
-          </Form.Group>
-        </Col>
-        {showSubmission && <>
-          <Col sm>
-            <Form.Group>
-              <Form.Label>Test</Form.Label>
-              <FormCheck
-                type="checkbox"
-                checked={test}
-                onChange={toggleTest}
-              />
-            </Form.Group>
-          </Col>
-        </>}
-      </Row>
+      <div className="govuk-grid-row">
+        <div className="govuk-grid-column-one-half">
+          <Label>{t('invoiceTypes.invoice')}</Label>
+          <div>
+            <FileUploader
+              fileName={invoice?.name}
+              accept=".xml"
+              buttonText={t('upload')}
+              uploadFile={updateInvoiceData}
+              deleteFile={clearInvoiceData}
+            />
+          </div>
+        </div>
+        {showSubmission && <div className="govuk-grid-column-one-half">
+          <Checkboxes
+            className="govuk-checkboxes--small"
+            fieldset={{legend: {children: 'Test'}}}
+            items={[{
+              checked: test,
+              children: 'Test',
+              onChange: toggleTest,
+            }]}
+          />
+        </div>}
+      </div>
       <div className="govuk-button-group">
         <Button
           className="govuk-button--secondary"
