@@ -4,7 +4,7 @@ import {useHistory, useLocation} from 'react-router'
 import {useTranslation} from 'react-i18next'
 import {Accordion, Button, Card, Col, Form, FormCheck, InputGroup, Row} from 'react-bootstrap'
 import DatePicker from '../helpers/DatePicker'
-import {invoiceFormats} from '../utils/constants'
+import {invoiceFormats, orderingTypes} from '../utils/constants'
 import {formatDate, formatTime, parseTime} from '../utils/helpers'
 import {isInvoicesFilterValid, keepDigitsOnly, keepFloatCharactersOnly} from '../utils/validations'
 import {areCodeListsLoadedSelector, codeListsSelector} from '../cache/documentation/state'
@@ -31,6 +31,10 @@ export default ({getInvoices}) => {
 
   const [ublFormat, setUblFormat] = useState(queryParams.getAll('format').includes(invoiceFormats.UBL))
   const [d16bFormat, setD16bFormat] = useState(queryParams.getAll('format').includes(invoiceFormats.D16B))
+
+  const [ordering, setOrdering] = useState(
+    queryParams.get('order') === orderingTypes.ASC ? orderingTypes.ASC : orderingTypes.DESC
+  )
 
   const [amountFrom, setAmountFrom] = useState(queryParams.get('amountFrom'))
   const [amountTo, setAmountTo] = useState(queryParams.get('amountTo'))
@@ -59,6 +63,8 @@ export default ({getInvoices}) => {
       if (ublFormat) newQueryParams.append('format', invoiceFormats.UBL)
       if (d16bFormat) newQueryParams.append('format', invoiceFormats.D16B)
 
+      if (ordering != null) newQueryParams.append('order', ordering)
+
       if (amountFrom != null) newQueryParams.set('amountFrom', amountFrom)
       if (amountTo != null) newQueryParams.set('amountTo', amountTo)
       if (amountCurrency != null) newQueryParams.set('amountCurrency', amountCurrency)
@@ -79,7 +85,7 @@ export default ({getInvoices}) => {
       history.push(`${pathname}?${newQueryParams}`)
     },
     [
-      history, pathname, test, amountFrom, amountTo, amountCurrency,
+      history, pathname, test, ordering, amountFrom, amountTo, amountCurrency,
       amountWithoutVatFrom, amountWithoutVatTo, amountWithoutVatCurrency,
       issueDateFrom, issueDateTo, uploadTimeFrom, uploadTimeTo,
       ublFormat, d16bFormat, customerName, supplierName, customerIco, supplierIco,
@@ -87,7 +93,7 @@ export default ({getInvoices}) => {
   )
 
   const searchEnabled = isInvoicesFilterValid({
-    ublFormat, d16bFormat, amountFrom, amountTo, amountCurrency,
+    ublFormat, d16bFormat, ordering, amountFrom, amountTo, amountCurrency,
     amountWithoutVatFrom, amountWithoutVatTo, amountWithoutVatCurrency,
     issueDateFrom, issueDateTo, uploadTimeFrom, uploadTimeTo, customerIco, supplierIco, codeLists,
   })
@@ -138,6 +144,20 @@ export default ({getInvoices}) => {
                   onChange={() => setTest((v) => !v)}
                   label="Test"
                 />
+              </Col>
+            </Row>
+            <Row>
+              <Col md>
+                <strong className="filter-heading">{t('invoice.orderFrom')}</strong>
+                <Form.Control
+                  as="select"
+                  style={{maxWidth: '150px'}}
+                  value={ordering}
+                  onChange={(e) => setOrdering(e.target.value)}
+                >
+                  <option value={orderingTypes.DESC}>{t('invoice.newest')}</option>
+                  <option value={orderingTypes.ASC}>{t('invoice.oldest')}</option>
+                </Form.Control>
               </Col>
             </Row>
             <Row>

@@ -18,7 +18,10 @@
     "format": "Formát",
     "intervalStart": "Od",
     "intervalEnd": "Do",
-    "currency":  "Mena"
+    "currency":  "Mena",
+    "orderFrom": "Zoraď od",
+    "newest": "Najnovšej",
+    "oldest": "Najstaršej"
   },
   "cancel": "Zrušiť",
   "save": "Uložiť",

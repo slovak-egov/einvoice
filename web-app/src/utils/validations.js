@@ -1,3 +1,5 @@
+import {orderingTypes} from './constants'
+
 const areFormatsValid = (ublFormat, d16bFormat) => ublFormat || d16bFormat
 
 const isIcoValid = (ico) => ico == null || ico.length === 8
@@ -13,13 +15,17 @@ const isTimeIntervalValid = (low, high) =>
 const isCurrencyValid = (currency, codeLists) =>
   currency == null || !codeLists || codeLists.ISO4217.codes[currency]
 
+const isOrderingValid = (ordering) =>
+  ordering == null || Object.values(orderingTypes).includes(ordering)
+
 export const isInvoicesFilterValid = ({
-  ublFormat, d16bFormat, amountFrom, amountTo, amountCurrency,
+  ublFormat, d16bFormat, ordering, amountFrom, amountTo, amountCurrency,
   amountWithoutVatFrom, amountWithoutVatTo, amountWithoutVatCurrency,
   issueDateFrom, issueDateTo, uploadTimeFrom, uploadTimeTo, customerIco, supplierIco,
   codeLists,
 }) =>
   areFormatsValid(ublFormat, d16bFormat) &&
+  isOrderingValid(ordering) &&
   isIcoValid(customerIco) &&
   isIcoValid(supplierIco) &&
   isAmountValid(amountFrom) &&

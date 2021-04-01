@@ -18,7 +18,10 @@
     "format": "Format",
     "intervalStart": "From",
     "intervalEnd": "To",
-    "currency":  "Currency"
+    "currency":  "Currency",
+    "orderFrom": "Order from",
+    "newest": "Newest",
+    "oldest": "Oldest"
   },
   "cancel": "Cancel",
   "save": "Save",
