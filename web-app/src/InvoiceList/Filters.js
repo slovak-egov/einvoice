@@ -79,8 +79,9 @@ export default ({getInvoices}) => {
       history.push(`${pathname}?${newQueryParams}`)
     },
     [
-      history, pathname, test, amountFrom, amountTo, amountCurrency, amountWithoutVatFrom,
-      amountWithoutVatTo, amountWithoutVatCurrency, issueDateFrom, issueDateTo, uploadTimeFrom, uploadTimeTo,
+      history, pathname, test, amountFrom, amountTo, amountCurrency,
+      amountWithoutVatFrom, amountWithoutVatTo, amountWithoutVatCurrency,
+      issueDateFrom, issueDateTo, uploadTimeFrom, uploadTimeTo,
       ublFormat, d16bFormat, customerName, supplierName, customerIco, supplierIco,
     ],
   )

@@ -14,8 +14,9 @@ const isCurrencyValid = (currency, codeLists) =>
   currency == null || !codeLists || codeLists.ISO4217.codes[currency]
 
 export const isInvoicesFilterValid = ({
-  ublFormat, d16bFormat, amountFrom, amountTo, amountCurrency, amountWithoutVatFrom, amountWithoutVatTo,
-  amountWithoutVatCurrency, issueDateFrom, issueDateTo, uploadTimeFrom, uploadTimeTo, customerIco, supplierIco,
+  ublFormat, d16bFormat, amountFrom, amountTo, amountCurrency,
+  amountWithoutVatFrom, amountWithoutVatTo, amountWithoutVatCurrency,
+  issueDateFrom, issueDateTo, uploadTimeFrom, uploadTimeTo, customerIco, supplierIco,
   codeLists,
 }) =>
   areFormatsValid(ublFormat, d16bFormat) &&
