@@ -1,7 +1,7 @@
 import {useState} from 'react'
-import {Modal, Form} from 'react-bootstrap'
+import {Modal} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
-import {Button} from '../../helpers/idsk'
+import {Button, Input} from '../../helpers/idsk'
 
 export default ({cancel, confirm}) => {
   const {t} = useTranslation('common')
@@ -14,15 +14,13 @@ export default ({cancel, confirm}) => {
       </Modal.Header>
 
       <Modal.Body>
-        <Form.Group>
-          <Form.Label>{t('invoiceDocs.name')}</Form.Label>
-          <Form.Control
-            isInvalid={isNameInvalid}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <Form.Control.Feedback type="invalid">{t('errorMessages.emptyField')}</Form.Control.Feedback>
-        </Form.Group>
+        <Input
+          errorMessage={isNameInvalid && {children: t('errorMessages.emptyField')}}
+          label={{children: t('invoiceDocs.name')}}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          type="text"
+        />
       </Modal.Body>
 
       <Modal.Footer>
