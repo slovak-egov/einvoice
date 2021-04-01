@@ -1,4 +1,3 @@
-import {Col, Row} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import NotFound from '../../helpers/NotFound'
 
@@ -9,21 +8,21 @@ export default ({data, identifier}) => {
   return (
     <>
       <h1 className="govuk-heading-l">{data.title[i18n.language]}</h1>
-      <Row>
-        <Col className="font-weight-bold" sm="3">{t('invoiceDocs.identifier')}</Col>
-        <Col sm="9">{identifier}</Col>
-      </Row>
-      <Row>
-        <Col className="font-weight-bold" sm="3">{t('invoiceDocs.agency')}</Col>
-        <Col sm="9">{data.agency}</Col>
-      </Row>
-      {data.version && <Row>
-        <Col className="font-weight-bold" sm="3">{t('invoiceDocs.version')}</Col>
-        <Col sm="9">{data.version}</Col>
-      </Row>}
-      <Row>
-        <Col className="font-weight-bold" sm="3">{t('invoiceDocs.codes')}</Col>
-        <Col sm="9">
+      <div className="govuk-grid-row">
+        <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.identifier')}</strong>
+        <div className="govuk-grid-column-three-quarters">{identifier}</div>
+      </div>
+      <div className="govuk-grid-row">
+        <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.agency')}</strong>
+        <div className="govuk-grid-column-three-quarters">{data.agency}</div>
+      </div>
+      {data.version && <div className="govuk-grid-row">
+        <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.version')}</strong>
+        <div className="govuk-grid-column-three-quarters">{data.version}</div>
+      </div>}
+      <div className="govuk-grid-row">
+        <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.codes')}</strong>
+        <div className="govuk-grid-column-three-quarters">
           {Object.entries(data.codes).map(([code, {name, description}], index) => (
             <div key={index} className="my-2 d-flex flex-column">
               <code>{code}</code>
@@ -31,8 +30,8 @@ export default ({data, identifier}) => {
               {description && <p>{description[i18n.language]}</p>}
             </div>
           ))}
-        </Col>
-      </Row>
+        </div>
+      </div>
     </>
   )
 }

@@ -1,6 +1,5 @@
 import {Fragment} from 'react'
 import {Link, useLocation} from 'react-router-dom'
-import {Col, Row} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import {last} from 'lodash'
 import {Table} from '../../../helpers/idsk'
@@ -62,56 +61,56 @@ export default ({rootDocs}) => {
     <>
       <h1 className="govuk-heading-l">{last(tagPath)}</h1>
       <p className="lead">{docs.description[i18n.language]}</p>
-      <Row>
-        <Col className="font-weight-bold" sm="3">{t('invoiceDocs.name')}</Col>
-        <Col sm="9">{docs.name[i18n.language]}</Col>
-      </Row>
-      <Row>
-        <Col className="font-weight-bold" sm="3">{t('invoiceDocs.cardinality.full')}</Col>
-        <Col sm="9">{displayCardinality(docs.cardinality)}</Col>
-      </Row>
-      {docs.dataType && <Row>
-        <Col className="font-weight-bold" sm="3">{t('invoiceDocs.dataType')}</Col>
-        <Col sm="9">{docs.dataType}</Col>
-      </Row>}
-      {docs.defaultValue && <Row>
-        <Col className="font-weight-bold" sm="3">{t('invoiceDocs.defaultValue')}</Col>
-        <Col sm="9">{docs.defaultValue}</Col>
-      </Row>}
-      {docs.businessTerms && <Row>
-        <Col className="font-weight-bold" sm="3">{t('invoiceDocs.businessTerms')}</Col>
-        <Col sm="9">
+      <div className="govuk-grid-row">
+        <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.name')}</strong>
+        <div className="govuk-grid-column-three-quarters">{docs.name[i18n.language]}</div>
+      </div>
+      <div className="govuk-grid-row">
+        <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.cardinality.full')}</strong>
+        <div className="govuk-grid-column-three-quarters">{displayCardinality(docs.cardinality)}</div>
+      </div>
+      {docs.dataType && <div className="govuk-grid-row">
+        <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.dataType')}</strong>
+        <div className="govuk-grid-column-three-quarters">{docs.dataType}</div>
+      </div>}
+      {docs.defaultValue && <div className="govuk-grid-row">
+        <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.defaultValue')}</strong>
+        <div className="govuk-grid-column-three-quarters">{docs.defaultValue}</div>
+      </div>}
+      {docs.businessTerms && <div className="govuk-grid-row">
+        <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.businessTerms')}</strong>
+        <div className="govuk-grid-column-three-quarters">
           {docs.businessTerms.map((term, i) => (
             <Fragment key={i}>
               {i !== 0 && <span>, </span>}
               <Link to={`/invoiceDocumentation/businessTerms/${term}`}>{term}</Link>
             </Fragment>
           ))}
-        </Col>
-      </Row>}
-      {docs.codeLists && <Row>
-        <Col className="font-weight-bold" sm="3">{t('invoiceDocs.codeLists')}</Col>
-        <Col sm="9">
+        </div>
+      </div>}
+      {docs.codeLists && <div className="govuk-grid-row">
+        <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.codeLists')}</strong>
+        <div className="govuk-grid-column-three-quarters">
           {docs.codeLists.map((codeList, i) => (
             <Fragment key={i}>
               {i !== 0 && <span>, </span>}
               <Link to={`/invoiceDocumentation/codeLists/${codeList}`}>{codeList}</Link>
             </Fragment>
           ))}
-        </Col>
-      </Row>}
-      {docs.attributes && <Row>
-        <Col className="font-weight-bold" sm="3">{t('invoiceDocs.attributes')}</Col>
-        <Col sm="9">
+        </div>
+      </div>}
+      {docs.attributes && <div className="govuk-grid-row">
+        <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.attributes')}</strong>
+        <div className="govuk-grid-column-three-quarters">
           <TagDescendantsTable descendants={docs.attributes} attributes />
-        </Col>
-      </Row>}
-      {docs.children && <Row>
-        <Col className="font-weight-bold" sm="3">{t('invoiceDocs.childElements')}</Col>
-        <Col sm="9">
+        </div>
+      </div>}
+      {docs.children && <div className="govuk-grid-row">
+        <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.childElements')}</strong>
+        <div className="govuk-grid-column-three-quarters">
           <TagDescendantsTable descendants={docs.children} />
-        </Col>
-      </Row>}
+        </div>
+      </div>}
     </>
   )
 }

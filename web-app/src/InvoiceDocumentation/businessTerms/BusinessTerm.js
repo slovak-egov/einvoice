@@ -2,7 +2,6 @@ import {Fragment} from 'react'
 import {useSelector} from 'react-redux'
 import {useTranslation} from 'react-i18next'
 import {Link} from 'react-router-dom'
-import {Col, Row} from 'react-bootstrap'
 import {Table} from '../../helpers/idsk'
 import NotFound from '../../helpers/NotFound'
 import {businessTermsDocsSelector} from '../../cache/documentation/state'
@@ -49,35 +48,35 @@ export default ({data, id}) => {
     <>
       <h1 className="govuk-heading-l">{data.name[i18n.language]}</h1>
       <p className="lead">{data.description[i18n.language]}</p>
-      <Row>
-        <Col className="font-weight-bold" sm="3">{t('invoiceDocs.identifier')}</Col>
-        <Col sm="9">{id}</Col>
-      </Row>
-      <Row>
-        <Col className="font-weight-bold" sm="3">{t('invoiceDocs.cardinality.full')}</Col>
-        <Col sm="9">{displayCardinality(data.cardinality)}</Col>
-      </Row>
-      {data.dataType && <Row>
-        <Col className="font-weight-bold" sm="3">{t('invoiceDocs.dataType')}</Col>
-        <Col sm="9">{data.dataType}</Col>
-      </Row>}
-      {data.codeLists && <Row>
-        <Col className="font-weight-bold" sm="3">{t('invoiceDocs.codeLists')}</Col>
-        <Col sm="9">
+      <div className="govuk-grid-row">
+        <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.identifier')}</strong>
+        <div className="govuk-grid-column-three-quarters">{id}</div>
+      </div>
+      <div className="govuk-grid-row">
+        <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.cardinality.full')}</strong>
+        <div className="govuk-grid-column-three-quarters">{displayCardinality(data.cardinality)}</div>
+      </div>
+      {data.dataType && <div className="govuk-grid-row">
+        <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.dataType')}</strong>
+        <div className="govuk-grid-column-three-quarters">{data.dataType}</div>
+      </div>}
+      {data.codeLists && <div className="govuk-grid-row">
+        <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.codeLists')}</strong>
+        <div className="govuk-grid-column-three-quarters">
           {data.codeLists.map((codeList, i) => (
             <Fragment key={i}>
               {i !== 0 && <span>, </span>}
               <Link to={`/invoiceDocumentation/codeLists/${codeList}`}>{codeList}</Link>
             </Fragment>
           ))}
-        </Col>
-      </Row>}
-      {data.children && <Row>
-        <Col className="font-weight-bold" sm="3">{t('invoiceDocs.childElements')}</Col>
-        <Col sm="9">
+        </div>
+      </div>}
+      {data.children && <div className="govuk-grid-row">
+        <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.childElements')}</strong>
+        <div className="govuk-grid-column-three-quarters">
           <ChildrenTable childrenIds={data.children} />
-        </Col>
-      </Row>}
+        </div>
+      </div>}
     </>
   )
 }

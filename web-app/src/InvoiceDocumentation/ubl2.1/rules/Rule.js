@@ -1,5 +1,4 @@
 import {useSelector} from 'react-redux'
-import {Col, Row} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import NotFound from '../../../helpers/NotFound'
 import {ubl21RuleSelector} from '../../../cache/documentation/state'
@@ -16,22 +15,22 @@ export default ({match}) => {
   return (
     <>
       <h1 className="govuk-heading-l">{ruleId}</h1>
-      <Row>
-        <Col className="font-weight-bold" sm="3">{t('invoiceDocs.rules.message')}</Col>
-        <Col sm="9">{rule.message[i18n.language]}</Col>
-      </Row>
-      <Row>
-        <Col className="font-weight-bold" sm="3">{t('invoiceDocs.rules.context')}</Col>
-        <Col sm="9"><code>{rule.context}</code></Col>
-      </Row>
-      <Row>
-        <Col className="font-weight-bold" sm="3">{t('invoiceDocs.rules.test')}</Col>
-        <Col sm="9"><code>{rule.test}</code></Col>
-      </Row>
-      <Row>
-        <Col className="font-weight-bold" sm="3">{t('invoiceDocs.rules.flag')}</Col>
-        <Col sm="9">{t(`invoiceDocs.rules.flags.${rule.flag}`)}</Col>
-      </Row>
+      <div className="govuk-grid-row">
+        <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.rules.message')}</strong>
+        <div className="govuk-grid-column-three-quarters">{rule.message[i18n.language]}</div>
+      </div>
+      <div className="govuk-grid-row">
+        <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.rules.context')}</strong>
+        <div className="govuk-grid-column-three-quarters"><code>{rule.context}</code></div>
+      </div>
+      <div className="govuk-grid-row">
+        <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.rules.test')}</strong>
+        <div className="govuk-grid-column-three-quarters"><code>{rule.test}</code></div>
+      </div>
+      <div className="govuk-grid-row">
+        <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.rules.flag')}</strong>
+        <div className="govuk-grid-column-three-quarters">{t(`invoiceDocs.rules.flags.${rule.flag}`)}</div>
+      </div>
     </>
   )
 }
