@@ -30,8 +30,8 @@ export default () => {
       </PhaseBanner>}
       <h1 className="govuk-heading-xl">{t('title')}</h1>
       <div>
-        <span>{t('introduction')}:</span>
-        <ol>
+        <h3 className="govuk-heading-m">{t('introduction')}:</h3>
+        <ol className="govuk-list govuk-list--number">
           <li>
             <strong>(B/G)2(B/G)</strong> - {t('version1')}
           </li>

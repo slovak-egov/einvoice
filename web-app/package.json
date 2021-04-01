@@ -10,7 +10,7 @@
   "license": "EUPL-1.2",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.2",
-    "@id-sk/frontend": "^2.3.0",
+    "@id-sk/frontend": "^2.4.0",
     "bootstrap": "^4.6.0",
     "classnames": "^2.2.6",
     "date-fns": "^2.18.0",

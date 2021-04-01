@@ -63,9 +63,8 @@ export default ({showSubmission, title}) => {
             <Form.Label>{t('invoiceTypes.invoice')}</Form.Label>
             <div>
               <FileUploader
-                file={invoice?.name}
+                fileName={invoice?.name}
                 accept=".xml"
-                buttonStyle={{margin: 0}}
                 buttonText={t('upload')}
                 uploadFile={updateInvoiceData}
                 deleteFile={clearInvoiceData}
