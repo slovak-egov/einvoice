@@ -1,4 +1,4 @@
-import {Button} from 'react-bootstrap'
+import {Button} from './idsk'
 import ConfirmationModal from './ConfirmationModal'
 
 export default ({confirmationTitle, confirmationText, onClick, children, ...props}) => (

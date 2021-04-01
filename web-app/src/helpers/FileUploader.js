@@ -1,13 +1,14 @@
 import {useRef} from 'react'
-import {Button, Form, InputGroup} from 'react-bootstrap'
+import {Form, InputGroup} from 'react-bootstrap'
+import {Button} from './idsk'
 import {clearEventTarget} from '../utils/helpers'
 
-const FileUploader = ({accept, buttonStyle, buttonText, uploadFile}) => {
+const FileUploader = ({accept, style, text, uploadFile}) => {
   const hiddenFileInput = useRef(null)
   return (
     <>
-      <Button onClick={() => hiddenFileInput.current.click()} style={buttonStyle}>
-        {buttonText}
+      <Button onClick={() => hiddenFileInput.current.click()} style={style}>
+        {text}
       </Button>
       {/*We have to clear target in onClick, so we can upload same file multiple times in row*/}
       <input
@@ -31,14 +32,14 @@ export default ({accept, buttonStyle, buttonText, deleteFile, fileName, uploadFi
         style={{maxWidth: '200px'}}
       />
       <InputGroup.Append>
-        <Button variant="danger" onClick={deleteFile} className="m-0">X</Button>
+        <Button onClick={deleteFile} className="govuk-button--warning">X</Button>
       </InputGroup.Append>
     </InputGroup>
   ) : (
     <FileUploader
       accept={accept}
-      buttonStyle={buttonStyle}
-      buttonText={buttonText}
+      style={buttonStyle}
+      text={buttonText}
       uploadFile={uploadFile}
     />
   )

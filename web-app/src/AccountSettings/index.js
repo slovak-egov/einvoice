@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
-import {Button, Card, Form, InputGroup} from 'react-bootstrap'
+import {Button, Form, InputGroup} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import Tooltip from '../helpers/Tooltip'
 import {getLoggedUser} from '../cache/users/state'
@@ -84,79 +84,75 @@ export default () => {
   if (loggedUser.substituteIds == null || loggedUser.organizationIds == null) return null
 
   return (
-    <Card className="m-1">
-      <Card.Header className="bg-primary text-white text-center" as="h3">
-        {t('topBar.accountSettings')}
-      </Card.Header>
-      <Card.Body>
-        <Form.Group>
-          <Form.Label>{t('userId.label')}</Form.Label>
-          <Tooltip tooltipText={t('userId.tooltip')} />
-          <Form.Control
-            value={loggedUser.id}
-            readOnly
-          />
-        </Form.Group>
-        <EditableField
-          actualValue={loggedUser.serviceAccountPublicKey}
-          label={t('accountPublicKey.label')}
-          tooltipText={t('accountPublicKey.tooltip')}
-          save={(serviceAccountPublicKey) => updateUserData({serviceAccountPublicKey})}
-          as="textarea"
-          rows={10}
+    <>
+      <h1 className="govuk-heading-l">{t('topBar.accountSettings')}</h1>
+      <Form.Group>
+        <Form.Label>{t('userId.label')}</Form.Label>
+        <Tooltip tooltipText={t('userId.tooltip')} />
+        <Form.Control
+          value={loggedUser.id}
+          readOnly
         />
-        <Form.Group>
-          <Form.Label>{t('substituteIds.label')}</Form.Label>
-          <Tooltip tooltipText={t('substituteIds.tooltip')} />
-          <div className="d-flex flex-wrap">
-            {loggedUser.substituteIds.map((id) => (
-              <InputGroup className="m-1" key={id} style={{width: '115px'}}>
-                <Form.Control
-                  value={id}
-                  readOnly
-                />
-                <InputGroup.Append>
-                  <Button className="m-0" variant="danger" onClick={removeSubstitute(id)}>X</Button>
-                </InputGroup.Append>
-              </InputGroup>
-            ))}
-            <InputGroup className="m-1" style={{width: '115px'}}>
+      </Form.Group>
+      <EditableField
+        actualValue={loggedUser.serviceAccountPublicKey}
+        label={t('accountPublicKey.label')}
+        tooltipText={t('accountPublicKey.tooltip')}
+        save={(serviceAccountPublicKey) => updateUserData({serviceAccountPublicKey})}
+        as="textarea"
+        rows={10}
+      />
+      <Form.Group>
+        <Form.Label>{t('substituteIds.label')}</Form.Label>
+        <Tooltip tooltipText={t('substituteIds.tooltip')} />
+        <div className="d-flex flex-wrap">
+          {loggedUser.substituteIds.map((id) => (
+            <InputGroup className="m-1" key={id} style={{width: '115px'}}>
               <Form.Control
-                value={newSubstituteId}
-                onChange={changeNewSubstituteId}
+                value={id}
+                readOnly
               />
               <InputGroup.Append>
-                <Button
-                  variant="success"
-                  onClick={addSubstitute}
-                  className="m-0"
-                  disabled={newSubstituteId === ''}
-                >
-                  +
-                </Button>
+                <Button className="m-0" variant="danger" onClick={removeSubstitute(id)}>X</Button>
               </InputGroup.Append>
             </InputGroup>
-          </div>
-        </Form.Group>
-        <Form.Group>
-          <Form.Label>{t('organizationIds.label')}</Form.Label>
-          <Tooltip tooltipText={t('organizationIds.tooltip')} />
-          <div className="d-flex flex-wrap">
-            {loggedUser.organizationIds.length > 0 ?
-              loggedUser.organizationIds.map((ico, i) => (
-                <Form.Control
-                  key={i}
-                  value={ico}
-                  readOnly
-                  className="m-1"
-                  style={{width: '105px'}}
-                />
-              )) :
-              <strong>{t('organizationIds.empty')}</strong>
-            }
-          </div>
-        </Form.Group>
-      </Card.Body>
-    </Card>
+          ))}
+          <InputGroup className="m-1" style={{width: '115px'}}>
+            <Form.Control
+              value={newSubstituteId}
+              onChange={changeNewSubstituteId}
+            />
+            <InputGroup.Append>
+              <Button
+                variant="success"
+                onClick={addSubstitute}
+                className="m-0"
+                disabled={newSubstituteId === ''}
+              >
+                +
+              </Button>
+            </InputGroup.Append>
+          </InputGroup>
+        </div>
+      </Form.Group>
+      <Form.Group>
+        <Form.Label>{t('organizationIds.label')}</Form.Label>
+        <Tooltip tooltipText={t('organizationIds.tooltip')} />
+        <div className="d-flex flex-wrap">
+          {loggedUser.organizationIds.length > 0 ?
+            loggedUser.organizationIds.map((ico, i) => (
+              <Form.Control
+                key={i}
+                value={ico}
+                readOnly
+                className="m-1"
+                style={{width: '105px'}}
+              />
+            )) :
+            <strong>{t('organizationIds.empty')}</strong>
+          }
+        </div>
+      </Form.Group>
+    </>
   )
 }

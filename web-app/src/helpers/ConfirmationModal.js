@@ -1,6 +1,7 @@
 import React from 'react'
-import {Modal, Button} from 'react-bootstrap'
+import {Modal} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
+import {Button} from './idsk'
 
 const ConfirmationModal = ({cancel, confirm, text, title}) => {
   const {t} = useTranslation('common')
@@ -13,13 +14,12 @@ const ConfirmationModal = ({cancel, confirm, text, title}) => {
       <Modal.Body>{text}</Modal.Body>
 
       <Modal.Footer>
-        <Button variant="danger" onClick={cancel}>{t('cancel')}</Button>
-        <Button variant="success" onClick={confirm}>{t('confirm')}</Button>
+        <Button className="govuk-button--warning" onClick={cancel}>{t('cancel')}</Button>
+        <Button onClick={confirm}>{t('confirm')}</Button>
       </Modal.Footer>
     </Modal>
   )
 }
-
 
 export default class extends React.Component {
   state = {

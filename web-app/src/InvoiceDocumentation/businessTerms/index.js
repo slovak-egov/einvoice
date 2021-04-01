@@ -1,8 +1,8 @@
 import {useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {Link, Route, Switch} from 'react-router-dom'
-import {Card, Table} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
+import {Table} from '../../helpers/idsk'
 import BusinessTerm from './BusinessTerm'
 import {businessTermsDocsSelector, isBusinessTermsDocsLoadedSelector} from '../../cache/documentation/state'
 import {getBusinessTermsDocs} from '../../cache/documentation/actions'
@@ -11,37 +11,43 @@ import {displayCardinality} from '../ubl2.1/syntax/helpers'
 const Home = ({businessTerms}) => {
   const {i18n, t} = useTranslation('common')
   return (
-    <Card>
-      <Card.Header className="bg-primary text-white text-center" as="h3">
-        {t('invoiceDocs.businessTerms')}
-      </Card.Header>
-      <Card.Body>
-        <Table striped hover responsive size="sm">
-          <thead>
-            <tr>
-              <th style={{width: '5%'}}>{t('invoiceDocs.cardinality.short')}</th>
-              <th className="w-25">ID</th>
-              <th className="d-none d-sm-table-cell">{t('invoiceDocs.description')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Object.entries(businessTerms).map(([id, term]) => (
-              <tr key={id}>
-                <td style={{width: '5%'}}>{displayCardinality(term.cardinality)}</td>
-                <td className="w-25">
-                  <span>{'• '.repeat(term.level)}</span>
-                  <Link to={`/invoiceDocumentation/businessTerms/${id}`}>{id}</Link>
-                </td>
-                <td className="d-none d-sm-table-cell">
-                  <strong>{term.name[i18n.language]}</strong>
-                  <div>{term.description[i18n.language]}</div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      </Card.Body>
-    </Card>
+    <>
+      <h1 className="govuk-heading-l">{t('invoiceDocs.businessTerms')}</h1>
+      <Table
+        head={[
+          {children: t('invoiceDocs.cardinality.short')},
+          {children: 'ID'},
+          {
+            children: t('invoiceDocs.description'),
+            className: 'd-none-mobile',
+          },
+        ]}
+        rows={Object.entries(businessTerms).map(([id, term]) => [
+          {
+            children: displayCardinality(term.cardinality),
+            style: {width: '5%'},
+          },
+          {
+            children: (
+              <>
+                <span>{'• '.repeat(term.level)}</span>
+                <Link to={`/invoiceDocumentation/businessTerms/${id}`}>{id}</Link>
+              </>
+            ),
+            style: {width: '15%'},
+          },
+          {
+            children: (
+              <>
+                <strong>{term.name[i18n.language]}</strong>
+                <div>{term.description[i18n.language]}</div>
+              </>
+            ),
+            className: 'd-none-mobile',
+          },
+        ])}
+      />
+    </>
   )
 }
 

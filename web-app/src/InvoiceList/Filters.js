@@ -2,7 +2,8 @@ import './Filters.css'
 import {useCallback, useEffect, useState} from 'react'
 import {useHistory, useLocation} from 'react-router'
 import {useTranslation} from 'react-i18next'
-import {Accordion, Button, Card, Col, Form, FormCheck, InputGroup, Row} from 'react-bootstrap'
+import {Accordion, Card, Form, InputGroup} from 'react-bootstrap'
+import {Button, Checkboxes, Input} from '../helpers/idsk'
 import DatePicker from '../helpers/DatePicker'
 import {invoiceFormats} from '../utils/constants'
 import {formatDate, formatTime, parseTime} from '../utils/helpers'
@@ -92,105 +93,118 @@ export default ({getInvoices}) => {
       <Accordion.Collapse eventKey="0">
         <Card.Body>
           <div>
-            <Row>
-              <Col sm>
-                <strong className="filter-heading">{t('invoice.format')}</strong>
-                <div className="d-flex">
-                  <FormCheck
-                    type="checkbox"
-                    checked={ublFormat}
-                    onChange={() => setUblFormat(!ublFormat)}
-                    label={invoiceFormats.UBL}
-                    className="mr-3"
-                  />
-                  <FormCheck
-                    type="checkbox"
-                    checked={d16bFormat}
-                    onChange={() => setD16bFormat(!d16bFormat)}
-                    label={invoiceFormats.D16B}
-                  />
-                </div>
-              </Col>
-              <Col sm>
-                <strong className="filter-heading">Test</strong>
-                <FormCheck
-                  type="checkbox"
-                  checked={test}
-                  onChange={() => setTest((v) => !v)}
-                  label="Test"
+            <div className="govuk-grid-row">
+              <div className="govuk-grid-column-one-half">
+                <Checkboxes
+                  className="govuk-checkboxes--small"
+                  fieldset={{legend: {children: t('invoice.format')}}}
+                  errorMessage={!ublFormat && !d16bFormat && {children: t('errorMessages.noneSelected')}}
+                  items={[
+                    {
+                      checked: ublFormat,
+                      children: invoiceFormats.UBL,
+                      onChange: () => setUblFormat((v) => !v),
+                    },
+                    {
+                      checked: d16bFormat,
+                      children: invoiceFormats.D16B,
+                      onChange: () => setD16bFormat((v) => !v),
+                    },
+                  ]}
                 />
-              </Col>
-            </Row>
-            <Row>
-              <Col md>
-                <strong className="filter-heading">{t('invoice.supplierIco')}</strong>
-                <InputGroup style={{maxWidth: '140px'}}>
-                  <Form.Control
-                    value={supplierIco || ''}
-                    onChange={(e) => setSupplierIco(keepDigitsOnly(e.target.value))}
-                    readOnly={supplierIco == null}
-                  />
-                  <InputGroup.Append>
-                    <InputGroup.Checkbox
-                      checked={supplierIco != null}
-                      onChange={() => setSupplierIco(supplierIco == null ? '' : null)}
-                    />
-                  </InputGroup.Append>
-                </InputGroup>
-              </Col>
-              <Col md>
-                <strong className="filter-heading">{t('invoice.customerIco')}</strong>
-                <InputGroup style={{maxWidth: '140px'}}>
-                  <Form.Control
-                    value={customerIco || ''}
-                    onChange={(e) => setCustomerIco(keepDigitsOnly(e.target.value))}
-                    readOnly={customerIco == null}
-                  />
-                  <InputGroup.Append>
-                    <InputGroup.Checkbox
-                      checked={customerIco != null}
-                      onChange={() => setCustomerIco(customerIco == null ? '' : null)}
-                    />
-                  </InputGroup.Append>
-                </InputGroup>
-              </Col>
-            </Row>
-            <Row>
-              <Col md>
-                <strong className="filter-heading">{t('invoice.supplier')}</strong>
-                <InputGroup style={{maxWidth: '230px'}}>
-                  <Form.Control
-                    value={supplierName || ''}
-                    onChange={(e) => setSupplierName(e.target.value)}
-                    readOnly={supplierName == null}
-                  />
-                  <InputGroup.Append>
-                    <InputGroup.Checkbox
-                      checked={supplierName != null}
-                      onChange={() => setSupplierName(supplierName == null ? '' : null)}
-                    />
-                  </InputGroup.Append>
-                </InputGroup>
-              </Col>
-              <Col md>
-                <strong className="filter-heading">{t('invoice.customer')}</strong>
-                <InputGroup style={{maxWidth: '230px'}}>
-                  <Form.Control
-                    value={customerName || ''}
-                    onChange={(e) => setCustomerName(e.target.value)}
-                    readOnly={customerName == null}
-                  />
-                  <InputGroup.Append>
-                    <InputGroup.Checkbox
-                      checked={customerName != null}
-                      onChange={() => setCustomerName(customerName == null ? '' : null)}
-                    />
-                  </InputGroup.Append>
-                </InputGroup>
-              </Col>
-            </Row>
-            <Row>
-              <Col md>
+              </div>
+              <div className="govuk-grid-column-one-half">
+                <Checkboxes
+                  className="govuk-checkboxes--small"
+                  fieldset={{legend: {children: 'Test'}}}
+                  items={[{
+                    checked: test,
+                    children: 'Test',
+                    onChange: () => setTest((v) => !v),
+                  }]}
+                />
+              </div>
+            </div>
+            <div className="govuk-grid-row">
+              <div className="govuk-grid-column-one-half">
+                <Checkboxes
+                  className="govuk-checkboxes--small"
+                  fieldset={{legend: {children: t('invoice.supplier')}}}
+                  items={[
+                    {
+                      checked: supplierIco != null,
+                      onChange: () => setSupplierIco(supplierIco == null ? '' : null),
+                      children: 'IČO',
+                      conditional: {
+                        children: (
+                          <Input
+                            className="govuk-input--width-10"
+                            value={supplierIco || ''}
+                            onChange={(e) => setSupplierIco(keepDigitsOnly(e.target.value))}
+                            type="text"
+                          />
+                        ),
+                      },
+                    },
+                    {
+                      checked: supplierName != null,
+                      onChange: () => setSupplierName(supplierName == null ? '' : null),
+                      children: t('invoiceDocs.name'),
+                      conditional: {
+                        children: (
+                          <Input
+                            className="govuk-input--width-10"
+                            value={supplierName || ''}
+                            onChange={(e) => setSupplierName(e.target.value)}
+                            type="text"
+                          />
+                        ),
+                      },
+                    },
+                  ]}
+                />
+              </div>
+              <div className="govuk-grid-column-one-half">
+                <Checkboxes
+                  className="govuk-checkboxes--small"
+                  fieldset={{legend: {children: t('invoice.customer')}}}
+                  items={[
+                    {
+                      checked: customerIco != null,
+                      onChange: () => setCustomerIco(customerIco == null ? '' : null),
+                      children: 'IČO',
+                      conditional: {
+                        children: (
+                          <Input
+                            className="govuk-input--width-10"
+                            value={customerIco || ''}
+                            onChange={(e) => setCustomerIco(keepDigitsOnly(e.target.value))}
+                            type="text"
+                          />
+                        ),
+                      },
+                    },
+                    {
+                      checked: customerName != null,
+                      onChange: () => setCustomerName(customerName == null ? '' : null),
+                      children: t('invoiceDocs.name'),
+                      conditional: {
+                        children: (
+                          <Input
+                            className="govuk-input--width-10"
+                            value={customerName || ''}
+                            onChange={(e) => setCustomerName(e.target.value)}
+                            type="text"
+                          />
+                        ),
+                      },
+                    },
+                  ]}
+                />
+              </div>
+            </div>
+            <div className="govuk-grid-row">
+              <div className="govuk-grid-column-one-half">
                 <strong className="filter-heading">{t('invoice.amount')}</strong>
                 <InputGroup>
                   <Form.Label style={{width: '40px'}}>{t('invoice.intervalStart')}</Form.Label>
@@ -222,8 +236,8 @@ export default ({getInvoices}) => {
                     />
                   </InputGroup.Append>
                 </InputGroup>
-              </Col>
-              <Col md>
+              </div>
+              <div className="govuk-grid-column-one-half">
                 <strong className="filter-heading">{t('invoice.amountWithoutVat')}</strong>
                 <InputGroup>
                   <Form.Label style={{width: '40px'}}>{t('invoice.intervalStart')}</Form.Label>
@@ -257,10 +271,10 @@ export default ({getInvoices}) => {
                     />
                   </InputGroup.Append>
                 </InputGroup>
-              </Col>
-            </Row>
-            <Row>
-              <Col md>
+              </div>
+            </div>
+            <div className="govuk-grid-row">
+              <div className="govuk-grid-column-one-half">
                 <strong className="filter-heading">{t('invoice.issueDate')}</strong>
                 <InputGroup>
                   <Form.Label style={{width: '40px'}}>{t('invoice.intervalStart')}</Form.Label>
@@ -294,8 +308,8 @@ export default ({getInvoices}) => {
                     />
                   </InputGroup.Append>
                 </InputGroup>
-              </Col>
-              <Col md>
+              </div>
+              <div className="govuk-grid-column-one-half">
                 <strong className="filter-heading">{t('invoice.uploadTime')}</strong>
                 <InputGroup>
                   <Form.Label style={{width: '40px'}}>{t('invoice.intervalStart')}</Form.Label>
@@ -335,13 +349,11 @@ export default ({getInvoices}) => {
                     />
                   </InputGroup.Append>
                 </InputGroup>
-              </Col>
-            </Row>
+              </div>
+            </div>
           </div>
-          <div className="d-flex">
+          <div className="govuk-button-group" style={{justifyContent: 'center'}}>
             <Button
-              variant="primary"
-              className="ml-auto"
               onClick={filterRedirect}
               disabled={!searchEnabled}
             >

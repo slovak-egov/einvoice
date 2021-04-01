@@ -1,8 +1,9 @@
 import {useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
-import {Button, Card, Col, Form, Row} from 'react-bootstrap'
+import {Form} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
 import {format as formatDate, parseISO} from 'date-fns'
+import {Button} from '../helpers/idsk'
 import NotFound from '../helpers/NotFound'
 import BoolIcon from '../helpers/BoolIcon'
 import {getInvoiceSelector} from '../cache/invoices/state'
@@ -52,77 +53,72 @@ export default ({history, match: {params: {id}}}) => {
   } = invoice
 
   return (
-    <Card className="m-1">
-      <Card.Header className="bg-primary text-white text-center d-sm-flex" as="h3">
-        <Col />
-        <Col>{t('invoiceTypes.invoice')}</Col>
-        <Col className="d-sm-flex">
-          <Button className="ml-auto" variant="danger" onClick={history.goBack}>{t('close')}</Button>
-        </Col>
-      </Card.Header>
-      <Card.Body>
-        <div>
-          <Row>
-            <Col>
-              <TextField label="ID" value={id} />
-            </Col>
-          </Row>
-          <Row>
-            <Col sm>
-              <TextField label={t('invoice.supplier')} value={sender} />
-            </Col>
-            <Col sm>
-              <TextField label={t('invoice.supplierIco')} value={supplierIco} />
-            </Col>
-          </Row>
-          <Row>
-            <Col sm>
-              <TextField label={t('invoice.customer')} value={receiver} />
-            </Col>
-            <Col sm>
-              <TextField label={t('invoice.customerIco')} value={customerIco} />
-            </Col>
-          </Row>
-          <Row>
-            <Col sm>
-              <TextField
-                label={t('invoice.uploadedAt')}
-                value={formatDate(parseISO(createdAt), 'yyyy-MM-dd HH:mm')}
-              />
-            </Col>
-            <Col sm>
-              <TextField label={t('invoice.issueDate')} value={issueDate} />
-            </Col>
-            <Col sm>
-              <TextField label={t('invoice.format')} value={format} />
-            </Col>
-          </Row>
-          <Row>
-            <Col sm>
-              <TextField label={t('invoice.amount')} value={amount} />
-            </Col>
-            <Col sm>
-              <TextField label={t('invoice.amountWithoutVat')} value={amountWithoutVat} />
-            </Col>
-          </Row>
-          <Row>
-            <Col sm>
-              <CheckboxField label="Test" value={test} />
-            </Col>
-            <Col sm>
-              <CheckboxField label={t('invoice.notificationsSent')} value={notificationsStatus === notificationStates.SENT} />
-            </Col>
-          </Row>
+    <>
+      <div className="govuk-back-link" onClick={history.goBack} style={{cursor: 'pointer'}}>
+        {t('back')}
+      </div>
+      <h1 className="govuk-heading-l">{t('invoiceTypes.invoice')}</h1>
+      <div>
+        <div className="govuk-grid-row">
+          <div className="govuk-grid-column-full">
+            <TextField label="ID" value={id} />
+          </div>
         </div>
-        <Row className="justify-content-center">
-          <Button variant="primary" href={`${CONFIG.apiServerUrl}/invoices/${id}/detail`}>
-            {`${t('download')} XML`}
-          </Button>
-          <Button variant="success" href={`${CONFIG.apiServerUrl}/invoices/${id}/visualization`}>
-            {`${t('download')} ZIP`}
-          </Button>
-        </Row>
-      </Card.Body>
-    </Card>
+        <div className="govuk-grid-row">
+          <div className="govuk-grid-column-one-half">
+            <TextField label={t('invoice.supplier')} value={sender} />
+          </div>
+          <div className="govuk-grid-column-one-half">
+            <TextField label={t('invoice.supplierIco')} value={supplierIco} />
+          </div>
+        </div>
+        <div className="govuk-grid-row">
+          <div className="govuk-grid-column-one-half">
+            <TextField label={t('invoice.customer')} value={receiver} />
+          </div>
+          <div className="govuk-grid-column-one-half">
+            <TextField label={t('invoice.customerIco')} value={customerIco} />
+          </div>
+        </div>
+        <div className="govuk-grid-row">
+          <div className="govuk-grid-column-one-third">
+            <TextField
+              label={t('invoice.uploadedAt')}
+              value={formatDate(parseISO(createdAt), 'yyyy-MM-dd HH:mm')}
+            />
+          </div>
+          <div className="govuk-grid-column-one-third">
+            <TextField label={t('invoice.issueDate')} value={issueDate} />
+          </div>
+          <div className="govuk-grid-column-one-third">
+            <TextField label={t('invoice.format')} value={format} />
+          </div>
+        </div>
+        <div className="govuk-grid-row">
+          <div className="govuk-grid-column-one-half">
+            <TextField label={t('invoice.amount')} value={amount} />
+          </div>
+          <div className="govuk-grid-column-one-half">
+            <TextField label={t('invoice.amountWithoutVat')} value={amountWithoutVat} />
+          </div>
+        </div>
+        <div className="govuk-grid-row">
+          <div className="govuk-grid-column-one-half">
+            <CheckboxField label="Test" value={test} />
+          </div>
+          <div className="govuk-grid-column-one-half">
+            <CheckboxField label={t('invoice.notificationsSent')} value={notificationsStatus === notificationStates.SENT} />
+          </div>
+        </div>
+      </div>
+      <div className="govuk-button-group" style={{justifyContent: 'center'}}>
+        <Button className="govuk-button--secondary" href={`${CONFIG.apiServerUrl}/invoices/${id}/detail`}>
+          {`${t('download')} XML`}
+        </Button>
+        <Button href={`${CONFIG.apiServerUrl}/invoices/${id}/visualization`}>
+          {`${t('download')} ZIP`}
+        </Button>
+      </div>
+    </>
   )
 }

@@ -2,7 +2,7 @@
   "add": "Pridať",
   "delete": "Odstrániť",
   "error": "Chyba",
-  "close": "Zavrieť",
+  "back": "Naspäť",
   "reset": "Vynulovať",
   "invoice": {
     "supplier": "Dodávateľ",
@@ -48,14 +48,18 @@
   "download": "Stiahnuť",
   "loadMore": "Načítaj viac",
   "invoiceDocumentation": "Dokumentácia faktúr",
-  "auth": {
+  "unauthorized": {
     "title": "Nepovolený prístup",
     "description": "Nemáte povolenie na prezeranie tejto stránky",
     "upvsLogout": "Odhlásiť zo slovensko.sk"
   },
-  "notfound": {
-    "title": "Nenájdené",
-    "description": "Stránka nebola nájdená"
+  "notFound": {
+    "title": "Stránka nebola nájdená",
+    "description": [
+      "Ak ste napísali webovú adresu, skontrolujte, či je správna.",
+      "Ak ste skopírovali webovú adresu, skontrolujte, či ste skopírovali celú adresu.",
+      "Ak je webová adresa správna alebo ste sa tu dostali cez odkaz alebo tlačidlo, napíšte email na adresu"
+    ]
   },
   "loading": {
     "title": "Spracúvam žiadosť"
@@ -151,7 +155,8 @@
     "deleteDraft": "Koncept faktúry sa nepodarilo vymazať",
     "createDraft": "Koncept faktúry sa nepodarilo vytvoriť",
     "unsupportedMimeType": "Pokúsili ste sa nahrať súbor nepodporovaného typu",
-    "emptyField": "Toto políčko nemôže byť prázdne"
+    "emptyField": "Toto políčko nemôže byť prázdne",
+    "noneSelected": "Zvoľte aspoň jednu možnosť"
   },
   "successMessages": {
     "createInvoice": {
@@ -168,5 +173,10 @@
   "drafts": "Koncepty",
   "open": "Otvoriť",
   "saveAsDraft": "Uložiť ako koncept",
-  "createDraft": "Vytvoriť koncept"
+  "createDraft": "Vytvoriť koncept",
+  "footer": [
+    "Vytvorené v súlade s",
+    "Jednotným dizajn manuálom elektronických služieb",
+    "Prevádzkovateľom služby je Ministerstvo financií Slovenskej republiky."
+  ]
 }
