@@ -13,8 +13,10 @@ func init() {
 			ADD COLUMN amount_currency VARCHAR (5),
 			ADD COLUMN amount_without_vat_currency VARCHAR (5);
 			
-			update invoices set amount_currency = 'EUR';
-			update invoices set amount_without_vat_currency = 'EUR';
+			UPDATE invoices SET amount_currency = 'EUR';
+			UPDATE invoices SET amount_without_vat_currency = 'EUR';
+			UPDATE invoices SET amount_currency = 'SEK' WHERE amount = 12500;
+			UPDATE invoices SET amount_without_vat_currency = 'SEK' WHERE amount = 12500;
 			
 			ALTER TABLE invoices 
 			ALTER COLUMN amount_currency SET NOT NULL,

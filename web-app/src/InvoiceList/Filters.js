@@ -33,9 +33,7 @@ export default ({getInvoices}) => {
   const [ublFormat, setUblFormat] = useState(queryParams.getAll('format').includes(invoiceFormats.UBL))
   const [d16bFormat, setD16bFormat] = useState(queryParams.getAll('format').includes(invoiceFormats.D16B))
 
-  const [ordering, setOrdering] = useState(
-    queryParams.get('order') === orderingTypes.ASC ? orderingTypes.ASC : orderingTypes.DESC
-  )
+  const [ordering, setOrdering] = useState(queryParams.get('order') || orderingTypes.DESC)
 
   const [amountFrom, setAmountFrom] = useState(queryParams.get('amountFrom'))
   const [amountTo, setAmountTo] = useState(queryParams.get('amountTo'))
@@ -115,7 +113,7 @@ export default ({getInvoices}) => {
         <span>{t('filters')}</span>
         <i className="fas fa-plus ml-auto" />
       </Accordion.Toggle>
-      <Accordion.Collapse eventKey="0">
+      { isCodeListLoaded && <Accordion.Collapse eventKey="0">
         <Card.Body>
           <div>
             <div className="govuk-grid-row">
@@ -275,7 +273,7 @@ export default ({getInvoices}) => {
                     />
                   </InputGroup.Append>
                 </InputGroup>
-                {isCodeListLoaded && <InputGroup>
+                <InputGroup>
                   <Form.Label style={{width: '70px'}}>{t('invoice.currency')}</Form.Label>
                   <Form.Control
                     as="select"
@@ -284,7 +282,7 @@ export default ({getInvoices}) => {
                     onChange={(e) => setAmountCurrency(e.target.value)}
                     disabled={amountCurrency == null}
                   >
-                    <option />
+                    <option hidden />
                     {codeLists && Object.keys(codeLists.ISO4217.codes).map((code, i) => (
                       <option key={i} value={code}>{code}</option>
                     ))}
@@ -292,7 +290,7 @@ export default ({getInvoices}) => {
                   <InputGroup.Append>
                     <InputGroup.Checkbox
                       checked={amountCurrency != null}
-                      onChange={() => setAmountCurrency(amountCurrency == null ? '' : null)}
+                      onChange={() => setAmountCurrency(amountCurrency == null ? 'EUR' : null)}
                     />
                   </InputGroup.Append>
                 </InputGroup>}
@@ -331,7 +329,7 @@ export default ({getInvoices}) => {
                     />
                   </InputGroup.Append>
                 </InputGroup>
-                {isCodeListLoaded && <InputGroup>
+                <InputGroup>
                   <Form.Label style={{width: '70px'}}>{t('invoice.currency')}</Form.Label>
                   <Form.Control
                     as="select"
@@ -340,7 +338,7 @@ export default ({getInvoices}) => {
                     onChange={(e) => setAmountWithoutVatCurrency(e.target.value)}
                     disabled={amountWithoutVatCurrency == null}
                   >
-                    <option />
+                    <option hidden />
                     {codeLists && Object.keys(codeLists.ISO4217.codes).map((code, i) => (
                       <option key={i} value={code}>{code}</option>
                     ))}
@@ -348,10 +346,10 @@ export default ({getInvoices}) => {
                   <InputGroup.Append>
                     <InputGroup.Checkbox
                       checked={amountWithoutVatCurrency != null}
-                      onChange={() => setAmountWithoutVatCurrency(amountWithoutVatCurrency == null ? '' : null)}
+                      onChange={() => setAmountWithoutVatCurrency(amountWithoutVatCurrency == null ? 'EUR' : null)}
                     />
                   </InputGroup.Append>
-                </InputGroup>}
+                </InputGroup>
               </div>
             </div>
             <div className="govuk-grid-row">
@@ -442,7 +440,7 @@ export default ({getInvoices}) => {
             </Button>
           </div>
         </Card.Body>
-      </Accordion.Collapse>
+      </Accordion.Collapse>}
     </Accordion>
   )
 }

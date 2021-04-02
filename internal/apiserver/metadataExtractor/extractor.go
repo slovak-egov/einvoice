@@ -2,8 +2,6 @@ package metadataExtractor
 
 import (
 	"encoding/xml"
-	"strconv"
-
 	"github.com/slovak-egov/einvoice/internal/entity"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 	"github.com/slovak-egov/einvoice/pkg/timeutil"
@@ -32,16 +30,6 @@ func parseUblInvoice(rawInvoice []byte) (*entity.Invoice, error) {
 		return nil, err
 	}
 
-	amount, err := strconv.ParseFloat(invoice.LegalMonetaryTotal.TaxInclusiveAmount.Value, 64)
-	if err != nil {
-		return nil, err
-	}
-
-	amountWithoutVat, err := strconv.ParseFloat(invoice.LegalMonetaryTotal.TaxExclusiveAmount.Value, 64)
-	if err != nil {
-		return nil, err
-	}
-
 	return &entity.Invoice{
 		Format:                   entity.UblFormat,
 		Sender:                   invoice.AccountingSupplierParty.Party.PartyName.Name,
@@ -50,9 +38,9 @@ func parseUblInvoice(rawInvoice []byte) (*entity.Invoice, error) {
 		Receiver:                 invoice.AccountingCustomerParty.Party.PartyName.Name,
 		CustomerIco:              invoice.AccountingCustomerParty.Party.PartyIdentification.ID,
 		CustomerCountry:          invoice.AccountingCustomerParty.Party.PostalAddress.Country.IdentificationCode,
-		Amount:                   amount,
+		Amount:                   invoice.LegalMonetaryTotal.TaxInclusiveAmount.Value,
 		AmountCurrency:           invoice.LegalMonetaryTotal.TaxInclusiveAmount.CurrencyID,
-		AmountWithoutVat:         amountWithoutVat,
+		AmountWithoutVat:         invoice.LegalMonetaryTotal.TaxExclusiveAmount.Value,
 		AmountWithoutVatCurrency: invoice.LegalMonetaryTotal.TaxExclusiveAmount.CurrencyID,
 		IssueDate:                *issueDate,
 	}, nil

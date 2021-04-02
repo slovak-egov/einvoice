@@ -13,7 +13,7 @@ const isTimeIntervalValid = (low, high) =>
   (low == null || high == null || low <= high) && low !== '' && high !== ''
 
 const isCurrencyValid = (currency, codeLists) =>
-  currency == null || currency in codeLists.ISO4217.codes
+  currency == null || (codeLists && currency in codeLists.ISO4217.codes)
 
 const isOrderingValid = (ordering) =>
   ordering == null || Object.values(orderingTypes).includes(ordering)

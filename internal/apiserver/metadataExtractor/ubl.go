@@ -15,8 +15,8 @@ type ublInvoice struct {
 }
 
 type amount struct {
-	Value      string `xml:",innerxml"`
-	CurrencyID string `xml:"currencyID,attr"`
+	Value      float64 `xml:",chardata"`
+	CurrencyID string  `xml:"currencyID,attr"`
 }
 
 type ublParty struct {
