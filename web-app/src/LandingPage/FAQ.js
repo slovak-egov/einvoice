@@ -274,11 +274,12 @@ const Version5 = () => (
 )
 
 export default () => {
-  const {t} = useTranslation('LandingPage')
+  const {i18n, t} = useTranslation('LandingPage')
   return (
     <>
       <h1 className="govuk-heading-l">{t('faq')}</h1>
       <Accordion
+        key={i18n.language}
         items={[
           {
             heading: {

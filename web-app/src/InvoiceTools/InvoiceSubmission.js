@@ -73,6 +73,7 @@ export default ({showSubmission, title}) => {
           <Checkboxes
             className="govuk-checkboxes--small"
             fieldset={{legend: {children: 'Test'}}}
+            name="submission-test-checkbox"
             items={[{
               checked: test,
               children: 'Test',
