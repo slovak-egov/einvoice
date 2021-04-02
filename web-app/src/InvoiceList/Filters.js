@@ -17,15 +17,15 @@ export default ({getInvoices}) => {
   const {pathname, search} = useLocation()
   const queryParams = new URLSearchParams(search)
 
-  const isCodeListsLoaded = useSelector(areCodeListsLoadedSelector)
+  const isCodeListLoaded = useSelector(areCodeListsLoadedSelector)
   const codeLists = useSelector(codeListsSelector)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if (!isCodeListsLoaded) {
+    if (!isCodeListLoaded) {
       dispatch(getCodeLists())
     }
-  }, [dispatch, isCodeListsLoaded])
+  }, [dispatch, isCodeListLoaded])
 
   const [test, setTest] = useState(queryParams.get('test') === 'true')
 
@@ -261,7 +261,7 @@ export default ({getInvoices}) => {
                     />
                   </InputGroup.Append>
                 </InputGroup>
-                <InputGroup>
+                {isCodeListLoaded && <InputGroup>
                   <Form.Label style={{width: '70px'}}>{t('invoice.currency')}</Form.Label>
                   <Form.Control
                     as="select"
@@ -281,7 +281,7 @@ export default ({getInvoices}) => {
                       onChange={() => setAmountCurrency(amountCurrency == null ? '' : null)}
                     />
                   </InputGroup.Append>
-                </InputGroup>
+                </InputGroup>}
               </Col>
               <Col md>
                 <strong className="filter-heading">{t('invoice.amountWithoutVat')}</strong>
@@ -317,7 +317,7 @@ export default ({getInvoices}) => {
                     />
                   </InputGroup.Append>
                 </InputGroup>
-                <InputGroup>
+                {isCodeListLoaded && <InputGroup>
                   <Form.Label style={{width: '70px'}}>{t('invoice.currency')}</Form.Label>
                   <Form.Control
                     as="select"
@@ -337,7 +337,7 @@ export default ({getInvoices}) => {
                       onChange={() => setAmountWithoutVatCurrency(amountWithoutVatCurrency == null ? '' : null)}
                     />
                   </InputGroup.Append>
-                </InputGroup>
+                </InputGroup>}
               </Col>
             </Row>
             <Row>
