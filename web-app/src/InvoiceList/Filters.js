@@ -282,8 +282,7 @@ export default ({getInvoices}) => {
                     onChange={(e) => setAmountCurrency(e.target.value)}
                     disabled={amountCurrency == null}
                   >
-                    <option hidden />
-                    {codeLists && Object.keys(codeLists.ISO4217.codes).map((code, i) => (
+                    {Object.keys(codeLists.ISO4217.codes).map((code, i) => (
                       <option key={i} value={code}>{code}</option>
                     ))}
                   </Form.Control>
@@ -338,8 +337,7 @@ export default ({getInvoices}) => {
                     onChange={(e) => setAmountWithoutVatCurrency(e.target.value)}
                     disabled={amountWithoutVatCurrency == null}
                   >
-                    <option hidden />
-                    {codeLists && Object.keys(codeLists.ISO4217.codes).map((code, i) => (
+                    {Object.keys(codeLists.ISO4217.codes).map((code, i) => (
                       <option key={i} value={code}>{code}</option>
                     ))}
                   </Form.Control>
