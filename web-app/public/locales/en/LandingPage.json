@@ -43,6 +43,8 @@
       "body": ["We are looking for programmers who help us build this system. See more information", "here"]
     }
   },
-  "devVersion": "This website is used solely for development",
-  "fixVersion": "This website is used solely for testing"
+  "phase": {
+    "dev": "This website is used solely for development",
+    "fix": "This website is used solely for testing"
+  }
 }

@@ -1,3 +1,4 @@
+import './id-sk.scss'
 import {render} from 'react-dom'
 import Root from './Root'
 import configureStore from './configureStore'

@@ -2,8 +2,8 @@ import {useCallback, useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {useHistory} from 'react-router-dom'
 import {useTranslation} from 'react-i18next'
-import {Button, Card, Col, Form, Row} from 'react-bootstrap'
 import {get} from 'lodash'
+import {Button, Radios} from '../../helpers/idsk'
 import TagGroup from './TagGroup'
 import CreateDraftModal from './CreateDraftModal'
 import ConfirmationButton from '../../helpers/ConfirmationButton'
@@ -96,47 +96,38 @@ export default () => {
   const allLoaded = areCodeListsLoaded && isDocsLoaded && isFormLoaded
 
   return (
-    <Card className="m-1">
-      <Card.Header className="bg-primary text-center" as="h3">
-        <Row className="d-block d-sm-none text-white">{t('form')}</Row>
-        <Row className="mb-0">
-          <Col>
-            <Form.Control
-              as="select"
-              className="w-auto"
-              value={formType}
-              onChange={changeFormType}
-            >
-              {Object.values(invoiceTypes).map((type) => (
-                <option key={type} value={type}>{t(`invoiceTypes.${type}`)}</option>
-              ))}
-            </Form.Control>
-          </Col>
-          <Col className="d-none d-sm-block text-white">{t('form')}</Col>
-          <Col className="d-flex">
-            <ConfirmationButton
-              variant="danger"
-              className="ml-auto"
-              confirmationTitle={t('confirmationQuestions.resetForm.title')}
-              confirmationText={t('confirmationQuestions.resetForm.text')}
-              onClick={resetForm}
-            >
-              {t('reset')}
-            </ConfirmationButton>
-          </Col>
-        </Row>
-      </Card.Header>
+    <>
+      <div className="govuk-button-group">
+        <h1 className="govuk-heading-l">{t('form')}</h1>
+        <ConfirmationButton
+          className="ml-auto govuk-button--warning"
+          confirmationTitle={t('confirmationQuestions.resetForm.title')}
+          confirmationText={t('confirmationQuestions.resetForm.text')}
+          onClick={resetForm}
+        >
+          {t('reset')}
+        </ConfirmationButton>
+      </div>
+      <Radios
+        className="govuk-radios--inline"
+        value={formType}
+        onChange={changeFormType}
+        items={Object.values(invoiceTypes).map((type) => ({
+          children: t(`invoiceTypes.${type}`),
+          value: type,
+        }))}
+      />
       {/*Render once data are loaded*/}
-      {allLoaded && <Card.Body>
+      {allLoaded && <>
         <TagGroup
           path={invoiceTypeData[formType].rootPath}
           formData={get(formData, invoiceTypeData[formType].rootPath)}
           docs={docs[invoiceTypeData[formType].rootPath[1]]}
           setErrorCount={setErrorCount}
         />
-        <Row className="justify-content-end flex-column flex-sm-row mx-0">
+        <div className="govuk-button-group">
           {isLogged &&
-            <Button variant="secondary" className="mt-1" onClick={() => setShowCreateDraftModal(true)}>
+            <Button className="govuk-button--secondary" onClick={() => setShowCreateDraftModal(true)}>
               {t('saveAsDraft')}
             </Button>
           }
@@ -145,11 +136,11 @@ export default () => {
               cancel={() => setShowCreateDraftModal(false)}
               confirm={confirmDraft}
             />}
-          <Button variant="success" className="mt-1" onClick={submit} disabled={errorCount !== 0}>
+          <Button onClick={submit} disabled={errorCount !== 0}>
             {t('generateInvoice')}
           </Button>
-        </Row>
-      </Card.Body>}
-    </Card>
+        </div>
+      </>}
+    </>
   )
 }

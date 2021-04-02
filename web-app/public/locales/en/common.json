@@ -2,7 +2,7 @@
   "add": "Add",
   "delete": "Delete",
   "error": "Error",
-  "close": "Close",
+  "back": "Back",
   "reset": "Reset",
   "invoice": {
     "supplier": "Supplier",
@@ -52,14 +52,18 @@
   "download": "Download",
   "loadMore": "Load more",
   "invoiceDocumentation": "Invoice documentation",
-  "auth": {
+  "unauthorized": {
     "title": "Unauthorized access",
     "description": "You have no permission to view this page",
     "upvsLogout": "Logout from slovensko.sk"
   },
-  "notfound": {
-    "title": "Not found",
-    "description": "Page not found"
+  "notFound": {
+    "title": "Page not found",
+    "description": [
+      "If you typed the web address, check it is correct.",
+      "If you pasted the web address, check you copied the entire address.",
+      "If the web address is correct or you selected a link or button, write an email to"
+    ]
   },
   "loading": {
     "title": "Processing request"
@@ -155,7 +159,8 @@
     "deleteDraft": "Invoice draft could not be deleted",
     "createDraft": "Invoice draft could not be created",
     "unsupportedMimeType": "You tried to upload file with unsupported media type",
-    "emptyField": "This field cannot be empty"
+    "emptyField": "This field cannot be empty",
+    "noneSelected": "You have to select at least one option"
   },
   "successMessages": {
     "createInvoice": {
@@ -172,5 +177,10 @@
   "drafts": "Drafts",
   "open": "Open",
   "saveAsDraft": "Save as draft",
-  "createDraft": "Create draft"
+  "createDraft": "Create draft",
+  "footer": [
+    "Created inline with the",
+    "Single Design manual of electronic services.",
+    "The site is operated by the Ministry of Finance of the Slovak Republic."
+  ]
 }
