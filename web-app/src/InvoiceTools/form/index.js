@@ -109,6 +109,7 @@ export default () => {
         </ConfirmationButton>
       </div>
       <Radios
+        name="invoice-types-radios"
         className="govuk-radios--inline"
         value={formType}
         onChange={changeFormType}
