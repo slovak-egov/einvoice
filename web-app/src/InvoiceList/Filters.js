@@ -113,7 +113,7 @@ export default ({getInvoices}) => {
         <span>{t('filters')}</span>
         <i className="fas fa-plus ml-auto" />
       </Accordion.Toggle>
-      { isCodeListLoaded && <Accordion.Collapse eventKey="0">
+      {isCodeListLoaded && <Accordion.Collapse eventKey="0">
         <Card.Body>
           <div>
             <div className="govuk-grid-row">
@@ -282,6 +282,8 @@ export default ({getInvoices}) => {
                     onChange={(e) => setAmountCurrency(e.target.value)}
                     disabled={amountCurrency == null}
                   >
+                    {/*Show empty string when select is disabled*/}
+                    <option hidden />
                     {Object.keys(codeLists.ISO4217.codes).map((code, i) => (
                       <option key={i} value={code}>{code}</option>
                     ))}
@@ -289,10 +291,10 @@ export default ({getInvoices}) => {
                   <InputGroup.Append>
                     <InputGroup.Checkbox
                       checked={amountCurrency != null}
-                      onChange={() => setAmountCurrency(amountCurrency == null ? 'EUR' : null)}
+                      onChange={() => setAmountCurrency(amountCurrency == null ? '' : null)}
                     />
                   </InputGroup.Append>
-                </InputGroup>}
+                </InputGroup>
               </div>
               <div className="govuk-grid-column-one-half">
                 <strong className="filter-heading">{t('invoice.amountWithoutVat')}</strong>
@@ -337,6 +339,8 @@ export default ({getInvoices}) => {
                     onChange={(e) => setAmountWithoutVatCurrency(e.target.value)}
                     disabled={amountWithoutVatCurrency == null}
                   >
+                    {/*Show empty string when select is disabled*/}
+                    <option hidden />
                     {Object.keys(codeLists.ISO4217.codes).map((code, i) => (
                       <option key={i} value={code}>{code}</option>
                     ))}
@@ -344,7 +348,7 @@ export default ({getInvoices}) => {
                   <InputGroup.Append>
                     <InputGroup.Checkbox
                       checked={amountWithoutVatCurrency != null}
-                      onChange={() => setAmountWithoutVatCurrency(amountWithoutVatCurrency == null ? 'EUR' : null)}
+                      onChange={() => setAmountWithoutVatCurrency(amountWithoutVatCurrency == null ? '' : null)}
                     />
                   </InputGroup.Append>
                 </InputGroup>
