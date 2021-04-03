@@ -281,8 +281,6 @@ paths:
       tags:
         - Invoices
       summary: Create invoice
-      parameters:
-        - $ref: '#/components/parameters/Language'
       requestBody:
         description: "UBL2.1 or D16B invoice"
         content:
@@ -312,8 +310,6 @@ paths:
       tags:
         - Invoices
       summary: Create test invoice
-      parameters:
-        - $ref: '#/components/parameters/Language'
       requestBody:
         description: "UBL2.1 or D16B invoice"
         content:
@@ -341,8 +337,6 @@ paths:
       tags:
         - Invoices
       summary: Get visualization of sent invoice
-      parameters:
-        - $ref: '#/components/parameters/Language'
       requestBody:
         description: "UBL2.1 or D16B invoice"
         content:
@@ -609,12 +603,6 @@ components:
       enum:
         - ubl2.1
         - d16b
-    Languages:
-      type: string
-      description: Requested language of response, default language is en
-      enum:
-        - sk
-        - en
     Invoice:
       type: object
       properties:
@@ -822,11 +810,6 @@ components:
       schema:
         type: string
         example: '11190993'
-    Language:
-      name: Accept-Language
-      in: header
-      schema:
-        $ref: '#/components/schemas/Languages'
     DraftId:
       name: draftId
       in: path

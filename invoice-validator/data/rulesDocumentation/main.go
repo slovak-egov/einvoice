@@ -142,7 +142,7 @@ func writeRules(rules map[string]Rule, outputPath string, prettyPrint bool) {
 }
 
 func main() {
-	translationFilePath := environment.Getenv("TRANSLATION_FILE", "sk-rules-translation.json")
+	translationFilePath := environment.Getenv("TRANSLATION_FILE", "./rulesDocumentaiton/sk-rules-translation.json")
 	schematronFile := environment.Getenv("SCHEMATRON_FILE", "ubl2.1/schematron/preprocessed/EN16931-UBL-validation-preprocessed.sch")
 	outputFile := environment.Getenv("OUTPUT", "ubl2.1/schematron/rules-documentation.json")
 	prettyPrint := environment.ParseBool("PRETTY_PRINT", false)

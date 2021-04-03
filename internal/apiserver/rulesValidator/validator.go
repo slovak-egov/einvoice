@@ -15,7 +15,7 @@ import (
 )
 
 type Validator interface {
-	Validate(ctx goContext.Context, xml []byte, format, language string) error
+	Validate(ctx goContext.Context, xml []byte, format string) error
 }
 
 type validator struct {
@@ -33,21 +33,11 @@ func New(url string) Validator {
 	}
 }
 
-func (v *validator) Validate(ctx goContext.Context, xml []byte, format, language string) error {
-	requestBody, err := json.Marshal(map[string]string{"xml": string(xml)})
-	if err != nil {
-		context.GetLogger(ctx).WithField("error", err.Error()).Error("rulesValidator.request.body.preparation.failed")
-		return err
-	}
-
-	if language == "" {
-		language = "en"
-	}
-
+func (v *validator) Validate(ctx goContext.Context, xml []byte, format string) error {
 	res, err := v.client.Post(
-		fmt.Sprintf("%s?format=%s&lang=%s", v.url, format, language),
-		"application/json",
-		bytes.NewReader([]byte(requestBody)),
+		fmt.Sprintf("%s?format=%s", v.url, format),
+		"application/xml",
+		bytes.NewReader(xml),
 	)
 	if err != nil {
 		context.GetLogger(ctx).WithField("error", err.Error()).Error("rulesValidator.request.failed")
