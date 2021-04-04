@@ -1,16 +1,67 @@
-import './Filters.css'
 import {useCallback, useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {useHistory, useLocation} from 'react-router-dom'
 import {useTranslation} from 'react-i18next'
-import {Form, InputGroup} from 'react-bootstrap'
-import {Accordion, Button, Checkboxes, Input} from '../helpers/idsk'
+import {identity} from 'lodash'
+import {Accordion, Button, Checkboxes, Input, Select} from '../helpers/idsk'
 import DatePicker from '../helpers/DatePicker'
 import {areCodeListsLoadedSelector, currencyListSelector} from '../cache/documentation/state'
 import {getCodeLists} from '../cache/documentation/actions'
 import {invoiceFormats, orderingTypes} from '../utils/constants'
 import {formatDate, formatTime, parseTime} from '../utils/helpers'
 import {isInvoicesFilterValid, keepDigitsOnly, keepFloatCharactersOnly} from '../utils/validations'
+
+const FilterField = ({items, processInput = identity, setValue, type, value, ...props}) => {
+  switch (type) {
+    case 'input':
+      return (
+        <Input
+          className="govuk-input--width-10"
+          value={value || ''}
+          onChange={(e) => setValue(processInput(e.target.value))}
+          type="text"
+          {...props}
+        />
+      )
+    case 'datepicker':
+      return (
+        <DatePicker
+          className="govuk-input--width-10"
+          selected={value}
+          onChange={setValue}
+          {...props}
+        />
+      )
+    case 'select':
+      return (
+        <Select
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          items={items}
+        />
+      )
+    default:
+      return null
+  }
+}
+
+const ConditionalFilter = ({items, name, title}) => (
+  <Checkboxes
+    className="govuk-checkboxes--small"
+    fieldset={{legend: {children: title}}}
+    name={`filter-${name}-checkbox`}
+    items={items.map((item) => ({
+      checked: item.value != null,
+      onChange: () => item.setValue(item.value == null ? '' : null),
+      children: item.title,
+      conditional: {
+        children: (
+          <FilterField value={item.value} setValue={item.setValue} {...item.childrenProps} />
+        ),
+      },
+    }))}
+  />
+)
 
 export default ({getInvoices}) => {
   const {i18n, t} = useTranslation('common')
@@ -151,78 +202,50 @@ export default ({getInvoices}) => {
               </div>
               <div className="govuk-grid-row">
                 <div className="govuk-grid-column-one-half">
-                  <Checkboxes
-                    className="govuk-checkboxes--small"
-                    fieldset={{legend: {children: t('invoice.supplier')}}}
-                    name="filter-supplier-checkbox"
+                  <ConditionalFilter
+                    title={t('invoice.supplier')}
+                    name="supplier"
                     items={[
                       {
-                        checked: supplierIco != null,
-                        onChange: () => setSupplierIco(supplierIco == null ? '' : null),
-                        children: 'IČO',
-                        conditional: {
-                          children: (
-                            <Input
-                              className="govuk-input--width-10"
-                              value={supplierIco || ''}
-                              onChange={(e) => setSupplierIco(keepDigitsOnly(e.target.value))}
-                              type="text"
-                            />
-                          ),
+                        title: 'IČO',
+                        value: supplierIco,
+                        setValue: setSupplierIco,
+                        childrenProps: {
+                          type: 'input',
+                          processInput: keepDigitsOnly,
                         },
                       },
                       {
-                        checked: supplierName != null,
-                        onChange: () => setSupplierName(supplierName == null ? '' : null),
-                        children: t('invoiceDocs.name'),
-                        conditional: {
-                          children: (
-                            <Input
-                              className="govuk-input--width-10"
-                              value={supplierName || ''}
-                              onChange={(e) => setSupplierName(e.target.value)}
-                              type="text"
-                            />
-                          ),
+                        title: t('invoiceDocs.name'),
+                        value: supplierName,
+                        setValue: setSupplierName,
+                        childrenProps: {
+                          type: 'input',
                         },
                       },
                     ]}
                   />
                 </div>
                 <div className="govuk-grid-column-one-half">
-                  <Checkboxes
-                    className="govuk-checkboxes--small"
-                    fieldset={{legend: {children: t('invoice.customer')}}}
-                    name="filter-customer-checkbox"
+                  <ConditionalFilter
+                    title={t('invoice.customer')}
+                    name="customer"
                     items={[
                       {
-                        checked: customerIco != null,
-                        onChange: () => setCustomerIco(customerIco == null ? '' : null),
-                        children: 'IČO',
-                        conditional: {
-                          children: (
-                            <Input
-                              className="govuk-input--width-10"
-                              value={customerIco || ''}
-                              onChange={(e) => setCustomerIco(keepDigitsOnly(e.target.value))}
-                              type="text"
-                            />
-                          ),
+                        title: 'IČO',
+                        value: customerIco,
+                        setValue: setCustomerIco,
+                        childrenProps: {
+                          type: 'input',
+                          processInput: keepDigitsOnly,
                         },
                       },
                       {
-                        checked: customerName != null,
-                        onChange: () => setCustomerName(customerName == null ? '' : null),
-                        children: t('invoiceDocs.name'),
-                        conditional: {
-                          children: (
-                            <Input
-                              className="govuk-input--width-10"
-                              value={customerName || ''}
-                              onChange={(e) => setCustomerName(e.target.value)}
-                              type="text"
-                            />
-                          ),
+                        title: t('invoiceDocs.name'),
+                        value: customerName,
+                        setValue: setCustomerName,
+                        childrenProps: {
+                          type: 'input',
                         },
                       },
                     ]}
@@ -231,210 +254,153 @@ export default ({getInvoices}) => {
               </div>
               <div className="govuk-grid-row">
                 <div className="govuk-grid-column-one-half">
-                  <strong className="filter-heading">{t('invoice.amount')}</strong>
-                  <InputGroup>
-                    <Form.Label style={{width: '70px'}}>{t('invoice.intervalStart')}</Form.Label>
-                    <Form.Control
-                      style={{maxWidth: '150px'}}
-                      value={amountFrom || ''}
-                      onChange={(e) => setAmountFrom(keepFloatCharactersOnly(e.target.value))}
-                      readOnly={amountFrom == null}
-                    />
-                    <InputGroup.Append>
-                      <InputGroup.Checkbox
-                        checked={amountFrom != null}
-                        onChange={() => setAmountFrom(amountFrom == null ? '' : null)}
-                      />
-                    </InputGroup.Append>
-                  </InputGroup>
-                  <InputGroup>
-                    <Form.Label style={{width: '70px'}}>{t('invoice.intervalEnd')}</Form.Label>
-                    <Form.Control
-                      style={{maxWidth: '150px'}}
-                      value={amountTo || ''}
-                      onChange={(e) => setAmountTo(keepFloatCharactersOnly(e.target.value))}
-                      readOnly={amountTo == null}
-                    />
-                    <InputGroup.Append>
-                      <InputGroup.Checkbox
-                        checked={amountTo != null}
-                        onChange={() => setAmountTo(amountTo == null ? '' : null)}
-                      />
-                    </InputGroup.Append>
-                  </InputGroup>
-                  <InputGroup>
-                    <Form.Label style={{width: '70px'}}>{t('invoice.currency')}</Form.Label>
-                    <Form.Control
-                      as="select"
-                      style={{maxWidth: '150px'}}
-                      value={amountCurrency || ''}
-                      onChange={(e) => setAmountCurrency(e.target.value)}
-                      disabled={amountCurrency == null}
-                    >
-                      {/*Show empty string when select is disabled*/}
-                      <option hidden />
-                      {currencyList.map((code, i) => (
-                        <option key={i} value={code}>{code}</option>
-                      ))}
-                    </Form.Control>
-                    <InputGroup.Append>
-                      <InputGroup.Checkbox
-                        checked={amountCurrency != null}
-                        onChange={() => setAmountCurrency(amountCurrency == null ? 'EUR' : null)}
-                      />
-                    </InputGroup.Append>
-                  </InputGroup>
+                  <ConditionalFilter
+                    title={t('invoice.amount')}
+                    name="amount"
+                    items={[
+                      {
+                        title: t('invoice.intervalStart'),
+                        value: amountFrom,
+                        setValue: setAmountFrom,
+                        childrenProps: {
+                          type: 'input',
+                          processInput: keepFloatCharactersOnly,
+                        },
+                      },
+                      {
+                        title: t('invoice.intervalEnd'),
+                        value: amountTo,
+                        setValue: setAmountTo,
+                        childrenProps: {
+                          type: 'input',
+                          processInput: keepFloatCharactersOnly,
+                        },
+                      },
+                      {
+                        title: t('invoice.currency'),
+                        value: amountCurrency,
+                        setValue: setAmountCurrency,
+                        childrenProps: {
+                          type: 'select',
+                          items: currencyList.map((code) => ({
+                            children: code,
+                            value: code,
+                          })),
+                        },
+                      },
+                    ]}
+                  />
                 </div>
                 <div className="govuk-grid-column-one-half">
-                  <strong className="filter-heading">{t('invoice.amountWithoutVat')}</strong>
-                  <InputGroup>
-                    <Form.Label style={{width: '70px'}}>{t('invoice.intervalStart')}</Form.Label>
-                    <Form.Control
-                      style={{maxWidth: '150px'}}
-                      value={amountWithoutVatFrom || ''}
-                      onChange={
-                        (e) => setAmountWithoutVatFrom(keepFloatCharactersOnly(e.target.value))
-                      }
-                      readOnly={amountWithoutVatFrom == null}
-                    />
-                    <InputGroup.Append>
-                      <InputGroup.Checkbox
-                        checked={amountWithoutVatFrom != null}
-                        onChange={() => setAmountWithoutVatFrom(amountWithoutVatFrom == null ? '' : null)}
-                      />
-                    </InputGroup.Append>
-                  </InputGroup>
-                  <InputGroup>
-                    <Form.Label style={{width: '70px'}}>{t('invoice.intervalEnd')}</Form.Label>
-                    <Form.Control
-                      style={{maxWidth: '150px'}}
-                      value={amountWithoutVatTo || ''}
-                      onChange={
-                        (e) => setAmountWithoutVatTo(keepFloatCharactersOnly(e.target.value))
-                      }
-                      readOnly={amountWithoutVatTo == null}
-                    />
-                    <InputGroup.Append>
-                      <InputGroup.Checkbox
-                        checked={amountWithoutVatTo != null}
-                        onChange={() => setAmountWithoutVatTo(amountWithoutVatTo == null ? '' : null)}
-                      />
-                    </InputGroup.Append>
-                  </InputGroup>
-                  <InputGroup>
-                    <Form.Label style={{width: '70px'}}>{t('invoice.currency')}</Form.Label>
-                    <Form.Control
-                      as="select"
-                      style={{maxWidth: '150px'}}
-                      value={amountWithoutVatCurrency || ''}
-                      onChange={(e) => setAmountWithoutVatCurrency(e.target.value)}
-                      disabled={amountWithoutVatCurrency == null}
-                    >
-                      {/*Show empty string when select is disabled*/}
-                      <option hidden />
-                      {currencyList.map((code, i) => (
-                        <option key={i} value={code}>{code}</option>
-                      ))}
-                    </Form.Control>
-                    <InputGroup.Append>
-                      <InputGroup.Checkbox
-                        checked={amountWithoutVatCurrency != null}
-                        onChange={() => setAmountWithoutVatCurrency(amountWithoutVatCurrency == null ? 'EUR' : null)}
-                      />
-                    </InputGroup.Append>
-                  </InputGroup>
+                  <ConditionalFilter
+                    title={t('invoice.amountWithoutVat')}
+                    name="amountWithoutVat"
+                    items={[
+                      {
+                        title: t('invoice.intervalStart'),
+                        value: amountWithoutVatFrom,
+                        setValue: setAmountWithoutVatFrom,
+                        childrenProps: {
+                          type: 'input',
+                          processInput: keepFloatCharactersOnly,
+                        },
+                      },
+                      {
+                        title: t('invoice.intervalEnd'),
+                        value: amountWithoutVatTo,
+                        setValue: setAmountWithoutVatTo,
+                        childrenProps: {
+                          type: 'input',
+                          processInput: keepFloatCharactersOnly,
+                        },
+                      },
+                      {
+                        title: t('invoice.currency'),
+                        value: amountWithoutVatCurrency,
+                        setValue: setAmountWithoutVatCurrency,
+                        childrenProps: {
+                          type: 'select',
+                          items: currencyList.map((code) => ({
+                            children: code,
+                            value: code,
+                          })),
+                        },
+                      },
+                    ]}
+                  />
                 </div>
               </div>
               <div className="govuk-grid-row">
                 <div className="govuk-grid-column-one-half">
-                  <strong className="filter-heading">{t('invoice.issueDate')}</strong>
-                  <InputGroup>
-                    <Form.Label style={{width: '40px'}}>{t('invoice.intervalStart')}</Form.Label>
-                    <DatePicker
-                      className="datepicker-width"
-                      selected={issueDateFrom || ''}
-                      onChange={setIssueDateFrom}
-                      disabled={issueDateFrom == null}
-                      dateFormat="P"
-                    />
-                    <InputGroup.Append>
-                      <InputGroup.Checkbox
-                        checked={issueDateFrom != null}
-                        onChange={() => setIssueDateFrom(issueDateFrom == null ? '' : null)}
-                      />
-                    </InputGroup.Append>
-                  </InputGroup>
-                  <InputGroup>
-                    <Form.Label style={{width: '40px'}}>{t('invoice.intervalEnd')}</Form.Label>
-                    <DatePicker
-                      className="datepicker-width"
-                      selected={issueDateTo || ''}
-                      onChange={setIssueDateTo}
-                      disabled={issueDateTo == null}
-                      dateFormat="P"
-                    />
-                    <InputGroup.Append>
-                      <InputGroup.Checkbox
-                        checked={issueDateTo != null}
-                        onChange={() => setIssueDateTo(issueDateTo == null ? '' : null)}
-                      />
-                    </InputGroup.Append>
-                  </InputGroup>
+                  <ConditionalFilter
+                    title={t('invoice.issueDate')}
+                    name="issueDate"
+                    items={[
+                      {
+                        title: t('invoice.intervalStart'),
+                        value: issueDateFrom,
+                        setValue: setIssueDateFrom,
+                        childrenProps: {
+                          type: 'datepicker',
+                          dateFormat: 'P',
+                        },
+                      },
+                      {
+                        title: t('invoice.intervalEnd'),
+                        value: issueDateTo,
+                        setValue: setIssueDateTo,
+                        childrenProps: {
+                          type: 'datepicker',
+                          dateFormat: 'P',
+                        },
+                      },
+                    ]}
+                  />
                 </div>
                 <div className="govuk-grid-column-one-half">
-                  <strong className="filter-heading">{t('invoice.uploadTime')}</strong>
-                  <InputGroup>
-                    <Form.Label style={{width: '40px'}}>{t('invoice.intervalStart')}</Form.Label>
-                    <DatePicker
-                      className="datepicker-width"
-                      selected={uploadTimeFrom || ''}
-                      onChange={setUploadTimeFrom}
-                      disabled={uploadTimeFrom == null}
-                      showTimeSelect
-                      dateFormat="Pp"
-                      maxDate={new Date()}
-                      timeCaption={t('time')}
-                    />
-                    <InputGroup.Append>
-                      <InputGroup.Checkbox
-                        checked={uploadTimeFrom != null}
-                        onChange={() => setUploadTimeFrom(uploadTimeFrom == null ? '' : null)}
-                      />
-                    </InputGroup.Append>
-                  </InputGroup>
-                  <InputGroup>
-                    <Form.Label style={{width: '40px'}}>{t('invoice.intervalEnd')}</Form.Label>
-                    <DatePicker
-                      className="datepicker-width"
-                      selected={uploadTimeTo || ''}
-                      onChange={setUploadTimeTo}
-                      disabled={uploadTimeTo == null}
-                      showTimeSelect
-                      dateFormat="Pp"
-                      maxDate={new Date()}
-                      timeCaption={t('time')}
-                    />
-                    <InputGroup.Append>
-                      <InputGroup.Checkbox
-                        checked={uploadTimeTo != null}
-                        onChange={() => setUploadTimeTo(uploadTimeTo == null ? '' : null)}
-                      />
-                    </InputGroup.Append>
-                  </InputGroup>
+                  <ConditionalFilter
+                    title={t('invoice.uploadTime')}
+                    name="uploadTime"
+                    items={[
+                      {
+                        title: t('invoice.intervalStart'),
+                        value: uploadTimeFrom,
+                        setValue: setUploadTimeFrom,
+                        childrenProps: {
+                          type: 'datepicker',
+                          showTimeSelect: true,
+                          dateFormat: 'Pp',
+                          maxDate: new Date(),
+                          timeCaption: t('time'),
+                        },
+                      },
+                      {
+                        title: t('invoice.intervalEnd'),
+                        value: uploadTimeTo,
+                        setValue: setUploadTimeTo,
+                        childrenProps: {
+                          type: 'datepicker',
+                          showTimeSelect: true,
+                          dateFormat: 'Pp',
+                          maxDate: new Date(),
+                          timeCaption: t('time'),
+                        },
+                      },
+                    ]}
+                  />
                 </div>
               </div>
               <div className="govuk-grid-row">
                 <div className="govuk-grid-column-one-half">
-                  <strong className="filter-heading">{t('invoice.orderFrom')}</strong>
-                  <Form.Control
-                    as="select"
-                    style={{width: 'auto'}}
+                  <Select
+                    label={{children: t('invoice.orderFrom')}}
                     value={ordering}
                     onChange={(e) => setOrdering(e.target.value)}
-                  >
-                    <option value={orderingTypes.DESC}>{t('invoice.newest')}</option>
-                    <option value={orderingTypes.ASC}>{t('invoice.oldest')}</option>
-                  </Form.Control>
+                    items={[
+                      {value: orderingTypes.DESC, children: t('invoice.newest')},
+                      {value: orderingTypes.ASC, children: t('invoice.oldest')},
+                    ]}
+                  />
                 </div>
               </div>
             </div>

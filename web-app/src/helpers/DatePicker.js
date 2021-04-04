@@ -8,7 +8,7 @@ export default ({className, ...props}) => {
   return (
     <DatePicker
       locale={i18n.language}
-      className={classNames('form-control', className)}
+      className={classNames('govuk-input', className)}
       {...props}
     />
   )
