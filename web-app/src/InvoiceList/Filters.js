@@ -45,14 +45,14 @@ const FilterField = ({items, processInput = identity, setValue, type, value, ...
   }
 }
 
-const ConditionalFilter = ({items, name, title}) => (
+const ConditionalFilter = ({defaultValue = '', items, name, title}) => (
   <Checkboxes
     className="govuk-checkboxes--small"
     fieldset={{legend: {children: title}}}
     name={`filter-${name}-checkbox`}
-    items={items.map((item) => ({
+    items={items.map(({defaultValue = '', ...item}) => ({
       checked: item.value != null,
-      onChange: () => item.setValue(item.value == null ? '' : null),
+      onChange: () => item.setValue(item.value == null ? defaultValue : null),
       children: item.title,
       conditional: {
         children: (
@@ -279,6 +279,7 @@ export default ({getInvoices}) => {
                       {
                         title: t('invoice.currency'),
                         value: amountCurrency,
+                        defaultValue: 'EUR',
                         setValue: setAmountCurrency,
                         childrenProps: {
                           type: 'select',
@@ -317,6 +318,7 @@ export default ({getInvoices}) => {
                       {
                         title: t('invoice.currency'),
                         value: amountWithoutVatCurrency,
+                        defaultValue: 'EUR',
                         setValue: setAmountWithoutVatCurrency,
                         childrenProps: {
                           type: 'select',

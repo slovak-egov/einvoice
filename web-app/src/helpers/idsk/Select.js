@@ -5,7 +5,7 @@ import {Label, Hint, ErrorMessage} from '.'
 const Select = (
   {
     className, 'aria-describedby': describedBy, errorMessage, formGroup, hint,
-    id, items, label, ...props
+    id, items, itemGroups, label, ...props
   },
   ref,
 ) => {
@@ -39,10 +39,17 @@ const Select = (
         aria-describedby={describedByValue || null}
         {...props}
       >
-        {items.map(({children, ...optionAttributes}, index) => (
+        {items && items.map(({children, ...optionAttributes}, index) => (
           <option {...optionAttributes} key={index}>
             {children}
           </option>
+        ))}
+        {itemGroups && itemGroups.map(({items, ...groupAttributes}, groupIndex) => (
+          <optgroup key={groupIndex} {...groupAttributes}>
+            {items.map(({children, ...itemAttributes}, itemIndex) => (
+              <option key={itemIndex} {...itemAttributes}>{children}</option>
+            ))}
+          </optgroup>
         ))}
       </select>
     </div>
