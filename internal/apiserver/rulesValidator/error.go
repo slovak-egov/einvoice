@@ -7,7 +7,7 @@ type ValidationError struct {
 }
 
 func (err *ValidationError) Error() string {
-	return strings.Join(err.Errors, "\n")
+	return strings.Join(err.Errors, ", ")
 }
 
 type RequestError struct{

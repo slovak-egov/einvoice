@@ -13,7 +13,7 @@ import {
 import {submissionInvoiceSelector, submissionTestSelector} from './state'
 
 export default ({showSubmission, title}) => {
-  const {i18n, t} = useTranslation('common')
+  const {t} = useTranslation('common')
   const history = useHistory()
 
   const invoice = useSelector(submissionInvoiceSelector)
@@ -30,7 +30,7 @@ export default ({showSubmission, title}) => {
   const submitInvoice = useCallback(
     async () => {
       const data = await invoice.text()
-      const {invoiceId, redirect} = await dispatch(createInvoice(data, test, i18n.language))
+      const {invoiceId, redirect} = await dispatch(createInvoice(data, test))
       if (invoiceId) {
         dispatch(resetInvoiceSubmission)
         if (redirect) {
@@ -38,12 +38,12 @@ export default ({showSubmission, title}) => {
         }
       }
     },
-    [dispatch, history, invoice, test, i18n.language]
+    [dispatch, history, invoice, test]
   )
 
   const visualizeInvoice = useCallback(
     async () => {
-      const visualization = await dispatch(getInvoiceVisualization(invoice, i18n.language))
+      const visualization = await dispatch(getInvoiceVisualization(invoice))
       if (visualization) {
         await save(visualization, 'invoice.zip')
       }
