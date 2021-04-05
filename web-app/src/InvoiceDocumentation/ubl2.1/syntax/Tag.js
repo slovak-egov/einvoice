@@ -99,6 +99,17 @@ export default ({rootDocs}) => {
           ))}
         </div>
       </div>}
+      {docs.rules && <div className="govuk-grid-row">
+        <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.rules.title')}</strong>
+        <div className="govuk-grid-column-three-quarters">
+          {docs.rules.map((ruleId, i) => (
+            <Fragment key={i}>
+              {i !== 0 && <span>, </span>}
+              <Link to={`/invoiceDocumentation/ublRules/${ruleId}`}>{ruleId}</Link>
+            </Fragment>
+          ))}
+        </div>
+      </div>}
       {docs.attributes && <div className="govuk-grid-row">
         <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.attributes')}</strong>
         <div className="govuk-grid-column-three-quarters">
