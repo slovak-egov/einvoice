@@ -50,3 +50,8 @@ export const dataTypes = {
 
 // Error code for forbidden substitution type, see docs/errors.md
 export const upvsForbiddenSubstitutionError = 'authorization.upvs.forbiddenSubstitutionType'
+
+export const orderingTypes = {
+  ASC: 'asc',
+  DESC: 'desc',
+}

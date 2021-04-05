@@ -48,18 +48,20 @@ func TestCreateInvoice(t *testing.T) {
 		t.Error(err)
 	}
 	expectedResponse := entity.Invoice{
-		Id:                  createdResponse.Id,        // No need to assert this param,
-		CreatedAt:           createdResponse.CreatedAt, // No need to assert this param
-		Sender:              "Global Trade Chain",
-		Receiver:            "Project Services",
-		Amount:              12500,
-		AmountWithoutVat:    10000,
-		SupplierIco:         "11190993",
-		CustomerIco:         "22222222",
-		Format:              entity.UblFormat,
-		CreatedBy:           user.Id,
-		IssueDate:           timeutil.Date{time.Date(2011, 9, 22, 0, 0, 0, 0, time.UTC)},
-		NotificationsStatus: entity.NotificationStatusNotSent,
+		Id:                       createdResponse.Id,        // No need to assert this param,
+		CreatedAt:                createdResponse.CreatedAt, // No need to assert this param
+		Sender:                   "Global Trade Chain",
+		Receiver:                 "Project Services",
+		Amount:                   12500,
+		AmountCurrency:           "SEK",
+		AmountWithoutVat:         10000,
+		AmountWithoutVatCurrency: "SEK",
+		SupplierIco:              "11190993",
+		CustomerIco:              "22222222",
+		Format:                   entity.UblFormat,
+		CreatedBy:                user.Id,
+		IssueDate:                timeutil.Date{time.Date(2011, 9, 22, 0, 0, 0, 0, time.UTC)},
+		NotificationsStatus:      entity.NotificationStatusNotSent,
 	}
 	if !reflect.DeepEqual(createdResponse, expectedResponse) {
 		t.Errorf("Expected created response was %v. Got %v", expectedResponse, createdResponse)

@@ -30,21 +30,23 @@ var InvoicePartiesTypes = []string{SlovakInvoiceParties, ForeignSupplierParty, F
 var DocumentTypes = []string{InvoiceDocumentType, CreditNoteDocumentType}
 
 type Invoice struct {
-	Id                  string        `json:"id"`
-	CreatedAt           *time.Time    `json:"createdAt,omitempty" pg:"-"`
-	Sender              string        `json:"sender"`
-	Receiver            string        `json:"receiver"`
-	Format              string        `json:"format"`
-	Amount              float64       `json:"amount"`
-	AmountWithoutVat    float64       `json:"amountWithoutVat"`
-	SupplierIco         string        `json:"supplierIco"`
-	SupplierCountry     string        `json:"-" pg:"-"`
-	CustomerIco         string        `json:"customerIco"`
-	CustomerCountry     string        `json:"-" pg:"-"`
-	IssueDate           timeutil.Date `json:"issueDate"`
-	CreatedBy           int           `json:"createdBy"` // User id of invoice creator
-	Test                bool          `json:"test"`
-	NotificationsStatus string        `json:"notificationsStatus"`
+	Id                       string        `json:"id"`
+	CreatedAt                *time.Time    `json:"createdAt,omitempty" pg:"-"`
+	Sender                   string        `json:"sender"`
+	Receiver                 string        `json:"receiver"`
+	Format                   string        `json:"format"`
+	Amount                   float64       `json:"amount"`
+	AmountCurrency           string        `json:"amountCurrency"`
+	AmountWithoutVat         float64       `json:"amountWithoutVat"`
+	AmountWithoutVatCurrency string        `json:"amountWithoutVatCurrency"`
+	SupplierIco              string        `json:"supplierIco"`
+	SupplierCountry          string        `json:"-" pg:"-"`
+	CustomerIco              string        `json:"customerIco"`
+	CustomerCountry          string        `json:"-" pg:"-"`
+	IssueDate                timeutil.Date `json:"issueDate"`
+	CreatedBy                int           `json:"createdBy"` // User id of invoice creator
+	Test                     bool          `json:"test"`
+	NotificationsStatus      string        `json:"notificationsStatus"`
 }
 
 // Derive created at from id

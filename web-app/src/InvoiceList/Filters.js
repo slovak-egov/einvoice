@@ -5,9 +5,12 @@ import {useTranslation} from 'react-i18next'
 import {Accordion, Card, Form, InputGroup} from 'react-bootstrap'
 import {Button, Checkboxes, Input} from '../helpers/idsk'
 import DatePicker from '../helpers/DatePicker'
-import {invoiceFormats} from '../utils/constants'
+import {invoiceFormats, orderingTypes} from '../utils/constants'
 import {formatDate, formatTime, parseTime} from '../utils/helpers'
 import {isInvoicesFilterValid, keepDigitsOnly, keepFloatCharactersOnly} from '../utils/validations'
+import {areCodeListsLoadedSelector, codeListsSelector} from '../cache/documentation/state'
+import {useDispatch, useSelector} from 'react-redux'
+import {getCodeLists} from '../cache/documentation/actions'
 
 export default ({getInvoices}) => {
   const {t} = useTranslation('common')
@@ -15,15 +18,29 @@ export default ({getInvoices}) => {
   const {pathname, search} = useLocation()
   const queryParams = new URLSearchParams(search)
 
+  const isCodeListLoaded = useSelector(areCodeListsLoadedSelector)
+  const codeLists = useSelector(codeListsSelector)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (!isCodeListLoaded) {
+      dispatch(getCodeLists())
+    }
+  }, [dispatch, isCodeListLoaded])
+
   const [test, setTest] = useState(queryParams.get('test') === 'true')
 
   const [ublFormat, setUblFormat] = useState(queryParams.getAll('format').includes(invoiceFormats.UBL))
   const [d16bFormat, setD16bFormat] = useState(queryParams.getAll('format').includes(invoiceFormats.D16B))
 
+  const [ordering, setOrdering] = useState(queryParams.get('order') || orderingTypes.DESC)
+
   const [amountFrom, setAmountFrom] = useState(queryParams.get('amountFrom'))
   const [amountTo, setAmountTo] = useState(queryParams.get('amountTo'))
+  const [amountCurrency, setAmountCurrency] = useState(queryParams.get('amountCurrency'))
   const [amountWithoutVatFrom, setAmountWithoutVatFrom] = useState(queryParams.get('amountWithoutVatFrom'))
   const [amountWithoutVatTo, setAmountWithoutVatTo] = useState(queryParams.get('amountWithoutVatTo'))
+  const [amountWithoutVatCurrency, setAmountWithoutVatCurrency] = useState(queryParams.get('amountWithoutVatCurrency'))
 
   const [issueDateFrom, setIssueDateFrom] = useState(parseTime(queryParams.get('issueDateFrom')))
   const [issueDateTo, setIssueDateTo] = useState(parseTime(queryParams.get('issueDateTo')))
@@ -45,10 +62,14 @@ export default ({getInvoices}) => {
       if (ublFormat) newQueryParams.append('format', invoiceFormats.UBL)
       if (d16bFormat) newQueryParams.append('format', invoiceFormats.D16B)
 
+      if (ordering != null) newQueryParams.append('order', ordering)
+
       if (amountFrom != null) newQueryParams.set('amountFrom', amountFrom)
       if (amountTo != null) newQueryParams.set('amountTo', amountTo)
+      if (amountCurrency != null) newQueryParams.set('amountCurrency', amountCurrency)
       if (amountWithoutVatFrom != null) newQueryParams.set('amountWithoutVatFrom', amountWithoutVatFrom)
       if (amountWithoutVatTo != null) newQueryParams.set('amountWithoutVatTo', amountWithoutVatTo)
+      if (amountWithoutVatCurrency != null) newQueryParams.set('amountWithoutVatCurrency', amountWithoutVatCurrency)
 
       if (issueDateFrom != null) newQueryParams.set('issueDateFrom', formatDate(issueDateFrom))
       if (issueDateTo != null) newQueryParams.set('issueDateTo', formatDate(issueDateTo))
@@ -63,15 +84,17 @@ export default ({getInvoices}) => {
       history.push(`${pathname}?${newQueryParams}`)
     },
     [
-      history, pathname, test, amountFrom, amountTo, amountWithoutVatFrom, amountWithoutVatTo,
-      issueDateFrom, issueDateTo, uploadTimeFrom, uploadTimeTo, ublFormat, d16bFormat,
-      customerName, supplierName, customerIco, supplierIco,
+      history, pathname, test, ordering, amountFrom, amountTo, amountCurrency,
+      amountWithoutVatFrom, amountWithoutVatTo, amountWithoutVatCurrency,
+      issueDateFrom, issueDateTo, uploadTimeFrom, uploadTimeTo,
+      ublFormat, d16bFormat, customerName, supplierName, customerIco, supplierIco,
     ],
   )
 
   const searchEnabled = isInvoicesFilterValid({
-    ublFormat, d16bFormat, amountFrom, amountTo, amountWithoutVatFrom, amountWithoutVatTo,
-    issueDateFrom, issueDateTo, uploadTimeFrom, uploadTimeTo, customerIco, supplierIco,
+    ublFormat, d16bFormat, ordering, amountFrom, amountTo, amountCurrency,
+    amountWithoutVatFrom, amountWithoutVatTo, amountWithoutVatCurrency,
+    issueDateFrom, issueDateTo, uploadTimeFrom, uploadTimeTo, customerIco, supplierIco, codeLists,
   })
 
   // When query URL parameters change try to fetch proper data
@@ -90,7 +113,7 @@ export default ({getInvoices}) => {
         <span>{t('filters')}</span>
         <i className="fas fa-plus ml-auto" />
       </Accordion.Toggle>
-      <Accordion.Collapse eventKey="0">
+      {isCodeListLoaded && <Accordion.Collapse eventKey="0">
         <Card.Body>
           <div>
             <div className="govuk-grid-row">
@@ -123,6 +146,20 @@ export default ({getInvoices}) => {
                     onChange: () => setTest((v) => !v),
                   }]}
                 />
+              </div>
+            </div>
+            <div className="govuk-grid-row">
+              <div className="govuk-grid-column-one-half">
+                <strong className="filter-heading">{t('invoice.orderFrom')}</strong>
+                <Form.Control
+                  as="select"
+                  style={{maxWidth: '150px'}}
+                  value={ordering}
+                  onChange={(e) => setOrdering(e.target.value)}
+                >
+                  <option value={orderingTypes.DESC}>{t('invoice.newest')}</option>
+                  <option value={orderingTypes.ASC}>{t('invoice.oldest')}</option>
+                </Form.Control>
               </div>
             </div>
             <div className="govuk-grid-row">
@@ -207,7 +244,7 @@ export default ({getInvoices}) => {
               <div className="govuk-grid-column-one-half">
                 <strong className="filter-heading">{t('invoice.amount')}</strong>
                 <InputGroup>
-                  <Form.Label style={{width: '40px'}}>{t('invoice.intervalStart')}</Form.Label>
+                  <Form.Label style={{width: '70px'}}>{t('invoice.intervalStart')}</Form.Label>
                   <Form.Control
                     style={{maxWidth: '150px'}}
                     value={amountFrom || ''}
@@ -222,7 +259,7 @@ export default ({getInvoices}) => {
                   </InputGroup.Append>
                 </InputGroup>
                 <InputGroup>
-                  <Form.Label style={{width: '40px'}}>{t('invoice.intervalEnd')}</Form.Label>
+                  <Form.Label style={{width: '70px'}}>{t('invoice.intervalEnd')}</Form.Label>
                   <Form.Control
                     style={{maxWidth: '150px'}}
                     value={amountTo || ''}
@@ -236,11 +273,33 @@ export default ({getInvoices}) => {
                     />
                   </InputGroup.Append>
                 </InputGroup>
+                <InputGroup>
+                  <Form.Label style={{width: '70px'}}>{t('invoice.currency')}</Form.Label>
+                  <Form.Control
+                    as="select"
+                    style={{maxWidth: '150px'}}
+                    value={amountCurrency || ''}
+                    onChange={(e) => setAmountCurrency(e.target.value)}
+                    disabled={amountCurrency == null}
+                  >
+                    {/*Show empty string when select is disabled*/}
+                    <option hidden />
+                    {Object.keys(codeLists.ISO4217.codes).map((code, i) => (
+                      <option key={i} value={code}>{code}</option>
+                    ))}
+                  </Form.Control>
+                  <InputGroup.Append>
+                    <InputGroup.Checkbox
+                      checked={amountCurrency != null}
+                      onChange={() => setAmountCurrency(amountCurrency == null ? '' : null)}
+                    />
+                  </InputGroup.Append>
+                </InputGroup>
               </div>
               <div className="govuk-grid-column-one-half">
                 <strong className="filter-heading">{t('invoice.amountWithoutVat')}</strong>
                 <InputGroup>
-                  <Form.Label style={{width: '40px'}}>{t('invoice.intervalStart')}</Form.Label>
+                  <Form.Label style={{width: '70px'}}>{t('invoice.intervalStart')}</Form.Label>
                   <Form.Control
                     style={{maxWidth: '150px'}}
                     value={amountWithoutVatFrom || ''}
@@ -257,7 +316,7 @@ export default ({getInvoices}) => {
                   </InputGroup.Append>
                 </InputGroup>
                 <InputGroup>
-                  <Form.Label style={{width: '40px'}}>{t('invoice.intervalEnd')}</Form.Label>
+                  <Form.Label style={{width: '70px'}}>{t('invoice.intervalEnd')}</Form.Label>
                   <Form.Control
                     style={{maxWidth: '150px'}}
                     value={amountWithoutVatTo || ''}
@@ -268,6 +327,28 @@ export default ({getInvoices}) => {
                     <InputGroup.Checkbox
                       checked={amountWithoutVatTo != null}
                       onChange={() => setAmountWithoutVatTo(amountWithoutVatTo == null ? '' : null)}
+                    />
+                  </InputGroup.Append>
+                </InputGroup>
+                <InputGroup>
+                  <Form.Label style={{width: '70px'}}>{t('invoice.currency')}</Form.Label>
+                  <Form.Control
+                    as="select"
+                    style={{maxWidth: '150px'}}
+                    value={amountWithoutVatCurrency || ''}
+                    onChange={(e) => setAmountWithoutVatCurrency(e.target.value)}
+                    disabled={amountWithoutVatCurrency == null}
+                  >
+                    {/*Show empty string when select is disabled*/}
+                    <option hidden />
+                    {Object.keys(codeLists.ISO4217.codes).map((code, i) => (
+                      <option key={i} value={code}>{code}</option>
+                    ))}
+                  </Form.Control>
+                  <InputGroup.Append>
+                    <InputGroup.Checkbox
+                      checked={amountWithoutVatCurrency != null}
+                      onChange={() => setAmountWithoutVatCurrency(amountWithoutVatCurrency == null ? '' : null)}
                     />
                   </InputGroup.Append>
                 </InputGroup>
@@ -361,7 +442,7 @@ export default ({getInvoices}) => {
             </Button>
           </div>
         </Card.Body>
-      </Accordion.Collapse>
+      </Accordion.Collapse>}
     </Accordion>
   )
 }

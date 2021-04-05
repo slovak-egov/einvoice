@@ -9,9 +9,14 @@ type ublInvoice struct {
 		Party ublParty
 	}
 	LegalMonetaryTotal struct {
-		TaxExclusiveAmount float64
-		TaxInclusiveAmount float64
+		TaxExclusiveAmount amount
+		TaxInclusiveAmount amount
 	}
+}
+
+type amount struct {
+	Value      float64 `xml:",chardata"`
+	CurrencyID string  `xml:"currencyID,attr"`
 }
 
 type ublParty struct {

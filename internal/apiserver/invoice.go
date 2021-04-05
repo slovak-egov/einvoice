@@ -61,6 +61,7 @@ func NewPublicInvoicesOptions(params url.Values, maxLimit int) (*db.PublicInvoic
 	if err != nil {
 		return nil, fmt.Errorf("amountTo: %w", err)
 	}
+	options.Amount.Currency = params.Get("amountCurrency")
 	options.AmountWithoutVat.From, err = getOptionalFloat(params.Get("amountWithoutVatFrom"))
 	if err != nil {
 		return nil, fmt.Errorf("amountWithoutVatFrom: %w", err)
@@ -69,6 +70,7 @@ func NewPublicInvoicesOptions(params url.Values, maxLimit int) (*db.PublicInvoic
 	if err != nil {
 		return nil, fmt.Errorf("amountWithoutVatTo: %w", err)
 	}
+	options.AmountWithoutVat.Currency = params.Get("amountWithoutVatCurrency")
 	options.IssueDate.From, err = getOptionalDate(params.Get("issueDateFrom"))
 	if err != nil {
 		return nil, fmt.Errorf("issueDateFrom: %w", err)

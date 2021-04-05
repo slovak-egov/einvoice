@@ -223,8 +223,10 @@ paths:
         - $ref: '#/components/parameters/TestInvoice'
         - $ref: '#/components/parameters/AmountFrom'
         - $ref: '#/components/parameters/AmountTo'
+        - $ref: '#/components/parameters/AmountCurrency'
         - $ref: '#/components/parameters/AmountWithoutVatFrom'
         - $ref: '#/components/parameters/AmountWithoutVatTo'
+        - $ref: '#/components/parameters/AmountWithoutVatCurrency'
         - $ref: '#/components/parameters/IssueDateFrom'
         - $ref: '#/components/parameters/IssueDateTo'
         - $ref: '#/components/parameters/UploadTimeFrom'
@@ -257,8 +259,10 @@ paths:
         - $ref: '#/components/parameters/TestInvoice'
         - $ref: '#/components/parameters/AmountFrom'
         - $ref: '#/components/parameters/AmountTo'
+        - $ref: '#/components/parameters/AmountCurrency'
         - $ref: '#/components/parameters/AmountWithoutVatFrom'
         - $ref: '#/components/parameters/AmountWithoutVatTo'
+        - $ref: '#/components/parameters/AmountWithoutVatCurrency'
         - $ref: '#/components/parameters/IssueDateFrom'
         - $ref: '#/components/parameters/IssueDateTo'
         - $ref: '#/components/parameters/UploadTimeFrom'
@@ -738,6 +742,12 @@ components:
       description: Select invoices with amount not greater than this value
       schema:
         type: number
+    AmountCurrency:
+      name: amountCurrency
+      in: query
+      description: Filter invoices by amount currency
+      schema:
+        type: string
     AmountWithoutVatFrom:
       name: amountWithoutVatFrom
       in: query
@@ -750,6 +760,12 @@ components:
       description: Select invoices with amount without VAT not greater than this value
       schema:
         type: number
+    AmountWithoutVatCurrency:
+      name: amountWithoutVatCurrency
+      in: query
+      description: Filter invoices by amount without VAT currency
+      schema:
+        type: string
     IssueDateFrom:
       name: issueDateFrom
       in: query
