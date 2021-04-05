@@ -32,14 +32,12 @@ func (a *App) parseAndValidateInvoice(res http.ResponseWriter, req *http.Request
 		return nil, "", InvoiceError("format.invalid").WithDetail(err)
 	}
 
-	language := req.Header.Get("Accept-Language")
-
 	// Validate invoice format
 	if err = a.xsdValidator.Validate(invoice, format, documentType); err != nil {
 		return nil, "", InvoiceError("xsdValidation.failed").WithDetail(err)
 	}
 
-	if err = a.rulesValidator.Validate(req.Context(), invoice, format, language); err != nil {
+	if err = a.rulesValidator.Validate(req.Context(), invoice, format); err != nil {
 		if _, ok := err.(*rulesValidator.ValidationError); ok {
 			return nil, "", InvoiceError("rulesValidation.failed").WithDetail(err)
 		} else if _, ok := err.(*rulesValidator.RequestError); ok {

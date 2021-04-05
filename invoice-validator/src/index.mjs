@@ -1,12 +1,11 @@
 import express from 'express'
 import SaxonJS from 'saxon-js'
 import config from './config.mjs'
-import {invoiceFormats, languages} from './constants.mjs'
-import {getXPathQuery, getErrorMessage, getSchema} from './helpers.mjs'
+import {invoiceFormats, schemas} from './constants.mjs'
 
 const app = express()
 
-app.use(express.json({limit: '10mb'}))
+app.use(express.text({limit: '10mb', type: 'application/xml'}))
 
 app.post('/', async (req, res) => {
   if (!Object.values(invoiceFormats).includes(req.query.format)) {
@@ -14,21 +13,16 @@ app.post('/', async (req, res) => {
     return
   }
 
-  if (!Object.values(languages).includes(req.query.lang)) {
-    res.status(400).send({error: 'unknown language'})
-    return
-  }
-
   try {
     const {principalResult} = await SaxonJS.transform({
-        stylesheetInternal: getSchema(req.query.format),
-        sourceText: req.body.xml,
+        stylesheetInternal: schemas[req.query.format],
+        sourceText: req.body,
         destination: 'document',
     }, 'async')
 
     // Find failed asserts in result
     let result = SaxonJS.XPath.evaluate(
-      getXPathQuery(req.query.lang),
+      '//svrl:failed-assert/@id',
       principalResult,
       {
         namespaceContext: {svrl: 'http://purl.oclc.org/dsdl/svrl'},
@@ -40,7 +34,7 @@ app.post('/', async (req, res) => {
       res.send({ok: true})
     } else {
       res.status(400).send({
-        errors: result.map(getErrorMessage(req.query.lang))
+        errors: result.map((v) => v.value)
       })
     }
   } catch (e) {
