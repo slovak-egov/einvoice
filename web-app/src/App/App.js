@@ -1,4 +1,3 @@
-import './App.css'
 import {Suspense, useMemo, useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {Redirect, Route, Switch} from 'react-router-dom'
@@ -56,9 +55,9 @@ export default () => {
   }
 
   return (
-    <div className="d-flex min-vh-100 flex-column">
+    <div style={{display: 'flex', flexDirection: 'column', minHeight: '100vh'}}>
       <TopBar />
-      <div className="container">
+      <main className="govuk-main-wrapper container">
         <Switch>
           <Route exact path="/">
             <Suspense fallback={<LoadingModal />}>
@@ -83,7 +82,7 @@ export default () => {
           <Route path="/invoiceDocumentation" component={InvoiceDocumentation} />
           <Route component={NotFound} />
         </Switch>
-      </div>
+      </main>
       {isLoading && <LoadingModal />}
       <Footer {...footerProps} />
     </div>

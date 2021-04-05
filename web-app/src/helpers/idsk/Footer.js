@@ -4,8 +4,8 @@ import Link from './Link'
 export default ({logo, navigation}) => {
   const {t} = useTranslation('common')
   return (
-    <div data-module="idsk-footer-extended" style={{marginTop: 'auto'}}>
-      <footer className="idsk-footer-extended " role="contentinfo">
+    <div style={{marginTop: 'auto'}}>
+      <footer data-module="idsk-footer-extended" className="idsk-footer-extended" role="contentinfo">
         <div className="idsk-footer-extended-main-content">
           <div className="govuk-width-container">
             <div className="govuk-grid-column-full">
