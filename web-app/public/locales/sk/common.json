@@ -93,6 +93,7 @@
     "codes": "Kódy",
     "ublRules": "UBL Pravidlá",
     "rules": {
+      "title": "Pravidlá",
       "identifier": "Identifikátor",
       "message": "Popis",
       "flag": "Vážnosť",

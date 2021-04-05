@@ -93,6 +93,7 @@
     "codes": "Codes",
     "ublRules": "UBL Rules",
     "rules": {
+      "title": "Rules",
       "identifier": "Identifier",
       "message": "Message",
       "flag": "Flag",
