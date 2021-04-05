@@ -24,7 +24,7 @@ export default ({data, identifier}) => {
         <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.codes')}</strong>
         <div className="govuk-grid-column-three-quarters">
           {Object.entries(data.codes).map(([code, {name, description}], index) => (
-            <div key={index} className="my-2 d-flex flex-column">
+            <div key={index} className="mt-2 d-flex flex-column">
               <code>{code}</code>
               <strong>{name[i18n.language]}</strong>
               {description && <p>{description[i18n.language]}</p>}

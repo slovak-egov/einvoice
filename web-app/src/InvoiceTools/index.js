@@ -23,18 +23,16 @@ export default ({match}) => {
   )
 
   return (
-    <div className="m-2">
-      <Tabs tabs={tabs}>
-        <Switch>
-          <AuthRoute path={`${match.url}/drafts`}>
-            <Drafts />
-          </AuthRoute>
-          <Route path={`${match.url}/form`} component={Form} />
-          <Route path={`${match.url}/submission`}>
-            <InvoiceSubmission showSubmission={isLogged} title={title} />
-          </Route>
-        </Switch>
-      </Tabs>
-    </div>
+    <Tabs tabs={tabs}>
+      <Switch>
+        <AuthRoute path={`${match.url}/drafts`}>
+          <Drafts />
+        </AuthRoute>
+        <Route path={`${match.url}/form`} component={Form} />
+        <Route path={`${match.url}/submission`}>
+          <InvoiceSubmission showSubmission={isLogged} title={title} />
+        </Route>
+      </Switch>
+    </Tabs>
   )
 }

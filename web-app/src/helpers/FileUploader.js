@@ -15,7 +15,7 @@ const FileUploader = ({accept, style, text, uploadFile}) => {
         ref={hiddenFileInput}
         onChange={uploadFile}
         onClick={clearEventTarget}
-        className="d-none"
+        style={{display: 'none'}}
         accept={accept}
       />
     </>
