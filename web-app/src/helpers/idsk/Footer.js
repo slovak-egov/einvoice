@@ -1,10 +1,8 @@
 import {useTranslation} from 'react-i18next'
 import Link from './Link'
-import skLogo from './mfsr-logo-sk.png'
-import enLogo from './mfsr-logo-en.png'
 
-export default ({navigation}) => {
-  const {i18n, t} = useTranslation('common')
+export default ({logo, navigation}) => {
+  const {t} = useTranslation('common')
   return (
     <div data-module="idsk-footer-extended" style={{marginTop: 'auto'}}>
       <footer className="idsk-footer-extended " role="contentinfo">
@@ -13,11 +11,11 @@ export default ({navigation}) => {
             <div className="govuk-grid-column-full">
               <div className="idsk-footer-extended-description-panel">
                 <div className="idsk-footer-extended-meta-item">
-                  <ul className="idsk-footer-extended-inline-list ">
+                  <ul className="idsk-footer-extended-inline-list">
                     {navigation.map(({title, ...attributes}, index) => (
                       <li key={index} className="idsk-footer-extended-inline-list-item">
                         <Link className="govuk-link" {...attributes}>
-                          {t(title)}
+                          {title}
                         </Link>
                       </li>
                     ))}
@@ -35,9 +33,9 @@ export default ({navigation}) => {
                   </p>
                 </div>
                 <div className="govuk-grid-column-one-third idsk-footer-extended-logo-box">
-                  <a href="https://mfsr.sk" target="_blank">
+                  <a href={logo.href} target="_blank" rel="noreferrer noopener">
                     <h2 className="idsk-footer-extended-logo">
-                      <img src={i18n.language === 'sk' ? skLogo : enLogo} />
+                      <img src={logo.src} />
                     </h2>
                   </a>
                 </div>

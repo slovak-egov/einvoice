@@ -1,7 +1,8 @@
 import './App.css'
-import {Suspense, useEffect} from 'react'
+import {Suspense, useMemo, useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {Redirect, Route, Switch} from 'react-router-dom'
+import {useTranslation} from 'react-i18next'
 import {registerLocale} from 'react-datepicker'
 import sk from 'date-fns/locale/sk'
 import PublicInvoices from '../PublicInvoices'
@@ -13,6 +14,7 @@ import InvoiceTools from '../InvoiceTools'
 import InvoiceDetail from '../InvoiceDetail'
 import AccountSettings from '../AccountSettings'
 import {Footer} from '../helpers/idsk'
+import mfsrLogo from '../helpers/mfsrLogo'
 import {AuthRoute} from '../helpers/Auth'
 import LoadingModal from '../helpers/LoadingModal'
 import NotFound from '../helpers/NotFound'
@@ -24,13 +26,8 @@ import {getMyInfo} from '../cache/users/actions'
 // Load slovak translations for time
 registerLocale('sk', sk)
 
-const footerNavigation = [
-  {title: 'FAQ', to: '/faq'},
-  {title: 'invoiceDocumentation', to: '/invoiceDocumentation'},
-  {title: 'Github', href: 'https://github.com/slovak-egov/einvoice', target: '_blank'},
-]
-
 export default () => {
+  const {i18n, t} = useTranslation('common')
   const isLoading = useSelector(isLoadingSelector)
   const isLogging = useSelector(isLoggingSelector)
   const dispatch = useDispatch()
@@ -38,6 +35,21 @@ export default () => {
   useEffect(() => {
     dispatch(getMyInfo())
   }, [dispatch])
+
+  const footerProps = useMemo(
+    () => ({
+      navigation: [
+        {title: 'FAQ', to: '/faq'},
+        {title: t('invoiceDocumentation'), to: '/invoiceDocumentation'},
+        {title: 'Github', href: 'https://github.com/slovak-egov/einvoice', target: '_blank'},
+      ],
+      logo: {
+        href: 'https://mfsr.sk',
+        src: mfsrLogo[i18n.language],
+      },
+    }),
+    [i18n.language],
+  )
 
   if (isLogging) {
     return <LoadingModal />
@@ -73,7 +85,7 @@ export default () => {
         </Switch>
       </div>
       {isLoading && <LoadingModal />}
-      <Footer navigation={footerNavigation} />
+      <Footer {...footerProps} />
     </div>
   )
 }

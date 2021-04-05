@@ -72,7 +72,7 @@ export default ({
           const idSuffix = `-${index + 1}`
           const idValue =
             id || `${idPrefixValue}${index === 0 ? '' : idSuffix}`
-          const nameValue = item.name ? item.name : name
+          const nameValue = item.name || name
           const conditionalId = itemConditional?.children
             ? `conditional-${idValue}`
             : null

@@ -1,6 +1,5 @@
 import {useRef} from 'react'
-import {Form, InputGroup} from 'react-bootstrap'
-import {Button} from './idsk'
+import {Button, Input} from './idsk'
 import {clearEventTarget} from '../utils/helpers'
 
 const FileUploader = ({accept, style, text, uploadFile}) => {
@@ -25,16 +24,16 @@ const FileUploader = ({accept, style, text, uploadFile}) => {
 
 export default ({accept, buttonStyle, buttonText, deleteFile, fileName, uploadFile}) =>
   fileName ? (
-    <InputGroup>
-      <Form.Control
-        value={fileName}
-        readOnly
-        style={{maxWidth: '200px'}}
-      />
-      <InputGroup.Append>
-        <Button onClick={deleteFile} className="govuk-button--warning">X</Button>
-      </InputGroup.Append>
-    </InputGroup>
+    <Input
+      className="govuk-input--width-10"
+      suffix={{
+        children: 'X',
+        onClick: deleteFile,
+        className: 'input-suffix--warning',
+      }}
+      value={fileName}
+      readOnly
+    />
   ) : (
     <FileUploader
       accept={accept}

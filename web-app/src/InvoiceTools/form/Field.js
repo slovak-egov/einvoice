@@ -1,12 +1,11 @@
 import {useCallback, useEffect, useMemo} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {useTranslation} from 'react-i18next'
-import {Button, Form} from 'react-bootstrap'
 import swal from 'sweetalert'
-import classnames from 'classnames'
+import classNames from 'classnames'
+import {Button, Input, Label, Select} from '../../helpers/idsk'
 import DatePicker from '../../helpers/DatePicker'
 import FileUploader from '../../helpers/FileUploader'
-import Tooltip from '../../helpers/Tooltip'
 import {formFieldSelector} from './state'
 import {setFormField} from './actions'
 import {codeListsSelector} from '../../cache/documentation/state'
@@ -31,13 +30,13 @@ export default ({canDelete, dropField, docs, path, setErrorCount}) => {
   )
   const value = useSelector(formFieldSelector(pathToUpdate)) || ''
   const dispatch = useDispatch()
-  const isInvalid = value === ''
+  const contentError = value === '' ? t('errorMessages.emptyField') : null
 
   useEffect(
     () => {
-      setErrorCount(isInvalid ? 1 : 0)
+      setErrorCount(contentError ? 1 : 0)
       return () => setErrorCount(0)
-    }, [isInvalid],
+    }, [contentError],
   )
 
   const updateField = useCallback(
@@ -46,29 +45,31 @@ export default ({canDelete, dropField, docs, path, setErrorCount}) => {
   )
 
   return (
-    <Form.Group>
-      <div className="d-flex">
-        <Form.Label className="d-flex">
-          <span>{docs.name[i18n.language]}</span>
-          <Tooltip className="my-auto" tooltipText={docs.description[i18n.language]} />
-        </Form.Label>
-        {canDelete && <Button className="ml-auto mb-1" variant="danger" size="sm" onClick={dropField}>
-          {t('delete')}
-        </Button>}
-      </div>
+    <>
+      <Label>
+        {docs.name[i18n.language]}
+        {canDelete &&
+          <Button
+            className="govuk-button--warning"
+            style={{marginBottom: 0, marginLeft: '5px'}}
+            onClick={dropField}
+          >
+            {t('delete')}
+          </Button>
+        }
+      </Label>
       <FieldInput
         codeListIds={docs.codeLists}
         dataType={docs.dataType}
         updateField={updateField}
         value={value}
-        isInvalid={isInvalid}
+        error={contentError}
       />
-      <Form.Control.Feedback type="invalid">{t('errorMessages.emptyField')}</Form.Control.Feedback>
-    </Form.Group>
+    </>
   )
 }
 
-const FieldInput = ({codeListIds, dataType, isInvalid, updateField, value}) => {
+const FieldInput = ({codeListIds, dataType, error, updateField, value}) => {
   const {t} = useTranslation('common')
   const getValue = useCallback(
     async (e) => {
@@ -130,9 +131,9 @@ const FieldInput = ({codeListIds, dataType, isInvalid, updateField, value}) => {
     case dataTypes.DATE:
       return (
         <DatePicker
+          className={classNames(error && 'govuk-input--error')}
           selected={parseDate(value)}
           onChange={onChange}
-          className={classnames({'is-invalid': isInvalid})}
           dateFormat="yyyy-MM-dd"
         />
       )
@@ -148,44 +149,38 @@ const FieldInput = ({codeListIds, dataType, isInvalid, updateField, value}) => {
       )
     case dataTypes.PERCENTAGE:
       return (
-        <div className="d-flex">
-          <Form.Control
-            value={value}
-            onChange={onChange}
-            className="text-right"
-            style={{maxWidth: '100px'}}
-            isInvalid={isInvalid}
-          />
-          <span className="my-auto ml-1">%</span>
-        </div>
+        <Input
+          className="govuk-input--width-5"
+          suffix={{
+            children: '%',
+            className: 'input-suffix--secondary',
+          }}
+          value={value}
+          onChange={onChange}
+        />
       )
     case dataTypes.CODE:
       return (
-        <Form.Control
-          as="select"
-          className="w-auto"
-          style={{maxWidth: '100%'}}
-          onChange={onChange}
+        <Select
+          items={[{}]}
+          itemGroups={codeListIds.map((id) => ({
+            label: id,
+            items: Object.keys(codeLists[id].codes).map((code) => ({
+              children: code,
+              value: code,
+            })),
+          }))}
           value={value}
-          isInvalid={isInvalid}
-        >
-          {/*Add empty option*/}
-          <option />
-          {codeListIds.map((id, i) => (
-            <optgroup key={i} label={id}>
-              {Object.keys(codeLists[id].codes).map((code, index) => (
-                <option key={index} value={code}>{code}</option>
-              ))}
-            </optgroup>
-          ))}
-        </Form.Control>
+          onChange={onChange}
+          errorMessage={error && {children: error}}
+        />
       )
     default:
       return (
-        <Form.Control
+        <Input
           value={value}
           onChange={onChange}
-          isInvalid={isInvalid}
+          errorMessage={error && {children: error}}
         />
       )
   }

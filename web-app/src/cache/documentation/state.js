@@ -13,3 +13,7 @@ export const isBusinessTermsDocsLoadedSelector = (state) => businessTermsDocsSel
 
 export const codeListsSelector = (state) => state.docs.codeLists
 export const areCodeListsLoadedSelector = (state) => codeListsSelector(state) != null
+export const currencyListSelector = (state) => {
+  const currencyList = codeListsSelector(state)?.ISO4217?.codes
+  return currencyList && Object.keys(currencyList)
+}
