@@ -91,7 +91,7 @@ export default ({data, id}) => {
               {path.map((tag, j) => (
                 <Fragment key={i}>
                   <span> / </span>
-                  <Link key={j} to={`/invoiceDocumentation/ublInvoice/${path.slice(0, j+1).join('/')}`}>{tag}</Link>
+                  <Link key={j} to={`/invoiceDocumentation/ublInvoice/${path.slice(0, j + 1).join('/')}`}>{tag}</Link>
                 </Fragment>
               ))}
             </Fragment>
@@ -107,7 +107,7 @@ export default ({data, id}) => {
               {path.map((tag, j) => (
                 <Fragment key={i}>
                   <span> / </span>
-                  <Link key={j} to={`/invoiceDocumentation/ublCreditNote/${path.slice(0, j+1).join('/')}`}>{tag}</Link>
+                  <Link key={j} to={`/invoiceDocumentation/ublCreditNote/${path.slice(0, j + 1).join('/')}`}>{tag}</Link>
                 </Fragment>
               ))}
             </Fragment>
