@@ -71,6 +71,17 @@ export default ({data, id}) => {
           ))}
         </div>
       </div>}
+      {data.rules && <div className="govuk-grid-row">
+        <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.rules.title')}</strong>
+        <div className="govuk-grid-column-three-quarters">
+          {data.rules.map((ruleId, i) => (
+            <Fragment key={i}>
+              {i !== 0 && <span>, </span>}
+              <Link to={`/invoiceDocumentation/ublRules/${ruleId}`}>{ruleId}</Link>
+            </Fragment>
+          ))}
+        </div>
+      </div>}
       {data.children && <div className="govuk-grid-row">
         <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.childElements')}</strong>
         <div className="govuk-grid-column-three-quarters">

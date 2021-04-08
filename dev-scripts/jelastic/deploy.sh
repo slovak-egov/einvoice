@@ -24,7 +24,7 @@ case "$1" in
     DOCKER_NAME="ghcr.io/slovak-egov/einvoice-notification-worker"
     DOCKER_FILE="cmd/notification-worker/Dockerfile"
     ENV_NAME="dev-einvoice-api-mfsr"
-    NODE_GROUP="docker"
+    NODE_GROUP="docker3"
     ;;
 
   cleanup-worker)
