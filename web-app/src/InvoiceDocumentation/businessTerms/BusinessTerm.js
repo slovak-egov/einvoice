@@ -82,6 +82,38 @@ export default ({data, id}) => {
           ))}
         </div>
       </div>}
+      {data.invoiceTags && <div className="govuk-grid-row">
+        <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.ublInvoice')}</strong>
+        <div className="govuk-grid-column-three-quarters">
+          {data.invoiceTags.map((path, i) => (
+            <Fragment key={i}>
+              {i !== 0 && <br />}
+              {path.map((tag, j) => (
+                <Fragment key={i}>
+                  <span> / </span>
+                  <Link key={j} to={`/invoiceDocumentation/ublInvoice/${path.slice(0, j+1).join('/')}`}>{tag}</Link>
+                </Fragment>
+              ))}
+            </Fragment>
+          ))}
+        </div>
+      </div>}
+      {data.creditNoteTags && <div className="govuk-grid-row">
+        <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.ublCreditNote')}</strong>
+        <div className="govuk-grid-column-three-quarters">
+          {data.creditNoteTags.map((path, i) => (
+            <Fragment key={i}>
+              {i !== 0 && <br />}
+              {path.map((tag, j) => (
+                <Fragment key={i}>
+                  <span> / </span>
+                  <Link key={j} to={`/invoiceDocumentation/ublCreditNote/${path.slice(0, j+1).join('/')}`}>{tag}</Link>
+                </Fragment>
+              ))}
+            </Fragment>
+          ))}
+        </div>
+      </div>}
       {data.children && <div className="govuk-grid-row">
         <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.childElements')}</strong>
         <div className="govuk-grid-column-three-quarters">

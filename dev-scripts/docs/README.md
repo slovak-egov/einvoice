@@ -15,3 +15,11 @@ Run:
 node addRulesToBusinessTerms.js
 ```
 to add rule ids to business term documentation. Uses ids parsed in previous step.
+
+## Business terms to invoice xml tags
+
+Run: 
+```
+node addTagsToBusinessTerms.js
+```
+to add tag paths to business term documentation.
