@@ -1,6 +1,7 @@
 package webserver
 
 import (
+	"encoding/json"
 	"html/template"
 	"net/http"
 	"os"
@@ -11,9 +12,13 @@ import (
 	"github.com/slovak-egov/einvoice/internal/webserver/config"
 )
 
+type templateData struct {
+	Config string
+}
+
 type UiHandler struct {
 	StaticPath        string
-	reactAppConfig    config.Urls
+	reactAppConfig    templateData
 	staticFilesServer http.Handler
 	htmlTemplate      *template.Template
 }
@@ -24,9 +29,14 @@ func NewUiHandler(staticPath, indexPath string, reactAppConfig config.Urls) UiHa
 		log.WithField("error", err.Error()).Fatal("uiHandler.htmlParse.failed")
 	}
 
+	jsonConfig, err := json.Marshal(reactAppConfig)
+	if err != nil {
+		log.WithField("error", err.Error()).Fatal("uiHandler.reactAppConfig.marshaling.failed")
+	}
+
 	return UiHandler{
 		staticPath,
-		reactAppConfig,
+		templateData{string(jsonConfig)},
 		http.FileServer(http.Dir(staticPath)),
 		htmlTemplate,
 	}
