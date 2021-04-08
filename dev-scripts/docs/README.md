@@ -23,3 +23,11 @@ Run:
 node addTagsToBusinessTerms.js
 ```
 to add tag paths to business term documentation.
+
+## Rules to invoice xml tags
+
+Run: 
+```
+node addTagsToRules.js
+```
+to add tag paths to rules documentation.
