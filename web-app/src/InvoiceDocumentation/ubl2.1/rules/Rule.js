@@ -1,16 +1,16 @@
 import {useSelector} from 'react-redux'
+import {Link} from 'react-router-dom'
 import {useTranslation} from 'react-i18next'
 import NotFound from '../../../helpers/NotFound'
 import {ubl21RuleSelector} from '../../../cache/documentation/state'
-import {Link} from 'react-router-dom'
 
-const addLinks = (msg, businessTerms) => {
+const addBusinessTermsLinks = (msg, businessTerms) => {
   const reg = new RegExp(`(${businessTerms.join('|')})`, 'g')
   const parts = msg.split(reg)
   for (let i = 1; i < parts.length; i += 2) {
     parts[i] = <Link key={i} to={`/invoiceDocumentation/businessTerms/${parts[i]}`}>{parts[i]}</Link>
   }
-  return <div>{parts}</div>
+  return parts
 }
 
 export default ({match}) => {
@@ -27,7 +27,7 @@ export default ({match}) => {
       <h1 className="govuk-heading-l">{ruleId}</h1>
       <div className="govuk-grid-row">
         <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.rules.message')}</strong>
-        <div className="govuk-grid-column-three-quarters">{addLinks(rule.message[i18n.language], rule.businessTerms)}</div>
+        <div className="govuk-grid-column-three-quarters">{addBusinessTermsLinks(rule.message[i18n.language], rule.businessTerms)}</div>
       </div>
       <div className="govuk-grid-row">
         <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.rules.context')}</strong>
