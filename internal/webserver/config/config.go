@@ -9,9 +9,9 @@ import (
 )
 
 type Urls struct {
-	ApiServer      string
-	UpvsLogin      string
-	LogoutCallback string
+	ApiServer      string `json:"apiServerUrl"`
+	UpvsLogin      string `json:"upvsLoginUrl"`
+	LogoutCallback string `json:"logoutCallbackUrl"`
 }
 
 type Configuration struct {
