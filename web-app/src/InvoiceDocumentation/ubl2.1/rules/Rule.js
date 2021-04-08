@@ -5,9 +5,8 @@ import NotFound from '../../../helpers/NotFound'
 import {ubl21RuleSelector} from '../../../cache/documentation/state'
 
 const addBusinessTermsLinks = (msg, businessTerms) => {
-  if (!businessTerms) {
-    return msg
-  }
+  if (!businessTerms) return msg
+
   const reg = new RegExp(`(${businessTerms.join('|')})`, 'g')
   const parts = msg.split(reg)
   for (let i = 1; i < parts.length; i += 2) {
