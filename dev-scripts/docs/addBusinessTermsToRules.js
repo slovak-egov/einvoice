@@ -1,4 +1,4 @@
-const fs = require('fs')
+const fs = require('fs');
 
 const regex = /(BG|BT)[-0-9]*/g;
 

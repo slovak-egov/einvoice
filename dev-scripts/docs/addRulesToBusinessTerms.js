@@ -1,4 +1,4 @@
-const fs = require('fs')
+const fs = require('fs');
 
 let businessTerms = require('./../../data/schemas/businessTerms/docs.json');
 let rules = require('./../../data/schemas/ubl2.1/rules-documentation.json');

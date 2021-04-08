@@ -1,4 +1,6 @@
 import {useTranslation} from 'react-i18next'
+import {Fragment} from 'react'
+import {Link} from 'react-router-dom'
 import NotFound from '../../helpers/NotFound'
 
 export default ({data, identifier}) => {
@@ -19,6 +21,38 @@ export default ({data, identifier}) => {
       {data.version && <div className="govuk-grid-row">
         <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.version')}</strong>
         <div className="govuk-grid-column-three-quarters">{data.version}</div>
+      </div>}
+      {data.invoiceTags && <div className="govuk-grid-row">
+        <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.ublInvoice')}</strong>
+        <div className="govuk-grid-column-three-quarters">
+          {data.invoiceTags.map((path, i) => (
+            <Fragment key={i}>
+              {i !== 0 && <br />}
+              {path.map((tag, j) => (
+                <Fragment key={j}>
+                  <span> / </span>
+                  <Link to={`/invoiceDocumentation/ublInvoice/${path.slice(0, j + 1).join('/')}`}>{tag}</Link>
+                </Fragment>
+              ))}
+            </Fragment>
+          ))}
+        </div>
+      </div>}
+      {data.creditNoteTags && <div className="govuk-grid-row">
+        <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.ublCreditNote')}</strong>
+        <div className="govuk-grid-column-three-quarters">
+          {data.creditNoteTags.map((path, i) => (
+            <Fragment key={i}>
+              {i !== 0 && <br />}
+              {path.map((tag, j) => (
+                <Fragment key={j}>
+                  <span> / </span>
+                  <Link to={`/invoiceDocumentation/ublCreditNote/${path.slice(0, j + 1).join('/')}`}>{tag}</Link>
+                </Fragment>
+              ))}
+            </Fragment>
+          ))}
+        </div>
       </div>}
       <div className="govuk-grid-row">
         <strong className="govuk-grid-column-one-quarter">{t('invoiceDocs.codes')}</strong>
