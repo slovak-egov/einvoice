@@ -11,7 +11,7 @@ Object.values(rules).forEach(rule => {
   }
 });
 
-fs.writeFile('./data/schemas/ubl2.1/rules-documentation.json', JSON.stringify(rules), function (err) {
+fs.writeFile('./../../data/schemas/ubl2.1/rules-documentation.json', JSON.stringify(rules), function (err) {
   if (err) throw err;
-  console.log('saved');
+  console.log('done');
 });

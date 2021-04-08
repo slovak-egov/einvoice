@@ -20,7 +20,7 @@ Object.values(businessTerms).forEach(bt => {
   }
 });
 
-fs.writeFile('./data/schemas/businessTerms/docs.json', JSON.stringify(businessTerms), function (err) {
+fs.writeFile('./../../data/schemas/businessTerms/docs.json', JSON.stringify(businessTerms), function (err) {
   if (err) throw err;
-  console.log('saved');
+  console.log('done');
 });
