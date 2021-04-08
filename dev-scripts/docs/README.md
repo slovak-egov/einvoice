@@ -31,3 +31,11 @@ Run:
 node addTagsToRules.js
 ```
 to add tag paths to rules documentation.
+
+## Code lists to invoice xml tags
+
+Run: 
+```
+node addTagsToCodeLists.js
+```
+to add tag paths to code lists documentation.

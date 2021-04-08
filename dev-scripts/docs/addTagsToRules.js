@@ -1,4 +1,4 @@
-const fs = require('fs')
+const fs = require('fs');
 
 let rules = require('./../../data/schemas/ubl2.1/rules-documentation.json');
 let invoiceTags = require('./../../data/schemas/ubl2.1/invoice-documentation.json');
@@ -21,13 +21,13 @@ parseTag = (path, tag, fieldName) => {
 }
 
 parseDoc = (doc, fieldName) => {
-  Object.values(rules).forEach(bt => delete bt[fieldName]);
+  Object.values(rules).forEach(rule => delete rule[fieldName]);
 
   Object.entries(doc).forEach(([name, tag]) => parseTag([name], tag, fieldName));
 
-  Object.values(rules).forEach(bt => {
-    if (bt[fieldName]) {
-      bt[fieldName] = Array.from(bt[fieldName]);
+  Object.values(rules).forEach(rule => {
+    if (rule[fieldName]) {
+      rule[fieldName] = Array.from(rule[fieldName]);
     }
   });
 }
