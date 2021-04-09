@@ -16,26 +16,10 @@ node addRulesToBusinessTerms.js
 ```
 to add rule ids to business term documentation. Uses ids parsed in previous step.
 
-## Business terms to invoice xml tags
+## Cross links to invoice xml tags
 
 Run: 
 ```
-node addTagsToBusinessTerms.js
+node addTagsToDocs.js
 ```
-to add tag paths to business term documentation.
-
-## Rules to invoice xml tags
-
-Run: 
-```
-node addTagsToRules.js
-```
-to add tag paths to rules documentation.
-
-## Code lists to invoice xml tags
-
-Run: 
-```
-node addTagsToCodeLists.js
-```
-to add tag paths to code lists documentation.
+to add tag paths to business terms, code lists and rules documentation.
