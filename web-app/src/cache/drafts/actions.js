@@ -44,11 +44,27 @@ export const deleteDraft = (id) => loadingWrapper(
 export const createDraft = (name, type, data) => loadingWrapper(
   async (dispatch, getState, {api}) => {
     try {
-      await api.drafts.create(name, {type, data})
-      return true
+      const draft = await api.drafts.create(name, {type, data})
+      return draft
     } catch (error) {
       await swal({
         title: i18n.t('errorMessages.createDraft'),
+        text: error.message,
+        icon: 'error',
+      })
+      return false
+    }
+  }
+)
+
+export const updateDraft = ({id, name, type, data}) => loadingWrapper(
+  async (dispatch, getState, {api}) => {
+    try {
+      await api.drafts.update({id, name, data: type && data && {type, data}})
+      return true
+    } catch (error) {
+      await swal({
+        title: i18n.t('errorMessages.updateDraft'),
         text: error.message,
         icon: 'error',
       })

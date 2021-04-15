@@ -1,6 +1,6 @@
 import swal from 'sweetalert'
 import {dropRight, get} from 'lodash'
-import {formDataSelector, FORM_PATH, FORM_TYPE_PATH, getFormInitialState} from './state'
+import {formDataSelector, FORM_PATH, FORM_TYPE_PATH, FORM_DRAFT_META_PATH, getFormInitialState} from './state'
 import {setInvoiceSubmissionData} from '../actions'
 import {loadingWrapper, setData} from '../../helpers/actions'
 import {generateInvoice} from '../../utils/invoiceGenerator'
@@ -8,6 +8,7 @@ import i18n from '../../i18n'
 
 export const setFormField = (path) => setData([...FORM_PATH, ...path])
 export const setFormType = setData(FORM_TYPE_PATH)
+export const setFormDraftMeta = setData(FORM_DRAFT_META_PATH)
 
 export const addFieldInstance = (path, data) => ({
   type: 'ADD INVOICE FIELD',
@@ -42,16 +43,17 @@ export const submitInvoiceForm = (invoiceType, rootPath) => loadingWrapper(
   }
 )
 
-export const initializeDraftForm = (id) => loadingWrapper(
+export const initializeDraftForm = (draftMeta) => loadingWrapper(
   async (dispatch, getState, {api}) => {
     try {
-      const {type, data} = await api.drafts.get(id)
+      const {type, data} = await api.drafts.get(draftMeta.id)
       dispatch(setFormField([type])(data))
       dispatch(setFormType(type))
+      dispatch(setFormDraftMeta(draftMeta))
       return true
     } catch (error) {
       await swal({
-        title: i18n.t('errorMessages.getDraft', {id}),
+        title: i18n.t('errorMessages.getDraft', {id: draftMeta.id}),
         text: error.message,
         icon: 'error',
       })

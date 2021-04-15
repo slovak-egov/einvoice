@@ -5,10 +5,10 @@ import {useTranslation} from 'react-i18next'
 import {get} from 'lodash'
 import {Button, Radios} from '../../helpers/idsk'
 import TagGroup from './TagGroup'
-import CreateDraftModal from './CreateDraftModal'
+import DraftNameModal from '../DraftNameModal'
 import ConfirmationButton from '../../helpers/ConfirmationButton'
-import {formTypeSelector, formDataSelector, isFormInitialized} from './state'
-import {initializeFormState, setFormType, submitInvoiceForm} from './actions'
+import {formTypeSelector, formDataSelector, isFormInitialized, formDraftSelector} from './state'
+import {initializeFormState, setFormType, setFormDraftMeta, submitInvoiceForm} from './actions'
 import {
   areCodeListsLoadedSelector,
   isUblCreditNoteDocsLoadedSelector,
@@ -17,7 +17,7 @@ import {
   ublInvoiceDocsSelector,
 } from '../../cache/documentation/state'
 import {getCodeLists, getUblCreditNoteDocs, getUblInvoiceDocs} from '../../cache/documentation/actions'
-import {createDraft} from '../../cache/drafts/actions'
+import {createDraft, updateDraft} from '../../cache/drafts/actions'
 import {isUserLogged} from '../../cache/users/state'
 import {invoiceTypes} from '../../utils/constants'
 
@@ -46,6 +46,8 @@ export default () => {
   const isFormLoaded = useSelector(isFormInitialized(formType))
   const docs = useSelector(invoiceTypeData[formType].docsSelector)
   const formData = useSelector(formDataSelector)
+  const formDraft = useSelector(formDraftSelector)
+
   const dispatch = useDispatch()
 
   const [errorCount, setErrorCount] = useState(0)
@@ -88,10 +90,16 @@ export default () => {
 
   const confirmDraft = (name) =>
     async () => {
-      if (await dispatch(createDraft(name, formType, formData[formType]))) {
+      const draft = await dispatch(createDraft(name, formType, formData[formType]))
+      if (draft) {
+        await (dispatch(setFormDraftMeta({id: draft.id, name: draft.name})))
         history.push('/invoice-tools/drafts')
       }
     }
+
+  const confirmUpdateDraft = async () => {
+    await dispatch(updateDraft({id: formDraft.id, type: formType, data: formData[formType]}))
+  }
 
   const allLoaded = areCodeListsLoaded && isDocsLoaded && isFormLoaded
 
@@ -129,11 +137,22 @@ export default () => {
         <div className="govuk-button-group">
           {isLogged &&
             <Button className="govuk-button--secondary" onClick={() => setShowCreateDraftModal(true)}>
-              {t('saveAsDraft')}
+              {t('saveAsNewDraft')}
             </Button>
           }
+          {isLogged && formDraft &&
+            <ConfirmationButton
+              className="govuk-button--secondary"
+              onClick={confirmUpdateDraft}
+              confirmationTitle={t('confirmationQuestions.updateDraft.title')}
+              confirmationText={t('confirmationQuestions.updateDraft.text', {name: formDraft.name})}
+            >
+              {t('updateDraft')}
+            </ConfirmationButton>
+          }
           {showCreateDraftModal &&
-            <CreateDraftModal
+            <DraftNameModal
+              title={t('createDraft')}
               cancel={() => setShowCreateDraftModal(false)}
               confirm={confirmDraft}
             />}

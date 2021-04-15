@@ -1,13 +1,14 @@
-import {useCallback, useEffect} from 'react'
+import {useCallback, useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {useTranslation} from 'react-i18next'
 import {useHistory} from 'react-router-dom'
 import {format as formatDate, parseISO} from 'date-fns'
-import {Table} from '../../helpers/idsk'
+import {Button, Table} from '../../helpers/idsk'
 import {draftsSelector} from '../../cache/drafts/state'
-import {deleteDraft, getDrafts} from '../../cache/drafts/actions'
+import {updateDraft, deleteDraft, getDrafts} from '../../cache/drafts/actions'
 import {initializeDraftForm} from '../form/actions'
 import ConfirmationButton from '../../helpers/ConfirmationButton'
+import DraftNameModal from '../DraftNameModal'
 
 export default () => {
   const {t} = useTranslation('common')
@@ -20,12 +21,22 @@ export default () => {
   }, [dispatch])
 
   const openDraft = useCallback(
-    async (id) => {
-      if (await dispatch(initializeDraftForm(id))) {
+    async (draft) => {
+      if (await dispatch(initializeDraftForm(draft))) {
         history.push('/invoice-tools/form')
       }
     }, [dispatch]
   )
+
+  const [renameDraftModalData, setRenameDraftModalData] = useState(null)
+
+  const renameDraft = (id) => (name) =>
+    async () => {
+      if (await dispatch(updateDraft({id, name}))) {
+        await dispatch(getDrafts())
+        setRenameDraftModalData(null)
+      }
+    }
 
   // Data is still loading
   if (drafts == null) return null
@@ -51,7 +62,7 @@ export default () => {
             children: (
               <>
                 <ConfirmationButton
-                  onClick={() => openDraft(draft.id)}
+                  onClick={() => openDraft(draft)}
                   confirmationTitle={t('confirmationQuestions.openDraft.title')}
                   confirmationText={t('confirmationQuestions.openDraft.text')}
                 >
@@ -65,11 +76,21 @@ export default () => {
                 >
                   {t('delete')}
                 </ConfirmationButton>
+                <Button className="govuk-button--secondary" onClick={() => setRenameDraftModalData({id: draft.id, name: draft.name})}>
+                  {t('rename')}
+                </Button>
               </>
             ),
           },
         ])}
       />
+      {renameDraftModalData &&
+        <DraftNameModal
+          title={t('renameDraft')}
+          initName={renameDraftModalData.name}
+          cancel={() => setRenameDraftModalData(null)}
+          confirm={renameDraft(renameDraftModalData.id)}
+        />}
     </>
   )
 }

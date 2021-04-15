@@ -9,10 +9,14 @@ export default (api) => {
   const create = (name, data) =>
     prepareRequest({method: 'POST', route: '', data: {name, data}})
 
+  const update = ({id, name, data}) =>
+    prepareRequest({method: 'PATCH', route: `/${id}`, data: {name, data}})
+
   const get = (id) => prepareRequest({route: `/${id}`})
 
   return {
     create,
+    update,
     remove,
     get,
     getAll,
