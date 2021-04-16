@@ -101,6 +101,39 @@ func (storage *LocalStorage) DeleteDraft(ctx goContext.Context, id string) error
 	return nil
 }
 
+func (storage *LocalStorage) visualizationFilename(id string) string {
+	return fmt.Sprintf("%s/visualization:%s.zip", storage.basePath, id)
+}
+
+func (storage *LocalStorage) SaveVisualization(ctx goContext.Context, id string, value []byte) error {
+	return storage.saveObject(ctx, storage.visualizationFilename(id), value)
+}
+
+func (storage *LocalStorage) GetVisualization(ctx goContext.Context, id string) ([]byte, error) {
+	bytes, err := storage.readObject(storage.visualizationFilename(id))
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			return nil, &NotFoundError{fmt.Sprintf("Visualization %s not found", id)}
+		} else {
+			context.GetLogger(ctx).WithField("error", err.Error()).Error("localStorage.getVisualization.failed")
+			return nil, err
+		}
+	}
+	return bytes, nil
+}
+
+func (storage *LocalStorage) DeleteVisualization(ctx goContext.Context, id string) error {
+	if err := storage.deleteObject(storage.visualizationFilename(id)); err != nil {
+		context.GetLogger(ctx).WithFields(log.Fields{
+			"invoiceId": id,
+			"error":     err.Error(),
+		}).Error("localStorage.deleteVisualization.failed")
+		return err
+	}
+
+	return nil
+}
+
 func (storage *LocalStorage) DeleteAll() error {
 	dir, err := os.ReadDir(storage.basePath)
 	if err != nil {

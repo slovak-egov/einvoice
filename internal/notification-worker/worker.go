@@ -2,7 +2,6 @@ package worker
 
 import (
 	goContext "context"
-	"io"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -69,7 +68,7 @@ func (w *Worker) checkInvoices() {
 
 	// send invoices notifications
 	for _, invoice := range invoices {
-		err := w.notifyInvoiceParties(ctx, invoice)
+		err := w.notifyInvoiceParties(ctx, &invoice)
 		if err == nil {
 			notifiedInvoiceIds = append(notifiedInvoiceIds, invoice.Id)
 		} else {
@@ -98,7 +97,7 @@ func (w *Worker) checkInvoices() {
 	}
 }
 
-func (w *Worker) notifyInvoiceParties(ctx goContext.Context, invoice entity.Invoice) error {
+func (w *Worker) notifyInvoiceParties(ctx goContext.Context, invoice *entity.Invoice) error {
 	uris, err := w.db.GetUserUris(ctx, []string{invoice.SupplierIco, invoice.CustomerIco})
 	if err != nil {
 		return err
@@ -109,33 +108,21 @@ func (w *Worker) notifyInvoiceParties(ctx goContext.Context, invoice entity.Invo
 		context.GetLogger(ctx).
 			WithFields(log.Fields{
 				"invoiceId": invoice.Id,
-				"error": err.Error(),
+				"error":     err.Error(),
 			}).
 			Error("worker.checkInvoices.notifyInvoiceParties.getXml.failed")
 
 		return err
 	}
 
-	invoiceZip, err := visualization.GenerateZip(invoiceXml)
+	invoiceZipBytes, err := visualization.GetOrCreateVisualization(ctx, invoice, w.storage, w.db)
 	if err != nil {
 		context.GetLogger(ctx).
 			WithFields(log.Fields{
 				"invoiceId": invoice.Id,
-				"error": err.Error(),
+				"error":     err.Error(),
 			}).
-			Error("worker.checkInvoices.notifyInvoiceParties.generatePdf.failed")
-
-		return err
-	}
-
-	invoiceZipBytes, err := io.ReadAll(invoiceZip)
-	if err != nil {
-		context.GetLogger(ctx).
-			WithFields(log.Fields{
-				"invoiceId": invoice.Id,
-				"error": err.Error(),
-			}).
-			Error("worker.checkInvoices.notifyInvoiceParties.createVisualization.failed")
+			Error("worker.checkInvoices.notifyInvoiceParties.getOrCreateVisualization.failed")
 
 		return err
 	}

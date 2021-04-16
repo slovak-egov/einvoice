@@ -32,6 +32,7 @@ func CreateInvoice(
 		CreatedBy:                user.Id,
 		IssueDate:                timeutil.Date{time.Date(2011, 9, 22, 0, 0, 0, 0, time.UTC)},
 		Test:                     false,
+		VisualizationCreated:     false,
 	}
 
 	for _, opt := range opts {

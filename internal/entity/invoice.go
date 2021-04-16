@@ -47,6 +47,7 @@ type Invoice struct {
 	CreatedBy                int           `json:"createdBy"` // User id of invoice creator
 	Test                     bool          `json:"test"`
 	NotificationsStatus      string        `json:"notificationsStatus"`
+	VisualizationCreated     bool          `json:"-"`
 }
 
 // Derive created at from id
