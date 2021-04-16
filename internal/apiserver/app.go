@@ -99,6 +99,7 @@ func (a *App) initializeHandlers() {
 	registerHandler(draftsRouter, "GET", "", a.getMyDrafts)
 	registerHandler(draftsRouter, "POST", "", a.createMyDraft)
 	registerHandler(draftsRouter, "GET", "/{id}", a.getMyDraft)
+	registerHandler(draftsRouter, "PATCH", "/{id}", a.updateMyDraft)
 	registerHandler(draftsRouter, "DELETE", "/{id}", a.deleteMyDraft)
 }
 

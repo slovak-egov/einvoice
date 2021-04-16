@@ -2,10 +2,13 @@ import {get} from 'lodash'
 
 export const FORM_PATH = ['createInvoiceScreen', 'form']
 export const FORM_TYPE_PATH = [...FORM_PATH, 'type']
+export const FORM_DRAFT_META_PATH = [...FORM_PATH, 'draftMeta']
 
 export const formTypeSelector = (state) => get(state, FORM_TYPE_PATH)
 
 export const formDataSelector = (state) => get(state, FORM_PATH)
+
+export const formDraftSelector = (state) => get(state, FORM_DRAFT_META_PATH)
 
 export const formFieldSelector = (path) => (state) => get(formDataSelector(state), path)
 

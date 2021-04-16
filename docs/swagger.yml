@@ -510,6 +510,43 @@ paths:
                   data:
                     type: object
                     description: Redux state of invoice form
+    patch:
+      tags:
+        - Drafts
+      security:
+        - sessionAuth: []
+      summary: Update draft
+      requestBody:
+        description: Draft of invoice form
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  nullable: true
+                data:
+                  type: object
+                  nullable: true
+                  properties:
+                    type:
+                      type: string
+                      enum:
+                        - invoice
+                        - creditNote
+                    data:
+                      type: object
+                      description: Redux state of invoice form
+      parameters:
+        - $ref: '#/components/parameters/DraftId'
+      responses:
+        '200':
+          description: Updated draft
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PatchedDraft'
     delete:
       tags:
         - Drafts
@@ -671,6 +708,29 @@ components:
           format: date-time
         data:
           type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - invoice
+                - creditNote
+            data:
+              type: object
+              description: Redux state of invoice form
+    PatchedDraft:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        data:
+          type: object
+          nullable: true
           properties:
             type:
               type: string

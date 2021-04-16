@@ -135,6 +135,10 @@
     "openDraft": {
       "title": "Otvoriť koncept",
       "text": "Pri otvorení tohto konceptu sa prepíšu súčasné údaje formulára"
+    },
+    "updateDraft": {
+      "title": "Upraviť koncept",
+      "text": "Naozaj chcete prepísať koncept faktúry \"{{name}}\"?"
     }
   },
   "errorMessages": {
@@ -159,6 +163,7 @@
     "getDraft": "Koncept {{id}} nebolo možné načítať",
     "deleteDraft": "Koncept faktúry sa nepodarilo vymazať",
     "createDraft": "Koncept faktúry sa nepodarilo vytvoriť",
+    "updateDraft": "Koncept faktúry sa nepodarilo upraviť",
     "unsupportedMimeType": "Pokúsili ste sa nahrať súbor nepodporovaného typu",
     "emptyField": "Toto políčko nemôže byť prázdne",
     "noneSelected": "Zvoľte aspoň jednu možnosť"
@@ -177,11 +182,13 @@
   "time": "Čas",
   "drafts": "Koncepty",
   "open": "Otvoriť",
-  "saveAsDraft": "Uložiť ako koncept",
+  "saveAsNewDraft": "Uložiť ako nový koncept",
+  "updateDraft": "Uložiť upravený koncept",
   "createDraft": "Vytvoriť koncept",
   "footer": [
     "Vytvorené v súlade s",
     "Jednotným dizajn manuálom elektronických služieb",
     "Prevádzkovateľom služby je Ministerstvo financií Slovenskej republiky."
-  ]
+  ],
+  "rename": "Premenovať"
 }

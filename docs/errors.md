@@ -56,5 +56,6 @@
 | invoice.test.rateLimit | 429 | Rate limit for creating test invoices reached | |
 | draft.notFound | 404 | Draft not found | |
 | draft.body.parsingError | 400 | Cannot parse data | Error message |
+| draft.body.empty | 400 | Missing draft data | |
 | draft.name.missing | 400 | Draft name cannot be not empty | |
 | draft.limit.reached | 429 | User reached maximal number of drafts | |

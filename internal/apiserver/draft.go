@@ -133,6 +133,66 @@ func (a *App) createMyDraft(res http.ResponseWriter, req *http.Request) error {
 	return nil
 }
 
+type PatchDraftRequest struct {
+	Name *string         `json:"name"`
+	Data json.RawMessage `json:"data,omitempty"`
+}
+
+func (a *App) updateMyDraft(res http.ResponseWriter, req *http.Request) error {
+	ctx := req.Context()
+
+	draftId := mux.Vars(req)["id"]
+
+	var requestBody PatchDraftRequest
+
+	decoder := json.NewDecoder(req.Body)
+	decoder.DisallowUnknownFields()
+
+	if err := decoder.Decode(&requestBody); err != nil {
+		return DraftError("body.parsingError").WithDetail(err)
+	}
+
+	if requestBody.Name == nil && requestBody.Data == nil {
+		return DraftError("body.empty")
+	}
+
+	draftName, err := a.cache.GetDraft(ctx, draftId)
+	if err != nil {
+		if _, ok := err.(*cache.NotFoundError); ok {
+			return handlerutil.NewNotFoundError("draft.notFound")
+		} else {
+			return err
+		}
+	}
+
+	if requestBody.Name != nil {
+		if *requestBody.Name == "" {
+			return DraftError("name.missing")
+		}
+		err := a.cache.SaveDraft(ctx, draftId, *requestBody.Name)
+		if err != nil {
+			return err
+		}
+		draftName = *requestBody.Name
+	}
+
+	draft := &entity.Draft{
+		Id:   draftId,
+		Name: draftName,
+	}
+	draft.CalculateCreatedAt()
+
+	if requestBody.Data != nil {
+		if err := a.storage.SaveDraft(ctx, draftId, requestBody.Data); err != nil {
+			return err
+		}
+		draft.Data = requestBody.Data
+	}
+
+	handlerutil.RespondWithJSON(res, http.StatusOK, draft)
+	return nil
+}
+
 func (a *App) deleteMyDraft(res http.ResponseWriter, req *http.Request) error {
 	draftId := mux.Vars(req)["id"]
 	err := a.deleteDraft(req.Context(), draftId)

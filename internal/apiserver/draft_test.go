@@ -164,6 +164,73 @@ func TestDraft(t *testing.T) {
 		assert.Equal(t, http.StatusNotFound, response.Code)
 	})
 
+	t.Run("Try to update unknown draft", func(t *testing.T) {
+		req, err := http.NewRequest("PATCH", "/drafts/"+ulid.New(time.Now()).String(), bytes.NewReader([]byte(`{"data": {}}`)))
+		if err != nil {
+			t.Error(err)
+		}
+
+		response := testutil.ExecuteAuthRequest(a, req, sessionToken)
+		assert.Equal(t, http.StatusNotFound, response.Code)
+	})
+
+	t.Run("Update draft name", func(t *testing.T) {
+		req, err := http.NewRequest("PATCH", "/drafts/"+createdDraft.Id, bytes.NewReader([]byte(`{"name":"d2"}`)))
+		if err != nil {
+			t.Error(err)
+		}
+
+		var draft entity.Draft
+		response := testutil.ExecuteAuthRequest(a, req, sessionToken)
+		assert.Equal(t, http.StatusOK, response.Code)
+
+		if err = json.Unmarshal(response.Body.Bytes(), &draft); err != nil {
+			t.Error(err)
+		}
+		assert.Equal(t, "d2", draft.Name)
+		assert.Nil(t, draft.Data)
+		assert.Equal(t, createdDraft.Id, draft.Id)
+	})
+
+	t.Run("Update draft data", func(t *testing.T) {
+		req, err := http.NewRequest("PATCH", "/drafts/"+createdDraft.Id, bytes.NewReader([]byte(`{"data": {"x":2}}`)))
+		if err != nil {
+			t.Error(err)
+		}
+
+		var draft entity.Draft
+		response := testutil.ExecuteAuthRequest(a, req, sessionToken)
+		assert.Equal(t, http.StatusOK, response.Code)
+
+		if err = json.Unmarshal(response.Body.Bytes(), &draft); err != nil {
+			t.Error(err)
+		}
+		assert.Equal(t, "d2", draft.Name)
+		assert.Equal(t, `{"x":2}`, string(draft.Data))
+		assert.Equal(t, createdDraft.Id, draft.Id)
+	})
+
+	t.Run("Try update draft with empty body", func(t *testing.T) {
+		req, err := http.NewRequest("PATCH", "/drafts/"+createdDraft.Id, bytes.NewReader([]byte(`{}`)))
+		if err != nil {
+			t.Error(err)
+		}
+
+		response := testutil.ExecuteAuthRequest(a, req, sessionToken)
+		assert.Equal(t, http.StatusBadRequest, response.Code)
+	})
+
+	t.Run("Get updated draft content", func(t *testing.T) {
+		req, err := http.NewRequest("GET", "/drafts/"+createdDraft.Id, nil)
+		if err != nil {
+			t.Error(err)
+		}
+
+		response := testutil.ExecuteAuthRequest(a, req, sessionToken)
+		assert.Equal(t, http.StatusOK, response.Code)
+		assert.Equal(t, `{"x":2}`, string(response.Body.Bytes()))
+	})
+
 	t.Run("Delete draft", func(t *testing.T) {
 		req, err := http.NewRequest("DELETE", "/drafts/"+createdDraft.Id, nil)
 		if err != nil {

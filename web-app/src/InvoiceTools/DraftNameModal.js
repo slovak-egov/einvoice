@@ -1,16 +1,16 @@
 import {useState} from 'react'
 import {Modal} from 'react-bootstrap'
 import {useTranslation} from 'react-i18next'
-import {Button, Input} from '../../helpers/idsk'
+import {Button, Input} from '../helpers/idsk'
 
-export default ({cancel, confirm}) => {
+export default ({title, cancel, confirm, initName}) => {
   const {t} = useTranslation('common')
-  const [name, setName] = useState('')
+  const [name, setName] = useState(initName || '')
   const isNameInvalid = name === ''
   return (
     <Modal show centered>
       <Modal.Header className="d-flex">
-        <Modal.Title className="m-auto">{t('createDraft')}</Modal.Title>
+        <Modal.Title className="m-auto">{title}</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
