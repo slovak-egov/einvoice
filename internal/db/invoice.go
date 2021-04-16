@@ -177,7 +177,10 @@ func (c *Connector) GetInvoice(ctx goContext.Context, id string) (*entity.Invoic
 	if errors.Is(err, pg.ErrNoRows) {
 		return nil, &dbutil.NotFoundError{fmt.Sprintf("Invoice %s not found", id)}
 	} else if err != nil {
-		context.GetLogger(ctx).WithField("error", err.Error()).Error("db.getInvoice.failed")
+		context.GetLogger(ctx).WithFields(log.Fields{
+			"error":     err.Error(),
+			"invoiceId": id,
+		}).Error("db.getInvoice.failed")
 		return nil, err
 	}
 
@@ -226,4 +229,22 @@ func (c *Connector) DeleteOldTestInvoices(ctx goContext.Context, expiration time
 	}
 
 	return invoiceIds, nil
+}
+
+func (c *Connector) UpdateVisualizationCreatedStatus(ctx goContext.Context, invoiceId string, status bool) error {
+	query := c.GetDb(ctx).
+		Model(&entity.Invoice{}).
+		Set("visualization_created = ?", status).
+		Where("id = ?", invoiceId)
+
+	if _, err := query.Update(); err != nil {
+		context.GetLogger(ctx).WithFields(log.Fields{
+			"error":     err.Error(),
+			"invoiceId": invoiceId,
+			"status":    status,
+		}).Error("db.updateVisualizationCreatedStatus.failed")
+		return err
+	}
+
+	return nil
 }

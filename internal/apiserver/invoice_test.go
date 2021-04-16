@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"testing"
 	"time"
 
@@ -167,6 +168,68 @@ func TestGetInvoice(t *testing.T) {
 	json.Unmarshal(response.Body.Bytes(), &parsedResponse)
 
 	assert.Equal(t, ids[0], parsedResponse.Id)
+
+	// Try to get nonexistent invoice
+	req, err = http.NewRequest("GET", fmt.Sprintf("/invoices/%s", ids[1]), nil)
+	if err != nil {
+		t.Error(err)
+	}
+	response = testutil.ExecuteRequest(a, req)
+
+	assert.Equal(t, http.StatusNotFound, response.Code)
+}
+
+func TestGetInvoiceVisualization(t *testing.T) {
+	t.Cleanup(testutil.CleanDb(ctx, t, a.db.Connector))
+	t.Cleanup(testutil.CleanStorage(t, a.storage))
+
+	ids := []string{"01776d7e-4661-138a-26e3-437102097b13", "01776d7e-4661-138a-26e3-437102097b14"}
+
+	invoiceXml, err := os.ReadFile("../../data/examples/ubl2.1/invoice.xml")
+	if err != nil {
+		t.Error(err)
+	}
+	err = a.storage.SaveInvoice(ctx, ids[0], invoiceXml)
+	if err != nil {
+		t.Error(err)
+	}
+
+	testutil.CreateInvoice(ctx, t, a.db.Connector, ids[0])
+
+	// Create visualization
+	req, err := http.NewRequest("GET", fmt.Sprintf("/invoices/%s/visualization", ids[0]), nil)
+	if err != nil {
+		t.Error(err)
+	}
+	response := testutil.ExecuteRequest(a, req)
+	assert.Equal(t, http.StatusOK, response.Code)
+
+	savedXml, err := a.storage.GetVisualization(ctx, ids[0])
+	if err != nil {
+		t.Error(err)
+	}
+	assert.Equal(t, response.Body.Bytes(), savedXml)
+
+	// Override invoice xml
+	invoiceXml, err = os.ReadFile("../../data/examples/ubl2.1/creditNote.xml")
+	if err != nil {
+		t.Error(err)
+	}
+	err = a.storage.SaveInvoice(ctx, ids[0], invoiceXml)
+	if err != nil {
+		t.Error(err)
+	}
+
+	// Get saved visualization
+	req, err = http.NewRequest("GET", fmt.Sprintf("/invoices/%s/visualization", ids[0]), nil)
+	if err != nil {
+		t.Error(err)
+	}
+	response = testutil.ExecuteRequest(a, req)
+	assert.Equal(t, http.StatusOK, response.Code)
+
+	// Compare with previous visualization
+	assert.Equal(t, response.Body.Bytes(), savedXml)
 
 	// Try to get nonexistent invoice
 	req, err = http.NewRequest("GET", fmt.Sprintf("/invoices/%s", ids[1]), nil)

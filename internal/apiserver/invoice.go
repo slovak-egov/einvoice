@@ -3,7 +3,6 @@ package apiserver
 import (
 	goContext "context"
 	"fmt"
-	"io"
 	"net/http"
 	"net/url"
 
@@ -180,17 +179,12 @@ func (a *App) getInvoiceVisualization(res http.ResponseWriter, req *http.Request
 	id := mux.Vars(req)["id"]
 
 	// DB is source of truth, so we have to check if invoice exists in DB
-	_, err := a.getInvoiceFromDb(req.Context(), id)
+	invoice, err := a.getInvoiceFromDb(req.Context(), id)
 	if err != nil {
 		return err
 	}
 
-	invoiceFile, err := a.getInvoiceFromStorage(req.Context(), id)
-	if err != nil {
-		return err
-	}
-
-	data, err := visualization.GenerateZip(invoiceFile)
+	data, err := visualization.GetOrCreateVisualization(req.Context(), invoice, a.storage, a.db)
 	if err != nil {
 		return err
 	}
@@ -198,7 +192,7 @@ func (a *App) getInvoiceVisualization(res http.ResponseWriter, req *http.Request
 	res.Header().Set("Content-Type", "application/zip")
 	res.Header().Set("Content-Disposition", "attachment; filename=invoice:"+id+".zip")
 	res.WriteHeader(http.StatusOK)
-	_, err = io.Copy(res, data)
+	_, err = res.Write(data)
 	return err
 }
 
