@@ -6,6 +6,7 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	"github.com/slovak-egov/einvoice/internal/upvs"
+	"github.com/slovak-egov/einvoice/internal/visualization"
 	"github.com/slovak-egov/einvoice/pkg/dbutil"
 	"github.com/slovak-egov/einvoice/pkg/environment"
 	"github.com/slovak-egov/einvoice/pkg/loggerutil"
@@ -19,6 +20,7 @@ type Configuration struct {
 	Logger                loggerutil.Configuration
 	Upvs                  upvs.Configuration
 	NotificationSenderUri string
+	Visualization         visualization.Configuration
 }
 
 func New() *Configuration {
@@ -45,6 +47,7 @@ func New() *Configuration {
 	config.LocalStorageBasePath = environment.Getenv("LOCAL_STORAGE_BASE_PATH", config.LocalStorageBasePath)
 	config.Upvs = upvs.NewConfig(config.Upvs)
 	config.NotificationSenderUri = environment.Getenv("NOTIFICATION_SENDER_URI", config.NotificationSenderUri)
+	config.Visualization = visualization.NewConfig(config.Visualization)
 
 	return &config
 }

@@ -3,8 +3,6 @@ package apiserver
 import (
 	"io"
 	"net/http"
-
-	"github.com/slovak-egov/einvoice/internal/apiserver/visualization"
 )
 
 func (a *App) createVisualization(res http.ResponseWriter, req *http.Request) error {
@@ -13,7 +11,7 @@ func (a *App) createVisualization(res http.ResponseWriter, req *http.Request) er
 		return err
 	}
 
-	data, err := visualization.GenerateZip(invoice)
+	data, err := a.visualizer.GenerateZip(invoice)
 	if err != nil {
 		return err
 	}

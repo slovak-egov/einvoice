@@ -20,5 +20,6 @@ FROM alpine:3.13
 RUN apk add --no-cache ca-certificates
 
 COPY --from=build_base /tmp/out/notification-worker /worker/notification-worker
+COPY --from=build_base /tmp/einvoice/data/fonts /app/data/fonts
 
 CMD ["/worker/notification-worker"]

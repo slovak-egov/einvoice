@@ -6,6 +6,7 @@ import (
 	"github.com/sirupsen/logrus"
 
 	"github.com/slovak-egov/einvoice/internal/upvs"
+	"github.com/slovak-egov/einvoice/internal/visualization"
 	"github.com/slovak-egov/einvoice/pkg/dbutil"
 	"github.com/slovak-egov/einvoice/pkg/loggerutil"
 )
@@ -27,6 +28,9 @@ var devConfig = Configuration{
 		Url:        "https://dev.upvs.einvoice.mfsr.sk",
 		SsoSubject: "einvoice",
 	},
+	Visualization: visualization.Configuration{
+		FontsDirectory: "data/fonts",
+	},
 }
 
 var prodConfig = Configuration{
@@ -46,6 +50,9 @@ var prodConfig = Configuration{
 		Url:        "https://dev.upvs.einvoice.mfsr.sk",
 		SsoSubject: "einvoice",
 	},
+	Visualization: visualization.Configuration{
+		FontsDirectory: "app/data/fonts",
+	},
 }
 
 var testConfig = Configuration{
@@ -60,5 +67,8 @@ var testConfig = Configuration{
 	Logger: loggerutil.Configuration{
 		LogLevel: logrus.ErrorLevel,
 		Format:   "text",
+	},
+	Visualization: visualization.Configuration{
+		FontsDirectory: "../../data/fonts",
 	},
 }
