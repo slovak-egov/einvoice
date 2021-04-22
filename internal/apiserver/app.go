@@ -15,6 +15,7 @@ import (
 	"github.com/slovak-egov/einvoice/internal/db"
 	"github.com/slovak-egov/einvoice/internal/storage"
 	"github.com/slovak-egov/einvoice/internal/upvs"
+	"github.com/slovak-egov/einvoice/internal/visualization"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
@@ -33,20 +34,25 @@ type App struct {
 	cache          *cache.Cache
 	upvs           *upvs.Connector
 	rulesValidator rulesValidator.Validator
+	visualizer     *visualization.Visualizer
 }
 
 func NewApp() *App {
 	appConfig := config.New()
 
+	dbConnector := db.NewConnector(appConfig.Db)
+	storageConnector := storage.New(appConfig.LocalStorageBasePath)
+
 	a := &App{
 		config:         appConfig,
 		router:         mux.NewRouter(),
-		db:             db.NewConnector(appConfig.Db),
-		storage:        storage.New(appConfig.LocalStorageBasePath),
+		db:             dbConnector,
+		storage:        storageConnector,
 		xsdValidator:   xsdValidator.New(appConfig.Ubl21XsdPath, appConfig.D16bXsdPath),
 		cache:          cache.NewRedis(appConfig.Cache),
 		upvs:           upvs.New(appConfig.Upvs),
 		rulesValidator: rulesValidator.New(appConfig.ValidationServerUrl),
+		visualizer:     visualization.NewVisualizer(appConfig.Visualization, storageConnector, dbConnector),
 	}
 
 	a.initializeHandlers()

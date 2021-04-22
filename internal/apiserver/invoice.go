@@ -8,7 +8,6 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"github.com/slovak-egov/einvoice/internal/apiserver/visualization"
 	"github.com/slovak-egov/einvoice/internal/db"
 	"github.com/slovak-egov/einvoice/internal/entity"
 	"github.com/slovak-egov/einvoice/internal/storage"
@@ -184,7 +183,7 @@ func (a *App) getInvoiceVisualization(res http.ResponseWriter, req *http.Request
 		return err
 	}
 
-	data, err := visualization.GetOrCreateVisualization(req.Context(), invoice, a.storage, a.db)
+	data, err := a.visualizer.GetOrCreateVisualization(req.Context(), invoice)
 	if err != nil {
 		return err
 	}

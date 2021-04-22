@@ -7,6 +7,7 @@ import (
 
 	"github.com/slovak-egov/einvoice/internal/cache"
 	"github.com/slovak-egov/einvoice/internal/upvs"
+	"github.com/slovak-egov/einvoice/internal/visualization"
 	"github.com/slovak-egov/einvoice/pkg/dbutil"
 	"github.com/slovak-egov/einvoice/pkg/environment"
 	"github.com/slovak-egov/einvoice/pkg/loggerutil"
@@ -37,6 +38,7 @@ type Configuration struct {
 	MaxInvoiceSize       int64
 	DraftExpiration      time.Duration
 	DraftsLimit          int
+	Visualization        visualization.Configuration
 }
 
 func New() *Configuration {
@@ -60,6 +62,7 @@ func New() *Configuration {
 	config.Db = dbutil.NewConfig(config.Db)
 	config.Cache = cache.NewConfig(config.Cache)
 	config.Upvs = upvs.NewConfig(config.Upvs)
+	config.Visualization = visualization.NewConfig(config.Visualization)
 
 	config.Host = environment.Getenv("HOST", config.Host)
 	config.Port = environment.ParseInt("PORT", config.Port)

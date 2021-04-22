@@ -6,29 +6,35 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/slovak-egov/einvoice/internal/apiserver/visualization"
 	"github.com/slovak-egov/einvoice/internal/db"
 	"github.com/slovak-egov/einvoice/internal/entity"
 	"github.com/slovak-egov/einvoice/internal/notification-worker/config"
 	"github.com/slovak-egov/einvoice/internal/storage"
 	"github.com/slovak-egov/einvoice/internal/upvs"
+	"github.com/slovak-egov/einvoice/internal/visualization"
 	"github.com/slovak-egov/einvoice/pkg/context"
 )
 
 type Worker struct {
-	config  *config.Configuration
-	db      *db.Connector
-	storage *storage.LocalStorage
-	upvs    *upvs.Connector
+	config     *config.Configuration
+	db         *db.Connector
+	storage    *storage.LocalStorage
+	upvs       *upvs.Connector
+	visualizer *visualization.Visualizer
 }
 
 func New() *Worker {
 	workerConfig := config.New()
+
+	dbConnector := db.NewConnector(workerConfig.Db)
+	storageConnector := storage.New(workerConfig.LocalStorageBasePath)
+
 	return &Worker{
-		config:  workerConfig,
-		db:      db.NewConnector(workerConfig.Db),
-		storage: storage.New(workerConfig.LocalStorageBasePath),
-		upvs:    upvs.New(workerConfig.Upvs),
+		config:     workerConfig,
+		db:         dbConnector,
+		storage:    storageConnector,
+		upvs:       upvs.New(workerConfig.Upvs),
+		visualizer: visualization.NewVisualizer(workerConfig.Visualization, storageConnector, dbConnector),
 	}
 }
 
@@ -115,7 +121,7 @@ func (w *Worker) notifyInvoiceParties(ctx goContext.Context, invoice *entity.Inv
 		return err
 	}
 
-	invoiceZipBytes, err := visualization.GetOrCreateVisualization(ctx, invoice, w.storage, w.db)
+	invoiceZipBytes, err := w.visualizer.GetOrCreateVisualization(ctx, invoice)
 	if err != nil {
 		context.GetLogger(ctx).
 			WithFields(log.Fields{

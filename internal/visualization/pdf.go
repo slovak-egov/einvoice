@@ -12,7 +12,7 @@ import (
 const (
 	lineHeight = 5
 	tabSize    = 4
-	font       = "Arial"
+	font       = "dejavu"
 )
 
 var pageHeight float64
@@ -82,9 +82,15 @@ func generateLines(currentNode types.Node, level int, pdf *gofpdf.Fpdf) error {
 	return nil
 }
 
-func GeneratePdf(xml types.Document) (*gofpdf.Fpdf, error) {
+func (v *Visualizer) generatePdf(xml types.Document) (*gofpdf.Fpdf, error) {
 
-	pdf := gofpdf.New("P", "mm", "A4", "")
+	pdf := gofpdf.New("P", "mm", "A4", v.fontsDir)
+
+	pdf.AddUTF8Font(font, "", "DejaVuSansCondensed.ttf")
+	pdf.AddUTF8Font(font, "B", "DejaVuSansCondensed-Bold.ttf")
+	pdf.AddUTF8Font(font, "I", "DejaVuSansCondensed-Oblique.ttf")
+	pdf.AddUTF8Font(font, "BI", "DejaVuSansCondensed-BoldOblique.ttf")
+
 	pdf.SetFont(font, "", lineHeight)
 	pdf.SetFontUnitSize(lineHeight)
 	_, pageHeight = pdf.GetPageSize()

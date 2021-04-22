@@ -7,6 +7,7 @@ import (
 
 	"github.com/slovak-egov/einvoice/internal/cache"
 	"github.com/slovak-egov/einvoice/internal/upvs"
+	"github.com/slovak-egov/einvoice/internal/visualization"
 	"github.com/slovak-egov/einvoice/pkg/dbutil"
 	"github.com/slovak-egov/einvoice/pkg/loggerutil"
 )
@@ -48,6 +49,9 @@ var devConfig = Configuration{
 	MaxInvoiceSize:  1 << 23,
 	DraftExpiration: 24 * time.Hour,
 	DraftsLimit:     10,
+	Visualization: visualization.Configuration{
+		FontsDirectory: "data/fonts",
+	},
 }
 
 var prodConfig = Configuration{
@@ -86,6 +90,9 @@ var prodConfig = Configuration{
 	MaxInvoiceSize:       1 << 23,
 	DraftExpiration:      7 * 24 * time.Hour,
 	DraftsLimit:          10,
+	Visualization: visualization.Configuration{
+		FontsDirectory: "app/data/fonts",
+	},
 }
 
 var testConfig = Configuration{
@@ -119,4 +126,7 @@ var testConfig = Configuration{
 	MaxInvoiceSize:  1 << 23,
 	DraftExpiration: 1 * time.Hour,
 	DraftsLimit:     2,
+	Visualization: visualization.Configuration{
+		FontsDirectory: "../../data/fonts",
+	},
 }

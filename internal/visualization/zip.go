@@ -12,7 +12,7 @@ import (
 	"github.com/lestrrat-go/libxml2/types"
 )
 
-func GenerateZip(invoiceBytes []byte) (io.Reader, error) {
+func (v *Visualizer) GenerateZip(invoiceBytes []byte) (io.Reader, error) {
 	xml, err := libxml2.Parse(invoiceBytes)
 	if err != nil {
 		return nil, err
@@ -23,7 +23,7 @@ func GenerateZip(invoiceBytes []byte) (io.Reader, error) {
 	defer w.Close()
 
 	// create pdf
-	pdf, err := GeneratePdf(xml)
+	pdf, err := v.generatePdf(xml)
 	if err != nil {
 		return nil, err
 	}
