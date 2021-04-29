@@ -7,19 +7,22 @@ import (
 	"github.com/slovak-egov/einvoice/internal/db"
 	"github.com/slovak-egov/einvoice/internal/entity"
 	"github.com/slovak-egov/einvoice/internal/storage"
+	"github.com/slovak-egov/einvoice/internal/xsdValidator"
 )
 
 type Visualizer struct {
-	fontsDir string
-	storage  *storage.LocalStorage
-	db       *db.Connector
+	fontsDir  string
+	storage   *storage.LocalStorage
+	db        *db.Connector
+	validator *xsdValidator.XsdValidator
 }
 
-func NewVisualizer(config Configuration, storage *storage.LocalStorage, db *db.Connector) *Visualizer {
+func New(config Configuration, storage *storage.LocalStorage, db *db.Connector, validator *xsdValidator.XsdValidator) *Visualizer {
 	return &Visualizer{
-		fontsDir: config.FontsDirectory,
-		storage:  storage,
-		db:       db,
+		fontsDir:  config.FontsDirectory,
+		storage:   storage,
+		db:        db,
+		validator: validator,
 	}
 }
 

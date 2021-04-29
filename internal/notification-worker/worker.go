@@ -12,6 +12,7 @@ import (
 	"github.com/slovak-egov/einvoice/internal/storage"
 	"github.com/slovak-egov/einvoice/internal/upvs"
 	"github.com/slovak-egov/einvoice/internal/visualization"
+	"github.com/slovak-egov/einvoice/internal/xsdValidator"
 	"github.com/slovak-egov/einvoice/pkg/context"
 )
 
@@ -28,13 +29,14 @@ func New() *Worker {
 
 	dbConnector := db.NewConnector(workerConfig.Db)
 	storageConnector := storage.New(workerConfig.LocalStorageBasePath)
+	validator := xsdValidator.New(workerConfig.XsdPath)
 
 	return &Worker{
 		config:     workerConfig,
 		db:         dbConnector,
 		storage:    storageConnector,
 		upvs:       upvs.New(workerConfig.Upvs),
-		visualizer: visualization.NewVisualizer(workerConfig.Visualization, storageConnector, dbConnector),
+		visualizer: visualization.New(workerConfig.Visualization, storageConnector, dbConnector, validator),
 	}
 }
 

@@ -28,9 +28,11 @@
         "korektná D16B faktúra",
         "D16B faktúra porušujúca sémantické pravidlá",
         "korektná UBL2.1 faktúra",
+        "korektná jednoduchá UBL2.1 faktúra",
         "UBL2.1 faktúra porušujúca sémantické pravidlá",
         "UBL2.1 faktúra porušujúca syntaktické pravidlá",
-        "korektný UBL2.1 dobropis"
+        "korektný UBL2.1 dobropis",
+        "korektný jednoduchý UBL2.1 dobropis"
       ],
       "user": "Používateľ",
       "password": "Heslo"

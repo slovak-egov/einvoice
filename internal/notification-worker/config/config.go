@@ -21,6 +21,7 @@ type Configuration struct {
 	Upvs                  upvs.Configuration
 	NotificationSenderUri string
 	Visualization         visualization.Configuration
+	XsdPath               string
 }
 
 func New() *Configuration {
@@ -48,6 +49,7 @@ func New() *Configuration {
 	config.Upvs = upvs.NewConfig(config.Upvs)
 	config.NotificationSenderUri = environment.Getenv("NOTIFICATION_SENDER_URI", config.NotificationSenderUri)
 	config.Visualization = visualization.NewConfig(config.Visualization)
+	config.XsdPath = environment.Getenv("XSD_PATH", config.XsdPath)
 
 	return &config
 }

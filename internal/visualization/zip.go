@@ -7,9 +7,12 @@ import (
 	"io"
 	"strings"
 
+	"github.com/jung-kurt/gofpdf"
 	"github.com/lestrrat-go/libxml2"
 	"github.com/lestrrat-go/libxml2/clib"
 	"github.com/lestrrat-go/libxml2/types"
+
+	"github.com/slovak-egov/einvoice/internal/entity"
 )
 
 func (v *Visualizer) GenerateZip(invoiceBytes []byte) (io.Reader, error) {
@@ -23,7 +26,17 @@ func (v *Visualizer) GenerateZip(invoiceBytes []byte) (io.Reader, error) {
 	defer w.Close()
 
 	// create pdf
-	pdf, err := v.generatePdf(xml)
+	format, invoiceType, err := v.validator.GetFormatAndType(invoiceBytes)
+	if err != nil {
+		return nil, err
+	}
+
+	var pdf gofpdf.Pdf
+	if format == entity.UblFormat && v.validator.IsSimple(xml, invoiceType) {
+		pdf, err = v.generateSimplePdf(invoiceBytes)
+	} else {
+		pdf, err = v.generateRawPdf(xml)
+	}
 	if err != nil {
 		return nil, err
 	}

@@ -10,12 +10,12 @@ import (
 
 	"github.com/slovak-egov/einvoice/internal/apiserver/config"
 	"github.com/slovak-egov/einvoice/internal/apiserver/rulesValidator"
-	"github.com/slovak-egov/einvoice/internal/apiserver/xsdValidator"
 	"github.com/slovak-egov/einvoice/internal/cache"
 	"github.com/slovak-egov/einvoice/internal/db"
 	"github.com/slovak-egov/einvoice/internal/storage"
 	"github.com/slovak-egov/einvoice/internal/upvs"
 	"github.com/slovak-egov/einvoice/internal/visualization"
+	"github.com/slovak-egov/einvoice/internal/xsdValidator"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
@@ -42,17 +42,18 @@ func NewApp() *App {
 
 	dbConnector := db.NewConnector(appConfig.Db)
 	storageConnector := storage.New(appConfig.LocalStorageBasePath)
+	validator := xsdValidator.New(appConfig.XsdPath)
 
 	a := &App{
 		config:         appConfig,
 		router:         mux.NewRouter(),
 		db:             dbConnector,
 		storage:        storageConnector,
-		xsdValidator:   xsdValidator.New(appConfig.Ubl21XsdPath, appConfig.D16bXsdPath),
+		xsdValidator:   xsdValidator.New(appConfig.XsdPath),
 		cache:          cache.NewRedis(appConfig.Cache),
 		upvs:           upvs.New(appConfig.Upvs),
 		rulesValidator: rulesValidator.New(appConfig.ValidationServerUrl),
-		visualizer:     visualization.NewVisualizer(appConfig.Visualization, storageConnector, dbConnector),
+		visualizer:     visualization.New(appConfig.Visualization, storageConnector, dbConnector, validator),
 	}
 
 	a.initializeHandlers()

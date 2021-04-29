@@ -2,6 +2,7 @@ package metadataExtractor
 
 import (
 	"encoding/xml"
+
 	"github.com/slovak-egov/einvoice/internal/entity"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 	"github.com/slovak-egov/einvoice/pkg/timeutil"
@@ -19,7 +20,7 @@ func ParseInvoice(invoice []byte, format string) (*entity.Invoice, error) {
 }
 
 func parseUblInvoice(rawInvoice []byte) (*entity.Invoice, error) {
-	invoice := &ublInvoice{}
+	invoice := &UblInvoice{}
 	err := xml.Unmarshal(rawInvoice, &invoice)
 	if err != nil {
 		return nil, err
@@ -32,10 +33,10 @@ func parseUblInvoice(rawInvoice []byte) (*entity.Invoice, error) {
 
 	return &entity.Invoice{
 		Format:                   entity.UblFormat,
-		Sender:                   invoice.AccountingSupplierParty.Party.PartyName.Name,
+		Sender:                   invoice.AccountingSupplierParty.Party.PartyLegalEntity.RegistrationName,
 		SupplierIco:              invoice.AccountingSupplierParty.Party.PartyIdentification.ID,
 		SupplierCountry:          invoice.AccountingSupplierParty.Party.PostalAddress.Country.IdentificationCode,
-		Receiver:                 invoice.AccountingCustomerParty.Party.PartyName.Name,
+		Receiver:                 invoice.AccountingCustomerParty.Party.PartyLegalEntity.RegistrationName,
 		CustomerIco:              invoice.AccountingCustomerParty.Party.PartyIdentification.ID,
 		CustomerCountry:          invoice.AccountingCustomerParty.Party.PostalAddress.Country.IdentificationCode,
 		Amount:                   invoice.LegalMonetaryTotal.TaxInclusiveAmount.Value,

@@ -28,9 +28,11 @@
         "valid D16B invoice",
         "D16B invoice violating semantic rules",
         "valid UBL2.1 invoice",
+        "valid simple UBL2.1 invoice",
         "UBL2.1 invoice violating semantic rules",
         "UBL2.1 invoice violating syntactic rules",
-        "valid UBL2.1 credit note"
+        "valid UBL2.1 credit note",
+        "valid simple UBL2.1 credit note"
       ],
       "user": "User",
       "password": "Password"
