@@ -9,7 +9,7 @@ const format = process.env.INVOICE_FORMAT || 'ubl2.1';
   const res = await fetch(`http://${host}:${port}?format=${format}`, {
     headers: {"Content-Type": "application/xml"},
     method: 'POST',
-    body: await fs.readFile('../data/examples/ubl2.1/invoice-rules-violation.xml', 'utf-8'),
+    body: await fs.readFile('../data/examples/ubl2.1-simple/invoice.xml', 'utf-8'),
   })
   console.log(res.status)
   console.log(await res.json())

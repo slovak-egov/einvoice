@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Library:           OASIS Universal Business Language (UBL) 2.1 OS
+                     http://docs.oasis-open.org/ubl/os-UBL-2.1/
+  Release Date:      04 November 2013
+  Module:            xsd/maindoc/UBL-Invoice-2.1.xsd
+  Generated on:      2013-10-31 17:17z
+  Copyright (c) OASIS Open 2013. All Rights Reserved.
+-->
+<xsd:schema xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ccts="urn:un:unece:uncefact:documentation:2" targetNamespace="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.1">
+   <!-- ===== Imports ===== -->
+   <xsd:import namespace="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" schemaLocation="../common/UBL-CommonAggregateComponents-2.1.xsd"/>
+   <xsd:import namespace="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" schemaLocation="../common/UBL-CommonBasicComponents-2.1.xsd"/>
+   <xsd:import namespace="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2" schemaLocation="../common/UBL-CommonExtensionComponents-2.1.xsd"/>
+   <!-- ===== Element Declarations ===== -->
+   <xsd:element name="Invoice" type="InvoiceType">
+      <xsd:annotation>
+         <xsd:documentation>This element MUST be conveyed as the root element in any instance document based on this Schema expression</xsd:documentation>
+      </xsd:annotation>
+   </xsd:element>
+   <!-- ===== Type Definitions ===== -->
+   <!-- ===== Aggregate Business Information Entity Type Definitions ===== -->
+   <xsd:complexType name="InvoiceType">
+      <xsd:annotation>
+         <xsd:documentation>
+            <ccts:Component>
+               <ccts:ComponentType>ABIE</ccts:ComponentType>
+               <ccts:DictionaryEntryName>Invoice. Details</ccts:DictionaryEntryName>
+               <ccts:Definition>A document used to request payment.</ccts:Definition>
+               <ccts:ObjectClass>Invoice</ccts:ObjectClass>
+            </ccts:Component>
+         </xsd:documentation>
+      </xsd:annotation>
+      <xsd:sequence>
+         <xsd:element ref="cbc:CustomizationID" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>BBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Invoice. Customization Identifier. Identifier</ccts:DictionaryEntryName>
+                     <ccts:Definition>Identifies a user-defined customization of UBL for a specific use.</ccts:Definition>
+                     <ccts:Cardinality>0..1</ccts:Cardinality>
+                     <ccts:ObjectClass>Invoice</ccts:ObjectClass>
+                     <ccts:PropertyTerm>Customization Identifier</ccts:PropertyTerm>
+                     <ccts:RepresentationTerm>Identifier</ccts:RepresentationTerm>
+                     <ccts:DataType>Identifier. Type</ccts:DataType>
+                     <ccts:Examples>NES</ccts:Examples>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cbc:ID" minOccurs="1" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>BBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Invoice. Identifier</ccts:DictionaryEntryName>
+                     <ccts:Definition>An identifier for this document, assigned by the sender.</ccts:Definition>
+                     <ccts:Cardinality>1</ccts:Cardinality>
+                     <ccts:ObjectClass>Invoice</ccts:ObjectClass>
+                     <ccts:PropertyTerm>Identifier</ccts:PropertyTerm>
+                     <ccts:RepresentationTerm>Identifier</ccts:RepresentationTerm>
+                     <ccts:DataType>Identifier. Type</ccts:DataType>
+                     <ccts:AlternativeBusinessTerms>Invoice Number</ccts:AlternativeBusinessTerms>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cbc:IssueDate" minOccurs="1" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>BBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Invoice. Issue Date. Date</ccts:DictionaryEntryName>
+                     <ccts:Definition>The date, assigned by the sender, on which this document was issued.</ccts:Definition>
+                     <ccts:Cardinality>1</ccts:Cardinality>
+                     <ccts:ObjectClass>Invoice</ccts:ObjectClass>
+                     <ccts:PropertyTerm>Issue Date</ccts:PropertyTerm>
+                     <ccts:RepresentationTerm>Date</ccts:RepresentationTerm>
+                     <ccts:DataType>Date. Type</ccts:DataType>
+                     <ccts:AlternativeBusinessTerms>Invoice Date</ccts:AlternativeBusinessTerms>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cbc:InvoiceTypeCode" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>BBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Invoice. Invoice Type Code. Code</ccts:DictionaryEntryName>
+                     <ccts:Definition>A code signifying the type of the Invoice.</ccts:Definition>
+                     <ccts:Cardinality>0..1</ccts:Cardinality>
+                     <ccts:ObjectClass>Invoice</ccts:ObjectClass>
+                     <ccts:PropertyTerm>Invoice Type Code</ccts:PropertyTerm>
+                     <ccts:RepresentationTerm>Code</ccts:RepresentationTerm>
+                     <ccts:DataType>Code. Type</ccts:DataType>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cbc:DocumentCurrencyCode" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>BBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Invoice. Document_ Currency Code. Code</ccts:DictionaryEntryName>
+                     <ccts:Definition>A code signifying the default currency for this document.</ccts:Definition>
+                     <ccts:Cardinality>0..1</ccts:Cardinality>
+                     <ccts:ObjectClass>Invoice</ccts:ObjectClass>
+                     <ccts:PropertyTermQualifier>Document</ccts:PropertyTermQualifier>
+                     <ccts:PropertyTerm>Currency Code</ccts:PropertyTerm>
+                     <ccts:RepresentationTerm>Code</ccts:RepresentationTerm>
+                     <ccts:DataTypeQualifier>Currency</ccts:DataTypeQualifier>
+                     <ccts:DataType>Currency_ Code. Type</ccts:DataType>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cac:AccountingSupplierParty" minOccurs="1" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Invoice. Accounting_ Supplier Party. Supplier Party</ccts:DictionaryEntryName>
+                     <ccts:Definition>The accounting supplier party.</ccts:Definition>
+                     <ccts:Cardinality>1</ccts:Cardinality>
+                     <ccts:ObjectClass>Invoice</ccts:ObjectClass>
+                     <ccts:PropertyTermQualifier>Accounting</ccts:PropertyTermQualifier>
+                     <ccts:PropertyTerm>Supplier Party</ccts:PropertyTerm>
+                     <ccts:AssociatedObjectClass>Supplier Party</ccts:AssociatedObjectClass>
+                     <ccts:RepresentationTerm>Supplier Party</ccts:RepresentationTerm>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cac:AccountingCustomerParty" minOccurs="1" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Invoice. Accounting_ Customer Party. Customer Party</ccts:DictionaryEntryName>
+                     <ccts:Definition>The accounting customer party.</ccts:Definition>
+                     <ccts:Cardinality>1</ccts:Cardinality>
+                     <ccts:ObjectClass>Invoice</ccts:ObjectClass>
+                     <ccts:PropertyTermQualifier>Accounting</ccts:PropertyTermQualifier>
+                     <ccts:PropertyTerm>Customer Party</ccts:PropertyTerm>
+                     <ccts:AssociatedObjectClass>Customer Party</ccts:AssociatedObjectClass>
+                     <ccts:RepresentationTerm>Customer Party</ccts:RepresentationTerm>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cac:PaymentTerms" minOccurs="0" maxOccurs="unbounded">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Invoice. Payment Terms</ccts:DictionaryEntryName>
+                     <ccts:Definition>A set of payment terms associated with this document.</ccts:Definition>
+                     <ccts:Cardinality>0..n</ccts:Cardinality>
+                     <ccts:ObjectClass>Invoice</ccts:ObjectClass>
+                     <ccts:PropertyTerm>Payment Terms</ccts:PropertyTerm>
+                     <ccts:AssociatedObjectClass>Payment Terms</ccts:AssociatedObjectClass>
+                     <ccts:RepresentationTerm>Payment Terms</ccts:RepresentationTerm>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cac:TaxTotal" minOccurs="0" maxOccurs="unbounded">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Invoice. Tax Total</ccts:DictionaryEntryName>
+                     <ccts:Definition>The total amount of a specific type of tax.</ccts:Definition>
+                     <ccts:Cardinality>0..n</ccts:Cardinality>
+                     <ccts:ObjectClass>Invoice</ccts:ObjectClass>
+                     <ccts:PropertyTerm>Tax Total</ccts:PropertyTerm>
+                     <ccts:AssociatedObjectClass>Tax Total</ccts:AssociatedObjectClass>
+                     <ccts:RepresentationTerm>Tax Total</ccts:RepresentationTerm>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cac:LegalMonetaryTotal" minOccurs="1" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Invoice. Legal_ Monetary Total. Monetary Total</ccts:DictionaryEntryName>
+                     <ccts:Definition>The total amount payable on the Invoice, including Allowances, Charges, and Taxes.</ccts:Definition>
+                     <ccts:Cardinality>1</ccts:Cardinality>
+                     <ccts:ObjectClass>Invoice</ccts:ObjectClass>
+                     <ccts:PropertyTermQualifier>Legal</ccts:PropertyTermQualifier>
+                     <ccts:PropertyTerm>Monetary Total</ccts:PropertyTerm>
+                     <ccts:AssociatedObjectClass>Monetary Total</ccts:AssociatedObjectClass>
+                     <ccts:RepresentationTerm>Monetary Total</ccts:RepresentationTerm>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cac:InvoiceLine" minOccurs="1" maxOccurs="unbounded">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Invoice. Invoice Line</ccts:DictionaryEntryName>
+                     <ccts:Definition>A line describing an invoice item.</ccts:Definition>
+                     <ccts:Cardinality>1..n</ccts:Cardinality>
+                     <ccts:ObjectClass>Invoice</ccts:ObjectClass>
+                     <ccts:PropertyTerm>Invoice Line</ccts:PropertyTerm>
+                     <ccts:AssociatedObjectClass>Invoice Line</ccts:AssociatedObjectClass>
+                     <ccts:RepresentationTerm>Invoice Line</ccts:RepresentationTerm>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+</xsd:schema>

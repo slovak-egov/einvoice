@@ -22,8 +22,7 @@ type Configuration struct {
 	Db                   dbutil.Configuration
 	Host                 string
 	Port                 int
-	D16bXsdPath          string
-	Ubl21XsdPath         string
+	XsdPath              string
 	DataPath             string
 	LocalStorageBasePath string
 	ServerReadTimeout    time.Duration
@@ -67,8 +66,7 @@ func New() *Configuration {
 	config.Host = environment.Getenv("HOST", config.Host)
 	config.Port = environment.ParseInt("PORT", config.Port)
 
-	config.D16bXsdPath = environment.Getenv("D16B_XSD_PATH", config.D16bXsdPath)
-	config.Ubl21XsdPath = environment.Getenv("UBL21_XSD_PATH", config.Ubl21XsdPath)
+	config.XsdPath = environment.Getenv("XSD_PATH", config.XsdPath)
 	config.DataPath = environment.Getenv("DATA_PATH", config.DataPath)
 
 	config.LocalStorageBasePath = environment.Getenv("LOCAL_STORAGE_BASE_PATH", config.LocalStorageBasePath)

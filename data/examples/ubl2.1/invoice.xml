@@ -151,7 +151,7 @@
                 </cac:TaxScheme>
             </cac:PartyTaxScheme>
             <cac:PartyLegalEntity>
-                <cbc:RegistrationName>The Global Chain Sweden AB</cbc:RegistrationName>
+                <cbc:RegistrationName>Global Trade Chain</cbc:RegistrationName>
                 <cbc:CompanyID schemeID="0007">1234567890</cbc:CompanyID>
                 <cbc:CompanyLegalForm>Säte: Big CIty</cbc:CompanyLegalForm>
             </cac:PartyLegalEntity>
@@ -192,7 +192,7 @@
                 </cac:TaxScheme>
             </cac:PartyTaxScheme>
             <cac:PartyLegalEntity>
-                <cbc:RegistrationName>Project services AB</cbc:RegistrationName>
+                <cbc:RegistrationName>Project Services</cbc:RegistrationName>
                 <cbc:CompanyID schemeID="0007">1234512345</cbc:CompanyID>
             </cac:PartyLegalEntity>
             <cac:Contact>

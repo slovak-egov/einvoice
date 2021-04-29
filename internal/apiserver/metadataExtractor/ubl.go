@@ -1,30 +1,31 @@
 package metadataExtractor
 
-type ublInvoice struct {
+type UblInvoice struct {
+	ID                      string
 	IssueDate               string
 	AccountingSupplierParty struct {
-		Party ublParty
+		Party UblParty
 	}
 	AccountingCustomerParty struct {
-		Party ublParty
+		Party UblParty
 	}
 	LegalMonetaryTotal struct {
-		TaxExclusiveAmount amount
-		TaxInclusiveAmount amount
+		TaxExclusiveAmount Amount
+		TaxInclusiveAmount Amount
 	}
 }
 
-type amount struct {
+type Amount struct {
 	Value      float64 `xml:",chardata"`
 	CurrencyID string  `xml:"currencyID,attr"`
 }
 
-type ublParty struct {
+type UblParty struct {
 	PartyIdentification struct {
 		ID string
 	}
-	PartyName struct {
-		Name string
+	PartyLegalEntity struct {
+		RegistrationName string
 	}
 	PostalAddress struct {
 		Country struct {
