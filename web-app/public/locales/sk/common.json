@@ -21,7 +21,9 @@
     "currency":  "Mena",
     "orderFrom": "Zoraď od",
     "newest": "Najnovšej",
-    "oldest": "Najstaršej"
+    "oldest": "Najstaršej",
+    "simple": "Jednoduchá",
+    "complex": "Komplexná"
   },
   "cancel": "Zrušiť",
   "save": "Uložiť",

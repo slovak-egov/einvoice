@@ -3,12 +3,13 @@ import {useDispatch, useSelector} from 'react-redux'
 import {useHistory} from 'react-router-dom'
 import {useTranslation} from 'react-i18next'
 import {get} from 'lodash'
-import {Button, Radios} from '../../helpers/idsk'
+import {Button, Radios, Select} from '../../helpers/idsk'
+import SimpleForm from './SimpleForm'
 import TagGroup from './TagGroup'
 import DraftNameModal from '../DraftNameModal'
 import ConfirmationButton from '../../helpers/ConfirmationButton'
-import {formTypeSelector, formDataSelector, isFormInitialized, formDraftSelector} from './state'
-import {initializeFormState, setFormType, setFormDraftMeta, submitInvoiceForm} from './actions'
+import {formTypeSelector, formDataSelector, isFormInitialized, formDraftSelector, formComplexitySelector} from './state'
+import {initializeFormState, setFormType, setFormDraftMeta, submitInvoiceForm, setFormComplexity} from './actions'
 import {
   areCodeListsLoadedSelector,
   isUblCreditNoteDocsLoadedSelector,
@@ -16,23 +17,38 @@ import {
   ublCreditNoteDocsSelector,
   ublInvoiceDocsSelector,
 } from '../../cache/documentation/state'
-import {getCodeLists, getUblCreditNoteDocs, getUblInvoiceDocs} from '../../cache/documentation/actions'
+import {
+  getCodeLists,
+  getUblCreditNoteDocs,
+  getUblInvoiceDocs,
+} from '../../cache/documentation/actions'
 import {createDraft, updateDraft} from '../../cache/drafts/actions'
 import {isUserLogged} from '../../cache/users/state'
-import {invoiceTypes} from '../../utils/constants'
+import {invoiceComplexities, invoiceTypes} from '../../utils/constants'
+
 
 const invoiceTypeData = {
   [invoiceTypes.INVOICE]: {
     isLoadedSelector: isUblInvoiceDocsLoadedSelector,
     docsSelector: ublInvoiceDocsSelector,
     getDocs: getUblInvoiceDocs,
-    rootPath: ['invoice', 'ubl:Invoice'],
+    [invoiceComplexities.SIMPLE]: {
+      rootPath: ['invoice', 'simple'],
+    },
+    [invoiceComplexities.COMPLEX]: {
+      rootPath: ['invoice', 'complex', 'ubl:Invoice'],
+    },
   },
   [invoiceTypes.CREDIT_NOTE]: {
     isLoadedSelector: isUblCreditNoteDocsLoadedSelector,
     docsSelector: ublCreditNoteDocsSelector,
     getDocs: getUblCreditNoteDocs,
-    rootPath: ['creditNote', 'ubl:CreditNote'],
+    [invoiceComplexities.SIMPLE]: {
+      rootPath: ['creditNote', 'simple'],
+    },
+    [invoiceComplexities.COMPLEX]: {
+      rootPath: ['creditNote', 'complex', 'ubl:CreditNote'],
+    },
   },
 }
 
@@ -41,9 +57,10 @@ export default () => {
   const history = useHistory()
   const isLogged = useSelector(isUserLogged)
   const formType = useSelector(formTypeSelector)
+  const formComplexity = useSelector(formComplexitySelector)
   const isDocsLoaded = useSelector(invoiceTypeData[formType].isLoadedSelector)
   const areCodeListsLoaded = useSelector(areCodeListsLoadedSelector)
-  const isFormLoaded = useSelector(isFormInitialized(formType))
+  const isFormLoaded = useSelector(isFormInitialized(formType, formComplexity))
   const docs = useSelector(invoiceTypeData[formType].docsSelector)
   const formData = useSelector(formDataSelector)
   const formDraft = useSelector(formDraftSelector)
@@ -58,7 +75,7 @@ export default () => {
     if (!isDocsLoaded) {
       dispatch(invoiceTypeData[formType].getDocs())
     }
-  }, [dispatch, formType, isDocsLoaded])
+  }, [dispatch, formType, formComplexity, isDocsLoaded])
 
   useEffect(() => {
     if (!areCodeListsLoaded) {
@@ -68,29 +85,43 @@ export default () => {
 
   useEffect(() => {
     if (areCodeListsLoaded && isDocsLoaded && !isFormLoaded) {
-      dispatch(initializeFormState(formType, docs))
+      dispatch(initializeFormState(formType, formComplexity, docs))
     }
-  }, [areCodeListsLoaded, dispatch, docs, formType, isDocsLoaded, isFormLoaded])
+  }, [areCodeListsLoaded, dispatch, docs, formType, formComplexity, isDocsLoaded, isFormLoaded])
 
   const changeFormType = useCallback(
     (e) => dispatch(setFormType(e.target.value)), [dispatch],
   )
 
+  const changeFormComplexity = useCallback(
+    (e) => dispatch(setFormComplexity(e.target.value)), [dispatch],
+  )
+
   const resetForm = useCallback(
-    () => dispatch(initializeFormState(formType, docs)), [dispatch, formType, docs],
+    () => dispatch(initializeFormState(formType, formComplexity, docs)),
+    [dispatch, formType, formComplexity, docs],
   )
 
   const submit = useCallback(
     async () => {
-      await dispatch(submitInvoiceForm(formType, invoiceTypeData[formType].rootPath))
+      await dispatch(submitInvoiceForm(
+        formType,
+        formComplexity,
+        invoiceTypeData[formType][formComplexity].rootPath)
+      )
       history.push('/invoice-tools/submission')
     },
-    [dispatch, formType],
+    [dispatch, formType, formComplexity],
   )
 
   const confirmDraft = (name) =>
     async () => {
-      const draft = await dispatch(createDraft(name, formType, formData[formType]))
+      const draft = await dispatch(createDraft(
+        name,
+        formType,
+        formComplexity,
+        formData[formType][formComplexity]
+      ))
       if (draft) {
         await (dispatch(setFormDraftMeta({id: draft.id, name: draft.name})))
         history.push('/invoice-tools/drafts')
@@ -98,7 +129,12 @@ export default () => {
     }
 
   const confirmUpdateDraft = async () => {
-    await dispatch(updateDraft({id: formDraft.id, type: formType, data: formData[formType]}))
+    await dispatch(updateDraft({
+      id: formDraft.id,
+      type: formType,
+      complexity: formComplexity,
+      data: formData[formType][formComplexity],
+    }))
   }
 
   const allLoaded = areCodeListsLoaded && isDocsLoaded && isFormLoaded
@@ -107,8 +143,18 @@ export default () => {
     <>
       <div className="govuk-button-group">
         <h1 className="govuk-heading-l">{t('form')}</h1>
+        <div className="ml-auto">
+          <Select
+            value={formComplexity}
+            onChange={(e) => changeFormComplexity(e)}
+            items={[
+              {value: invoiceComplexities.SIMPLE, children: t('invoice.simple')},
+              {value: invoiceComplexities.COMPLEX, children: t('invoice.complex')},
+            ]}
+          />
+        </div>
         <ConfirmationButton
-          className="ml-auto govuk-button--warning"
+          className="ml-3 govuk-button--warning"
           confirmationTitle={t('confirmationQuestions.resetForm.title')}
           confirmationText={t('confirmationQuestions.resetForm.text')}
           onClick={resetForm}
@@ -128,12 +174,21 @@ export default () => {
       />
       {/*Render once data are loaded*/}
       {allLoaded && <>
-        <TagGroup
-          path={invoiceTypeData[formType].rootPath}
-          formData={get(formData, invoiceTypeData[formType].rootPath)}
-          docs={docs[invoiceTypeData[formType].rootPath[1]]}
-          setErrorCount={setErrorCount}
-        />
+        {
+          formComplexity === invoiceComplexities.SIMPLE ?
+            <SimpleForm
+              formType={formType}
+              path={[formType, formComplexity]}
+              docs={docs[invoiceTypeData[formType][invoiceComplexities.COMPLEX].rootPath[2]]}
+            />
+            :
+            <TagGroup
+              path={invoiceTypeData[formType][formComplexity].rootPath}
+              formData={get(formData, invoiceTypeData[formType][formComplexity].rootPath)}
+              docs={docs[invoiceTypeData[formType][formComplexity].rootPath[2]]}
+              setErrorCount={setErrorCount}
+            />
+        }
         <div className="govuk-button-group">
           {isLogged &&
             <Button className="govuk-button--secondary" onClick={() => setShowCreateDraftModal(true)}>

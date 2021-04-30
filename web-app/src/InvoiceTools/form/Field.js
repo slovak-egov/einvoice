@@ -32,12 +32,14 @@ export default ({canDelete, dropField, docs, path, setErrorCount}) => {
   const dispatch = useDispatch()
   const contentError = value === '' ? t('errorMessages.emptyField') : null
 
-  useEffect(
-    () => {
-      setErrorCount(contentError ? 1 : 0)
-      return () => setErrorCount(0)
-    }, [contentError],
-  )
+  if (setErrorCount) {
+    useEffect(
+      () => {
+        setErrorCount(contentError ? 1 : 0)
+        return () => setErrorCount(0)
+      }, [contentError],
+    )
+  }
 
   const updateField = useCallback(
     (value) => dispatch(setFormField(pathToUpdate)(value)),

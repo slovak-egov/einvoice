@@ -33,6 +33,11 @@ export const invoiceTypes = {
   CREDIT_NOTE: 'creditNote',
 }
 
+export const invoiceComplexities = {
+  SIMPLE: 'simple',
+  COMPLEX: 'complex',
+}
+
 export const rootAttributes = (invoiceType) => ({
   'xmlns': [{text: `urn:oasis:names:specification:ubl:schema:xsd:${capitalizeFirstChar(invoiceType)}-2`}],
   'xmlns:cac': [{text: 'urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2'}],

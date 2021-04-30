@@ -28,7 +28,6 @@
 			</cac:PartyLegalEntity>
 		</cac:Party>
 	</cac:AccountingSupplierParty>
-
 	<cac:AccountingCustomerParty>
 		<cac:Party>
 			<cac:PartyIdentification>
@@ -44,7 +43,6 @@
 			</cac:PartyLegalEntity>
 		</cac:Party>
 	</cac:AccountingCustomerParty>
-
 	<cac:TaxTotal>
 		<cbc:TaxAmount currencyID="EUR">2500</cbc:TaxAmount>
 		<cac:TaxSubtotal>
@@ -59,14 +57,12 @@
 			</cac:TaxCategory>
 		</cac:TaxSubtotal>
 	</cac:TaxTotal>
-
 	<cac:LegalMonetaryTotal>
 		<cbc:LineExtensionAmount currencyID="EUR">10000</cbc:LineExtensionAmount>
 		<cbc:TaxExclusiveAmount currencyID="EUR">10000</cbc:TaxExclusiveAmount>
 		<cbc:TaxInclusiveAmount currencyID="EUR">12500</cbc:TaxInclusiveAmount>
 		<cbc:PayableAmount currencyID="EUR">12500</cbc:PayableAmount>
 	</cac:LegalMonetaryTotal>
-
 	<cac:CreditNoteLine>
 		<cbc:ID>1</cbc:ID>
 		<cbc:CreditedQuantity unitCode="DAY">7</cbc:CreditedQuantity>

@@ -6,10 +6,12 @@ import classNames from 'classnames'
 export default ({className, ...props}) => {
   const {i18n} = useTranslation()
   return (
-    <DatePicker
-      locale={i18n.language}
-      className={classNames('govuk-input', className)}
-      {...props}
-    />
+    <div className={'govuk-form-group'} >
+      <DatePicker
+        locale={i18n.language}
+        className={classNames('govuk-input', className)}
+        {...props}
+      />
+    </div>
   )
 }

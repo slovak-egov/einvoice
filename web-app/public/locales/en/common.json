@@ -21,7 +21,9 @@
     "currency":  "Currency",
     "orderFrom": "Order from",
     "newest": "Newest",
-    "oldest": "Oldest"
+    "oldest": "Oldest",
+    "simple": "Simple",
+    "complex": "Complex"
   },
   "cancel": "Cancel",
   "save": "Save",

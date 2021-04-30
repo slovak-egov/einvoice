@@ -1,5 +1,5 @@
 import {forwardReducerTo} from './utils/helpers'
-import {invoiceTypes} from './utils/constants'
+import {invoiceTypes, invoiceComplexities} from './utils/constants'
 
 const getInitialState = () => ({
   invoices: {},
@@ -12,7 +12,10 @@ const getInitialState = () => ({
       test: false,
     },
     form: {
+      [invoiceTypes.INVOICE]: {},
+      [invoiceTypes.CREDIT_NOTE]: {},
       type: invoiceTypes.INVOICE,
+      complexity: invoiceComplexities.SIMPLE,
     },
   },
   publicInvoicesScreen: {},
