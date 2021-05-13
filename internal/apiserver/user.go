@@ -8,6 +8,7 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/mux"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/slovak-egov/einvoice/internal/entity"
 	"github.com/slovak-egov/einvoice/pkg/context"
@@ -90,6 +91,10 @@ func (a *App) updateUser(res http.ResponseWriter, req *http.Request) error {
 	if err != nil {
 		return err
 	}
+
+	context.GetLogger(req.Context()).WithFields(log.Fields{
+		"userId": requestedUserId,
+	}).Info("user.update")
 
 	handlerutil.RespondWithJSON(res, http.StatusOK, user)
 	return nil

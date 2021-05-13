@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"time"
 
+	log "github.com/sirupsen/logrus"
+
 	"github.com/slovak-egov/einvoice/internal/apiserver/metadataExtractor"
 	"github.com/slovak-egov/einvoice/internal/apiserver/rulesValidator"
 	"github.com/slovak-egov/einvoice/internal/db"
@@ -108,6 +110,11 @@ func (a *App) createInvoice(test bool) func(res http.ResponseWriter, req *http.R
 		}
 
 		// Notifications to invoice parties are sent asynchronously by notification-worker
+
+		context.GetLogger(req.Context()).WithFields(log.Fields{
+			"userId":    userId,
+			"invoiceId": metadata.Id,
+		}).Info("invoice.create")
 
 		handlerutil.RespondWithJSON(res, http.StatusCreated, metadata)
 		return nil

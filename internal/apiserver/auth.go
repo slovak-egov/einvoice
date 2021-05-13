@@ -4,13 +4,17 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/slovak-egov/einvoice/internal/entity"
 	"github.com/slovak-egov/einvoice/internal/upvs"
+	"github.com/slovak-egov/einvoice/pkg/context"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
 
 func (a *App) handleLogin(res http.ResponseWriter, req *http.Request) error {
+	ctx := req.Context()
+
 	oboToken, err := GetAuthToken(req)
 	if err != nil {
 		return err
@@ -18,7 +22,7 @@ func (a *App) handleLogin(res http.ResponseWriter, req *http.Request) error {
 		return AuthInvalidTypeError
 	}
 
-	upvsUser, samlToken, err := a.upvs.GetLoggedUserInfo(req.Context(), oboToken.Value)
+	upvsUser, samlToken, err := a.upvs.GetLoggedUserInfo(ctx, oboToken.Value)
 	if _, ok := err.(*upvs.InvalidTokenError); ok {
 		return UnauthorizedError
 	} else if _, ok := err.(*upvs.UpvsError); ok {
@@ -32,16 +36,21 @@ func (a *App) handleLogin(res http.ResponseWriter, req *http.Request) error {
 		return handlerutil.NewForbiddenError("authorization.upvs.forbiddenSubstitutionType")
 	}
 
-	user, err := a.db.GetOrCreateUser(req.Context(), upvsUser.Uri, upvsUser.Name)
+	user, err := a.db.GetOrCreateUser(ctx, upvsUser.Uri, upvsUser.Name)
 	if err != nil {
 		return err
 	}
 
 	sessionToken := uuid.New().String()
-	err = a.cache.SaveUserToken(req.Context(), sessionToken, user.Id)
+	err = a.cache.SaveUserToken(ctx, sessionToken, user.Id)
 	if err != nil {
 		return err
 	}
+
+	context.GetLogger(ctx).WithFields(log.Fields{
+		"userId":  user.Id,
+		"upvsUri": user.UpvsUri,
+	}).Info("login")
 
 	handlerutil.RespondWithJSON(res, http.StatusOK, struct {
 		Token string `json:"token"`
@@ -76,10 +85,19 @@ func (a *App) handleLogout(res http.ResponseWriter, req *http.Request) error {
 		return AuthInvalidTypeError
 	}
 
+	userId, err := a.cache.GetUserId(req.Context(), token.Value)
+	if err != nil {
+		return err
+	}
+
 	err = a.cache.RemoveUserToken(req.Context(), token.Value)
 	if err != nil {
 		return err
 	}
+
+	context.GetLogger(req.Context()).WithFields(log.Fields{
+		"userId": userId,
+	}).Info("logout")
 
 	handlerutil.RespondWithJSON(res, http.StatusOK, map[string]string{"logout": "successful"})
 	return nil

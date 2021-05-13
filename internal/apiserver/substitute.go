@@ -5,6 +5,9 @@ import (
 	"errors"
 	"net/http"
 
+	log "github.com/sirupsen/logrus"
+
+	"github.com/slovak-egov/einvoice/pkg/context"
 	"github.com/slovak-egov/einvoice/pkg/dbutil"
 	"github.com/slovak-egov/einvoice/pkg/handlerutil"
 )
@@ -65,6 +68,11 @@ func (a *App) addUserSubstitutes(res http.ResponseWriter, req *http.Request) err
 		return err
 	}
 
+	context.GetLogger(req.Context()).WithFields(log.Fields{
+		"userId":        requestedUserId,
+		"substituteIds": requestBody,
+	}).Info("substitute.add")
+
 	handlerutil.RespondWithJSON(res, http.StatusOK, substituteIds)
 	return nil
 }
@@ -92,6 +100,11 @@ func (a *App) removeUserSubstitutes(res http.ResponseWriter, req *http.Request) 
 	if err != nil {
 		return err
 	}
+
+	context.GetLogger(req.Context()).WithFields(log.Fields{
+		"userId":        requestedUserId,
+		"substituteIds": requestBody,
+	}).Info("substitute.delete")
 
 	handlerutil.RespondWithJSON(res, http.StatusOK, substituteIds)
 	return nil

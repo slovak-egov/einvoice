@@ -12,6 +12,10 @@ You can view it on this [website](https://generator.swagger.io/?url=https://raw.
 
 [Api errors](docs/errors.md)
 
+### Audit log
+
+[Events](docs/auditLog.md)
+
 ## Try it out
 
 <https://dev.einvoice.mfsr.sk>

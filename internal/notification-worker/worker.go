@@ -89,6 +89,7 @@ func (w *Worker) checkInvoices() {
 		err := w.db.UpdateNotificationStatus(ctx, notifiedInvoiceIds, entity.NotificationStatusSent)
 		if err == nil {
 			context.GetLogger(ctx).WithField("invoiceIds", notifiedInvoiceIds).Info("worker.checkInvoices.notified")
+			context.GetLogger(ctx).WithField("invoiceIds", notifiedInvoiceIds).Info("invoice.notify")
 		}
 	} else {
 		context.GetLogger(ctx).Warn("worker.checkInvoices.noNotification")
