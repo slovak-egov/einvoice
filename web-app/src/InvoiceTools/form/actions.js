@@ -29,7 +29,9 @@ export const removeFieldInstance = (path) => ({
 export const initializeFormState = (invoiceType, invoiceComplexity, docs) => (
   (dispatch) => {
     if (invoiceComplexity === invoiceComplexities.SIMPLE) {
-      dispatch(setFormField([invoiceType, invoiceComplexity])({}))
+      dispatch(setFormField([invoiceType, invoiceComplexity])({
+        items: {1: {}},
+      }))
     } else {
       // Add fake start point and unwrap it at the end
       const initialState = getFormInitialState({
@@ -70,3 +72,21 @@ export const initializeDraftForm = (draftMeta) => loadingWrapper(
     }
   }
 )
+
+export const addItem = (path, index) => ({
+  type: 'ADD INVOICE ITEM',
+  path: [...FORM_PATH, ...path],
+  payload: {},
+  reducer: (state) => ({...state, [index]: {}}),
+})
+
+export const removeItem = (path, index) => ({
+  type: 'REMOVE INVOICE ITEM',
+  path: [...FORM_PATH, ...path],
+  payload: null,
+  reducer: (state) => {
+    const s = {...state}
+    delete s[index]
+    return s
+  },
+})

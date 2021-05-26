@@ -20,7 +20,7 @@ const fileToState = (file, name, mime) => ({
   },
 })
 
-export default ({canDelete, dropField, docs, path, setErrorCount}) => {
+export const ComplexField = ({canDelete, dropField, docs, path, setErrorCount}) => {
   const {t, i18n} = useTranslation('common')
   // Uploading file is special case
   // We allow field to change its parent, it will set mime type and filename too
@@ -65,6 +65,43 @@ export default ({canDelete, dropField, docs, path, setErrorCount}) => {
         dataType={docs.dataType}
         updateField={updateField}
         value={value}
+        error={contentError}
+      />
+    </>
+  )
+}
+
+export const Field = ({docs, label, path, value, nullable, disabled}) => {
+  const {t} = useTranslation('common')
+  const dispatch = useDispatch()
+  const currentValue = useSelector(formFieldSelector(path)) || ''
+
+  useEffect(() => {
+    if (value !== undefined && currentValue !== value) {
+      dispatch(setFormField(path)(value))
+    }
+  }, [dispatch, value])
+
+  const contentError = !nullable && currentValue === '' ? t('errorMessages.emptyField') : null
+
+  const updateField = useCallback(
+    (value) => {
+      if (!disabled) {
+        dispatch(setFormField(path)(value))
+      }
+    }, [dispatch],
+  )
+
+  return (
+    <>
+      <Label>
+        {label}
+      </Label>
+      <FieldInput
+        codeListIds={docs.codeLists}
+        dataType={docs.dataType}
+        updateField={updateField}
+        value={currentValue}
         error={contentError}
       />
     </>

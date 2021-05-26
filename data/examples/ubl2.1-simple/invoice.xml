@@ -5,15 +5,35 @@
 
     <cbc:CustomizationID>urn:cen.eu:en16931:2017#compliant#urn:fdc:peppol.eu:2017:poacc:billing:3.0</cbc:CustomizationID>
     <cbc:ID>2018210</cbc:ID>
-    <cbc:IssueDate>2011-09-22</cbc:IssueDate>
+    <cbc:IssueDate>2018-03-01</cbc:IssueDate>
+    <cbc:DueDate>2018-03-07</cbc:DueDate>
     <cbc:InvoiceTypeCode>380</cbc:InvoiceTypeCode>
+    <cbc:Note>Document level Note</cbc:Note>
+    <cbc:TaxPointDate>2018-02-08</cbc:TaxPointDate>
     <cbc:DocumentCurrencyCode>SEK</cbc:DocumentCurrencyCode>
+    <cac:OrderReference>
+        <cbc:ID>20180117</cbc:ID>
+    </cac:OrderReference>
+    <cac:BillingReference>
+        <cac:InvoiceDocumentReference>
+            <cbc:ID>2018209</cbc:ID>
+        </cac:InvoiceDocumentReference>
+    </cac:BillingReference>
+    <cac:OriginatorDocumentReference>
+        <cbc:ID>Tender 2017-12, lot no. 3</cbc:ID>
+    </cac:OriginatorDocumentReference>
     <cac:AccountingSupplierParty>
         <cac:Party>
             <cac:PartyIdentification>
                 <cbc:ID>11190993</cbc:ID>
             </cac:PartyIdentification>
+            <cac:PartyName>
+                <cbc:Name>Global Trade Chain</cbc:Name>
+            </cac:PartyName>
             <cac:PostalAddress>
+                <cbc:StreetName>Streetname 1</cbc:StreetName>
+                <cbc:CityName>Big City</cbc:CityName>
+                <cbc:PostalZone>11122</cbc:PostalZone>
                 <cac:Country>
                     <cbc:IdentificationCode>SK</cbc:IdentificationCode>
                 </cac:Country>
@@ -25,8 +45,13 @@
                 </cac:TaxScheme>
             </cac:PartyTaxScheme>
             <cac:PartyLegalEntity>
-                <cbc:RegistrationName>Global Trade Chain</cbc:RegistrationName>
+                <cbc:RegistrationName>The Global Chain Slovakia AB</cbc:RegistrationName>
             </cac:PartyLegalEntity>
+            <cac:Contact>
+                <cbc:Name>A Person</cbc:Name>
+                <cbc:Telephone>0201234567</cbc:Telephone>
+                <cbc:ElectronicMail>info@gtc.sk</cbc:ElectronicMail>
+            </cac:Contact>
         </cac:Party>
     </cac:AccountingSupplierParty>
     <cac:AccountingCustomerParty>
@@ -34,20 +59,53 @@
             <cac:PartyIdentification>
                 <cbc:ID>22222222</cbc:ID>
             </cac:PartyIdentification>
+            <cac:PartyName>
+                <cbc:Name>Project Services</cbc:Name>
+            </cac:PartyName>
             <cac:PostalAddress>
+                <cbc:StreetName>Streetname 2</cbc:StreetName>
+                <cbc:CityName>Big City 2</cbc:CityName>
+                <cbc:PostalZone>10203</cbc:PostalZone>
                 <cac:Country>
                     <cbc:IdentificationCode>SK</cbc:IdentificationCode>
                 </cac:Country>
             </cac:PostalAddress>
+            <cac:PartyTaxScheme>
+                <cbc:CompanyID>SK22222222</cbc:CompanyID>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:PartyTaxScheme>
             <cac:PartyLegalEntity>
-                <cbc:RegistrationName>Project Services</cbc:RegistrationName>
+                <cbc:RegistrationName>Project services AB</cbc:RegistrationName>
             </cac:PartyLegalEntity>
+            <cac:Contact>
+                <cbc:Name>B Person</cbc:Name>
+                <cbc:Telephone>070123456</cbc:Telephone>
+                <cbc:ElectronicMail>info@ps.sk</cbc:ElectronicMail>
+            </cac:Contact>
         </cac:Party>
     </cac:AccountingCustomerParty>
-    <cac:PaymentTerms>
-        <cbc:Note>30 days net. Penalty rate 12 %
-            Line break should be respected here.</cbc:Note>
-    </cac:PaymentTerms>
+    <cac:Delivery>
+        <cbc:ActualDeliveryDate>2017-12-01</cbc:ActualDeliveryDate>
+        <cac:DeliveryLocation>
+            <cac:Address>
+                <cbc:StreetName>DELIV Streetname-line1</cbc:StreetName>
+                <cbc:CityName>DELIV Town</cbc:CityName>
+                <cbc:PostalZone>DELIV 90807</cbc:PostalZone>
+                <cac:Country>
+                    <cbc:IdentificationCode>SK</cbc:IdentificationCode>
+                </cac:Country>
+            </cac:Address>
+        </cac:DeliveryLocation>
+    </cac:Delivery>
+    <cac:PaymentMeans>
+        <cbc:PaymentMeansCode>30</cbc:PaymentMeansCode>
+        <cbc:PaymentID>1800355</cbc:PaymentID>
+        <cac:PayeeFinancialAccount>
+            <cbc:ID>SK1212341234123412341234</cbc:ID>
+        </cac:PayeeFinancialAccount>
+    </cac:PaymentMeans>
     <cac:TaxTotal>
         <cbc:TaxAmount currencyID="SEK">2500</cbc:TaxAmount>
         <cac:TaxSubtotal>
@@ -56,6 +114,19 @@
             <cac:TaxCategory>
                 <cbc:ID>S</cbc:ID>
                 <cbc:Percent>25</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:TaxCategory>
+        </cac:TaxSubtotal>
+        <cac:TaxSubtotal>
+            <cbc:TaxableAmount currencyID="SEK">0</cbc:TaxableAmount>
+            <cbc:TaxAmount currencyID="SEK">0</cbc:TaxAmount>
+            <cac:TaxCategory>
+                <cbc:ID>E</cbc:ID>
+                <cbc:Percent>0</cbc:Percent>
+                <cbc:TaxExemptionReasonCode>vatex-eu-132-1g</cbc:TaxExemptionReasonCode>
+                <cbc:TaxExemptionReason>EU Direcive Article 132, section 1(g)</cbc:TaxExemptionReason>
                 <cac:TaxScheme>
                     <cbc:ID>VAT</cbc:ID>
                 </cac:TaxScheme>
@@ -70,9 +141,12 @@
     </cac:LegalMonetaryTotal>
     <cac:InvoiceLine>
         <cbc:ID>1</cbc:ID>
+        <cbc:Note>Item note</cbc:Note>
         <cbc:InvoicedQuantity unitCode="MTR">500</cbc:InvoicedQuantity>
         <cbc:LineExtensionAmount currencyID="SEK">10000</cbc:LineExtensionAmount>
+        <cbc:AccountingCost>Accounting 101-222-8</cbc:AccountingCost>
         <cac:Item>
+            <cbc:Description>Universal product, customized with option X</cbc:Description>
             <cbc:Name>Universal product</cbc:Name>
             <cac:ClassifiedTaxCategory>
                 <cbc:ID>S</cbc:ID>

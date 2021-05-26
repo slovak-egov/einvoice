@@ -1,9 +1,12 @@
 import {get} from 'lodash'
+import {invoiceComplexities} from '../../utils/constants'
 
 export const FORM_PATH = ['createInvoiceScreen', 'form']
 export const FORM_TYPE_PATH = [...FORM_PATH, 'type']
 export const FORM_DRAFT_META_PATH = [...FORM_PATH, 'draftMeta']
 export const FORM_COMPLEXITY_PATH = [...FORM_PATH, 'complexity']
+
+export const formItemsPath = (invoiceType) => [...FORM_PATH, invoiceType, invoiceComplexities.SIMPLE, 'items']
 
 export const formTypeSelector = (state) => get(state, FORM_TYPE_PATH)
 
@@ -14,6 +17,9 @@ export const formDataSelector = (state) => get(state, FORM_PATH)
 export const formDraftSelector = (state) => get(state, FORM_DRAFT_META_PATH)
 
 export const formFieldSelector = (path) => (state) => get(formDataSelector(state), path)
+
+export const formItemsSelector = (invoiceType) => (state) =>
+  get(state, formItemsPath(invoiceType))
 
 export const isFormInitialized = (invoiceType, formComplexity) => (state) =>
   formDataSelector(state)[invoiceType][formComplexity] != null

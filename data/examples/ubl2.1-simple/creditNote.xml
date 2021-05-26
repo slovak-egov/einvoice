@@ -5,8 +5,21 @@
 	<cbc:CustomizationID>urn:cen.eu:en16931:2017#compliant#urn:fdc:peppol.eu:2017:poacc:billing:3.0</cbc:CustomizationID>
 	<cbc:ID>Snippet1</cbc:ID>
 	<cbc:IssueDate>2017-11-13</cbc:IssueDate>
+	<cbc:TaxPointDate>2018-02-08</cbc:TaxPointDate>
 	<cbc:CreditNoteTypeCode>381</cbc:CreditNoteTypeCode>
+	<cbc:Note>Document level Note</cbc:Note>
 	<cbc:DocumentCurrencyCode>EUR</cbc:DocumentCurrencyCode>
+	<cac:OrderReference>
+		<cbc:ID>20180117</cbc:ID>
+	</cac:OrderReference>
+	<cac:BillingReference>
+		<cac:InvoiceDocumentReference>
+			<cbc:ID>2018209</cbc:ID>
+		</cac:InvoiceDocumentReference>
+	</cac:BillingReference>
+	<cac:OriginatorDocumentReference>
+		<cbc:ID>Tender 2017-12, lot no. 3</cbc:ID>
+	</cac:OriginatorDocumentReference>
 	<cac:AccountingSupplierParty>
 		<cac:Party>
 			<cac:PartyIdentification>
@@ -43,6 +56,27 @@
 			</cac:PartyLegalEntity>
 		</cac:Party>
 	</cac:AccountingCustomerParty>
+	<cac:Delivery>
+		<cbc:ActualDeliveryDate>2017-12-01</cbc:ActualDeliveryDate>
+		<cac:DeliveryLocation>
+			<cac:Address>
+				<cbc:StreetName>DELIV Streetname-line1</cbc:StreetName>
+				<cbc:CityName>DELIV Town</cbc:CityName>
+				<cbc:PostalZone>DELIV 90807</cbc:PostalZone>
+				<cac:Country>
+					<cbc:IdentificationCode>SK</cbc:IdentificationCode>
+				</cac:Country>
+			</cac:Address>
+		</cac:DeliveryLocation>
+	</cac:Delivery>
+	<cac:PaymentMeans>
+		<cbc:PaymentMeansCode>30</cbc:PaymentMeansCode>
+		<cbc:PaymentDueDate>2018-03-07</cbc:PaymentDueDate>
+		<cbc:PaymentID>1800355</cbc:PaymentID>
+		<cac:PayeeFinancialAccount>
+			<cbc:ID>SK1212341234123412341234</cbc:ID>
+		</cac:PayeeFinancialAccount>
+	</cac:PaymentMeans>
 	<cac:TaxTotal>
 		<cbc:TaxAmount currencyID="EUR">2500</cbc:TaxAmount>
 		<cac:TaxSubtotal>
