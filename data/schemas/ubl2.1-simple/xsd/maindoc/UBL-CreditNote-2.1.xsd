@@ -93,6 +93,22 @@
                </xsd:documentation>
             </xsd:annotation>
          </xsd:element>
+         <xsd:element ref="cbc:TaxPointDate" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>BBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Credit Note. Tax Point Date. Date</ccts:DictionaryEntryName>
+                     <ccts:Definition>The date of the Credit Note, used to indicate the point at which tax becomes applicable.</ccts:Definition>
+                     <ccts:Cardinality>0..1</ccts:Cardinality>
+                     <ccts:ObjectClass>Credit Note</ccts:ObjectClass>
+                     <ccts:PropertyTerm>Tax Point Date</ccts:PropertyTerm>
+                     <ccts:RepresentationTerm>Date</ccts:RepresentationTerm>
+                     <ccts:DataType>Date. Type</ccts:DataType>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
          <xsd:element ref="cbc:CreditNoteTypeCode" minOccurs="0" maxOccurs="1">
             <xsd:annotation>
                <xsd:documentation>
@@ -105,6 +121,22 @@
                      <ccts:PropertyTerm>Credit Note Type Code</ccts:PropertyTerm>
                      <ccts:RepresentationTerm>Code</ccts:RepresentationTerm>
                      <ccts:DataType>Code. Type</ccts:DataType>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cbc:Note" minOccurs="0" maxOccurs="unbounded">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>BBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Credit Note. Note. Text</ccts:DictionaryEntryName>
+                     <ccts:Definition>Free-form text pertinent to this document, conveying information that is not contained explicitly in other structures.</ccts:Definition>
+                     <ccts:Cardinality>0..n</ccts:Cardinality>
+                     <ccts:ObjectClass>Credit Note</ccts:ObjectClass>
+                     <ccts:PropertyTerm>Note</ccts:PropertyTerm>
+                     <ccts:RepresentationTerm>Text</ccts:RepresentationTerm>
+                     <ccts:DataType>Text. Type</ccts:DataType>
                   </ccts:Component>
                </xsd:documentation>
             </xsd:annotation>
@@ -123,6 +155,57 @@
                      <ccts:RepresentationTerm>Code</ccts:RepresentationTerm>
                      <ccts:DataTypeQualifier>Currency</ccts:DataTypeQualifier>
                      <ccts:DataType>Currency_ Code. Type</ccts:DataType>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cac:OrderReference" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Credit Note. Order Reference</ccts:DictionaryEntryName>
+                     <ccts:Definition>The Order associated with this Credit Note.</ccts:Definition>
+                     <ccts:Cardinality>0..1</ccts:Cardinality>
+                     <ccts:ObjectClass>Credit Note</ccts:ObjectClass>
+                     <ccts:PropertyTerm>Order Reference</ccts:PropertyTerm>
+                     <ccts:AssociatedObjectClass>Order Reference</ccts:AssociatedObjectClass>
+                     <ccts:RepresentationTerm>Order Reference</ccts:RepresentationTerm>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cac:BillingReference" minOccurs="0" maxOccurs="unbounded">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Credit Note. Billing Reference</ccts:DictionaryEntryName>
+                     <ccts:Definition>A reference to a billing document associated with this document.</ccts:Definition>
+                     <ccts:Cardinality>0..n</ccts:Cardinality>
+                     <ccts:ObjectClass>Credit Note</ccts:ObjectClass>
+                     <ccts:PropertyTerm>Billing Reference</ccts:PropertyTerm>
+                     <ccts:AssociatedObjectClass>Billing Reference</ccts:AssociatedObjectClass>
+                     <ccts:RepresentationTerm>Billing Reference</ccts:RepresentationTerm>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cac:OriginatorDocumentReference"
+                      minOccurs="0"
+                      maxOccurs="unbounded">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Credit Note. Originator_ Document Reference. Document Reference</ccts:DictionaryEntryName>
+                     <ccts:Definition>A reference to an originator document associated with this document.</ccts:Definition>
+                     <ccts:Cardinality>0..n</ccts:Cardinality>
+                     <ccts:ObjectClass>Credit Note</ccts:ObjectClass>
+                     <ccts:PropertyTermQualifier>Originator</ccts:PropertyTermQualifier>
+                     <ccts:PropertyTerm>Document Reference</ccts:PropertyTerm>
+                     <ccts:AssociatedObjectClass>Document Reference</ccts:AssociatedObjectClass>
+                     <ccts:RepresentationTerm>Document Reference</ccts:RepresentationTerm>
                   </ccts:Component>
                </xsd:documentation>
             </xsd:annotation>
@@ -161,18 +244,34 @@
                </xsd:documentation>
             </xsd:annotation>
          </xsd:element>
-         <xsd:element ref="cac:AllowanceCharge" minOccurs="0" maxOccurs="unbounded">
+         <xsd:element ref="cac:Delivery" minOccurs="0" maxOccurs="unbounded">
             <xsd:annotation>
                <xsd:documentation>
                   <ccts:Component>
                      <ccts:ComponentType>ASBIE</ccts:ComponentType>
-                     <ccts:DictionaryEntryName>Credit Note. Allowance Charge</ccts:DictionaryEntryName>
-                     <ccts:Definition>A discount or charge that applies to a price component.</ccts:Definition>
+                     <ccts:DictionaryEntryName>Credit Note. Delivery</ccts:DictionaryEntryName>
+                     <ccts:Definition>A delivery associated with this document.</ccts:Definition>
                      <ccts:Cardinality>0..n</ccts:Cardinality>
                      <ccts:ObjectClass>Credit Note</ccts:ObjectClass>
-                     <ccts:PropertyTerm>Allowance Charge</ccts:PropertyTerm>
-                     <ccts:AssociatedObjectClass>Allowance Charge</ccts:AssociatedObjectClass>
-                     <ccts:RepresentationTerm>Allowance Charge</ccts:RepresentationTerm>
+                     <ccts:PropertyTerm>Delivery</ccts:PropertyTerm>
+                     <ccts:AssociatedObjectClass>Delivery</ccts:AssociatedObjectClass>
+                     <ccts:RepresentationTerm>Delivery</ccts:RepresentationTerm>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cac:PaymentMeans" minOccurs="0" maxOccurs="unbounded">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Credit Note. Payment Means</ccts:DictionaryEntryName>
+                     <ccts:Definition>Expected means of payment.</ccts:Definition>
+                     <ccts:Cardinality>0..n</ccts:Cardinality>
+                     <ccts:ObjectClass>Credit Note</ccts:ObjectClass>
+                     <ccts:PropertyTerm>Payment Means</ccts:PropertyTerm>
+                     <ccts:AssociatedObjectClass>Payment Means</ccts:AssociatedObjectClass>
+                     <ccts:RepresentationTerm>Payment Means</ccts:RepresentationTerm>
                   </ccts:Component>
                </xsd:documentation>
             </xsd:annotation>

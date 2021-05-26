@@ -108,6 +108,8 @@ const generateTaxSubtotal = (item, currency) =>
         <cac:TaxCategory>
             <cbc:ID>${item.taxCategory}</cbc:ID>
             <cbc:Percent>${item.taxPercentage}</cbc:Percent>
+            ${item.taxExemptionCode ? `<cbc:TaxExemptionReasonCode>${item.taxExemptionCode}</cbc:TaxExemptionReasonCode>` : ''}
+            ${item.taxExemptionReason ? `<cbc:TaxExemptionReason>${item.taxExemptionReason}</cbc:TaxExemptionReason>` : ''}
             <cac:TaxScheme>
                 <cbc:ID>VAT</cbc:ID>
             </cac:TaxScheme>
@@ -160,12 +162,12 @@ const generateSimpleInvoice = (invoice) => `<?xml version="1.0" encoding="UTF-8"
     <cac:AccountingCustomerParty>
         ${generateParty(invoice.customer)}
     </cac:AccountingCustomerParty>
-    ${(invoice.deliveryDate || invoice.deliveryAddress.line1) ?
+    ${(invoice.deliveryDate || invoice.customer.deliveryAddress.line1) ?
     `<cac:Delivery>
         ${invoice.deliveryDate ? `<cbc:ActualDeliveryDate>${invoice.deliveryDate}</cbc:ActualDeliveryDate>` : ''}
-        ${invoice.deliveryAddress ?
+        ${invoice.customer.deliveryAddress ?
     `<cac:DeliveryLocation>
-            ${generateAddress(invoice.deliveryAddress, 'cac:Address')}
+            ${generateAddress(invoice.customer.deliveryAddress, 'cac:Address')}
         </cac:DeliveryLocation>`
     : ''}
     </cac:Delivery>`

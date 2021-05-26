@@ -99,8 +99,10 @@
 	</cac:LegalMonetaryTotal>
 	<cac:CreditNoteLine>
 		<cbc:ID>1</cbc:ID>
+		<cbc:Note>Item note</cbc:Note>
 		<cbc:CreditedQuantity unitCode="DAY">7</cbc:CreditedQuantity>
 		<cbc:LineExtensionAmount currencyID= "EUR">10000</cbc:LineExtensionAmount>
+		<cbc:AccountingCost>Accounting 101-222-8</cbc:AccountingCost>
 		<cac:Item>
 			<cbc:Name>Universal product</cbc:Name>
 			<cac:ClassifiedTaxCategory>
