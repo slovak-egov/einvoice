@@ -191,18 +191,16 @@
                </xsd:documentation>
             </xsd:annotation>
          </xsd:element>
-         <xsd:element ref="cac:OriginatorDocumentReference"
-                      minOccurs="0"
-                      maxOccurs="unbounded">
+         <xsd:element ref="cac:ContractDocumentReference" minOccurs="0" maxOccurs="unbounded">
             <xsd:annotation>
                <xsd:documentation>
                   <ccts:Component>
                      <ccts:ComponentType>ASBIE</ccts:ComponentType>
-                     <ccts:DictionaryEntryName>Credit Note. Originator_ Document Reference. Document Reference</ccts:DictionaryEntryName>
-                     <ccts:Definition>A reference to an originator document associated with this document.</ccts:Definition>
+                     <ccts:DictionaryEntryName>Invoice. Contract_ Document Reference. Document Reference</ccts:DictionaryEntryName>
+                     <ccts:Definition>A reference to a contract associated with this document.</ccts:Definition>
                      <ccts:Cardinality>0..n</ccts:Cardinality>
-                     <ccts:ObjectClass>Credit Note</ccts:ObjectClass>
-                     <ccts:PropertyTermQualifier>Originator</ccts:PropertyTermQualifier>
+                     <ccts:ObjectClass>Invoice</ccts:ObjectClass>
+                     <ccts:PropertyTermQualifier>Contract</ccts:PropertyTermQualifier>
                      <ccts:PropertyTerm>Document Reference</ccts:PropertyTerm>
                      <ccts:AssociatedObjectClass>Document Reference</ccts:AssociatedObjectClass>
                      <ccts:RepresentationTerm>Document Reference</ccts:RepresentationTerm>

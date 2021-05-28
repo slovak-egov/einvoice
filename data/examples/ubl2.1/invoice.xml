@@ -152,7 +152,7 @@
             </cac:PartyTaxScheme>
             <cac:PartyLegalEntity>
                 <cbc:RegistrationName>Global Trade Chain</cbc:RegistrationName>
-                <cbc:CompanyID schemeID="0007">1234567890</cbc:CompanyID>
+                <cbc:CompanyID schemeID="0007">11190993</cbc:CompanyID>
                 <cbc:CompanyLegalForm>Säte: Big CIty</cbc:CompanyLegalForm>
             </cac:PartyLegalEntity>
             <cac:Contact>
@@ -193,7 +193,7 @@
             </cac:PartyTaxScheme>
             <cac:PartyLegalEntity>
                 <cbc:RegistrationName>Project Services</cbc:RegistrationName>
-                <cbc:CompanyID schemeID="0007">1234512345</cbc:CompanyID>
+                <cbc:CompanyID schemeID="0007">22222222</cbc:CompanyID>
             </cac:PartyLegalEntity>
             <cac:Contact>
                 <cbc:Name>B. E. Ställman</cbc:Name>

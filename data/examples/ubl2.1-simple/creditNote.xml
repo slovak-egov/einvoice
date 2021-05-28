@@ -103,10 +103,10 @@
  		</cac:PayeeFinancialAccount>
  	</cac:PaymentMeans>
  	<cac:TaxTotal>
- 		<cbc:TaxAmount currencyID="SEK">2500</cbc:TaxAmount>
+ 		<cbc:TaxAmount currencyID="EUR">2500</cbc:TaxAmount>
  		<cac:TaxSubtotal>
- 			<cbc:TaxableAmount currencyID="SEK">10000</cbc:TaxableAmount>
- 			<cbc:TaxAmount currencyID="SEK">2500</cbc:TaxAmount>
+ 			<cbc:TaxableAmount currencyID="EUR">10000</cbc:TaxableAmount>
+ 			<cbc:TaxAmount currencyID="EUR">2500</cbc:TaxAmount>
  			<cac:TaxCategory>
  				<cbc:ID>S</cbc:ID>
  				<cbc:Percent>25</cbc:Percent>
@@ -116,8 +116,8 @@
  			</cac:TaxCategory>
 		</cac:TaxSubtotal>
 		<cac:TaxSubtotal>
- 			<cbc:TaxableAmount currencyID="SEK">0</cbc:TaxableAmount>
- 			<cbc:TaxAmount currencyID="SEK">0</cbc:TaxAmount>
+ 			<cbc:TaxableAmount currencyID="EUR">0</cbc:TaxableAmount>
+ 			<cbc:TaxAmount currencyID="EUR">0</cbc:TaxAmount>
  			<cac:TaxCategory>
  				<cbc:ID>E</cbc:ID>
  				<cbc:Percent>0</cbc:Percent>
@@ -138,7 +138,7 @@
   	<cac:CreditNoteLine>
  		<cbc:ID>1</cbc:ID>
  		<cbc:Note>Item note</cbc:Note>
- 		<cbc:CreditedQuantity unitCode="DAY">7</cbc:CreditedQuantity>
+ 		<cbc:CreditedQuantity unitCode="DAY">500</cbc:CreditedQuantity>
  		<cbc:LineExtensionAmount currencyID= "EUR">10000</cbc:LineExtensionAmount>
  		<cbc:AccountingCost>Accounting 101-222-8</cbc:AccountingCost>
  		<cac:Item>
@@ -153,7 +153,7 @@
  			</cac:ClassifiedTaxCategory>
  		</cac:Item>
  		<cac:Price>
- 			<cbc:PriceAmount currencyID="SEK">20</cbc:PriceAmount>
+ 			<cbc:PriceAmount currencyID="EUR">20</cbc:PriceAmount>
  		</cac:Price>
  	</cac:CreditNoteLine>
 </CreditNote>
