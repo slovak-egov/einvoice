@@ -10,7 +10,7 @@ export default ({docs, path}) => {
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-one-half">
           <Field
-            docs={getDoc(docs, ['cac:AccountingCustomerParty', 'cac:Party', 'cac:PartyIdentification', 'cbc:ID'])}
+            docs={getDoc(docs, ['cac:AccountingCustomerParty', 'cac:Party', 'cac:PartyLegalEntity', 'cbc:CompanyID'])}
             label={t('partyIco')}
             path={[...path, 'ico']}
           />
@@ -36,6 +36,7 @@ export default ({docs, path}) => {
             docs={getDoc(docs, ['cac:AccountingCustomerParty', 'cac:Party', 'cac:PartyName', 'cbc:Name'])}
             label={t('partyBusinessName')}
             path={[...path, 'businessName']}
+            nullable
           />
         </div>
       </div>
@@ -47,8 +48,6 @@ export default ({docs, path}) => {
             path={[...path, 'address', 'line1']}
           />
         </div>
-      </div>
-      <div className="govuk-grid-row">
         <div className="govuk-grid-column-one-half">
           <Field
             docs={getDoc(docs, ['cac:AccountingCustomerParty', 'cac:Party', 'cac:PostalAddress', 'cbc:PostalZone'])}
@@ -56,6 +55,8 @@ export default ({docs, path}) => {
             path={[...path, 'address', 'postalZone']}
           />
         </div>
+      </div>
+      <div className="govuk-grid-row">
         <div className="govuk-grid-column-one-half">
           <Field
             docs={getDoc(docs, ['cac:AccountingCustomerParty', 'cac:Party', 'cac:PostalAddress', 'cbc:CityName'])}
@@ -63,8 +64,6 @@ export default ({docs, path}) => {
             path={[...path, 'address', 'city']}
           />
         </div>
-      </div>
-      <div className="govuk-grid-row">
         <div className="govuk-grid-column-one-half">
           <Field
             docs={getDoc(docs, ['cac:AccountingCustomerParty', 'cac:Party', 'cac:PostalAddress', 'cac:Country', 'cbc:IdentificationCode'])}
@@ -107,7 +106,7 @@ export default ({docs, path}) => {
           <Field
             docs={getDoc(docs, ['cac:Delivery', 'cac:DeliveryLocation', 'cac:Address', 'cbc:StreetName'])}
             label={t('addressLine1')}
-            path={[...path, 'deliveryAddress', 'addressLine1']}
+            path={[...path, 'deliveryAddress', 'line1']}
             nullable
           />
         </div>

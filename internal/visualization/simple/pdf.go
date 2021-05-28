@@ -70,7 +70,7 @@ func writeParty(pdf *gofpdf.Fpdf, x, y float64, name string, party *metadataExtr
 	pdf.SetXY(x, y+2*lineHeight)
 	pdf.Write(lineHeight, party.PartyLegalEntity.RegistrationName)
 	pdf.SetXY(x, y+3*lineHeight)
-	pdf.Write(lineHeight, "IČO: "+party.PartyIdentification.ID)
+	pdf.Write(lineHeight, "IČO: "+party.PartyLegalEntity.CompanyID)
 }
 
 func writeAmount(pdf *gofpdf.Fpdf, x, y float64, invoice *metadataExtractor.UblInvoice) {

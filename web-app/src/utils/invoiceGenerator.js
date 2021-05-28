@@ -60,14 +60,14 @@ const generatePreviousInvoiceReference = (ref) => ref ?
   </cac:BillingReference>`
   : ''
 
-const generateOriginatorReference = (ref) => ref ?
-  `<cac:OriginatorDocumentReference>
+const generateContractReference = (ref) => ref ?
+  `<cac:ContractDocumentReference>
       <cbc:ID>${ref}</cbc:ID>
-  </cac:OriginatorDocumentReference>`
+  </cac:ContractDocumentReference>`
   : ''
 
 const generateAddress = (address, name) => `<${name}>
-    <cbc:StreetName>${address.addressLine1}</cbc:StreetName>
+    <cbc:StreetName>${address.line1}</cbc:StreetName>
     <cbc:CityName>${address.city}</cbc:CityName>
     <cbc:PostalZone>${address.postalZone}</cbc:PostalZone>
     <cac:Country>
@@ -76,9 +76,6 @@ const generateAddress = (address, name) => `<${name}>
   </${name}>`
 
 const generateParty = (party) => `<cac:Party>
-    <cac:PartyIdentification>
-        <cbc:ID>${party.ico}</cbc:ID>
-    </cac:PartyIdentification>
     ${party.businessName ?
     `<cac:PartyName>
         <cbc:Name>${party.businessName}</cbc:Name>
@@ -93,6 +90,8 @@ const generateParty = (party) => `<cac:Party>
     </cac:PartyTaxScheme>
     <cac:PartyLegalEntity>
         <cbc:RegistrationName>${party.name}</cbc:RegistrationName>
+        <cbc:CompanyID>${party.ico}</cbc:CompanyID>
+        ${party.legalForm ? `<cbc:CompanyLegalForm>${party.legalForm}</cbc:CompanyLegalForm>` : ''}
     </cac:PartyLegalEntity>
     <cac:Contact>
         <cbc:Name>${party.contactName}</cbc:Name>
@@ -135,7 +134,7 @@ const generateItem = (item, name, quantityName, currency) =>
             </cac:ClassifiedTaxCategory>
         </cac:Item>
         <cac:Price>
-            <cbc:PriceAmount currencyID="${currency}">${item.quantityUnitPrice}</cbc:PriceAmount>
+            <cbc:PriceAmount currencyID="${currency}">${item.netPrice}</cbc:PriceAmount>
         </cac:Price>
     </${name}>`
 
@@ -155,7 +154,7 @@ const generateSimpleInvoice = (invoice) => `<?xml version="1.0" encoding="UTF-8"
     <cbc:DocumentCurrencyCode>${invoice.currencyCode}</cbc:DocumentCurrencyCode>
     ${generateOrderReference(invoice.orderReference)}
     ${generatePreviousInvoiceReference(invoice.previousInvoiceNumber)}
-    ${generateOriginatorReference(invoice.originatorDocumentId)}
+    ${generateContractReference(invoice.contractId)}
     <cac:AccountingSupplierParty>
         ${generateParty(invoice.supplier)}
     </cac:AccountingSupplierParty>
@@ -173,8 +172,8 @@ const generateSimpleInvoice = (invoice) => `<?xml version="1.0" encoding="UTF-8"
     </cac:Delivery>`
     : ''}
     <cac:PaymentMeans>
-        <cbc:PaymentMeansCode>${invoice.supplier.paymentMeansCode}</cbc:PaymentMeansCode>
-        <cbc:PaymentID>${invoice.paymentId}</cbc:PaymentID>
+        <cbc:PaymentMeansCode name="${invoice.supplier.paymentMeans}">${invoice.supplier.paymentMeansCode}</cbc:PaymentMeansCode>
+        <cbc:PaymentID>${invoice.supplier.paymentId}</cbc:PaymentID>
         <cac:PayeeFinancialAccount>
             <cbc:ID>${invoice.supplier.paymentAccountId}</cbc:ID>
         </cac:PayeeFinancialAccount>
@@ -208,14 +207,14 @@ const generateSimpleCreditNote = (invoice) => `<?xml version="1.0" encoding="UTF
 	<cbc:DocumentCurrencyCode>${invoice.currencyCode}</cbc:DocumentCurrencyCode>
 	${generateOrderReference(invoice.orderReference)}
   ${generatePreviousInvoiceReference(invoice.previousInvoiceNumber)}
-  ${generateOriginatorReference(invoice.originatorDocumentId)}
+  ${generateContractReference(invoice.contractId)}
 	<cac:AccountingSupplierParty>
       ${generateParty(invoice.supplier)}
   </cac:AccountingSupplierParty>
   <cac:AccountingCustomerParty>
       ${generateParty(invoice.customer)}
   </cac:AccountingCustomerParty>
-  ${(invoice.deliveryDate || invoice.deliveryAddress.line1) ?
+  ${(invoice.deliveryDate || invoice.customer.deliveryAddress.line1) ?
     `<cac:Delivery>
         ${invoice.deliveryDate ? `<cbc:ActualDeliveryDate>${invoice.deliveryDate}</cbc:ActualDeliveryDate>` : ''}
         ${invoice.deliveryAddress ?
@@ -226,9 +225,9 @@ const generateSimpleCreditNote = (invoice) => `<?xml version="1.0" encoding="UTF
     </cac:Delivery>`
     : ''}
   <cac:PaymentMeans>
-      <cbc:PaymentMeansCode>${invoice.supplier.paymentMeansCode}</cbc:PaymentMeansCode>
+      <cbc:PaymentMeansCode name="${invoice.supplier.paymentMeans}">${invoice.supplier.paymentMeansCode}</cbc:PaymentMeansCode>
       ${invoice.dueDate ? `<cbc:PaymentDueDate>${invoice.dueDate}</cbc:PaymentDueDate>` : ''}
-      <cbc:PaymentID>${invoice.paymentId}</cbc:PaymentID>
+      <cbc:PaymentID>${invoice.supplier.paymentId}</cbc:PaymentID>
       <cac:PayeeFinancialAccount>
           <cbc:ID>${invoice.supplier.paymentAccountId}</cbc:ID>
       </cac:PayeeFinancialAccount>

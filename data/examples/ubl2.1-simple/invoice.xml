@@ -19,14 +19,11 @@
             <cbc:ID>2018209</cbc:ID>
         </cac:InvoiceDocumentReference>
     </cac:BillingReference>
-    <cac:OriginatorDocumentReference>
-        <cbc:ID>Tender 2017-12, lot no. 3</cbc:ID>
-    </cac:OriginatorDocumentReference>
+    <cac:ContractDocumentReference>
+        <cbc:ID>2017-123</cbc:ID>
+    </cac:ContractDocumentReference>
     <cac:AccountingSupplierParty>
         <cac:Party>
-            <cac:PartyIdentification>
-                <cbc:ID>11190993</cbc:ID>
-            </cac:PartyIdentification>
             <cac:PartyName>
                 <cbc:Name>Global Trade Chain</cbc:Name>
             </cac:PartyName>
@@ -46,6 +43,8 @@
             </cac:PartyTaxScheme>
             <cac:PartyLegalEntity>
                 <cbc:RegistrationName>The Global Chain Slovakia AB</cbc:RegistrationName>
+                <cbc:CompanyID>11190993</cbc:CompanyID>
+                <cbc:CompanyLegalForm>Säte: Big CIty</cbc:CompanyLegalForm>
             </cac:PartyLegalEntity>
             <cac:Contact>
                 <cbc:Name>A Person</cbc:Name>
@@ -56,9 +55,6 @@
     </cac:AccountingSupplierParty>
     <cac:AccountingCustomerParty>
         <cac:Party>
-            <cac:PartyIdentification>
-                <cbc:ID>22222222</cbc:ID>
-            </cac:PartyIdentification>
             <cac:PartyName>
                 <cbc:Name>Project Services</cbc:Name>
             </cac:PartyName>
@@ -78,6 +74,7 @@
             </cac:PartyTaxScheme>
             <cac:PartyLegalEntity>
                 <cbc:RegistrationName>Project services AB</cbc:RegistrationName>
+                <cbc:CompanyID>22222222</cbc:CompanyID>
             </cac:PartyLegalEntity>
             <cac:Contact>
                 <cbc:Name>B Person</cbc:Name>
@@ -100,7 +97,7 @@
         </cac:DeliveryLocation>
     </cac:Delivery>
     <cac:PaymentMeans>
-        <cbc:PaymentMeansCode>30</cbc:PaymentMeansCode>
+        <cbc:PaymentMeansCode name="adf">30</cbc:PaymentMeansCode>
         <cbc:PaymentID>1800355</cbc:PaymentID>
         <cac:PayeeFinancialAccount>
             <cbc:ID>SK1212341234123412341234</cbc:ID>

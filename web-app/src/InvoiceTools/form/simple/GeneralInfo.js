@@ -68,15 +68,6 @@ export default ({docs, path, formType}) => {
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-one-half">
           <Field
-            docs={getDoc(docs, ['cac:PaymentMeans', 'cbc:PaymentID'])}
-            label={t('paymentId')}
-            path={[...path, 'paymentId']}
-          />
-        </div>
-      </div>
-      <div className="govuk-grid-row">
-        <div className="govuk-grid-column-one-half">
-          <Field
             docs={getDoc(docs, ['cac:OrderReference', 'cbc:ID'])}
             label={t('orderReference')}
             path={[...path, 'orderReference']}
@@ -95,9 +86,9 @@ export default ({docs, path, formType}) => {
         </div>
         <div className="govuk-grid-column-one-half">
           <Field
-            docs={getDoc(docs, ['cac:OriginatorDocumentReference', 'cbc:ID'])}
-            label={t('originatorDocumentId')}
-            path={[...path, 'originatorDocumentId']}
+            docs={getDoc(docs, ['cac:ContractDocumentReference', 'cbc:ID'])}
+            label={t('contractId')}
+            path={[...path, 'contractId']}
             nullable
           />
         </div>

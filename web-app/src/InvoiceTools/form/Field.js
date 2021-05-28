@@ -11,6 +11,7 @@ import {setFormField} from './actions'
 import {codeListsSelector} from '../../cache/documentation/state'
 import {allowedAttachmentMimeTypes, dataTypes} from '../../utils/constants'
 import {fileToBase64, formatDate, parseDate} from '../../utils/helpers'
+import {Link} from 'react-router-dom'
 
 const fileToState = (file, name, mime) => ({
   text: file,
@@ -92,14 +93,24 @@ export const Field = ({docs, label, path, value, nullable, disabled}) => {
     }, [dispatch],
   )
 
+  const businessTerms = []
+  if (docs && docs.businessTerms) {
+    businessTerms.push(' (')
+    docs.businessTerms.forEach((id) => {
+      businessTerms.push(<Link key={id} to={`/invoiceDocumentation/businessTerms/${id}`}>{id}</Link>)
+      businessTerms.push(', ')
+    })
+    businessTerms[businessTerms.length-1] = ')'
+  }
+
   return (
     <>
       <Label>
-        {label}
+        {label}{businessTerms}
       </Label>
       <FieldInput
-        codeListIds={docs.codeLists}
-        dataType={docs.dataType}
+        codeListIds={docs && docs.codeLists}
+        dataType={docs && docs.dataType}
         updateField={updateField}
         value={currentValue}
         error={contentError}

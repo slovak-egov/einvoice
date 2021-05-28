@@ -1071,142 +1071,6 @@
          </xsd:documentation>
       </xsd:annotation>
       <xsd:sequence>
-         <xsd:element ref="cbc:ID" minOccurs="0" maxOccurs="1">
-            <xsd:annotation>
-               <xsd:documentation>
-                  <ccts:Component>
-                     <ccts:ComponentType>BBIE</ccts:ComponentType>
-                     <ccts:DictionaryEntryName>Allowance Charge. Identifier</ccts:DictionaryEntryName>
-                     <ccts:Definition>An identifier for this allowance or charge.</ccts:Definition>
-                     <ccts:Cardinality>0..1</ccts:Cardinality>
-                     <ccts:ObjectClass>Allowance Charge</ccts:ObjectClass>
-                     <ccts:PropertyTerm>Identifier</ccts:PropertyTerm>
-                     <ccts:RepresentationTerm>Identifier</ccts:RepresentationTerm>
-                     <ccts:DataType>Identifier. Type</ccts:DataType>
-                  </ccts:Component>
-               </xsd:documentation>
-            </xsd:annotation>
-         </xsd:element>
-         <xsd:element ref="cbc:ChargeIndicator" minOccurs="1" maxOccurs="1">
-            <xsd:annotation>
-               <xsd:documentation>
-                  <ccts:Component>
-                     <ccts:ComponentType>BBIE</ccts:ComponentType>
-                     <ccts:DictionaryEntryName>Allowance Charge. Charge_ Indicator. Indicator</ccts:DictionaryEntryName>
-                     <ccts:Definition>An indicator that this AllowanceCharge describes a charge (true) or a discount (false).</ccts:Definition>
-                     <ccts:Cardinality>1</ccts:Cardinality>
-                     <ccts:ObjectClass>Allowance Charge</ccts:ObjectClass>
-                     <ccts:PropertyTermQualifier>Charge</ccts:PropertyTermQualifier>
-                     <ccts:PropertyTerm>Indicator</ccts:PropertyTerm>
-                     <ccts:RepresentationTerm>Indicator</ccts:RepresentationTerm>
-                     <ccts:DataType>Indicator. Type</ccts:DataType>
-                  </ccts:Component>
-               </xsd:documentation>
-            </xsd:annotation>
-         </xsd:element>
-         <xsd:element ref="cbc:AllowanceChargeReasonCode" minOccurs="0" maxOccurs="1">
-            <xsd:annotation>
-               <xsd:documentation>
-                  <ccts:Component>
-                     <ccts:ComponentType>BBIE</ccts:ComponentType>
-                     <ccts:DictionaryEntryName>Allowance Charge. Allowance Charge Reason Code. Code</ccts:DictionaryEntryName>
-                     <ccts:Definition>A mutually agreed code signifying the reason for this allowance or charge.</ccts:Definition>
-                     <ccts:Cardinality>0..1</ccts:Cardinality>
-                     <ccts:ObjectClass>Allowance Charge</ccts:ObjectClass>
-                     <ccts:PropertyTerm>Allowance Charge Reason Code</ccts:PropertyTerm>
-                     <ccts:RepresentationTerm>Code</ccts:RepresentationTerm>
-                     <ccts:DataTypeQualifier>Allowance Charge Reason</ccts:DataTypeQualifier>
-                     <ccts:DataType>Allowance Charge Reason_ Code. Type</ccts:DataType>
-                  </ccts:Component>
-               </xsd:documentation>
-            </xsd:annotation>
-         </xsd:element>
-         <xsd:element ref="cbc:AllowanceChargeReason" minOccurs="0" maxOccurs="unbounded">
-            <xsd:annotation>
-               <xsd:documentation>
-                  <ccts:Component>
-                     <ccts:ComponentType>BBIE</ccts:ComponentType>
-                     <ccts:DictionaryEntryName>Allowance Charge. Allowance Charge_ Reason. Text</ccts:DictionaryEntryName>
-                     <ccts:Definition>The reason for this allowance or charge.</ccts:Definition>
-                     <ccts:Cardinality>0..n</ccts:Cardinality>
-                     <ccts:ObjectClass>Allowance Charge</ccts:ObjectClass>
-                     <ccts:PropertyTermQualifier>Allowance Charge</ccts:PropertyTermQualifier>
-                     <ccts:PropertyTerm>Reason</ccts:PropertyTerm>
-                     <ccts:RepresentationTerm>Text</ccts:RepresentationTerm>
-                     <ccts:DataType>Text. Type</ccts:DataType>
-                  </ccts:Component>
-               </xsd:documentation>
-            </xsd:annotation>
-         </xsd:element>
-         <xsd:element ref="cbc:MultiplierFactorNumeric" minOccurs="0" maxOccurs="1">
-            <xsd:annotation>
-               <xsd:documentation>
-                  <ccts:Component>
-                     <ccts:ComponentType>BBIE</ccts:ComponentType>
-                     <ccts:DictionaryEntryName>Allowance Charge. Multiplier_ Factor. Numeric</ccts:DictionaryEntryName>
-                     <ccts:Definition>A number by which the base amount is multiplied to calculate the actual amount of this allowance or charge.</ccts:Definition>
-                     <ccts:Cardinality>0..1</ccts:Cardinality>
-                     <ccts:ObjectClass>Allowance Charge</ccts:ObjectClass>
-                     <ccts:PropertyTermQualifier>Multiplier</ccts:PropertyTermQualifier>
-                     <ccts:PropertyTerm>Factor</ccts:PropertyTerm>
-                     <ccts:RepresentationTerm>Numeric</ccts:RepresentationTerm>
-                     <ccts:DataType>Numeric. Type</ccts:DataType>
-                     <ccts:Examples>0.20</ccts:Examples>
-                  </ccts:Component>
-               </xsd:documentation>
-            </xsd:annotation>
-         </xsd:element>
-         <xsd:element ref="cbc:PrepaidIndicator" minOccurs="0" maxOccurs="1">
-            <xsd:annotation>
-               <xsd:documentation>
-                  <ccts:Component>
-                     <ccts:ComponentType>BBIE</ccts:ComponentType>
-                     <ccts:DictionaryEntryName>Allowance Charge. Prepaid_ Indicator. Indicator</ccts:DictionaryEntryName>
-                     <ccts:Definition>An indicator that this allowance or charge is prepaid (true) or not (false).</ccts:Definition>
-                     <ccts:Cardinality>0..1</ccts:Cardinality>
-                     <ccts:ObjectClass>Allowance Charge</ccts:ObjectClass>
-                     <ccts:PropertyTermQualifier>Prepaid</ccts:PropertyTermQualifier>
-                     <ccts:PropertyTerm>Indicator</ccts:PropertyTerm>
-                     <ccts:RepresentationTerm>Indicator</ccts:RepresentationTerm>
-                     <ccts:DataType>Indicator. Type</ccts:DataType>
-                  </ccts:Component>
-               </xsd:documentation>
-            </xsd:annotation>
-         </xsd:element>
-         <xsd:element ref="cbc:SequenceNumeric" minOccurs="0" maxOccurs="1">
-            <xsd:annotation>
-               <xsd:documentation>
-                  <ccts:Component>
-                     <ccts:ComponentType>BBIE</ccts:ComponentType>
-                     <ccts:DictionaryEntryName>Allowance Charge. Sequence. Numeric</ccts:DictionaryEntryName>
-                     <ccts:Definition>A number indicating the order of this allowance or charge in the sequence of calculations applied when there are multiple allowances or charges.</ccts:Definition>
-                     <ccts:Cardinality>0..1</ccts:Cardinality>
-                     <ccts:ObjectClass>Allowance Charge</ccts:ObjectClass>
-                     <ccts:PropertyTerm>Sequence</ccts:PropertyTerm>
-                     <ccts:RepresentationTerm>Numeric</ccts:RepresentationTerm>
-                     <ccts:DataType>Numeric. Type</ccts:DataType>
-                     <ccts:Examples>1, 2, 3, 4, etc.</ccts:Examples>
-                  </ccts:Component>
-               </xsd:documentation>
-            </xsd:annotation>
-         </xsd:element>
-         <xsd:element ref="cbc:Amount" minOccurs="1" maxOccurs="1">
-            <xsd:annotation>
-               <xsd:documentation>
-                  <ccts:Component>
-                     <ccts:ComponentType>BBIE</ccts:ComponentType>
-                     <ccts:DictionaryEntryName>Allowance Charge. Amount</ccts:DictionaryEntryName>
-                     <ccts:Definition>The monetary amount of this allowance or charge to be applied.</ccts:Definition>
-                     <ccts:Cardinality>1</ccts:Cardinality>
-                     <ccts:ObjectClass>Allowance Charge</ccts:ObjectClass>
-                     <ccts:PropertyTerm>Amount</ccts:PropertyTerm>
-                     <ccts:RepresentationTerm>Amount</ccts:RepresentationTerm>
-                     <ccts:DataType>Amount. Type</ccts:DataType>
-                     <ccts:Examples>35,23</ccts:Examples>
-                  </ccts:Component>
-               </xsd:documentation>
-            </xsd:annotation>
-         </xsd:element>
          <xsd:element ref="cbc:BaseAmount" minOccurs="0" maxOccurs="1">
             <xsd:annotation>
                <xsd:documentation>
@@ -1220,103 +1084,6 @@
                      <ccts:PropertyTerm>Amount</ccts:PropertyTerm>
                      <ccts:RepresentationTerm>Amount</ccts:RepresentationTerm>
                      <ccts:DataType>Amount. Type</ccts:DataType>
-                  </ccts:Component>
-               </xsd:documentation>
-            </xsd:annotation>
-         </xsd:element>
-         <xsd:element ref="cbc:AccountingCostCode" minOccurs="0" maxOccurs="1">
-            <xsd:annotation>
-               <xsd:documentation>
-                  <ccts:Component>
-                     <ccts:ComponentType>BBIE</ccts:ComponentType>
-                     <ccts:DictionaryEntryName>Allowance Charge. Accounting Cost Code. Code</ccts:DictionaryEntryName>
-                     <ccts:Definition>The accounting cost centre used by the buyer to account for this allowance or charge, expressed as a code.</ccts:Definition>
-                     <ccts:Cardinality>0..1</ccts:Cardinality>
-                     <ccts:ObjectClass>Allowance Charge</ccts:ObjectClass>
-                     <ccts:PropertyTerm>Accounting Cost Code</ccts:PropertyTerm>
-                     <ccts:RepresentationTerm>Code</ccts:RepresentationTerm>
-                     <ccts:DataType>Code. Type</ccts:DataType>
-                  </ccts:Component>
-               </xsd:documentation>
-            </xsd:annotation>
-         </xsd:element>
-         <xsd:element ref="cbc:AccountingCost" minOccurs="0" maxOccurs="1">
-            <xsd:annotation>
-               <xsd:documentation>
-                  <ccts:Component>
-                     <ccts:ComponentType>BBIE</ccts:ComponentType>
-                     <ccts:DictionaryEntryName>Allowance Charge. Accounting Cost. Text</ccts:DictionaryEntryName>
-                     <ccts:Definition>The accounting cost centre used by the buyer to account for this allowance or charge, expressed as text.</ccts:Definition>
-                     <ccts:Cardinality>0..1</ccts:Cardinality>
-                     <ccts:ObjectClass>Allowance Charge</ccts:ObjectClass>
-                     <ccts:PropertyTerm>Accounting Cost</ccts:PropertyTerm>
-                     <ccts:RepresentationTerm>Text</ccts:RepresentationTerm>
-                     <ccts:DataType>Text. Type</ccts:DataType>
-                  </ccts:Component>
-               </xsd:documentation>
-            </xsd:annotation>
-         </xsd:element>
-         <xsd:element ref="cbc:PerUnitAmount" minOccurs="0" maxOccurs="1">
-            <xsd:annotation>
-               <xsd:documentation>
-                  <ccts:Component>
-                     <ccts:ComponentType>BBIE</ccts:ComponentType>
-                     <ccts:DictionaryEntryName>Allowance Charge. Per Unit_ Amount. Amount</ccts:DictionaryEntryName>
-                     <ccts:Definition>The allowance or charge per item; the total allowance or charge is calculated by multiplying the per unit amount by the quantity of items, either at the level of the individual transaction line or for the total number of items in the document, depending on the context in which it appears.</ccts:Definition>
-                     <ccts:Cardinality>0..1</ccts:Cardinality>
-                     <ccts:ObjectClass>Allowance Charge</ccts:ObjectClass>
-                     <ccts:PropertyTermQualifier>Per Unit</ccts:PropertyTermQualifier>
-                     <ccts:PropertyTerm>Amount</ccts:PropertyTerm>
-                     <ccts:RepresentationTerm>Amount</ccts:RepresentationTerm>
-                     <ccts:DataType>Amount. Type</ccts:DataType>
-                  </ccts:Component>
-               </xsd:documentation>
-            </xsd:annotation>
-         </xsd:element>
-         <xsd:element ref="cac:TaxCategory" minOccurs="0" maxOccurs="unbounded">
-            <xsd:annotation>
-               <xsd:documentation>
-                  <ccts:Component>
-                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
-                     <ccts:DictionaryEntryName>Allowance Charge. Tax Category</ccts:DictionaryEntryName>
-                     <ccts:Definition>A tax category applicable to this allowance or charge.</ccts:Definition>
-                     <ccts:Cardinality>0..n</ccts:Cardinality>
-                     <ccts:ObjectClass>Allowance Charge</ccts:ObjectClass>
-                     <ccts:PropertyTerm>Tax Category</ccts:PropertyTerm>
-                     <ccts:AssociatedObjectClass>Tax Category</ccts:AssociatedObjectClass>
-                     <ccts:RepresentationTerm>Tax Category</ccts:RepresentationTerm>
-                  </ccts:Component>
-               </xsd:documentation>
-            </xsd:annotation>
-         </xsd:element>
-         <xsd:element ref="cac:TaxTotal" minOccurs="0" maxOccurs="1">
-            <xsd:annotation>
-               <xsd:documentation>
-                  <ccts:Component>
-                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
-                     <ccts:DictionaryEntryName>Allowance Charge. Tax Total</ccts:DictionaryEntryName>
-                     <ccts:Definition>The total of all the taxes applicable to this allowance or charge.</ccts:Definition>
-                     <ccts:Cardinality>0..1</ccts:Cardinality>
-                     <ccts:ObjectClass>Allowance Charge</ccts:ObjectClass>
-                     <ccts:PropertyTerm>Tax Total</ccts:PropertyTerm>
-                     <ccts:AssociatedObjectClass>Tax Total</ccts:AssociatedObjectClass>
-                     <ccts:RepresentationTerm>Tax Total</ccts:RepresentationTerm>
-                  </ccts:Component>
-               </xsd:documentation>
-            </xsd:annotation>
-         </xsd:element>
-         <xsd:element ref="cac:PaymentMeans" minOccurs="0" maxOccurs="unbounded">
-            <xsd:annotation>
-               <xsd:documentation>
-                  <ccts:Component>
-                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
-                     <ccts:DictionaryEntryName>Allowance Charge. Payment Means</ccts:DictionaryEntryName>
-                     <ccts:Definition>A means of payment for this allowance or charge.</ccts:Definition>
-                     <ccts:Cardinality>0..n</ccts:Cardinality>
-                     <ccts:ObjectClass>Allowance Charge</ccts:ObjectClass>
-                     <ccts:PropertyTerm>Payment Means</ccts:PropertyTerm>
-                     <ccts:AssociatedObjectClass>Payment Means</ccts:AssociatedObjectClass>
-                     <ccts:RepresentationTerm>Payment Means</ccts:RepresentationTerm>
                   </ccts:Component>
                </xsd:documentation>
             </xsd:annotation>
@@ -19310,22 +19077,6 @@ Thus, the column Preference Criterion will indicate either A, B, C,...</ccts:Exa
          </xsd:documentation>
       </xsd:annotation>
       <xsd:sequence>
-         <xsd:element ref="cac:PartyIdentification" minOccurs="0" maxOccurs="unbounded">
-            <xsd:annotation>
-               <xsd:documentation>
-                  <ccts:Component>
-                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
-                     <ccts:DictionaryEntryName>Party. Party Identification</ccts:DictionaryEntryName>
-                     <ccts:Definition>An identifier for this party.</ccts:Definition>
-                     <ccts:Cardinality>0..n</ccts:Cardinality>
-                     <ccts:ObjectClass>Party</ccts:ObjectClass>
-                     <ccts:PropertyTerm>Party Identification</ccts:PropertyTerm>
-                     <ccts:AssociatedObjectClass>Party Identification</ccts:AssociatedObjectClass>
-                     <ccts:RepresentationTerm>Party Identification</ccts:RepresentationTerm>
-                  </ccts:Component>
-               </xsd:documentation>
-            </xsd:annotation>
-         </xsd:element>
          <xsd:element ref="cac:PartyName" minOccurs="0" maxOccurs="unbounded">
             <xsd:annotation>
                <xsd:documentation>
@@ -19468,6 +19219,40 @@ Thus, the column Preference Criterion will indicate either A, B, C,...</ccts:Exa
                   </ccts:Component>
                </xsd:documentation>
             </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cbc:CompanyID" minOccurs="0" maxOccurs="1">
+             <xsd:annotation>
+                 <xsd:documentation>
+                     <ccts:Component>
+                         <ccts:ComponentType>BBIE</ccts:ComponentType>
+                         <ccts:DictionaryEntryName>Party Legal Entity. Company Identifier. Identifier</ccts:DictionaryEntryName>
+                         <ccts:Definition>An identifier for the party as registered within a company registration scheme.</ccts:Definition>
+                         <ccts:Cardinality>0..1</ccts:Cardinality>
+                         <ccts:ObjectClass>Party Legal Entity</ccts:ObjectClass>
+                         <ccts:PropertyTerm>Company Identifier</ccts:PropertyTerm>
+                         <ccts:RepresentationTerm>Identifier</ccts:RepresentationTerm>
+                         <ccts:DataType>Identifier. Type</ccts:DataType>
+                         <ccts:AlternativeBusinessTerms>Business Registration Number, Company Number</ccts:AlternativeBusinessTerms>
+                         <ccts:Examples>3556625 </ccts:Examples>
+                     </ccts:Component>
+                 </xsd:documentation>
+             </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cbc:CompanyLegalForm" minOccurs="0" maxOccurs="1">
+             <xsd:annotation>
+                 <xsd:documentation>
+                     <ccts:Component>
+                         <ccts:ComponentType>BBIE</ccts:ComponentType>
+                         <ccts:DictionaryEntryName>Party Legal Entity. Company Legal Form. Text</ccts:DictionaryEntryName>
+                         <ccts:Definition>The company legal status, expressed as a text.</ccts:Definition>
+                         <ccts:Cardinality>0..1</ccts:Cardinality>
+                         <ccts:ObjectClass>Party Legal Entity</ccts:ObjectClass>
+                         <ccts:PropertyTerm>Company Legal Form</ccts:PropertyTerm>
+                         <ccts:RepresentationTerm>Text</ccts:RepresentationTerm>
+                         <ccts:DataType>Text. Type</ccts:DataType>
+                     </ccts:Component>
+                 </xsd:documentation>
+             </xsd:annotation>
          </xsd:element>
       </xsd:sequence>
    </xsd:complexType>

@@ -14,9 +14,10 @@ const Item = ({docs, formType, path, index, number}) => {
   const {t} = useTranslation('form')
   const dispatch = useDispatch()
   const itemQuantity = useSelector(formFieldSelector([...itemPath, 'quantity']))
-  const quantityUnitPrice = useSelector(formFieldSelector([...itemPath, 'quantityUnitPrice']))
+  const itemNetPrice = useSelector(formFieldSelector([...itemPath, 'netPrice']))
   const taxPercentage = useSelector(formFieldSelector([...itemPath, 'taxPercentage']))
   const amountWithoutVat = useSelector(formFieldSelector([...itemPath, 'amountWithoutVat']))
+  const amount = useSelector(formFieldSelector([...itemPath, 'amount']))
   const vat = useSelector(formFieldSelector([...itemPath, 'vat']))
 
   useEffect(() => {
@@ -29,7 +30,7 @@ const Item = ({docs, formType, path, index, number}) => {
 
   useEffect(() => {
     dispatch(setFormField([...invoicePath, 'amountChange'])(true))
-  }, [vat])
+  }, [amount])
 
   return (
     <div>
@@ -107,8 +108,8 @@ const Item = ({docs, formType, path, index, number}) => {
               ['cac:CreditNoteLine', 'cac:Price', 'cbc:PriceAmount'],
               formType
             )}
-            label={t('quantityUnitPrice')}
-            path={[...path, 'quantityUnitPrice']}
+            label={t('itemNetPrice')}
+            path={[...path, 'netPrice']}
           />
         </div>
         <div className="govuk-grid-column-one-half">
@@ -122,8 +123,8 @@ const Item = ({docs, formType, path, index, number}) => {
             path={[...path, 'amountWithoutVat']}
             disabled
             nullable
-            value={(Number(itemQuantity) && Number(quantityUnitPrice) ?
-              Number(itemQuantity) * Number(quantityUnitPrice)
+            value={(Number(itemQuantity) && Number(itemNetPrice) ?
+              Number(itemQuantity) * Number(itemNetPrice)
               :
               0
             ).toFixed(2)}
@@ -167,16 +168,11 @@ const Item = ({docs, formType, path, index, number}) => {
         </div>
         <div className="govuk-grid-column-one-half">
           <Field
-            docs={getDoc(docs,
-              ['cac:InvoiceLine', 'cbc:LineExtensionAmount'],
-              ['cac:CreditNoteLine', 'cbc:LineExtensionAmount'],
-              formType
-            )}
             label={t('itemVat')}
             path={[...path, 'vat']}
             disabled
-            value={(Number(taxPercentage) && Number(itemQuantity) && Number(quantityUnitPrice) ?
-              Number(taxPercentage) * Number(itemQuantity) * Number(quantityUnitPrice) / 100
+            value={(Number(taxPercentage) >= 0 && Number(itemQuantity) && Number(itemNetPrice) ?
+              Number(taxPercentage) * Number(itemQuantity) * Number(itemNetPrice) / 100
               :
               0
             ).toFixed(2)}
@@ -186,16 +182,11 @@ const Item = ({docs, formType, path, index, number}) => {
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-one-half">
           <Field
-            docs={getDoc(docs,
-              ['cac:InvoiceLine', 'cbc:LineExtensionAmount'],
-              ['cac:CreditNoteLine', 'cbc:LineExtensionAmount'],
-              formType
-            )}
             label={t('itemQuantityUnitPriceWithVat')}
             path={[...path, 'quantityUnitPriceWithVat']}
             disabled
-            value={(Number(taxPercentage) && Number(quantityUnitPrice) ?
-              (1 + Number(taxPercentage) / 100) * Number(quantityUnitPrice)
+            value={(Number(taxPercentage) >= 0 && Number(itemNetPrice) ?
+              (1 + Number(taxPercentage) / 100) * Number(itemNetPrice)
               :
               0
             ).toFixed(2)}
@@ -203,16 +194,11 @@ const Item = ({docs, formType, path, index, number}) => {
         </div>
         <div className="govuk-grid-column-one-half">
           <Field
-            docs={getDoc(docs,
-              ['cac:InvoiceLine', 'cbc:LineExtensionAmount'],
-              ['cac:CreditNoteLine', 'cbc:LineExtensionAmount'],
-              formType
-            )}
             label={t('itemAmount')}
             path={[...path, 'amount']}
             disabled
-            value={(Number(taxPercentage) && Number(itemQuantity) && Number(quantityUnitPrice) ?
-              (1 + Number(taxPercentage) / 100) * Number(itemQuantity) * Number(quantityUnitPrice)
+            value={(Number(taxPercentage) >= 0 && Number(itemQuantity) && Number(itemNetPrice) ?
+              (1 + Number(taxPercentage) / 100) * Number(itemQuantity) * Number(itemNetPrice)
               :
               0
             ).toFixed(2)}
