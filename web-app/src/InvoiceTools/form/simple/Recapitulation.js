@@ -4,6 +4,9 @@ import {useEffect} from 'react'
 import {formFieldSelector, formItemsSelector} from '../state'
 import {setFormField} from '../actions'
 import {Table} from '../../../helpers/idsk'
+import {Link} from 'react-router-dom'
+
+const businessTerm = (id) => <Link to={`/invoiceDocumentation/businessTerms/${id}`}>{id}</Link>
 
 export default ({path, formType}) => {
   const dispatch = useDispatch()
@@ -61,32 +64,32 @@ export default ({path, formType}) => {
     <div>
       <div className="govuk-heading-l">{t('recapitulation')}</div>
       <Table
-        head={[
-          {children: ''},
-          {children: t('taxPercentage')},
-          {children: t('taxBase')},
-          {children: t('vat')},
-          {children: t('total')},
-        ]}
-        rows={[...Object.entries(items).map(([itemIndex, item], index) => [
-          {children: `${t('item')} ${index + 1}`},
-          {children: item.taxPercentage},
-          {children: item.amountWithoutVat},
-          {children: item.vat},
-          {children: item.amount},
-        ]), [
-          {children: ''},
-          {children: <div className="govuk-heading-s">{t('total')}:</div>},
-          {children: amountWithoutVat},
-          {children: vat},
-          {children: amount},
-        ], [
-          {children: ''},
-          {children: ''},
-          {children: ''},
-          {children: <div className="govuk-heading-m">{t('totalToPay')}</div>},
-          {children: amount},
-        ]]}
+        rows={[
+          [
+            {children: ''},
+            {children: <div><b>{t('taxPercentage')}</b> ({businessTerm('BT-119')})</div>},
+            {children: <div><b>{t('taxBase')}</b> ({businessTerm('BT-116')})</div>},
+            {children: <div><b>{t('vat')}</b> ({businessTerm('BT-117')})</div>},
+            {children: <div><b>{t('total')}</b> ({businessTerm('BT-112')})</div>},
+          ], ...Object.entries(items).map(([itemIndex, item], index) => [
+            {children: `${t('item')} ${index + 1}`},
+            {children: item.taxPercentage},
+            {children: item.amountWithoutVat},
+            {children: item.vat},
+            {children: item.amount},
+          ]), [
+            {children: ''},
+            {children: <div className="govuk-heading-s">{t('total')}:</div>},
+            {children: <div>{amountWithoutVat} ({businessTerm('BT-109')})</div>},
+            {children: <div>{vat} ({businessTerm('BT-110')})</div>},
+            {children: <div>{amount} ({businessTerm('BT-112')})</div>},
+          ], [
+            {children: ''},
+            {children: ''},
+            {children: ''},
+            {children: <div><b>{t('totalToPay')}</b> ({businessTerm('BT-115')})</div>},
+            {children: amount},
+          ]]}
       />
     </div>
   )
