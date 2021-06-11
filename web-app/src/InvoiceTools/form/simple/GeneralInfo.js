@@ -6,7 +6,7 @@ export default ({docs, path, formType}) => {
   const {t} = useTranslation('form')
   return (
     <div>
-      <div className="govuk-heading-l">{t('generalInfo')}</div>
+      <div className="govuk-heading-l">{t('general')}</div>
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-one-half">
           <Field
