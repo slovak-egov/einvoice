@@ -16,7 +16,7 @@ export default ({docs, path}) => {
 
   useEffect(() => {
     dispatch(setFormField([...path, 'paymentMeans'])(
-      paymentMeansCode && codeLists.UNCL4461.codes[paymentMeansCode].name[i18n.language]
+      paymentMeansCode && codeLists.UNCL4461.codes[paymentMeansCode] && codeLists.UNCL4461.codes[paymentMeansCode].name[i18n.language]
     ))
   }, [paymentMeansCode])
 
