@@ -5,53 +5,87 @@ import Items from './Items'
 import Recapitulation from './Recapitulation'
 import Notes from './Notes'
 import {useTranslation} from 'react-i18next'
-import {useState} from 'react'
 import Button from '../../../helpers/idsk/Button'
+import {Redirect, Route, Switch, useHistory, useLocation} from 'react-router-dom'
+import Link from '../../../helpers/idsk/Link'
 
 export default ({formType, path, docs}) => {
   const {t} = useTranslation('form')
-  const [section, setSection] = useState(0)
+  const location = useLocation()
+  const history = useHistory()
+  const section = location.pathname.split('/').pop()
+  const sections = ['general', 'supplier', 'customer', 'items', 'recapitulation', 'notes']
+  const sectionIndex = sections.findIndex((s) => s === section)
 
-  const sectionLink = (index, name) => (
-    <a
+  const sectionLink = (name) => (
+    <Link
       style={{textAlign: 'center', color: '#007bff'}}
       className="govuk-heading-s govuk-grid-column-one-half"
-      onClick={() => setSection(index)}
+      to={`/invoice-tools/form/${name}`}
     >
-      {section === index ? <u>{t(name)}</u> : t(name)}
-    </a>
+      {section === name ? <u>{t(name)}</u> : t(name)}
+    </Link>
   )
 
   return (
     <div>
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-one-third govuk-grid-row">
-          {sectionLink(0, 'generalInfo')}
-          {sectionLink(1, 'supplier')}
+          {sectionLink('general')}
+          {sectionLink('supplier')}
         </div>
         <div className="govuk-grid-column-one-third govuk-grid-row">
-          {sectionLink(2, 'customer')}
-          {sectionLink(3, 'items')}
+          {sectionLink('customer')}
+          {sectionLink('items')}
         </div>
         <div className="govuk-grid-column-one-third govuk-grid-row">
-          {sectionLink(4, 'recapitulation')}
-          {sectionLink(5, 'notes')}
+          {sectionLink('recapitulation')}
+          {sectionLink('notes')}
         </div>
       </div>
       <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
-      { section === 0 && <GeneralInfo formType={formType} path={[...path, 'general']} docs={docs} />}
-      { section === 1 && <Supplier path={[...path, 'supplier']} docs={docs} />}
-      { section === 2 && <Customer path={[...path, 'customer']} docs={docs} />}
-      { section === 3 && <Items formType={formType} path={[...path, 'items']} docs={docs} />}
-      { section === 4 && <Recapitulation formType={formType} path={[...path, 'recapitulation']} docs={docs} />}
-      { section === 5 && <Notes path={[...path, 'notes']} docs={docs} />}
+      <Switch>
+        <Route
+          exact
+          path="/invoice-tools/form/general"
+          render={(props) => <GeneralInfo {...props} formType={formType} path={[...path, 'general']} docs={docs} />}
+        />
+        <Route
+          path="/invoice-tools/form/supplier"
+          render={(props) => <Supplier {...props} path={[...path, 'supplier']} docs={docs} />}
+        />
+        <Route
+          path="/invoice-tools/form/customer"
+          render={(props) => <Customer {...props} path={[...path, 'customer']} docs={docs} />}
+        />
+        <Route
+          path="/invoice-tools/form/items"
+          render={(props) => <Items {...props} formType={formType} path={[...path, 'items']} docs={docs} />}
+        />
+        <Route
+          path="/invoice-tools/form/recapitulation"
+          render={(props) => <Recapitulation {...props} formType={formType} path={[...path, 'recapitulation']} docs={docs} />}
+        />
+        <Route
+          path="/invoice-tools/form/notes"
+          render={(props) => <Notes {...props} path={[...path, 'notes']} docs={docs} />}
+        />
+        <Route path="/invoice-tools/form">
+          <Redirect to="/invoice-tools/form/general" />
+        </Route>
+      </Switch>
       <div className="govuk-button-group">
-        { section > 0 &&
-        <Button className="govuk-button--secondary" onClick={() => setSection(section - 1)}>
+        { sectionIndex > 0 &&
+        <Button
+          className="govuk-button--secondary"
+          onClick={() => history.push(`/invoice-tools/form/${sections[sectionIndex - 1]}`)}
+        >
           {t('previousSection')}
         </Button>}
-        { section < 5 &&
-        <Button onClick={() => setSection(section + 1)}>
+        { sectionIndex < sections.length - 1 &&
+        <Button
+          onClick={() => history.push(`/invoice-tools/form/${sections[sectionIndex + 1]}`)}
+        >
           {t('nextSection')}
         </Button>}
       </div>

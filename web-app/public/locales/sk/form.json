@@ -1,5 +1,5 @@
 {
-  "generalInfo": "Úvod",
+  "general": "Úvod",
   "invoiceNumber": "Číslo faktúry",
   "previousInvoiceNumber": "Referenčné označenie predchádzajúcej faktúry",
   "invoiceTypeCode": "Kód typu faktúry",
