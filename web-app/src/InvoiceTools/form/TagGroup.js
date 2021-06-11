@@ -2,7 +2,7 @@ import {useCallback, useEffect, useState} from 'react'
 import {useDispatch} from 'react-redux'
 import {useTranslation} from 'react-i18next'
 import {Accordion, Badge, Button, Card} from 'react-bootstrap'
-import FormField from './Field'
+import {ComplexField} from './Field'
 import AddField from './AddField'
 import {removeFieldInstance} from './actions'
 
@@ -31,7 +31,7 @@ const Tag = ({canDelete, path, formData, docs, setErrorCount}) => {
 
   if (!formData.children) {
     result.push(
-      <FormField
+      <ComplexField
         key="text"
         path={[...path, 'text']}
         docs={docs}
@@ -48,7 +48,7 @@ const Tag = ({canDelete, path, formData, docs, setErrorCount}) => {
       const attrPath = [...path, 'attributes', name]
       if (formData.attributes[name].length > 0) {
         result.push(
-          <FormField
+          <ComplexField
             key={`attr-${name}`}
             path={[...attrPath, 0, 'text']}
             docs={attr}

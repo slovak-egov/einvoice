@@ -34,10 +34,10 @@ func parseUblInvoice(rawInvoice []byte) (*entity.Invoice, error) {
 	return &entity.Invoice{
 		Format:                   entity.UblFormat,
 		Sender:                   invoice.AccountingSupplierParty.Party.PartyLegalEntity.RegistrationName,
-		SupplierIco:              invoice.AccountingSupplierParty.Party.PartyIdentification.ID,
+		SupplierIco:              invoice.AccountingSupplierParty.Party.PartyLegalEntity.CompanyID,
 		SupplierCountry:          invoice.AccountingSupplierParty.Party.PostalAddress.Country.IdentificationCode,
 		Receiver:                 invoice.AccountingCustomerParty.Party.PartyLegalEntity.RegistrationName,
-		CustomerIco:              invoice.AccountingCustomerParty.Party.PartyIdentification.ID,
+		CustomerIco:              invoice.AccountingCustomerParty.Party.PartyLegalEntity.CompanyID,
 		CustomerCountry:          invoice.AccountingCustomerParty.Party.PostalAddress.Country.IdentificationCode,
 		Amount:                   invoice.LegalMonetaryTotal.TaxInclusiveAmount.Value,
 		AmountCurrency:           invoice.LegalMonetaryTotal.TaxInclusiveAmount.CurrencyID,

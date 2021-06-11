@@ -24,6 +24,9 @@
                     <cbc:IdentificationCode>SK</cbc:IdentificationCode>
                 </cac:Country>
             </cac:PostalAddress>
+            <cac:PartyLegalEntity>
+                <cbc:CompanyID schemeID="0007">11190993</cbc:CompanyID>
+            </cac:PartyLegalEntity>
         </cac:Party>
     </cac:AccountingSupplierParty>
     <cac:AccountingCustomerParty>
@@ -43,6 +46,9 @@
                     <cbc:IdentificationCode>SK</cbc:IdentificationCode>
                 </cac:Country>
             </cac:PostalAddress>
+            <cac:PartyLegalEntity>
+                <cbc:CompanyID schemeID="0007">22222222</cbc:CompanyID>
+            </cac:PartyLegalEntity>
         </cac:Party>
     </cac:AccountingCustomerParty>
     <cac:LegalMonetaryTotal>

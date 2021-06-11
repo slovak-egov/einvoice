@@ -19,7 +19,9 @@ func TestValidation(t *testing.T) {
 		testInvoicePath string
 	}{
 		{entity.UblFormat, entity.InvoiceDocumentType, "../../data/examples/ubl2.1/invoice.xml"},
+		{entity.UblFormat, entity.InvoiceDocumentType, "../../data/examples/ubl2.1-simple/invoice.xml"},
 		{entity.UblFormat, entity.CreditNoteDocumentType, "../../data/examples/ubl2.1/creditNote.xml"},
+		{entity.UblFormat, entity.CreditNoteDocumentType, "../../data/examples/ubl2.1-simple/creditNote.xml"},
 		{entity.D16bFormat, entity.InvoiceDocumentType, "../../data/examples/d16b/invoice.xml"},
 	}
 	for _, tt := range flagtests {

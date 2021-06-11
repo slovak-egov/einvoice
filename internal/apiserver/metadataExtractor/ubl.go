@@ -21,11 +21,9 @@ type Amount struct {
 }
 
 type UblParty struct {
-	PartyIdentification struct {
-		ID string
-	}
 	PartyLegalEntity struct {
 		RegistrationName string
+		CompanyID        string
 	}
 	PostalAddress struct {
 		Country struct {

@@ -11,6 +11,7 @@ import {setFormField} from './actions'
 import {codeListsSelector} from '../../cache/documentation/state'
 import {allowedAttachmentMimeTypes, dataTypes} from '../../utils/constants'
 import {fileToBase64, formatDate, parseDate} from '../../utils/helpers'
+import {Link} from 'react-router-dom'
 
 const fileToState = (file, name, mime) => ({
   text: file,
@@ -20,7 +21,7 @@ const fileToState = (file, name, mime) => ({
   },
 })
 
-export default ({canDelete, dropField, docs, path, setErrorCount}) => {
+export const ComplexField = ({canDelete, dropField, docs, path, setErrorCount}) => {
   const {t, i18n} = useTranslation('common')
   // Uploading file is special case
   // We allow field to change its parent, it will set mime type and filename too
@@ -71,8 +72,56 @@ export default ({canDelete, dropField, docs, path, setErrorCount}) => {
   )
 }
 
-const FieldInput = ({codeListIds, dataType, error, updateField, value}) => {
+export const Field = ({docs, label, path, value, nullable, disabled}) => {
   const {t} = useTranslation('common')
+  const dispatch = useDispatch()
+  const currentValue = useSelector(formFieldSelector(path)) || ''
+
+  useEffect(() => {
+    if (value !== undefined && currentValue !== value) {
+      dispatch(setFormField(path)(value))
+    }
+  }, [dispatch, value])
+
+  const contentError = !nullable && currentValue === '' ? t('errorMessages.emptyField') : null
+
+  const updateField = useCallback(
+    (value) => {
+      if (!disabled) {
+        dispatch(setFormField(path)(value))
+      }
+    }, [dispatch],
+  )
+
+  const businessTerms = []
+  if (docs && docs.businessTerms) {
+    businessTerms.push(' (')
+    docs.businessTerms.forEach((id) => {
+      businessTerms.push(<Link key={id} to={`/invoiceDocumentation/businessTerms/${id}`}>{id}</Link>)
+      businessTerms.push(', ')
+    })
+    businessTerms[businessTerms.length - 1] = ')'
+  }
+
+  return (
+    <>
+      <Label>
+        {label}{businessTerms}
+      </Label>
+      <FieldInput
+        codeListIds={docs && docs.codeLists}
+        dataType={docs && docs.dataType}
+        updateField={updateField}
+        value={currentValue}
+        error={contentError}
+        disabled={disabled}
+      />
+    </>
+  )
+}
+
+const FieldInput = ({codeListIds, dataType, error, updateField, value}) => {
+  const {t, i18n} = useTranslation('common')
   const getValue = useCallback(
     async (e) => {
       switch (dataType) {
@@ -167,9 +216,9 @@ const FieldInput = ({codeListIds, dataType, error, updateField, value}) => {
           items={[{}]}
           itemGroups={codeListIds.map((id) => ({
             label: id,
-            items: Object.keys(codeLists[id].codes).map((code) => ({
-              children: code,
-              value: code,
+            items: Object.entries(codeLists[id].codes).map(([id, code]) => ({
+              children: `${id} - ${code.name[i18n.language]}`,
+              value: id,
             })),
           }))}
           value={value}
