@@ -39,7 +39,8 @@ const Item = ({docs, formType, path, index, number}) => {
 
   useEffect(() => {
     dispatch(setFormField([...itemPath, 'taxExemptionReason'])(
-      taxExemptionCode && codeLists.vatex.codes[taxExemptionCode] && codeLists.vatex.codes[taxExemptionCode].name[i18n.language]
+      taxExemptionCode && codeLists.vatex.codes[taxExemptionCode] &&
+      codeLists.vatex.codes[taxExemptionCode].name[i18n.language]
     ))
   }, [taxExemptionCode])
 
