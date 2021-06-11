@@ -67,37 +67,36 @@ const generateContractReference = (ref) => ref ?
   : ''
 
 const generateAddress = (address, name) => `<${name}>
-    <cbc:StreetName>${address.line1}</cbc:StreetName>
-    <cbc:CityName>${address.city}</cbc:CityName>
-    <cbc:PostalZone>${address.postalZone}</cbc:PostalZone>
+    ${address.line1 ? `<cbc:StreetName>${address.line1}</cbc:StreetName>` : ''}
+    ${address.city ? `<cbc:CityName>${address.city}</cbc:CityName>` : ''}
+    ${address.postalZone ? `<cbc:PostalZone>${address.postalZone}</cbc:PostalZone>` : ''}
     <cac:Country>
         <cbc:IdentificationCode>${address.country}</cbc:IdentificationCode>
     </cac:Country>
   </${name}>`
 
 const generateParty = (party) => `<cac:Party>
-    ${party.businessName ?
-    `<cac:PartyName>
-        <cbc:Name>${party.businessName}</cbc:Name>
-    </cac:PartyName>`
-    : ''}
     ${generateAddress(party.address, 'cac:PostalAddress')}
-    <cac:PartyTaxScheme>
+    ${party.vatId ?
+    `<cac:PartyTaxScheme>
         <cbc:CompanyID>${party.vatId}</cbc:CompanyID>
         <cac:TaxScheme>
             <cbc:ID>VAT</cbc:ID>
         </cac:TaxScheme>
-    </cac:PartyTaxScheme>
+    </cac:PartyTaxScheme>`
+    : ''}
     <cac:PartyLegalEntity>
         <cbc:RegistrationName>${party.name}</cbc:RegistrationName>
-        <cbc:CompanyID>${party.ico}</cbc:CompanyID>
+        ${party.ico ? `<cbc:CompanyID>${party.ico}</cbc:CompanyID>` : ''}
         ${party.legalForm ? `<cbc:CompanyLegalForm>${party.legalForm}</cbc:CompanyLegalForm>` : ''}
     </cac:PartyLegalEntity>
-    <cac:Contact>
-        <cbc:Name>${party.contactName}</cbc:Name>
-        <cbc:Telephone>${party.contactPhone}</cbc:Telephone>
-        <cbc:ElectronicMail>${party.contactEmail}</cbc:ElectronicMail>
-    </cac:Contact>
+    ${party.contactName || party.contactPhone || party.contactEmail ?
+    `<cac:Contact>
+        ${party.contactName ? `<cbc:Name>${party.contactName}</cbc:Name>` : ''}
+        ${party.contactPhone ? `<cbc:Telephone>${party.contactPhone}</cbc:Telephone>` : ''}
+        ${party.contactEmail ? `<cbc:ElectronicMail>${party.contactEmail}</cbc:ElectronicMail>` : ''}
+    </cac:Contact>`
+    : ''}
   </cac:Party>`
 
 const generateTaxSubtotal = (item, currency) =>
@@ -145,26 +144,26 @@ const generateSimpleInvoice = (invoice) => `<?xml version="1.0" encoding="UTF-8"
         xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2">
 
     <cbc:CustomizationID>urn:cen.eu:en16931:2017#compliant#urn:fdc:peppol.eu:2017:poacc:billing:3.0</cbc:CustomizationID>
-    <cbc:ID>${invoice.invoiceNumber}</cbc:ID>
-    <cbc:IssueDate>${invoice.issueDate}</cbc:IssueDate>
-    <cbc:DueDate>${invoice.dueDate}</cbc:DueDate>
-    <cbc:InvoiceTypeCode>${invoice.invoiceTypeCode}</cbc:InvoiceTypeCode>
-    ${invoice.note ? `<cbc:Note>${invoice.note}</cbc:Note>` : ''}
-    <cbc:TaxPointDate>${invoice.taxPointDate}</cbc:TaxPointDate>
-    <cbc:DocumentCurrencyCode>${invoice.currencyCode}</cbc:DocumentCurrencyCode>
-    ${generateOrderReference(invoice.orderReference)}
-    ${generatePreviousInvoiceReference(invoice.previousInvoiceNumber)}
-    ${generateContractReference(invoice.contractId)}
+    <cbc:ID>${invoice.general.invoiceNumber}</cbc:ID>
+    <cbc:IssueDate>${invoice.general.issueDate}</cbc:IssueDate>
+    <cbc:DueDate>${invoice.general.dueDate}</cbc:DueDate>
+    <cbc:InvoiceTypeCode>${invoice.general.invoiceTypeCode}</cbc:InvoiceTypeCode>
+    ${invoice.notes.note ? `<cbc:Note>${invoice.notes.note}</cbc:Note>` : ''}
+    ${invoice.general.taxPointDate ? `<cbc:TaxPointDate>${invoice.general.taxPointDate}</cbc:TaxPointDate>` : ''}
+    <cbc:DocumentCurrencyCode>${invoice.general.currencyCode}</cbc:DocumentCurrencyCode>
+    ${generateOrderReference(invoice.general.orderReference)}
+    ${generatePreviousInvoiceReference(invoice.general.previousInvoiceNumber)}
+    ${generateContractReference(invoice.general.contractId)}
     <cac:AccountingSupplierParty>
         ${generateParty(invoice.supplier)}
     </cac:AccountingSupplierParty>
     <cac:AccountingCustomerParty>
         ${generateParty(invoice.customer)}
     </cac:AccountingCustomerParty>
-    ${(invoice.deliveryDate || invoice.customer.deliveryAddress.line1) ?
+    ${(invoice.general.deliveryDate || (invoice.customer.deliveryAddress && invoice.customer.deliveryAddress.country)) ?
     `<cac:Delivery>
-        ${invoice.deliveryDate ? `<cbc:ActualDeliveryDate>${invoice.deliveryDate}</cbc:ActualDeliveryDate>` : ''}
-        ${invoice.customer.deliveryAddress ?
+        ${invoice.general.deliveryDate ? `<cbc:ActualDeliveryDate>${invoice.general.deliveryDate}</cbc:ActualDeliveryDate>` : ''}
+        ${invoice.customer.deliveryAddress.country ?
     `<cac:DeliveryLocation>
             ${generateAddress(invoice.customer.deliveryAddress, 'cac:Address')}
         </cac:DeliveryLocation>`
@@ -173,23 +172,23 @@ const generateSimpleInvoice = (invoice) => `<?xml version="1.0" encoding="UTF-8"
     : ''}
     <cac:PaymentMeans>
         <cbc:PaymentMeansCode name="${invoice.supplier.paymentMeans}">${invoice.supplier.paymentMeansCode}</cbc:PaymentMeansCode>
-        <cbc:PaymentID>${invoice.supplier.paymentId}</cbc:PaymentID>
+        ${invoice.supplier.paymentId ? `<cbc:PaymentID>${invoice.supplier.paymentId}</cbc:PaymentID>` : ''}
         <cac:PayeeFinancialAccount>
             <cbc:ID>${invoice.supplier.paymentAccountId}</cbc:ID>
         </cac:PayeeFinancialAccount>
     </cac:PaymentMeans>
     <cac:TaxTotal>
-        <cbc:TaxAmount currencyID="${invoice.currencyCode}">${invoice.vat}</cbc:TaxAmount>
-        ${Object.values(invoice.items).map((item) => (generateTaxSubtotal(item, invoice.currencyCode))).join('\n')}
+        <cbc:TaxAmount currencyID="${invoice.general.currencyCode}">${invoice.recapitulation.vat}</cbc:TaxAmount>
+        ${Object.values(invoice.items).map((item) => (generateTaxSubtotal(item, invoice.general.currencyCode))).join('\n')}
     </cac:TaxTotal>
     <cac:LegalMonetaryTotal>
-        <cbc:LineExtensionAmount currencyID="${invoice.currencyCode}">${invoice.amountWithoutVat}</cbc:LineExtensionAmount>
-        <cbc:TaxExclusiveAmount currencyID="${invoice.currencyCode}">${invoice.amountWithoutVat}</cbc:TaxExclusiveAmount>
-        <cbc:TaxInclusiveAmount currencyID="${invoice.currencyCode}">${invoice.amount}</cbc:TaxInclusiveAmount>
-        <cbc:PayableAmount currencyID="${invoice.currencyCode}">${invoice.amount}</cbc:PayableAmount>
+        <cbc:LineExtensionAmount currencyID="${invoice.general.currencyCode}">${invoice.recapitulation.amountWithoutVat}</cbc:LineExtensionAmount>
+        <cbc:TaxExclusiveAmount currencyID="${invoice.general.currencyCode}">${invoice.recapitulation.amountWithoutVat}</cbc:TaxExclusiveAmount>
+        <cbc:TaxInclusiveAmount currencyID="${invoice.general.currencyCode}">${invoice.recapitulation.amount}</cbc:TaxInclusiveAmount>
+        <cbc:PayableAmount currencyID="${invoice.general.currencyCode}">${invoice.recapitulation.amount}</cbc:PayableAmount>
     </cac:LegalMonetaryTotal>
     ${Object.values(invoice.items).map((item) =>
-    (generateItem(item, 'cac:InvoiceLine', 'cbc:InvoicedQuantity', invoice.currencyCode)))
+    (generateItem(item, 'cac:InvoiceLine', 'cbc:InvoicedQuantity', invoice.general.currencyCode)))
     .join('\n')}
 </Invoice>`
 
@@ -199,51 +198,51 @@ const generateSimpleCreditNote = (invoice) => `<?xml version="1.0" encoding="UTF
 			xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
 			xmlns="urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2">
 	<cbc:CustomizationID>urn:cen.eu:en16931:2017#compliant#urn:fdc:peppol.eu:2017:poacc:billing:3.0</cbc:CustomizationID>
-	<cbc:ID>${invoice.invoiceNumber}</cbc:ID>
-	<cbc:IssueDate>${invoice.issueDate}</cbc:IssueDate>
-	<cbc:TaxPointDate>${invoice.taxPointDate}</cbc:TaxPointDate>
+	<cbc:ID>${invoice.general.invoiceNumber}</cbc:ID>
+	<cbc:IssueDate>${invoice.general.issueDate}</cbc:IssueDate>
+	${invoice.general.taxPointDate ? `<cbc:TaxPointDate>${invoice.general.taxPointDate}</cbc:TaxPointDate>` : ''}
 	<cbc:CreditNoteTypeCode>${invoice.invoiceTypeCode}</cbc:CreditNoteTypeCode>
-	${invoice.note ? `<cbc:Note>${invoice.note}</cbc:Note>` : ''}
-	<cbc:DocumentCurrencyCode>${invoice.currencyCode}</cbc:DocumentCurrencyCode>
-	${generateOrderReference(invoice.orderReference)}
-  ${generatePreviousInvoiceReference(invoice.previousInvoiceNumber)}
-  ${generateContractReference(invoice.contractId)}
+	${invoice.notes.note ? `<cbc:Note>${invoice.notes.note}</cbc:Note>` : ''}
+	<cbc:DocumentCurrencyCode>${invoice.general.currencyCode}</cbc:DocumentCurrencyCode>
+	${generateOrderReference(invoice.general.orderReference)}
+  ${generatePreviousInvoiceReference(invoice.general.previousInvoiceNumber)}
+  ${generateContractReference(invoice.general.contractId)}
 	<cac:AccountingSupplierParty>
       ${generateParty(invoice.supplier)}
   </cac:AccountingSupplierParty>
   <cac:AccountingCustomerParty>
       ${generateParty(invoice.customer)}
   </cac:AccountingCustomerParty>
-  ${(invoice.deliveryDate || invoice.customer.deliveryAddress.line1) ?
+  ${(invoice.general.deliveryDate || (invoice.customer.deliveryAddress && invoice.customer.deliveryAddress.country)) ?
     `<cac:Delivery>
-        ${invoice.deliveryDate ? `<cbc:ActualDeliveryDate>${invoice.deliveryDate}</cbc:ActualDeliveryDate>` : ''}
-        ${invoice.deliveryAddress ?
+        ${invoice.general.deliveryDate ? `<cbc:ActualDeliveryDate>${invoice.general.deliveryDate}</cbc:ActualDeliveryDate>` : ''}
+        ${invoice.customer.deliveryAddress.country ?
     `<cac:DeliveryLocation>
-            ${generateAddress(invoice.deliveryAddress, 'cac:Address')}
+            ${generateAddress(invoice.customer.deliveryAddress, 'cac:Address')}
         </cac:DeliveryLocation>`
     : ''}
     </cac:Delivery>`
     : ''}
   <cac:PaymentMeans>
       <cbc:PaymentMeansCode name="${invoice.supplier.paymentMeans}">${invoice.supplier.paymentMeansCode}</cbc:PaymentMeansCode>
-      ${invoice.dueDate ? `<cbc:PaymentDueDate>${invoice.dueDate}</cbc:PaymentDueDate>` : ''}
+      ${invoice.general.dueDate ? `<cbc:PaymentDueDate>${invoice.general.dueDate}</cbc:PaymentDueDate>` : ''}
       <cbc:PaymentID>${invoice.supplier.paymentId}</cbc:PaymentID>
       <cac:PayeeFinancialAccount>
           <cbc:ID>${invoice.supplier.paymentAccountId}</cbc:ID>
       </cac:PayeeFinancialAccount>
   </cac:PaymentMeans>
 	<cac:TaxTotal>
-      <cbc:TaxAmount currencyID="${invoice.currencyCode}">${invoice.vat}</cbc:TaxAmount>
-      ${Object.values(invoice.items).map((item) => (generateTaxSubtotal(item, invoice.currencyCode))).join('\n')}
+      <cbc:TaxAmount currencyID="${invoice.general.currencyCode}">${invoice.recapitulation.vat}</cbc:TaxAmount>
+      ${Object.values(invoice.items).map((item) => (generateTaxSubtotal(item, invoice.general.currencyCode))).join('\n')}
   </cac:TaxTotal>
 	<cac:LegalMonetaryTotal>
-      <cbc:LineExtensionAmount currencyID="${invoice.currencyCode}">${invoice.amountWithoutVat}</cbc:LineExtensionAmount>
-      <cbc:TaxExclusiveAmount currencyID="${invoice.currencyCode}">${invoice.amountWithoutVat}</cbc:TaxExclusiveAmount>
-      <cbc:TaxInclusiveAmount currencyID="${invoice.currencyCode}">${invoice.amount}</cbc:TaxInclusiveAmount>
-      <cbc:PayableAmount currencyID="${invoice.currencyCode}">${invoice.amount}</cbc:PayableAmount>
+      <cbc:LineExtensionAmount currencyID="${invoice.general.currencyCode}">${invoice.recapitulation.amountWithoutVat}</cbc:LineExtensionAmount>
+      <cbc:TaxExclusiveAmount currencyID="${invoice.general.currencyCode}">${invoice.recapitulation.amountWithoutVat}</cbc:TaxExclusiveAmount>
+      <cbc:TaxInclusiveAmount currencyID="${invoice.general.currencyCode}">${invoice.recapitulation.amount}</cbc:TaxInclusiveAmount>
+      <cbc:PayableAmount currencyID="${invoice.general.currencyCode}">${invoice.recapitulation.amount}</cbc:PayableAmount>
   </cac:LegalMonetaryTotal>
   ${Object.values(invoice.items).map((item) =>
-    (generateItem(item, 'cac:CreditNoteLine', 'cbc:CreditedQuantity', invoice.currencyCode)))
+    (generateItem(item, 'cac:CreditNoteLine', 'cbc:CreditedQuantity', invoice.general.currencyCode)))
     .join('\n')}
 </CreditNote>`
 

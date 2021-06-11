@@ -1,4 +1,7 @@
 import {invoiceTypes} from '../../../utils/constants'
+import {Link} from 'react-router-dom'
+
+export const businessTermLink = (id) => <Link to={`/invoiceDocumentation/businessTerms/${id}`}>{id}</Link>
 
 export const getDoc = (docs, path, creditNotePath, formType) => {
   let node = docs

@@ -1,40 +1,57 @@
 import {useTranslation} from 'react-i18next'
 import {useDispatch, useSelector} from 'react-redux'
 import {useEffect} from 'react'
-import {getDoc} from './docs'
+import {businessTermLink, getDoc} from './helpers'
 import {formFieldSelector, formItemsSelector} from '../state'
 import {addItem, removeItem, setFormField} from '../actions'
 import {Field} from '../Field'
 import {Button} from '../../../helpers/idsk'
 import {invoiceComplexities} from '../../../utils/constants'
+import {codeListsSelector} from '../../../cache/documentation/state'
 
 const Item = ({docs, formType, path, index, number}) => {
   const invoicePath = [formType, invoiceComplexities.SIMPLE]
   const itemPath = [...invoicePath, 'items', index]
-  const {t} = useTranslation('form')
+  const {t, i18n} = useTranslation('form')
   const dispatch = useDispatch()
+  const codeLists = useSelector(codeListsSelector)
   const itemQuantity = useSelector(formFieldSelector([...itemPath, 'quantity']))
-  const itemNetPrice = useSelector(formFieldSelector([...itemPath, 'netPrice']))
+  const netPrice = useSelector(formFieldSelector([...itemPath, 'netPrice']))
   const taxPercentage = useSelector(formFieldSelector([...itemPath, 'taxPercentage']))
   const amountWithoutVat = useSelector(formFieldSelector([...itemPath, 'amountWithoutVat']))
   const amount = useSelector(formFieldSelector([...itemPath, 'amount']))
   const vat = useSelector(formFieldSelector([...itemPath, 'vat']))
+  const taxCategory = useSelector(formFieldSelector([...itemPath, 'taxCategory']))
+  const taxExemptionCode = useSelector(formFieldSelector([...itemPath, 'taxExemptionCode']))
 
   useEffect(() => {
-    dispatch(setFormField([...invoicePath, 'amountWithoutVatChange'])(true))
-  }, [amountWithoutVat])
+    const vat = (Number(taxPercentage) >= 0 && Number(itemQuantity) && Number(netPrice) ?
+      Number(taxPercentage) * Number(itemQuantity) * Number(netPrice) / 100 : 0
+    ).toFixed(2)
+
+    const amount = (Number(taxPercentage) >= 0 && Number(itemQuantity) && Number(netPrice) ?
+      (1 + Number(taxPercentage) / 100) * Number(itemQuantity) * Number(netPrice) : 0
+    ).toFixed(2)
+
+    dispatch(setFormField([...itemPath, 'vat'])(vat))
+    dispatch(setFormField([...itemPath, 'amount'])(amount))
+  }, [taxPercentage, itemQuantity, netPrice])
 
   useEffect(() => {
-    dispatch(setFormField([...invoicePath, 'vatChange'])(true))
-  }, [vat])
+    dispatch(setFormField([...itemPath, 'taxExemptionReason'])(
+      taxExemptionCode && codeLists.vatex.codes[taxExemptionCode].name[i18n.language]
+    ))
+  }, [taxExemptionCode])
 
   useEffect(() => {
-    dispatch(setFormField([...invoicePath, 'amountChange'])(true))
-  }, [amount])
+    dispatch(setFormField([...invoicePath, 'recapitulationChange'])(true))
+  }, [amountWithoutVat, amount, vat, taxPercentage,
+    taxCategory, taxExemptionCode])
 
   return (
     <div>
-      <div className="govuk-heading-m">{`${t('item')} ${index}`}</div>
+      {index > 1 && <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible" />}
+      <div className="govuk-heading-m">{`${t('item')} ${index}`} ({businessTermLink('BG-25')})</div>
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-one-half">
           <Field
@@ -123,8 +140,8 @@ const Item = ({docs, formType, path, index, number}) => {
             path={[...path, 'amountWithoutVat']}
             disabled
             nullable
-            value={(Number(itemQuantity) && Number(itemNetPrice) ?
-              Number(itemQuantity) * Number(itemNetPrice)
+            value={(Number(itemQuantity) && Number(netPrice) ?
+              Number(itemQuantity) * Number(netPrice)
               :
               0
             ).toFixed(2)}
@@ -168,46 +185,6 @@ const Item = ({docs, formType, path, index, number}) => {
         </div>
         <div className="govuk-grid-column-one-half">
           <Field
-            label={t('itemVat')}
-            path={[...path, 'vat']}
-            disabled
-            value={(Number(taxPercentage) >= 0 && Number(itemQuantity) && Number(itemNetPrice) ?
-              Number(taxPercentage) * Number(itemQuantity) * Number(itemNetPrice) / 100
-              :
-              0
-            ).toFixed(2)}
-          />
-        </div>
-      </div>
-      <div className="govuk-grid-row">
-        <div className="govuk-grid-column-one-half">
-          <Field
-            label={t('itemQuantityUnitPriceWithVat')}
-            path={[...path, 'quantityUnitPriceWithVat']}
-            disabled
-            value={(Number(taxPercentage) >= 0 && Number(itemNetPrice) ?
-              (1 + Number(taxPercentage) / 100) * Number(itemNetPrice)
-              :
-              0
-            ).toFixed(2)}
-          />
-        </div>
-        <div className="govuk-grid-column-one-half">
-          <Field
-            label={t('itemAmount')}
-            path={[...path, 'amount']}
-            disabled
-            value={(Number(taxPercentage) >= 0 && Number(itemQuantity) && Number(itemNetPrice) ?
-              (1 + Number(taxPercentage) / 100) * Number(itemQuantity) * Number(itemNetPrice)
-              :
-              0
-            ).toFixed(2)}
-          />
-        </div>
-      </div>
-      <div className="govuk-grid-row">
-        <div className="govuk-grid-column-full">
-          <Field
             docs={getDoc(docs,
               ['cac:InvoiceLine', 'cbc:AccountingCost'],
               ['cac:CreditNoteLine', 'cbc:AccountingCost'],
@@ -215,18 +192,6 @@ const Item = ({docs, formType, path, index, number}) => {
             )}
             label={t('itemAccountingCost')}
             path={[...path, 'accountingCost']}
-            nullable
-          />
-        </div>
-      </div>
-      <div className="govuk-grid-row">
-        <div className="govuk-grid-column-full">
-          <Field
-            docs={getDoc(docs,
-              ['cac:TaxTotal', 'cac:TaxSubtotal', 'cac:TaxCategory', 'cbc:TaxExemptionReason']
-            )}
-            label={t('itemTaxExemptionReason')}
-            path={[...path, 'taxExemptionReason']}
             nullable
           />
         </div>

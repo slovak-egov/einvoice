@@ -30,7 +30,12 @@ export const initializeFormState = (invoiceType, invoiceComplexity, docs) => (
   (dispatch) => {
     if (invoiceComplexity === invoiceComplexities.SIMPLE) {
       dispatch(setFormField([invoiceType, invoiceComplexity])({
+        general: {},
+        supplier: {},
+        customer: {},
         items: {1: {}},
+        recapitulation: {},
+        notes: {},
       }))
     } else {
       // Add fake start point and unwrap it at the end

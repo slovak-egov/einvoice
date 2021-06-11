@@ -1,5 +1,5 @@
 import {useTranslation} from 'react-i18next'
-import {getDoc} from './docs'
+import {getDoc} from './helpers'
 import {Field} from '../Field'
 
 export default ({docs, path}) => {
@@ -7,7 +7,7 @@ export default ({docs, path}) => {
 
   return (
     <div>
-      <div className="govuk-heading-l">{t('note')}</div>
+      <div className="govuk-heading-l">{t('notes')}</div>
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <Field

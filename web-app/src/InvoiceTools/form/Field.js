@@ -100,7 +100,7 @@ export const Field = ({docs, label, path, value, nullable, disabled}) => {
       businessTerms.push(<Link key={id} to={`/invoiceDocumentation/businessTerms/${id}`}>{id}</Link>)
       businessTerms.push(', ')
     })
-    businessTerms[businessTerms.length-1] = ')'
+    businessTerms[businessTerms.length - 1] = ')'
   }
 
   return (
@@ -114,13 +114,14 @@ export const Field = ({docs, label, path, value, nullable, disabled}) => {
         updateField={updateField}
         value={currentValue}
         error={contentError}
+        disabled={disabled}
       />
     </>
   )
 }
 
 const FieldInput = ({codeListIds, dataType, error, updateField, value}) => {
-  const {t} = useTranslation('common')
+  const {t, i18n} = useTranslation('common')
   const getValue = useCallback(
     async (e) => {
       switch (dataType) {
@@ -215,9 +216,9 @@ const FieldInput = ({codeListIds, dataType, error, updateField, value}) => {
           items={[{}]}
           itemGroups={codeListIds.map((id) => ({
             label: id,
-            items: Object.keys(codeLists[id].codes).map((code) => ({
-              children: code,
-              value: code,
+            items: Object.entries(codeLists[id].codes).map(([id, code]) => ({
+              children: `${id} - ${code.name[i18n.language]}`,
+              value: id,
             })),
           }))}
           value={value}

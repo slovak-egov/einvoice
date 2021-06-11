@@ -3,94 +3,192 @@ import {useTranslation} from 'react-i18next'
 import {useEffect} from 'react'
 import {formFieldSelector, formItemsSelector} from '../state'
 import {setFormField} from '../actions'
-import {Table} from '../../../helpers/idsk'
-import {Link} from 'react-router-dom'
+import {businessTermLink, getDoc} from './helpers'
+import {Field} from '../Field'
 
-const businessTerm = (id) => <Link to={`/invoiceDocumentation/businessTerms/${id}`}>{id}</Link>
+const Category = ({docs, path, index}) => {
+  const {t} = useTranslation('form')
 
-export default ({path, formType}) => {
+  return (
+    <div>
+      <div className="govuk-heading-s">{t('recapitulationCategory', {index})} ({businessTermLink('BG-23')})</div>
+      <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+      <div className="govuk-grid-row">
+        <div className="govuk-grid-column-one-half">
+          <Field
+            docs={getDoc(docs,
+              ['cac:TaxTotal', 'cac:TaxSubtotal', 'cac:TaxCategory', 'cbc:ID']
+            )}
+            label={t('taxCategory')}
+            path={[...path, 'key', 'taxCategory']}
+            disabled
+            nullable
+          />
+        </div>
+        <div className="govuk-grid-column-one-half">
+          <Field
+            docs={getDoc(docs,
+              ['cac:TaxTotal', 'cac:TaxSubtotal', 'cac:TaxCategory', 'cbc:Percent']
+            )}
+            label={t('taxPercentage')}
+            path={[...path, 'key', 'taxPercentage']}
+            disabled
+            nullable
+          />
+        </div>
+      </div>
+      <div className="govuk-grid-row">
+        <div className="govuk-grid-column-one-half">
+          <Field
+            docs={getDoc(docs,
+              ['cac:TaxTotal', 'cac:TaxSubtotal', 'cbc:TaxableAmount']
+            )}
+            label={t('taxBase')}
+            path={[...path, 'amountWithoutVat']}
+            disabled
+            nullable
+          />
+        </div>
+        <div className="govuk-grid-column-one-half">
+          <Field
+            docs={getDoc(docs,
+              ['cac:TaxTotal', 'cac:TaxSubtotal', 'cbc:TaxAmount']
+            )}
+            label={t('vat')}
+            path={[...path, 'vat']}
+            disabled
+            nullable
+          />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default ({path, docs, formType}) => {
   const dispatch = useDispatch()
   const items = useSelector(formItemsSelector(formType))
-  const amountWithoutVat = useSelector(formFieldSelector([...path, 'amountWithoutVat']))
-  const amountWithoutVatChange = useSelector(formFieldSelector([...path, 'amountWithoutVatChange']))
-  const vat = useSelector(formFieldSelector([...path, 'vat']))
-  const vatChange = useSelector(formFieldSelector([...path, 'vatChange']))
-  const amount = useSelector(formFieldSelector([...path, 'amount']))
-  const amountChange = useSelector(formFieldSelector([...path, 'amountChange']))
+  const recapitulationChange = useSelector(formFieldSelector([...path, 'recapitulationChange']))
+  const taxSubtotals = useSelector(formFieldSelector([...path, 'taxSubtotals'])) || []
   const {t} = useTranslation('form')
 
   useEffect(() => {
-    if (!amountWithoutVatChange) return
-
+    const subtotals = {}
     let newAmountWithoutVat = 0
-    Object.values(items).forEach((item) => {
-      if (Number(item.amountWithoutVat)) newAmountWithoutVat += Number(item.amountWithoutVat)
-    })
-
-    if (amountWithoutVat !== newAmountWithoutVat) {
-      dispatch(setFormField([...path, 'amountWithoutVat'])(newAmountWithoutVat.toFixed(2)))
-    }
-    dispatch(setFormField([...path, 'amountWithoutVatChange'])(false))
-  }, [amountWithoutVatChange])
-
-  useEffect(() => {
-    if (!vatChange) return
-
     let newVat = 0
-    Object.values(items).forEach((item) => {
-      if (Number(item.vat)) newVat += Number(item.vat)
-    })
-
-    if (vat !== newVat) {
-      dispatch(setFormField([...path, 'vat'])(newVat.toFixed(2)))
-    }
-    dispatch(setFormField([...path, 'vatChange'])(false))
-  }, [vatChange])
-
-  useEffect(() => {
-    if (!amountChange) return
     let newAmount = 0
+
     Object.values(items).forEach((item) => {
-      if (Number(item.amount)) newAmount += Number(item.amount)
+      const key = ({
+        taxCategory: item.taxCategory,
+        taxPercentage: item.taxPercentage || '0.00',
+        taxExemptionCode: item.taxExemptionCode,
+        taxExemptionReason: item.taxExemptionReason,
+      })
+      const keyString = JSON.stringify(key)
+      const subtotal = subtotals[keyString] || {
+        amountWithoutVat: Number(0),
+        vat: Number(0),
+        amount: Number(0),
+      }
+
+      if (Number(item.amountWithoutVat)) {
+        subtotal.amountWithoutVat += Number(item.amountWithoutVat)
+        newAmountWithoutVat += Number(item.amountWithoutVat)
+      }
+      if (Number(item.vat)) {
+        subtotal.vat += Number(item.vat)
+        newVat += Number(item.vat)
+      }
+      if (Number(item.amount)) {
+        subtotal.amount += Number(item.amount)
+        newAmount += Number(item.amount)
+      }
+
+      subtotals[keyString] = {...subtotal, key}
     })
 
-    if (amount !== newAmount) {
-      dispatch(setFormField([...path, 'amount'])(newAmount.toFixed(2)))
-    }
-    dispatch(setFormField([...path, 'amountChange'])(false))
-  }, [amountChange])
+    const res = {}
+    Object.values(subtotals).forEach((subtotal, index) => (
+      res[index] = {
+        key: subtotal.key,
+        amountWithoutVat: subtotal.amountWithoutVat.toFixed(2),
+        vat: subtotal.vat.toFixed(2),
+        amount: subtotal.amount.toFixed(2),
+      }
+    ))
+
+    dispatch(setFormField([...path, 'amountWithoutVat'])(newAmountWithoutVat.toFixed(2)))
+    dispatch(setFormField([...path, 'vat'])(newVat.toFixed(2)))
+    dispatch(setFormField([...path, 'amount'])(newAmount.toFixed(2)))
+
+    dispatch(setFormField([...path, 'taxSubtotals'])(res))
+    dispatch(setFormField([...path, 'recapitulationChange'])(false))
+  }, [recapitulationChange])
 
   return (
     <div>
       <div className="govuk-heading-l">{t('recapitulation')}</div>
-      <Table
-        rows={[
-          [
-            {children: ''},
-            {children: <div><b>{t('taxPercentage')}</b> ({businessTerm('BT-119')})</div>},
-            {children: <div><b>{t('taxBase')}</b> ({businessTerm('BT-116')})</div>},
-            {children: <div><b>{t('vat')}</b> ({businessTerm('BT-117')})</div>},
-            {children: <div><b>{t('total')}</b> ({businessTerm('BT-112')})</div>},
-          ], ...Object.entries(items).map(([itemIndex, item], index) => [
-            {children: `${t('item')} ${index + 1}`},
-            {children: item.taxPercentage},
-            {children: item.amountWithoutVat},
-            {children: item.vat},
-            {children: item.amount},
-          ]), [
-            {children: ''},
-            {children: <div className="govuk-heading-s">{t('total')}:</div>},
-            {children: <div>{amountWithoutVat} ({businessTerm('BT-109')})</div>},
-            {children: <div>{vat} ({businessTerm('BT-110')})</div>},
-            {children: <div>{amount} ({businessTerm('BT-112')})</div>},
-          ], [
-            {children: ''},
-            {children: ''},
-            {children: ''},
-            {children: <div><b>{t('totalToPay')}</b> ({businessTerm('BT-115')})</div>},
-            {children: amount},
-          ]]}
-      />
+      {Object.entries(taxSubtotals).map(([index, subtotal]) => (
+        <Category
+          key={index}
+          path={[...path, 'taxSubtotals', index]}
+          docs={docs}
+          formType={formType}
+          index={parseInt(index, 10) + 1}
+        />
+      ))}
+      <div>
+        <div className="govuk-heading-s">{t('recapitulationFull')} ({businessTermLink('BG-22')})</div>
+        <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+        <div className="govuk-grid-row">
+          <div className="govuk-grid-column-one-half">
+            <Field
+              docs={getDoc(docs,
+                ['cac:LegalMonetaryTotal', 'cbc:TaxExclusiveAmount'])}
+              label={t('taxBase')}
+              path={[...path, 'amountWithoutVat']}
+              disabled
+              nullable
+            />
+          </div>
+          <div className="govuk-grid-column-one-half">
+            <Field
+              docs={getDoc(docs,
+                ['cac:TaxTotal', 'cbc:TaxAmount']
+              )}
+              label={t('vat')}
+              path={[...path, 'vat']}
+              disabled
+              nullable
+            />
+          </div>
+        </div>
+        <div className="govuk-grid-row">
+          <div className="govuk-grid-column-one-half">
+            <Field
+              docs={getDoc(docs,
+                ['cac:LegalMonetaryTotal', 'cbc:TaxInclusiveAmount']
+              )}
+              label={t('amount')}
+              path={[...path, 'amount']}
+              disabled
+              nullable
+            />
+          </div>
+          <div className="govuk-grid-column-one-half">
+            <Field
+              docs={getDoc(docs,
+                ['cac:LegalMonetaryTotal', 'cbc:PayableAmount']
+              )}
+              label={t('totalToPay')}
+              path={[...path, 'amount']}
+              disabled
+              nullable
+            />
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
