@@ -76,7 +76,7 @@ const generateAddress = (address, name) => `<${name}>
   </${name}>`
 
 const generateParty = (party) => `<cac:Party>
-    ${generateAddress(party.address, 'cac:PostalAddress')}
+    ${party.address ? generateAddress(party.address, 'cac:PostalAddress') : ''}
     ${party.vatId ?
     `<cac:PartyTaxScheme>
         <cbc:CompanyID>${party.vatId}</cbc:CompanyID>
@@ -146,7 +146,7 @@ const generateSimpleInvoice = (invoice) => `<?xml version="1.0" encoding="UTF-8"
     <cbc:CustomizationID>urn:cen.eu:en16931:2017#compliant#urn:fdc:peppol.eu:2017:poacc:billing:3.0</cbc:CustomizationID>
     <cbc:ID>${invoice.general.invoiceNumber}</cbc:ID>
     <cbc:IssueDate>${invoice.general.issueDate}</cbc:IssueDate>
-    <cbc:DueDate>${invoice.general.dueDate}</cbc:DueDate>
+    ${invoice.general.dueDate ? `<cbc:DueDate>${invoice.general.dueDate}</cbc:DueDate>` : ''}
     <cbc:InvoiceTypeCode>${invoice.general.invoiceTypeCode}</cbc:InvoiceTypeCode>
     ${invoice.notes.note ? `<cbc:Note>${invoice.notes.note}</cbc:Note>` : ''}
     ${invoice.general.taxPointDate ? `<cbc:TaxPointDate>${invoice.general.taxPointDate}</cbc:TaxPointDate>` : ''}
@@ -201,7 +201,7 @@ const generateSimpleCreditNote = (invoice) => `<?xml version="1.0" encoding="UTF
 	<cbc:ID>${invoice.general.invoiceNumber}</cbc:ID>
 	<cbc:IssueDate>${invoice.general.issueDate}</cbc:IssueDate>
 	${invoice.general.taxPointDate ? `<cbc:TaxPointDate>${invoice.general.taxPointDate}</cbc:TaxPointDate>` : ''}
-	<cbc:CreditNoteTypeCode>${invoice.invoiceTypeCode}</cbc:CreditNoteTypeCode>
+	<cbc:CreditNoteTypeCode>${invoice.general.invoiceTypeCode}</cbc:CreditNoteTypeCode>
 	${invoice.notes.note ? `<cbc:Note>${invoice.notes.note}</cbc:Note>` : ''}
 	<cbc:DocumentCurrencyCode>${invoice.general.currencyCode}</cbc:DocumentCurrencyCode>
 	${generateOrderReference(invoice.general.orderReference)}
@@ -226,7 +226,7 @@ const generateSimpleCreditNote = (invoice) => `<?xml version="1.0" encoding="UTF
   <cac:PaymentMeans>
       <cbc:PaymentMeansCode name="${invoice.supplier.paymentMeans}">${invoice.supplier.paymentMeansCode}</cbc:PaymentMeansCode>
       ${invoice.general.dueDate ? `<cbc:PaymentDueDate>${invoice.general.dueDate}</cbc:PaymentDueDate>` : ''}
-      <cbc:PaymentID>${invoice.supplier.paymentId}</cbc:PaymentID>
+      ${invoice.supplier.paymentId ? `<cbc:PaymentID>${invoice.supplier.paymentId}</cbc:PaymentID>` : ''}
       <cac:PayeeFinancialAccount>
           <cbc:ID>${invoice.supplier.paymentAccountId}</cbc:ID>
       </cac:PayeeFinancialAccount>
