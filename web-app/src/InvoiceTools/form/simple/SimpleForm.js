@@ -37,8 +37,6 @@ export default ({formType, path, docs}) => {
   )
 
   useEffect(() => {
-    console.log('in simple')
-    console.log(recapitulationChange)
     if (!recapitulationChange) return
 
     const subtotals = {}
