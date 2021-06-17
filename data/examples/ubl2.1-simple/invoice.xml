@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <Invoice
         xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
         xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
@@ -10,7 +11,7 @@
     <cbc:InvoiceTypeCode>380</cbc:InvoiceTypeCode>
     <cbc:Note>Document level Note</cbc:Note>
     <cbc:TaxPointDate>2018-02-08</cbc:TaxPointDate>
-    <cbc:DocumentCurrencyCode>SEK</cbc:DocumentCurrencyCode>
+    <cbc:DocumentCurrencyCode>EUR</cbc:DocumentCurrencyCode>
     <cac:OrderReference>
         <cbc:ID>20180117</cbc:ID>
     </cac:OrderReference>
@@ -24,9 +25,6 @@
     </cac:ContractDocumentReference>
     <cac:AccountingSupplierParty>
         <cac:Party>
-            <cac:PartyName>
-                <cbc:Name>Global Trade Chain</cbc:Name>
-            </cac:PartyName>
             <cac:PostalAddress>
                 <cbc:StreetName>Streetname 1</cbc:StreetName>
                 <cbc:CityName>Big City</cbc:CityName>
@@ -44,7 +42,7 @@
             <cac:PartyLegalEntity>
                 <cbc:RegistrationName>The Global Chain Slovakia AB</cbc:RegistrationName>
                 <cbc:CompanyID>11190993</cbc:CompanyID>
-                <cbc:CompanyLegalForm>Säte: Big CIty</cbc:CompanyLegalForm>
+                <cbc:CompanyLegalForm>8</cbc:CompanyLegalForm>
             </cac:PartyLegalEntity>
             <cac:Contact>
                 <cbc:Name>A Person</cbc:Name>
@@ -55,9 +53,6 @@
     </cac:AccountingSupplierParty>
     <cac:AccountingCustomerParty>
         <cac:Party>
-            <cac:PartyName>
-                <cbc:Name>Project Services</cbc:Name>
-            </cac:PartyName>
             <cac:PostalAddress>
                 <cbc:StreetName>Streetname 2</cbc:StreetName>
                 <cbc:CityName>Big City 2</cbc:CityName>
@@ -97,33 +92,33 @@
         </cac:DeliveryLocation>
     </cac:Delivery>
     <cac:PaymentMeans>
-        <cbc:PaymentMeansCode name="adf">30</cbc:PaymentMeansCode>
+        <cbc:PaymentMeansCode name="Bezhotovostný prevod">30</cbc:PaymentMeansCode>
         <cbc:PaymentID>1800355</cbc:PaymentID>
         <cac:PayeeFinancialAccount>
             <cbc:ID>SK1212341234123412341234</cbc:ID>
         </cac:PayeeFinancialAccount>
     </cac:PaymentMeans>
     <cac:TaxTotal>
-        <cbc:TaxAmount currencyID="SEK">2500</cbc:TaxAmount>
+        <cbc:TaxAmount currencyID="EUR">219.24</cbc:TaxAmount>
         <cac:TaxSubtotal>
-            <cbc:TaxableAmount currencyID="SEK">10000</cbc:TaxableAmount>
-            <cbc:TaxAmount currencyID="SEK">2500</cbc:TaxAmount>
+            <cbc:TaxableAmount currencyID="EUR">756.00</cbc:TaxableAmount>
+            <cbc:TaxAmount currencyID="EUR">219.24</cbc:TaxAmount>
             <cac:TaxCategory>
                 <cbc:ID>S</cbc:ID>
-                <cbc:Percent>25</cbc:Percent>
+                <cbc:Percent>29</cbc:Percent>
                 <cac:TaxScheme>
                     <cbc:ID>VAT</cbc:ID>
                 </cac:TaxScheme>
             </cac:TaxCategory>
         </cac:TaxSubtotal>
         <cac:TaxSubtotal>
-            <cbc:TaxableAmount currencyID="SEK">0</cbc:TaxableAmount>
-            <cbc:TaxAmount currencyID="SEK">0</cbc:TaxAmount>
+            <cbc:TaxableAmount currencyID="EUR">1190.00</cbc:TaxableAmount>
+            <cbc:TaxAmount currencyID="EUR">0.00</cbc:TaxAmount>
             <cac:TaxCategory>
                 <cbc:ID>E</cbc:ID>
-                <cbc:Percent>0</cbc:Percent>
-                <cbc:TaxExemptionReasonCode>vatex-eu-132-1g</cbc:TaxExemptionReasonCode>
-                <cbc:TaxExemptionReason>EU Direcive Article 132, section 1(g)</cbc:TaxExemptionReason>
+                <cbc:Percent>0.00</cbc:Percent>
+                <cbc:TaxExemptionReasonCode>VATEX-EU-132-1I</cbc:TaxExemptionReasonCode>
+                <cbc:TaxExemptionReason>Oslobodenie na základe článku 132 ods. 1 písm. i) Rady 2006/112/ES</cbc:TaxExemptionReason>
                 <cac:TaxScheme>
                     <cbc:ID>VAT</cbc:ID>
                 </cac:TaxScheme>
@@ -131,30 +126,51 @@
         </cac:TaxSubtotal>
     </cac:TaxTotal>
     <cac:LegalMonetaryTotal>
-        <cbc:LineExtensionAmount currencyID="SEK">10000</cbc:LineExtensionAmount>
-        <cbc:TaxExclusiveAmount currencyID="SEK">10000</cbc:TaxExclusiveAmount>
-        <cbc:TaxInclusiveAmount currencyID="SEK">12500</cbc:TaxInclusiveAmount>
-        <cbc:PayableAmount currencyID="SEK">12500</cbc:PayableAmount>
+        <cbc:LineExtensionAmount currencyID="EUR">1946.00</cbc:LineExtensionAmount>
+        <cbc:TaxExclusiveAmount currencyID="EUR">1946.00</cbc:TaxExclusiveAmount>
+        <cbc:TaxInclusiveAmount currencyID="EUR">2165.24</cbc:TaxInclusiveAmount>
+        <cbc:PayableAmount currencyID="EUR">2165.24</cbc:PayableAmount>
     </cac:LegalMonetaryTotal>
     <cac:InvoiceLine>
         <cbc:ID>1</cbc:ID>
         <cbc:Note>Item note</cbc:Note>
-        <cbc:InvoicedQuantity unitCode="MTR">500</cbc:InvoicedQuantity>
-        <cbc:LineExtensionAmount currencyID="SEK">10000</cbc:LineExtensionAmount>
-        <cbc:AccountingCost>Accounting 101-222-8</cbc:AccountingCost>
+        <cbc:InvoicedQuantity unitCode="MD">27</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="EUR">756.00</cbc:LineExtensionAmount>
+        <cbc:AccountingCost>30</cbc:AccountingCost>
         <cac:Item>
             <cbc:Description>Universal product, customized with option X</cbc:Description>
             <cbc:Name>Universal product</cbc:Name>
             <cac:ClassifiedTaxCategory>
                 <cbc:ID>S</cbc:ID>
-                <cbc:Percent>25</cbc:Percent>
+                <cbc:Percent>29</cbc:Percent>
                 <cac:TaxScheme>
                     <cbc:ID>VAT</cbc:ID>
                 </cac:TaxScheme>
             </cac:ClassifiedTaxCategory>
         </cac:Item>
         <cac:Price>
-            <cbc:PriceAmount currencyID="SEK">20</cbc:PriceAmount>
+            <cbc:PriceAmount currencyID="EUR">28</cbc:PriceAmount>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>2</cbc:ID>
+        <cbc:Note>Item note</cbc:Note>
+        <cbc:InvoicedQuantity unitCode="XYP">34</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="EUR">1190.00</cbc:LineExtensionAmount>
+        <cbc:AccountingCost>36</cbc:AccountingCost>
+        <cac:Item>
+            <cbc:Description>Universal product, customized with option Y</cbc:Description>
+            <cbc:Name>Universal product 2</cbc:Name>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>E</cbc:ID>
+                <cbc:Percent>0.00</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="EUR">35</cbc:PriceAmount>
         </cac:Price>
     </cac:InvoiceLine>
 </Invoice>

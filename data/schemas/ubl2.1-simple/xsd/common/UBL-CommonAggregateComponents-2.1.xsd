@@ -19077,22 +19077,6 @@ Thus, the column Preference Criterion will indicate either A, B, C,...</ccts:Exa
          </xsd:documentation>
       </xsd:annotation>
       <xsd:sequence>
-         <xsd:element ref="cac:PartyName" minOccurs="0" maxOccurs="unbounded">
-            <xsd:annotation>
-               <xsd:documentation>
-                  <ccts:Component>
-                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
-                     <ccts:DictionaryEntryName>Party. Party Name</ccts:DictionaryEntryName>
-                     <ccts:Definition>A name for this party.</ccts:Definition>
-                     <ccts:Cardinality>0..n</ccts:Cardinality>
-                     <ccts:ObjectClass>Party</ccts:ObjectClass>
-                     <ccts:PropertyTerm>Party Name</ccts:PropertyTerm>
-                     <ccts:AssociatedObjectClass>Party Name</ccts:AssociatedObjectClass>
-                     <ccts:RepresentationTerm>Party Name</ccts:RepresentationTerm>
-                  </ccts:Component>
-               </xsd:documentation>
-            </xsd:annotation>
-         </xsd:element>
          <xsd:element ref="cac:PostalAddress" minOccurs="0" maxOccurs="1">
             <xsd:annotation>
                <xsd:documentation>
