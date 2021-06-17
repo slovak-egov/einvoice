@@ -1,8 +1,6 @@
-import {useDispatch, useSelector} from 'react-redux'
+import {useSelector} from 'react-redux'
 import {useTranslation} from 'react-i18next'
-import {useEffect} from 'react'
-import {formFieldSelector, formItemsSelector} from '../state'
-import {setFormField} from '../actions'
+import {formFieldSelector} from '../state'
 import {businessTermLink, getDoc} from './helpers'
 import {Field} from '../Field'
 
@@ -66,65 +64,8 @@ const Category = ({docs, path, index}) => {
 }
 
 export default ({path, docs, formType}) => {
-  const dispatch = useDispatch()
-  const items = useSelector(formItemsSelector(formType))
-  const recapitulationChange = useSelector(formFieldSelector([...path, 'recapitulationChange']))
   const taxSubtotals = useSelector(formFieldSelector([...path, 'taxSubtotals'])) || []
   const {t} = useTranslation('form')
-
-  useEffect(() => {
-    const subtotals = {}
-    let newAmountWithoutVat = 0
-    let newVat = 0
-    let newAmount = 0
-
-    Object.values(items).forEach((item) => {
-      const key = ({
-        taxCategory: item.taxCategory,
-        taxPercentage: item.taxPercentage || '0.00',
-        taxExemptionCode: item.taxExemptionCode,
-        taxExemptionReason: item.taxExemptionReason,
-      })
-      const keyString = JSON.stringify(key)
-      const subtotal = subtotals[keyString] || {
-        amountWithoutVat: Number(0),
-        vat: Number(0),
-        amount: Number(0),
-      }
-
-      if (Number(item.amountWithoutVat)) {
-        subtotal.amountWithoutVat += Number(item.amountWithoutVat)
-        newAmountWithoutVat += Number(item.amountWithoutVat)
-      }
-      if (Number(item.vat)) {
-        subtotal.vat += Number(item.vat)
-        newVat += Number(item.vat)
-      }
-      if (Number(item.amount)) {
-        subtotal.amount += Number(item.amount)
-        newAmount += Number(item.amount)
-      }
-
-      subtotals[keyString] = {...subtotal, key}
-    })
-
-    const res = {}
-    Object.values(subtotals).forEach((subtotal, index) => (
-      res[index] = {
-        key: subtotal.key,
-        amountWithoutVat: subtotal.amountWithoutVat.toFixed(2),
-        vat: subtotal.vat.toFixed(2),
-        amount: subtotal.amount.toFixed(2),
-      }
-    ))
-
-    dispatch(setFormField([...path, 'amountWithoutVat'])(newAmountWithoutVat.toFixed(2)))
-    dispatch(setFormField([...path, 'vat'])(newVat.toFixed(2)))
-    dispatch(setFormField([...path, 'amount'])(newAmount.toFixed(2)))
-
-    dispatch(setFormField([...path, 'taxSubtotals'])(res))
-    dispatch(setFormField([...path, 'recapitulationChange'])(false))
-  }, [recapitulationChange])
 
   return (
     <div>

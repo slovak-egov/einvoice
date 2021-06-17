@@ -8,14 +8,23 @@ import {useTranslation} from 'react-i18next'
 import Button from '../../../helpers/idsk/Button'
 import {Redirect, Route, Switch, useHistory, useLocation} from 'react-router-dom'
 import Link from '../../../helpers/idsk/Link'
+import {useEffect} from 'react'
+import {setFormField} from '../actions'
+import {useDispatch, useSelector} from 'react-redux'
+import {formFieldSelector, formItemsSelector} from '../state'
 
 export default ({formType, path, docs}) => {
   const {t} = useTranslation('form')
   const location = useLocation()
+  const dispatch = useDispatch()
   const history = useHistory()
   const section = location.pathname.split('/').pop()
   const sections = ['general', 'supplier', 'customer', 'items', 'recapitulation', 'notes']
   const sectionIndex = sections.findIndex((s) => s === section)
+  const recapitulationChange = useSelector(formFieldSelector([...path, 'recapitulationChange']))
+  const items = useSelector(formItemsSelector(formType))
+
+  const recapitulationPath = [...path, 'recapitulation']
 
   const sectionLink = (name) => (
     <Link
@@ -26,6 +35,64 @@ export default ({formType, path, docs}) => {
       {section === name ? <u>{t(name)}</u> : t(name)}
     </Link>
   )
+
+  useEffect(() => {
+    console.log('in simple')
+    console.log(recapitulationChange)
+    if (!recapitulationChange) return
+
+    const subtotals = {}
+    let newAmountWithoutVat = 0
+    let newVat = 0
+    let newAmount = 0
+
+    Object.values(items).forEach((item) => {
+      const key = ({
+        taxCategory: item.taxCategory,
+        taxPercentage: item.taxPercentage || '0.00',
+        taxExemptionCode: item.taxExemptionCode,
+        taxExemptionReason: item.taxExemptionReason,
+      })
+      const keyString = JSON.stringify(key)
+      const subtotal = subtotals[keyString] || {
+        amountWithoutVat: Number(0),
+        vat: Number(0),
+        amount: Number(0),
+      }
+
+      if (Number(item.amountWithoutVat)) {
+        subtotal.amountWithoutVat += Number(item.amountWithoutVat)
+        newAmountWithoutVat += Number(item.amountWithoutVat)
+      }
+      if (Number(item.vat)) {
+        subtotal.vat += Number(item.vat)
+        newVat += Number(item.vat)
+      }
+      if (Number(item.amount)) {
+        subtotal.amount += Number(item.amount)
+        newAmount += Number(item.amount)
+      }
+
+      subtotals[keyString] = {...subtotal, key}
+    })
+
+    const res = {}
+    Object.values(subtotals).forEach((subtotal, index) => (
+      res[index] = {
+        key: subtotal.key,
+        amountWithoutVat: subtotal.amountWithoutVat.toFixed(2),
+        vat: subtotal.vat.toFixed(2),
+        amount: subtotal.amount.toFixed(2),
+      }
+    ))
+
+    dispatch(setFormField([...recapitulationPath, 'amountWithoutVat'])(newAmountWithoutVat.toFixed(2)))
+    dispatch(setFormField([...recapitulationPath, 'vat'])(newVat.toFixed(2)))
+    dispatch(setFormField([...recapitulationPath, 'amount'])(newAmount.toFixed(2)))
+
+    dispatch(setFormField([...recapitulationPath, 'taxSubtotals'])(res))
+    dispatch(setFormField([...path, 'recapitulationChange'])(false))
+  }, [recapitulationChange])
 
   return (
     <div>
@@ -64,7 +131,12 @@ export default ({formType, path, docs}) => {
         />
         <Route
           path="/invoice-tools/form/recapitulation"
-          render={(props) => <Recapitulation {...props} formType={formType} path={[...path, 'recapitulation']} docs={docs} />}
+          render={(props) => (<Recapitulation
+            {...props}
+            formType={formType}
+            path={recapitulationPath}
+            docs={docs}
+          />)}
         />
         <Route
           path="/invoice-tools/form/notes"

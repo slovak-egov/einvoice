@@ -17,35 +17,39 @@ const Item = ({docs, formType, path, index, number}) => {
   const codeLists = useSelector(codeListsSelector)
   const itemQuantity = useSelector(formFieldSelector([...itemPath, 'quantity']))
   const netPrice = useSelector(formFieldSelector([...itemPath, 'netPrice']))
-  const taxPercentage = useSelector(formFieldSelector([...itemPath, 'taxPercentage']))
+  const taxPercentage = useSelector(formFieldSelector([...itemPath, 'taxPercentage'])) || '0.00'
   const amountWithoutVat = useSelector(formFieldSelector([...itemPath, 'amountWithoutVat']))
   const amount = useSelector(formFieldSelector([...itemPath, 'amount']))
   const vat = useSelector(formFieldSelector([...itemPath, 'vat']))
   const taxCategory = useSelector(formFieldSelector([...itemPath, 'taxCategory']))
   const taxExemptionCode = useSelector(formFieldSelector([...itemPath, 'taxExemptionCode']))
+  const taxExemptionReason = useSelector(formFieldSelector([...itemPath, 'taxExemptionReason']))
+  const recapitulationChange = useSelector(formFieldSelector([...invoicePath, 'recapitulationChange']))
 
   useEffect(() => {
-    const vat = (Number(taxPercentage) >= 0 && Number(itemQuantity) && Number(netPrice) ?
+    const newVat = (Number(taxPercentage) >= 0 && Number(itemQuantity) && Number(netPrice) ?
       Number(taxPercentage) * Number(itemQuantity) * Number(netPrice) / 100 : 0
     ).toFixed(2)
 
-    const amount = (Number(taxPercentage) >= 0 && Number(itemQuantity) && Number(netPrice) ?
+    const newAmount = (Number(taxPercentage) >= 0 && Number(itemQuantity) && Number(netPrice) ?
       (1 + Number(taxPercentage) / 100) * Number(itemQuantity) * Number(netPrice) : 0
     ).toFixed(2)
 
-    dispatch(setFormField([...itemPath, 'vat'])(vat))
-    dispatch(setFormField([...itemPath, 'amount'])(amount))
+    if (newVat !== vat) dispatch(setFormField([...itemPath, 'vat'])(newVat))
+    if (newAmount !== amount) dispatch(setFormField([...itemPath, 'amount'])(newAmount))
   }, [taxPercentage, itemQuantity, netPrice])
 
   useEffect(() => {
-    dispatch(setFormField([...itemPath, 'taxExemptionReason'])(
-      taxExemptionCode && codeLists.vatex.codes[taxExemptionCode] &&
+    const newTaxExemptionReason = taxExemptionCode && codeLists.vatex.codes[taxExemptionCode] &&
       codeLists.vatex.codes[taxExemptionCode].name[i18n.language]
-    ))
+
+    if (newTaxExemptionReason !== taxExemptionReason) {
+      dispatch(setFormField([...itemPath, 'taxExemptionReason'])(newTaxExemptionReason))
+    }
   }, [taxExemptionCode])
 
   useEffect(() => {
-    dispatch(setFormField([...invoicePath, 'recapitulationChange'])(true))
+    if (!recapitulationChange) dispatch(setFormField([...invoicePath, 'recapitulationChange'])(true))
   }, [amountWithoutVat, amount, vat, taxPercentage,
     taxCategory, taxExemptionCode])
 
@@ -170,7 +174,7 @@ const Item = ({docs, formType, path, index, number}) => {
             )}
             label={t('itemTaxPercentage')}
             path={[...path, 'taxPercentage']}
-            value={'0.00'}
+            value={taxPercentage}
           />
         </div>
       </div>

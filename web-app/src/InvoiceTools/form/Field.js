@@ -214,11 +214,11 @@ const FieldInput = ({codeListIds, dataType, error, updateField, value}) => {
       return (
         <Select
           items={[{}]}
-          itemGroups={codeListIds.map((id) => ({
-            label: id,
-            items: Object.entries(codeLists[id].codes).map(([id, code]) => ({
+          itemGroups={codeListIds.map((codeListId) => ({
+            label: codeListId,
+            items: Object.entries(codeLists[codeListId].codes).map(([id, code]) => ({
               children: `${id} - ${code.name[i18n.language]}`,
-              value: id,
+              value: codeListId === 'UNECERec21' ? `X${id}` : id, // BR-CL-23
             })),
           }))}
           value={value}
