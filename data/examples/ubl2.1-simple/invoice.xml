@@ -95,7 +95,7 @@
         <cbc:PaymentMeansCode name="Bezhotovostný prevod">30</cbc:PaymentMeansCode>
         <cbc:PaymentID>1800355</cbc:PaymentID>
         <cac:PayeeFinancialAccount>
-            <cbc:ID>SK1212341234123412341234</cbc:ID>
+            <cbc:ID>SK0809000000000123123123</cbc:ID>
         </cac:PayeeFinancialAccount>
     </cac:PaymentMeans>
     <cac:TaxTotal>

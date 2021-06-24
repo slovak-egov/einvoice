@@ -1,0 +1,195 @@
+{{ $inv := .Xml}}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ if .IsInvoice }} Invoice {{- else }} Credit Note {{- end }} {{ .Xml.ID}}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    {{ template "style" }}
+  </head>
+  <body>
+    <div>
+
+      <div class="general-info-row">
+        <div>
+          <div>
+            <span class="header1">{{ if .IsInvoice }} FAKTÚRA {{- else }} DOBROPIS {{- end }}</span>
+            <span class="header2">/ {{ if .IsInvoice }} INVOICE {{- else }} CREDIT NOTE {{- end }}</span>
+          </div>
+          <div style="width: 350px">
+            {{ template "valueRowRight" args "Kód meny faktúry" "Invoice currency code" $inv.DocumentCurrencyCode}}
+            {{ template "valueRowRight" args "Číslo objednávky" "Purchase order reference" $inv.OrderReference.ID }}
+            {{ template "valueRowRight" args "Dátum dodania" "Actual delivery date" $inv.Delivery.ActualDeliveryDate }}
+          </div>
+        </div>
+        <div>
+          <div class="label">
+            <span class="label-sk">Číslo</span> / <span class="label-en">Invoice number</span> :
+          </div>
+          <div class="invoice-number">{{ $inv.ID }}</div>
+          {{ template "valueRowRight" args "Typ faktúry" "Invoice type code" (or $inv.InvoiceTypeCode $inv.CreditNoteTypeCode) }}
+          {{ template "valueRowRight" args "Dátum vystavenia" "Invoice issue date" $inv.IssueDate }}
+          {{ template "valueRowRight" args "Dátum zdan. plnenia" "Value added tax point date" $inv.TaxPointDate }}
+          {{ template "valueRowRight" args "Dátum splatnosti" "Payment due date" (or $inv.DueDate $inv.PaymentMeans.PaymentDueDate ) }}
+          {{ template "valueRowRight" args "Číslo ver. obstarávania" "Contract reference" $inv.ContractDocumentReference.ID }}
+          {{ template "valueRowRight" args "Číslo predchádzajúcej faktúry" "Preceding Invoice reference" $inv.BillingReference.InvoiceDocumentReference.ID }}
+        </div>
+      </div>
+
+      {{/* parties */}}
+      <div>
+        <div class="party-labels">
+          <div class="party-label">
+            <span class="party-label-sk">PREDÁVAJÚCI</span>
+            <span class="party-label-en">/ SELLER</span>
+          </div>
+          <div class="party-label">
+            <span class="party-label-sk">KUPUJÚCI</span>
+            <span class="party-label-en">/ BUYER</span>
+          </div>
+        </div>
+
+        <div class="party-columns">
+          {{ with $party := $inv.AccountingSupplierParty.Party }}
+          <div class="party-column party-column-l">
+            <div class="party-info">
+              {{ template "valueRowLeftInline" args "Názov" "Seller name" .PartyLegalEntity.RegistrationName }}
+              {{ template "valueRowLeft" args "Ulica, číslo" "Seller address line 1" .PostalAddress.StreetName }}
+              {{ template "valueRowLeft" args "PSČ Mesto" "Seller postcode City"
+              (printf "%s %s" .PostalAddress.PostalZone .PostalAddress.CityName) }}
+              {{ template "valueRowLeftInline" args "Štát" "Seller country code" .PostalAddress.Country.IdentificationCode }}
+            </div>
+            <div class="party-info">
+              {{ template "valueRowLeft" args "Právna forma" "Legal Status" $party.PartyLegalEntity.CompanyLegalForm }}
+              {{ template "valueRowLeft" args "IČO" "Seller legal registration identifier" $party.PartyLegalEntity.CompanyID }}
+              {{ template "valueRowLeft" args "IČ DPH" "Seller VAT identifier" $party.PartyTaxScheme.CompanyID }}
+            </div>
+            <div class="party-info">
+              {{ template "labelSection" label "Platobné údaje" "Payment details"}}
+              {{ template "valueRowLeft" args "Spôsob úhrady" "Payment means type code"
+              (printf "%s - %s" $inv.PaymentMeans.PaymentMeansCode.Value $inv.PaymentMeans.PaymentMeansCode.Name) }}
+              {{ template "valueRowLeft" args "Variabilný symbol" "Remittance  information" $inv.PaymentMeans.PaymentID}}
+              {{ template "valueRowLeftSmall" args "IBAN/SWIFT" "Payment account  identifier" $inv.PaymentMeans.PayeeFinancialAccount.ID}}
+            </div>
+            <div class="party-info">
+              {{ template "labelSection" label "Faktúru vyhotovil" "Issued by" }}
+              {{ template "valueRowLeftInline" args "Meno" "Seller contact point" $party.Contact.Name }}
+              {{ template "valueRowLeftInline" args "Telefón" "Telephone number" $party.Contact.Telephone }}
+              {{ template "valueRowLeftInline" args "E-mail" "Email address" $party.Contact.ElectronicMail }}
+            </div>
+          </div>
+          {{ end }}
+          {{ with $party := $inv.AccountingCustomerParty.Party }}
+          <div class="party-column">
+            <div class="party-info">
+              {{ template "valueRowLeftInline" args "Názov" "Buyer name" .PartyLegalEntity.RegistrationName }}
+              {{ template "valueRowLeft" args "Ulica, číslo" "Buyer address line 1" .PostalAddress.StreetName }}
+              {{ template "valueRowLeft" args "PSČ Mesto" "Buyer postcode City"
+              (printf "%s %s" .PostalAddress.PostalZone .PostalAddress.CityName) }}
+              {{ template "valueRowLeftInline" args "Štát" "Buyer country code" .PostalAddress.Country.IdentificationCode }}
+            </div>
+            <div class="party-info">
+              {{ template "valueRowLeft" args "IČO" "Seller legal registration identifier" $party.PartyLegalEntity.CompanyID }}
+              {{ template "valueRowLeft" args "IČ DPH" "Seller VAT identifier" $party.PartyTaxScheme.CompanyID }}
+            </div>
+            <div class="party-info">
+              {{ template "labelSection" label "Adresa dodania" "Delivery address"}}
+              {{ template "valueRowLeft" args "Ulica, číslo" "Deliver to address line 1" $inv.Delivery.DeliveryLocation.Address.StreetName }}
+              {{ template "valueRowLeft" args "PSČ Mesto" "Deliver to postcode City"
+              (printf "%s %s" $inv.Delivery.DeliveryLocation.Address.PostalZone $inv.Delivery.DeliveryLocation.Address.CityName) }}
+              {{ template "valueRowLeft" args "Štát" "Deliver to country code" $inv.Delivery.DeliveryLocation.Address.Country.IdentificationCode }}
+            </div>
+            <div class="party-info">
+              {{ template "labelSection" label "Kontaktné údaje" "Contact information" }}
+              {{ template "valueRowLeftInline" args "Meno" "Buyer contact point" $party.Contact.Name }}
+              {{ template "valueRowLeftInline" args "Telefón" "Telephone number" $party.Contact.Telephone }}
+              {{ template "valueRowLeftInline" args "E-mail" "Email address" $party.Contact.ElectronicMail }}
+            </div>
+          </div>
+          {{ end }}
+        </div>
+
+        {{/* items */}}
+        <div class="items">
+          {{ template "labelSection" label "Zoznam fakturovaných položiek" "List of invoiced items" }}
+          <table>
+            <tr class="table-head-sk">
+              <td style="width:5%" >P.č.</td>
+              <td style="width:20%" >Názov</td>
+              <td style="width:10%" >Množstvo</td>
+              <td style="width:10%" >MJ</td>
+              <td style="width:15%" >Jedn. cena<br>bez DPH (po zľave)</td>
+              <td style="width:12%" >Spolu bez DPH<br>(po zľave)</td>
+              <td style="width:10%" >Sadzba DPH</td>
+            </tr>
+            <tr class="table-head-en">
+              <td>No.</td>
+              <td>Item name</td>
+              <td>Invoiced<br>Quantity</td>
+              <td>Unit of<br>measure code</td>
+              <td>Item net price</td>
+              <td>Invoice line<br>net amount</td>
+              <td>Invoiced item<br>VAT rate</td>
+            </tr>
+            {{ range (or $inv.InvoiceLine $inv.CreditNoteLine) }}
+              <tr>
+                <td>{{ .ID }}.</td>
+                <td>{{ .Item.Name }}</td>
+                <td>{{ or .InvoicedQuantity.Value .CreditedQuantity.Value }}</td>
+                <td>{{ or .InvoicedQuantity.Code .CreditedQuantity.Code }}</td>
+                <td>{{ printf "%.2f" .Price.PriceAmount }}</td>
+                <td>{{ printf "%.2f" .LineExtensionAmount }}</td>
+                <td>{{ .Item.ClassifiedTaxCategory.Percent }}%</td>
+              </tr>
+            {{ end }}
+          </table>
+        </div>
+
+        {{/* recapitulation */}}
+        <div class="recapitulation">
+          {{ template "labelSection" label "REKAPITULÁCIA" "RECAPITULATION" }}
+          <table>
+            <tr class="table-head-sk">
+              <td style="width:26%" >Sadzba DPH</td>
+              <td style="width:25%" >Základ dane</td>
+              <td style="width:24%" >DPH</td>
+              <td style="width:25%" >Spolu</td>
+            </tr>
+            <tr class="table-head-en">
+              <td>VAT rate</td>
+              <td>Tax base</td>
+              <td>VAT</td>
+              <td>Total</td>
+            </tr>
+            {{ range $inv.TaxTotal.TaxSubtotal }}
+              <tr>
+                <td>{{ printf "%.2f" .TaxCategory.Percent }}%</td>
+                <td>{{ printf "%.2f" .TaxableAmount }}</td>
+                <td>{{ printf "%.2f" .TaxAmount }}</td>
+                <td>{{ printf "%.2f" (sum .TaxableAmount .TaxAmount) }}</td>
+              </tr>
+            {{ end }}
+            <tr>
+              <td>
+                {{ template "label" (label "Spolu" "Total")}}
+              </td>
+              <td>{{ printf "%.2f" $inv.LegalMonetaryTotal.TaxExclusiveAmount.Value }}</td>
+              <td>{{ printf "%.2f" $inv.TaxTotal.TaxAmount }}</td>
+              <td>{{ printf "%.2f" $inv.LegalMonetaryTotal.TaxInclusiveAmount.Value }}</td>
+            </tr>
+          </table>
+          <div class="total-section">
+            <div class="total-label">
+              <div class="total-label-sk">Celkom k úhrade</div>
+              <div class="total-label-en">Total amount to pay</div>
+            </div>
+            <div class="total-value">
+              {{ printf "%.2f" $inv.LegalMonetaryTotal.PayableAmount.Value }}
+              {{ $inv.DocumentCurrencyCode }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
