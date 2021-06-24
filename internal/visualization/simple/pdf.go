@@ -1,81 +1,60 @@
 package simple
 
 import (
+	"bytes"
 	"encoding/xml"
-	"fmt"
+	"html/template"
+	"io"
 
-	"github.com/jung-kurt/gofpdf"
+	"github.com/SebastiaanKlippert/go-wkhtmltopdf"
 
 	"github.com/slovak-egov/einvoice/internal/apiserver/metadataExtractor"
+	"github.com/slovak-egov/einvoice/internal/entity"
 )
 
-const (
-	fontSize   = 5
-	lineHeight = 7
-	font       = "dejavu"
-)
-
-var pageHeight, pageWidth float64
-
-func GeneratePdf(fontsDir string, rawInvoice []byte) (*gofpdf.Fpdf, error) {
-	invoice := &metadataExtractor.UblInvoice{}
+func GeneratePdf(invoiceType string, tmpl *template.Template, rawInvoice []byte) (io.Reader, error) {
+	invoice := &metadataExtractor.UblInvoiceFull{}
 	err := xml.Unmarshal(rawInvoice, &invoice)
 	if err != nil {
 		return nil, err
 	}
 
-	pdf := gofpdf.New("P", "mm", "A4", fontsDir)
+	tmplMetadata := TemplateMeta{
+		IsInvoice: invoiceType == entity.InvoiceDocumentType,
+		Xml:       invoice,
+	}
 
-	pdf.AddUTF8Font(font, "", "DejaVuSansCondensed.ttf")
-	pdf.AddUTF8Font(font, "B", "DejaVuSansCondensed-Bold.ttf")
-	pdf.AddUTF8Font(font, "I", "DejaVuSansCondensed-Oblique.ttf")
-	pdf.AddUTF8Font(font, "BI", "DejaVuSansCondensed-BoldOblique.ttf")
-	pdf.SetFont(font, "", fontSize)
+	buffer := bytes.NewBuffer(nil)
 
-	pdf.AddPage()
-	left := pdf.GetX()
-	pageWidth, pageHeight = pdf.GetPageSize()
+	err = tmpl.Execute(buffer, tmplMetadata)
+	if err != nil {
+		println(err.Error())
+		return nil, err
+	}
 
-	// Header
-	pdf.SetFontStyle("B")
-	pdf.SetFontUnitSize(2 * fontSize)
-	pdf.SetY(20)
-	pdf.SetX(left)
-	pdf.Write(2*lineHeight, "Invoice "+invoice.ID)
+	pdfg, err := wkhtmltopdf.NewPDFGenerator()
+	if err != nil {
+		println(err.Error())
+		return nil, err
+	}
 
-	// Supplier
-	writeParty(pdf, left, 0.3*pageHeight, "Supplier", &invoice.AccountingSupplierParty.Party)
+	pdfg.Dpi.Set(300)
+	pdfg.Orientation.Set(wkhtmltopdf.OrientationPortrait)
+	pdfg.Grayscale.Set(true)
 
-	// Customer
-	writeParty(pdf, left+0.5*pageWidth, 0.3*pageHeight, "Customer", &invoice.AccountingCustomerParty.Party)
+	page := wkhtmltopdf.NewPageReader(buffer)
 
-	// Issued date
-	pdf.SetFontStyle("")
-	pdf.SetFontUnitSize(fontSize)
-	pdf.SetXY(left, 0.45*pageHeight)
-	pdf.Write(2*lineHeight, "Issue date: "+invoice.IssueDate)
+	// Set options for this page
+	page.EnableLocalFileAccess.Set(true)
 
-	// Cost
-	writeAmount(pdf, left, 0.55*pageHeight, invoice)
+	// Add to document
+	pdfg.AddPage(page)
 
-	return pdf, nil
-}
+	err = pdfg.Create()
+	if err != nil {
+		println(err.Error())
+		return nil, err
+	}
 
-func writeParty(pdf *gofpdf.Fpdf, x, y float64, name string, party *metadataExtractor.UblParty) {
-	pdf.SetFontStyle("B")
-	pdf.SetFontUnitSize(fontSize)
-	pdf.SetXY(x, y)
-	pdf.Write(2*lineHeight, name+":")
-	pdf.SetFontStyle("")
-	pdf.SetXY(x, y+2*lineHeight)
-	pdf.Write(lineHeight, party.PartyLegalEntity.RegistrationName)
-	pdf.SetXY(x, y+3*lineHeight)
-	pdf.Write(lineHeight, "IČO: "+party.PartyLegalEntity.CompanyID)
-}
-
-func writeAmount(pdf *gofpdf.Fpdf, x, y float64, invoice *metadataExtractor.UblInvoice) {
-	pdf.SetFontStyle("")
-	pdf.SetFontUnitSize(fontSize)
-	pdf.SetXY(x, y)
-	pdf.Write(2*lineHeight, fmt.Sprintf("Total: %.2f %s", invoice.LegalMonetaryTotal.TaxInclusiveAmount.Value, invoice.LegalMonetaryTotal.TaxInclusiveAmount.CurrencyID))
+	return pdfg.Buffer(), nil
 }

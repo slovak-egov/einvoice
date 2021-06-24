@@ -30,6 +30,7 @@ var devConfig = Configuration{
 	},
 	Visualization: visualization.Configuration{
 		FontsDirectory: "data/fonts",
+		TemplatePath:   "data/templates/invoice",
 	},
 	XsdPath: "data/schemas",
 }
@@ -53,6 +54,7 @@ var prodConfig = Configuration{
 	},
 	Visualization: visualization.Configuration{
 		FontsDirectory: "app/data/fonts",
+		TemplatePath:   "app/data/templates/invoice",
 	},
 	XsdPath: "app/data/schemas",
 }
@@ -72,6 +74,7 @@ var testConfig = Configuration{
 	},
 	Visualization: visualization.Configuration{
 		FontsDirectory: "../../data/fonts",
+		TemplatePath:   "../../data/templates/invoice",
 	},
 	XsdPath: "../../data/schemas",
 }

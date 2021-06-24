@@ -2,11 +2,15 @@ package visualization
 
 import (
 	goContext "context"
+	"html/template"
 	"io"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/slovak-egov/einvoice/internal/db"
 	"github.com/slovak-egov/einvoice/internal/entity"
 	"github.com/slovak-egov/einvoice/internal/storage"
+	"github.com/slovak-egov/einvoice/internal/visualization/simple"
 	"github.com/slovak-egov/einvoice/internal/xsdValidator"
 )
 
@@ -15,14 +19,20 @@ type Visualizer struct {
 	storage   *storage.LocalStorage
 	db        *db.Connector
 	validator *xsdValidator.XsdValidator
+	template  *template.Template
 }
 
 func New(config Configuration, storage *storage.LocalStorage, db *db.Connector, validator *xsdValidator.XsdValidator) *Visualizer {
+	tmpl, err := simple.CreateTemplate(config.TemplatePath)
+	if err != nil {
+		log.WithField("error", err.Error()).Fatal("visualization.createTemplate.failed")
+	}
 	return &Visualizer{
 		fontsDir:  config.FontsDirectory,
 		storage:   storage,
 		db:        db,
 		validator: validator,
+		template:  tmpl,
 	}
 }
 

@@ -50,6 +50,7 @@ var devConfig = Configuration{
 	DraftsLimit:     10,
 	Visualization: visualization.Configuration{
 		FontsDirectory: "data/fonts",
+		TemplatePath:   "data/templates/invoice",
 	},
 }
 
@@ -90,6 +91,7 @@ var prodConfig = Configuration{
 	DraftsLimit:          10,
 	Visualization: visualization.Configuration{
 		FontsDirectory: "app/data/fonts",
+		TemplatePath:   "app/data/templates/invoice",
 	},
 }
 
@@ -125,5 +127,6 @@ var testConfig = Configuration{
 	DraftsLimit:     2,
 	Visualization: visualization.Configuration{
 		FontsDirectory: "../../data/fonts",
+		TemplatePath:   "../../data/templates/invoice",
 	},
 }

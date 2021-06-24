@@ -54,7 +54,7 @@
   "removeItem": "Odstrániť položku",
   "recapitulation": "Rekapitulácia",
   "recapitulationCategory": "Rekapitulácia za kategóriu DPH č. {{index}}",
-  "recapitulationFull": "Rekapitulícia za všetky kateorie DPH",
+  "recapitulationFull": "Rekapitulácia za všetky kategórie DPH",
   "taxCategory": "Kód kategórie DPH",
   "taxPercentage": "Sadzba dane",
   "taxBase": "Celková suma faktúry bez DPH",

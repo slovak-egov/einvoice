@@ -97,17 +97,17 @@
         </cac:DeliveryLocation>
     </cac:Delivery>
     <cac:PaymentMeans>
-        <cbc:PaymentMeansCode name="adf">30</cbc:PaymentMeansCode>
+        <cbc:PaymentMeansCode name="Bezhotovostný prevod">30</cbc:PaymentMeansCode>
         <cbc:PaymentID>1800355</cbc:PaymentID>
         <cac:PayeeFinancialAccount>
-            <cbc:ID>SK1212341234123412341234</cbc:ID>
+            <cbc:ID>SK0809000000000123123123</cbc:ID>
         </cac:PayeeFinancialAccount>
     </cac:PaymentMeans>
     <cac:TaxTotal>
-        <cbc:TaxAmount currencyID="SEK">2500</cbc:TaxAmount>
+        <cbc:TaxAmount currencyID="SEK">2500.00</cbc:TaxAmount>
         <cac:TaxSubtotal>
-            <cbc:TaxableAmount currencyID="SEK">10000</cbc:TaxableAmount>
-            <cbc:TaxAmount currencyID="SEK">2500</cbc:TaxAmount>
+            <cbc:TaxableAmount currencyID="SEK">10000.00</cbc:TaxableAmount>
+            <cbc:TaxAmount currencyID="SEK">2500.00</cbc:TaxAmount>
             <cac:TaxCategory>
                 <cbc:ID>S</cbc:ID>
                 <cbc:Percent>25</cbc:Percent>
@@ -117,8 +117,8 @@
             </cac:TaxCategory>
         </cac:TaxSubtotal>
         <cac:TaxSubtotal>
-            <cbc:TaxableAmount currencyID="SEK">0</cbc:TaxableAmount>
-            <cbc:TaxAmount currencyID="SEK">0</cbc:TaxAmount>
+            <cbc:TaxableAmount currencyID="SEK">0.00</cbc:TaxableAmount>
+            <cbc:TaxAmount currencyID="SEK">0.00</cbc:TaxAmount>
             <cac:TaxCategory>
                 <cbc:ID>E</cbc:ID>
                 <cbc:Percent>0</cbc:Percent>
@@ -131,16 +131,16 @@
         </cac:TaxSubtotal>
     </cac:TaxTotal>
     <cac:LegalMonetaryTotal>
-        <cbc:LineExtensionAmount currencyID="SEK">10000</cbc:LineExtensionAmount>
-        <cbc:TaxExclusiveAmount currencyID="SEK">10000</cbc:TaxExclusiveAmount>
-        <cbc:TaxInclusiveAmount currencyID="SEK">12500</cbc:TaxInclusiveAmount>
-        <cbc:PayableAmount currencyID="SEK">12500</cbc:PayableAmount>
+        <cbc:LineExtensionAmount currencyID="SEK">10000.00</cbc:LineExtensionAmount>
+        <cbc:TaxExclusiveAmount currencyID="SEK">10000.00</cbc:TaxExclusiveAmount>
+        <cbc:TaxInclusiveAmount currencyID="SEK">12500.00</cbc:TaxInclusiveAmount>
+        <cbc:PayableAmount currencyID="SEK">12500.00</cbc:PayableAmount>
     </cac:LegalMonetaryTotal>
     <cac:InvoiceLine>
         <cbc:ID>1</cbc:ID>
         <cbc:Note>Item note</cbc:Note>
         <cbc:InvoicedQuantity unitCode="MTR">500</cbc:InvoicedQuantity>
-        <cbc:LineExtensionAmount currencyID="SEK">10000</cbc:LineExtensionAmount>
+        <cbc:LineExtensionAmount currencyID="SEK">10000.00</cbc:LineExtensionAmount>
         <cbc:AccountingCost>Accounting 101-222-8</cbc:AccountingCost>
         <cac:Item>
             <cbc:Description>Universal product, customized with option X</cbc:Description>
@@ -154,7 +154,28 @@
             </cac:ClassifiedTaxCategory>
         </cac:Item>
         <cac:Price>
-            <cbc:PriceAmount currencyID="SEK">20</cbc:PriceAmount>
+            <cbc:PriceAmount currencyID="SEK">20.00</cbc:PriceAmount>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>2</cbc:ID>
+        <cbc:Note>Item note 2</cbc:Note>
+        <cbc:InvoicedQuantity unitCode="MTR">1</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="SEK">0.00</cbc:LineExtensionAmount>
+        <cbc:AccountingCost>Accounting 101-222-8</cbc:AccountingCost>
+        <cac:Item>
+            <cbc:Description>Universal product, customized with option X</cbc:Description>
+            <cbc:Name>Universal product 2</cbc:Name>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>E</cbc:ID>
+                <cbc:Percent>0</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="SEK">0.00</cbc:PriceAmount>
         </cac:Price>
     </cac:InvoiceLine>
 </Invoice>

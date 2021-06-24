@@ -1,0 +1,56 @@
+{{ define "label" }}
+    <span class="label-sk">{{.SK}}</span>/ <span class="label-en">{{.EN}}</span> :
+{{ end}}
+
+{{ define "labelSplit" }}
+    <span class="label-sk">{{.SK}}</span>/ : <br>
+    <span class="label-en">{{.EN}}</span>
+{{ end}}
+
+{{ define "labelSection" }}
+    <span class="label-sk"><b>{{.SK}}</b></span> / <span class="label-en">{{.EN}}</span> :
+{{ end}}
+
+{{ define "valueRowRight" }}
+     <div class="value-row-r">
+         <div class="label-r">
+             {{ template "labelSplit" .Label}}
+         </div>
+         <div class="value-r">
+             {{ .Value }}
+         </div>
+     </div>
+{{ end }}
+
+{{ define "valueRowLeft" }}
+    <div class="value-row-l">
+        <div class="label-l">
+            {{ template "labelSplit" .Label}}
+        </div>
+        <div class="value-l">
+            {{ .Value }}
+        </div>
+    </div>
+{{ end }}
+
+{{ define "valueRowLeftSmall" }}
+    <div class="value-row-l">
+        <div class="label-l">
+            {{ template "labelSplit" .Label}}
+        </div>
+        <div class="value-l-s">
+            {{ .Value }}
+        </div>
+    </div>
+{{ end }}
+
+{{ define "valueRowLeftInline" }}
+    <div class="value-row-l">
+        <div class="label-l">
+            {{ template "label" .Label}}
+        </div>
+        <div class="value-l">
+            {{ .Value }}
+        </div>
+    </div>
+{{ end }}

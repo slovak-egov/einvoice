@@ -15,11 +15,29 @@ COPY . .
 
 RUN go build -o /tmp/out/notification-worker ./cmd/notification-worker
 
+FROM surnet/alpine-wkhtmltopdf:3.13.5-0.12.6-small as wkhtmltopdf
+
 # Start fresh from a smaller image
 FROM alpine:3.13
-RUN apk add --no-cache ca-certificates
+RUN apk update && apk add --no-cache \
+  libxml2 \
+  libxslt-dev \
+  libstdc++ \
+  libx11 \
+  libxrender \
+  libxext \
+  libssl1.1 \
+  ca-certificates \
+  fontconfig \
+  freetype \
+  ttf-dejavu \
+  ttf-droid \
+  ttf-freefont \
+  ttf-liberation \
+  ttf-ubuntu-font-family
 
 COPY --from=build_base /tmp/out/notification-worker /worker/notification-worker
 COPY --from=build_base /tmp/einvoice/data/fonts /app/data/fonts
+COPY --from=wkhtmltopdf /bin/wkhtmltopdf /bin/wkhtmltopdf
 
 CMD ["/worker/notification-worker"]

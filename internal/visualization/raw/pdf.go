@@ -1,7 +1,9 @@
 package raw
 
 import (
+	"bytes"
 	"fmt"
+	"io"
 	"strings"
 
 	"github.com/jung-kurt/gofpdf"
@@ -82,7 +84,7 @@ func generateLines(currentNode types.Node, level int, pdf *gofpdf.Fpdf) error {
 	return nil
 }
 
-func GeneratePdf(fontsDir string, xml types.Document) (*gofpdf.Fpdf, error) {
+func GeneratePdf(fontsDir string, xml types.Document) (io.Reader, error) {
 
 	pdf := gofpdf.New("P", "mm", "A4", fontsDir)
 
@@ -102,5 +104,11 @@ func GeneratePdf(fontsDir string, xml types.Document) (*gofpdf.Fpdf, error) {
 		return nil, err
 	}
 
-	return pdf, nil
+	buf := bytes.NewBuffer(nil)
+	err = pdf.Output(buf)
+	if err != nil {
+		return nil, err
+	}
+
+	return buf, nil
 }
