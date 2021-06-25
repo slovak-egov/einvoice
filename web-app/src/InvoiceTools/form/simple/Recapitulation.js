@@ -19,7 +19,7 @@ const Category = ({docs, path, index}) => {
             )}
             label={t('taxCategory')}
             path={[...path, 'key', 'taxCategory']}
-            disabled
+            notEditable
             nullable
           />
         </div>
@@ -28,9 +28,9 @@ const Category = ({docs, path, index}) => {
             docs={getDoc(docs,
               ['cac:TaxTotal', 'cac:TaxSubtotal', 'cac:TaxCategory', 'cbc:Percent']
             )}
-            label={t('taxPercentage')}
+            label={t('categoryTaxPercentage')}
             path={[...path, 'key', 'taxPercentage']}
-            disabled
+            notEditable
             nullable
           />
         </div>
@@ -41,9 +41,9 @@ const Category = ({docs, path, index}) => {
             docs={getDoc(docs,
               ['cac:TaxTotal', 'cac:TaxSubtotal', 'cbc:TaxableAmount']
             )}
-            label={t('taxBase')}
+            label={t('categoryTaxBase')}
             path={[...path, 'amountWithoutVat']}
-            disabled
+            notEditable
             nullable
           />
         </div>
@@ -52,9 +52,9 @@ const Category = ({docs, path, index}) => {
             docs={getDoc(docs,
               ['cac:TaxTotal', 'cac:TaxSubtotal', 'cbc:TaxAmount']
             )}
-            label={t('vat')}
+            label={t('categoryVat')}
             path={[...path, 'vat']}
-            disabled
+            notEditable
             nullable
           />
         </div>
@@ -89,7 +89,7 @@ export default ({path, docs, formType}) => {
                 ['cac:LegalMonetaryTotal', 'cbc:TaxExclusiveAmount'])}
               label={t('taxBase')}
               path={[...path, 'amountWithoutVat']}
-              disabled
+              notEditable
               nullable
             />
           </div>
@@ -100,7 +100,7 @@ export default ({path, docs, formType}) => {
               )}
               label={t('vat')}
               path={[...path, 'vat']}
-              disabled
+              notEditable
               nullable
             />
           </div>
@@ -113,7 +113,7 @@ export default ({path, docs, formType}) => {
               )}
               label={t('amount')}
               path={[...path, 'amount']}
-              disabled
+              notEditable
               nullable
             />
           </div>
@@ -124,7 +124,7 @@ export default ({path, docs, formType}) => {
               )}
               label={t('totalToPay')}
               path={[...path, 'amount']}
-              disabled
+              notEditable
               nullable
             />
           </div>

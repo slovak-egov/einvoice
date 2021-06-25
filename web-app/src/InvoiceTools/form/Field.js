@@ -72,7 +72,7 @@ export const ComplexField = ({canDelete, dropField, docs, path, setErrorCount}) 
   )
 }
 
-export const Field = ({docs, label, path, value, nullable, disabled}) => {
+export const Field = ({docs, label, path, value, nullable, notEditable}) => {
   const {t} = useTranslation('common')
   const dispatch = useDispatch()
   const currentValue = useSelector(formFieldSelector(path)) || ''
@@ -87,7 +87,7 @@ export const Field = ({docs, label, path, value, nullable, disabled}) => {
 
   const updateField = useCallback(
     (value) => {
-      if (!disabled) {
+      if (!notEditable) {
         dispatch(setFormField(path)(value))
       }
     }, [dispatch],
@@ -114,13 +114,13 @@ export const Field = ({docs, label, path, value, nullable, disabled}) => {
         updateField={updateField}
         value={currentValue}
         error={contentError}
-        disabled={disabled}
+        notEditable={notEditable}
       />
     </>
   )
 }
 
-const FieldInput = ({codeListIds, dataType, error, updateField, value}) => {
+const FieldInput = ({codeListIds, dataType, error, updateField, value, notEditable}) => {
   const {t, i18n} = useTranslation('common')
   const getValue = useCallback(
     async (e) => {
@@ -208,22 +208,26 @@ const FieldInput = ({codeListIds, dataType, error, updateField, value}) => {
           }}
           value={value}
           onChange={onChange}
+          onFocus={(e) => notEditable && e.target.blur()}
         />
       )
     case dataTypes.CODE:
       return (
         <Select
-          items={[{}]}
+          items={[{style: notEditable && {display: 'none'}}]}
           itemGroups={codeListIds.map((codeListId) => ({
             label: codeListId,
             items: Object.entries(codeLists[codeListId].codes).map(([id, code]) => ({
               children: `${id} - ${code.name[i18n.language]}`,
               value: codeListId === 'UNECERec21' ? `X${id}` : id, // BR-CL-23
             })),
+            style: notEditable && {display: 'none'},
           }))}
           value={value}
           onChange={onChange}
           errorMessage={error && {children: error}}
+          onFocus={(e) => notEditable && e.target.blur()}
+          style={{width: '100%'}}
         />
       )
     default:
@@ -232,6 +236,7 @@ const FieldInput = ({codeListIds, dataType, error, updateField, value}) => {
           value={value}
           onChange={onChange}
           errorMessage={error && {children: error}}
+          onFocus={(e) => notEditable && e.target.blur()}
         />
       )
   }

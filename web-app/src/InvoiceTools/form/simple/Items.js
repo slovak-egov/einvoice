@@ -17,7 +17,7 @@ const Item = ({docs, formType, path, index, number}) => {
   const codeLists = useSelector(codeListsSelector)
   const itemQuantity = useSelector(formFieldSelector([...itemPath, 'quantity']))
   const netPrice = useSelector(formFieldSelector([...itemPath, 'netPrice']))
-  const taxPercentage = useSelector(formFieldSelector([...itemPath, 'taxPercentage'])) || '0.00'
+  const taxPercentage = useSelector(formFieldSelector([...itemPath, 'taxPercentage']))
   const amountWithoutVat = useSelector(formFieldSelector([...itemPath, 'amountWithoutVat']))
   const amount = useSelector(formFieldSelector([...itemPath, 'amount']))
   const vat = useSelector(formFieldSelector([...itemPath, 'vat']))
@@ -27,13 +27,11 @@ const Item = ({docs, formType, path, index, number}) => {
   const recapitulationChange = useSelector(formFieldSelector([...invoicePath, 'recapitulationChange']))
 
   useEffect(() => {
-    const newVat = (Number(taxPercentage) >= 0 && Number(itemQuantity) && Number(netPrice) ?
-      Number(taxPercentage) * Number(itemQuantity) * Number(netPrice) / 100 : 0
-    ).toFixed(2)
+    const newVat = Number(taxPercentage) >= 0 && Number(itemQuantity) && Number(netPrice) ?
+      (Number(taxPercentage) * Number(itemQuantity) * Number(netPrice) / 100).toFixed(2) : undefined
 
-    const newAmount = (Number(taxPercentage) >= 0 && Number(itemQuantity) && Number(netPrice) ?
-      (1 + Number(taxPercentage) / 100) * Number(itemQuantity) * Number(netPrice) : 0
-    ).toFixed(2)
+    const newAmount = Number(taxPercentage) >= 0 && Number(itemQuantity) && Number(netPrice) ?
+      ((1 + Number(taxPercentage) / 100) * Number(itemQuantity) * Number(netPrice)).toFixed(2) : undefined
 
     if (newVat !== vat) dispatch(setFormField([...itemPath, 'vat'])(newVat))
     if (newAmount !== amount) dispatch(setFormField([...itemPath, 'amount'])(newAmount))
@@ -66,7 +64,7 @@ const Item = ({docs, formType, path, index, number}) => {
               formType)}
             label={t('itemId')}
             path={[...path, 'id']}
-            disabled
+            notEditable
             value={number}
           />
         </div>
@@ -143,7 +141,7 @@ const Item = ({docs, formType, path, index, number}) => {
             )}
             label={t('itemAmountWithoutVat')}
             path={[...path, 'amountWithoutVat']}
-            disabled
+            notEditable
             nullable
             value={(Number(itemQuantity) && Number(netPrice) ?
               Number(itemQuantity) * Number(netPrice)

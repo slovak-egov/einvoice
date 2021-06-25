@@ -11,7 +11,7 @@ export default ({docs, path}) => {
         <div className="govuk-grid-column-full">
           <Field
             docs={getDoc(docs, ['cac:AccountingCustomerParty', 'cac:Party', 'cac:PartyLegalEntity', 'cbc:RegistrationName'])}
-            label={t('partyName')}
+            label={t('customerName')}
             path={[...path, 'name']}
           />
         </div>
@@ -20,17 +20,15 @@ export default ({docs, path}) => {
         <div className="govuk-grid-column-one-half">
           <Field
             docs={getDoc(docs, ['cac:AccountingCustomerParty', 'cac:Party', 'cac:PostalAddress', 'cbc:StreetName'])}
-            label={t('addressLine1')}
+            label={t('customerAddressLine1')}
             path={[...path, 'address', 'line1']}
-            nullable
           />
         </div>
         <div className="govuk-grid-column-one-half">
           <Field
             docs={getDoc(docs, ['cac:AccountingCustomerParty', 'cac:Party', 'cac:PostalAddress', 'cbc:PostalZone'])}
-            label={t('postalZone')}
+            label={t('customerPostalZone')}
             path={[...path, 'address', 'postalZone']}
-            nullable
           />
         </div>
       </div>
@@ -38,17 +36,15 @@ export default ({docs, path}) => {
         <div className="govuk-grid-column-one-half">
           <Field
             docs={getDoc(docs, ['cac:AccountingCustomerParty', 'cac:Party', 'cac:PostalAddress', 'cbc:CityName'])}
-            label={t('city')}
+            label={t('customerCity')}
             path={[...path, 'address', 'city']}
-            nullable
           />
         </div>
         <div className="govuk-grid-column-one-half">
           <Field
             docs={getDoc(docs, ['cac:AccountingCustomerParty', 'cac:Party', 'cac:PostalAddress', 'cac:Country', 'cbc:IdentificationCode'])}
-            label={t('country')}
+            label={t('customerCountry')}
             path={[...path, 'address', 'country']}
-            nullable
           />
         </div>
       </div>
@@ -56,7 +52,7 @@ export default ({docs, path}) => {
         <div className="govuk-grid-column-one-half">
           <Field
             docs={getDoc(docs, ['cac:AccountingCustomerParty', 'cac:Party', 'cac:PartyLegalEntity', 'cbc:CompanyID'])}
-            label={t('partyIco')}
+            label={t('customerIco')}
             path={[...path, 'ico']}
             nullable
           />
@@ -64,7 +60,7 @@ export default ({docs, path}) => {
         <div className="govuk-grid-column-one-half">
           <Field
             docs={getDoc(docs, ['cac:AccountingCustomerParty', 'cac:Party', 'cac:PartyTaxScheme', 'cbc:CompanyID'])}
-            label={t('partyVatId')}
+            label={t('customerVatId')}
             path={[...path, 'vatId']}
             nullable
           />
@@ -76,7 +72,7 @@ export default ({docs, path}) => {
         <div className="govuk-grid-column-one-half">
           <Field
             docs={getDoc(docs, ['cac:Delivery', 'cac:DeliveryLocation', 'cac:Address', 'cbc:StreetName'])}
-            label={t('addressLine1')}
+            label={t('deliveryAddressLine1')}
             path={[...path, 'deliveryAddress', 'line1']}
             nullable
           />
@@ -84,7 +80,7 @@ export default ({docs, path}) => {
         <div className="govuk-grid-column-one-half">
           <Field
             docs={getDoc(docs, ['cac:Delivery', 'cac:DeliveryLocation', 'cac:Address', 'cbc:PostalZone'])}
-            label={t('postalZone')}
+            label={t('deliveryPostalZone')}
             path={[...path, 'deliveryAddress', 'postalZone']}
             nullable
           />
@@ -94,7 +90,7 @@ export default ({docs, path}) => {
         <div className="govuk-grid-column-one-half">
           <Field
             docs={getDoc(docs, ['cac:Delivery', 'cac:DeliveryLocation', 'cac:Address', 'cbc:CityName'])}
-            label={t('city')}
+            label={t('deliveryCity')}
             path={[...path, 'deliveryAddress', 'city']}
             nullable
           />
@@ -102,9 +98,8 @@ export default ({docs, path}) => {
         <div className="govuk-grid-column-one-half">
           <Field
             docs={getDoc(docs, ['cac:Delivery', 'cac:DeliveryLocation', 'cac:Address', 'cac:Country', 'cbc:IdentificationCode'])}
-            label={t('country')}
+            label={t('deliveryCountry')}
             path={[...path, 'deliveryAddress', 'country']}
-            nullable
           />
         </div>
       </div>

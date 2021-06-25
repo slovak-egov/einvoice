@@ -28,7 +28,7 @@ export default ({docs, path}) => {
         <div className="govuk-grid-column-full">
           <Field
             docs={getDoc(docs, ['cac:AccountingSupplierParty', 'cac:Party', 'cac:PartyLegalEntity', 'cbc:RegistrationName'])}
-            label={t('partyName')}
+            label={t('supplierName')}
             path={[...path, 'name']}
           />
         </div>
@@ -37,17 +37,15 @@ export default ({docs, path}) => {
         <div className="govuk-grid-column-one-half">
           <Field
             docs={getDoc(docs, ['cac:AccountingSupplierParty', 'cac:Party', 'cac:PostalAddress', 'cbc:StreetName'])}
-            label={t('addressLine1')}
+            label={t('supplierAddressLine1')}
             path={[...path, 'address', 'line1']}
-            nullable
           />
         </div>
         <div className="govuk-grid-column-one-half">
           <Field
             docs={getDoc(docs, ['cac:AccountingSupplierParty', 'cac:Party', 'cac:PostalAddress', 'cbc:PostalZone'])}
-            label={t('postalZone')}
+            label={t('supplierPostalZone')}
             path={[...path, 'address', 'postalZone']}
-            nullable
           />
         </div>
       </div>
@@ -55,17 +53,15 @@ export default ({docs, path}) => {
         <div className="govuk-grid-column-one-half">
           <Field
             docs={getDoc(docs, ['cac:AccountingSupplierParty', 'cac:Party', 'cac:PostalAddress', 'cbc:CityName'])}
-            label={t('city')}
+            label={t('supplierCity')}
             path={[...path, 'address', 'city']}
-            nullable
           />
         </div>
         <div className="govuk-grid-column-one-half">
           <Field
             docs={getDoc(docs, ['cac:AccountingSupplierParty', 'cac:Party', 'cac:PostalAddress', 'cac:Country', 'cbc:IdentificationCode'])}
-            label={t('country')}
+            label={t('supplierCountry')}
             path={[...path, 'address', 'country']}
-            nullable
           />
         </div>
       </div>
@@ -73,7 +69,7 @@ export default ({docs, path}) => {
         <div className="govuk-grid-column-full">
           <Field
             docs={getDoc(docs, ['cac:AccountingSupplierParty', 'cac:Party', 'cac:PartyLegalEntity', 'cbc:CompanyLegalForm'])}
-            label={t('legalForm')}
+            label={t('supplierLegalForm')}
             path={[...path, 'legalForm']}
             nullable
           />
@@ -83,7 +79,7 @@ export default ({docs, path}) => {
         <div className="govuk-grid-column-one-half">
           <Field
             docs={getDoc(docs, ['cac:AccountingSupplierParty', 'cac:Party', 'cac:PartyLegalEntity', 'cbc:CompanyID'])}
-            label={t('partyIco')}
+            label={t('supplierIco')}
             path={[...path, 'ico']}
             nullable
           />
@@ -91,7 +87,7 @@ export default ({docs, path}) => {
         <div className="govuk-grid-column-one-half">
           <Field
             docs={getDoc(docs, ['cac:AccountingSupplierParty', 'cac:Party', 'cac:PartyTaxScheme', 'cbc:CompanyID'])}
-            label={t('partyVatId')}
+            label={t('supplierVatId')}
             path={[...path, 'vatId']}
             nullable
           />
@@ -124,7 +120,8 @@ export default ({docs, path}) => {
           />
         </div>
       </div>
-      <div className="govuk-heading-m">{t('contact')} ({businessTermLink('BG-6')})</div>
+
+      <div className="govuk-heading-m">{t('supplierContact')} ({businessTermLink('BG-6')})</div>
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-one-half">
           <Field
