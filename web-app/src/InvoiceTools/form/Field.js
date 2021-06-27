@@ -12,6 +12,7 @@ import {codeListsSelector} from '../../cache/documentation/state'
 import {allowedAttachmentMimeTypes, dataTypes} from '../../utils/constants'
 import {fileToBase64, formatDate, parseDate} from '../../utils/helpers'
 import {Link} from 'react-router-dom'
+import {pathToId} from './ids'
 
 const fileToState = (file, name, mime) => ({
   text: file,
@@ -56,6 +57,7 @@ export const ComplexField = ({canDelete, dropField, docs, path, setErrorCount}) 
             className="govuk-button--warning"
             style={{marginBottom: 0, marginLeft: '5px'}}
             onClick={dropField}
+            id={`remove-${pathToId(path)}`}
           >
             {t('delete')}
           </Button>
@@ -67,12 +69,13 @@ export const ComplexField = ({canDelete, dropField, docs, path, setErrorCount}) 
         updateField={updateField}
         value={value}
         error={contentError}
+        id={pathToId(path)}
       />
     </>
   )
 }
 
-export const Field = ({docs, label, path, value, nullable, disabled}) => {
+export const Field = ({docs, label, path, value, nullable, notEditable, id}) => {
   const {t} = useTranslation('common')
   const dispatch = useDispatch()
   const currentValue = useSelector(formFieldSelector(path)) || ''
@@ -87,7 +90,7 @@ export const Field = ({docs, label, path, value, nullable, disabled}) => {
 
   const updateField = useCallback(
     (value) => {
-      if (!disabled) {
+      if (!notEditable) {
         dispatch(setFormField(path)(value))
       }
     }, [dispatch],
@@ -114,13 +117,14 @@ export const Field = ({docs, label, path, value, nullable, disabled}) => {
         updateField={updateField}
         value={currentValue}
         error={contentError}
-        disabled={disabled}
+        notEditable={notEditable}
+        id={id}
       />
     </>
   )
 }
 
-const FieldInput = ({codeListIds, dataType, error, updateField, value}) => {
+const FieldInput = ({codeListIds, dataType, error, updateField, value, notEditable, id}) => {
   const {t, i18n} = useTranslation('common')
   const getValue = useCallback(
     async (e) => {
@@ -186,6 +190,7 @@ const FieldInput = ({codeListIds, dataType, error, updateField, value}) => {
           selected={parseDate(value)}
           onChange={onChange}
           dateFormat="yyyy-MM-dd"
+          id={id}
         />
       )
     case dataTypes.BINARY_OBJECT:
@@ -196,6 +201,7 @@ const FieldInput = ({codeListIds, dataType, error, updateField, value}) => {
           uploadFile={onChange}
           deleteFile={() => updateField(fileToState('', '', ''))}
           fileName={value.attributes.filename[0].text}
+          id={id}
         />
       )
     case dataTypes.PERCENTAGE:
@@ -208,22 +214,28 @@ const FieldInput = ({codeListIds, dataType, error, updateField, value}) => {
           }}
           value={value}
           onChange={onChange}
+          onFocus={(e) => notEditable && e.target.blur()}
+          id={id}
         />
       )
     case dataTypes.CODE:
       return (
         <Select
-          items={[{}]}
+          items={[{style: notEditable && {display: 'none'}}]}
           itemGroups={codeListIds.map((codeListId) => ({
             label: codeListId,
             items: Object.entries(codeLists[codeListId].codes).map(([id, code]) => ({
               children: `${id} - ${code.name[i18n.language]}`,
               value: codeListId === 'UNECERec21' ? `X${id}` : id, // BR-CL-23
             })),
+            style: notEditable && {display: 'none'},
           }))}
           value={value}
           onChange={onChange}
           errorMessage={error && {children: error}}
+          onFocus={(e) => notEditable && e.target.blur()}
+          style={{width: '100%'}}
+          id={id}
         />
       )
     default:
@@ -232,6 +244,8 @@ const FieldInput = ({codeListIds, dataType, error, updateField, value}) => {
           value={value}
           onChange={onChange}
           errorMessage={error && {children: error}}
+          onFocus={(e) => notEditable && e.target.blur()}
+          id={id}
         />
       )
   }

@@ -37,7 +37,7 @@ RUN apk update && apk add --no-cache \
   ttf-ubuntu-font-family
 
 COPY --from=build_base /tmp/out/notification-worker /worker/notification-worker
-COPY --from=build_base /tmp/einvoice/data/fonts /app/data/fonts
+COPY --from=build_base /tmp/einvoice/data /app/data
 COPY --from=wkhtmltopdf /bin/wkhtmltopdf /bin/wkhtmltopdf
 
 CMD ["/worker/notification-worker"]

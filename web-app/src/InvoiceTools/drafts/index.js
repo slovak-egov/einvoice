@@ -65,6 +65,7 @@ export default () => {
                   onClick={() => openDraft(draft)}
                   confirmationTitle={t('confirmationQuestions.openDraft.title')}
                   confirmationText={t('confirmationQuestions.openDraft.text')}
+                  id={`open-draft-${i + 1}`}
                 >
                   {t('open')}
                 </ConfirmationButton>
@@ -73,10 +74,15 @@ export default () => {
                   onClick={() => dispatch(deleteDraft(draft.id))}
                   confirmationTitle={t('confirmationQuestions.deleteDraft.title')}
                   confirmationText={t('confirmationQuestions.deleteDraft.text')}
+                  id={`delete-draft-${i + 1}`}
                 >
                   {t('delete')}
                 </ConfirmationButton>
-                <Button className="govuk-button--secondary" onClick={() => setRenameDraftModalData({id: draft.id, name: draft.name})}>
+                <Button
+                  className="govuk-button--secondary"
+                  onClick={() => setRenameDraftModalData({id: draft.id, name: draft.name})}
+                  id={`rename-draft-${i + 1}`}
+                >
                   {t('rename')}
                 </Button>
               </>

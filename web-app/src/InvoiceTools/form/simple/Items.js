@@ -17,7 +17,7 @@ const Item = ({docs, formType, path, index, number}) => {
   const codeLists = useSelector(codeListsSelector)
   const itemQuantity = useSelector(formFieldSelector([...itemPath, 'quantity']))
   const netPrice = useSelector(formFieldSelector([...itemPath, 'netPrice']))
-  const taxPercentage = useSelector(formFieldSelector([...itemPath, 'taxPercentage'])) || '0.00'
+  const taxPercentage = useSelector(formFieldSelector([...itemPath, 'taxPercentage']))
   const amountWithoutVat = useSelector(formFieldSelector([...itemPath, 'amountWithoutVat']))
   const amount = useSelector(formFieldSelector([...itemPath, 'amount']))
   const vat = useSelector(formFieldSelector([...itemPath, 'vat']))
@@ -27,13 +27,13 @@ const Item = ({docs, formType, path, index, number}) => {
   const recapitulationChange = useSelector(formFieldSelector([...invoicePath, 'recapitulationChange']))
 
   useEffect(() => {
-    const newVat = (Number(taxPercentage) >= 0 && Number(itemQuantity) && Number(netPrice) ?
-      Number(taxPercentage) * Number(itemQuantity) * Number(netPrice) / 100 : 0
-    ).toFixed(2)
+    const newVat = Number(taxPercentage) >= 0 && Number(itemQuantity) && Number(netPrice) ?
+      (Number(taxPercentage) * Number(itemQuantity) * Number(netPrice) / 100).toFixed(2)
+      : undefined
 
-    const newAmount = (Number(taxPercentage) >= 0 && Number(itemQuantity) && Number(netPrice) ?
-      (1 + Number(taxPercentage) / 100) * Number(itemQuantity) * Number(netPrice) : 0
-    ).toFixed(2)
+    const newAmount = Number(taxPercentage) >= 0 && Number(itemQuantity) && Number(netPrice) ?
+      ((1 + Number(taxPercentage) / 100) * Number(itemQuantity) * Number(netPrice)).toFixed(2)
+      : undefined
 
     if (newVat !== vat) dispatch(setFormField([...itemPath, 'vat'])(newVat))
     if (newAmount !== amount) dispatch(setFormField([...itemPath, 'amount'])(newAmount))
@@ -66,8 +66,9 @@ const Item = ({docs, formType, path, index, number}) => {
               formType)}
             label={t('itemId')}
             path={[...path, 'id']}
-            disabled
+            notEditable
             value={number}
+            id={`item-${index}-id`}
           />
         </div>
       </div>
@@ -81,6 +82,7 @@ const Item = ({docs, formType, path, index, number}) => {
             )}
             label={t('itemName')}
             path={[...path, 'name']}
+            id={`item-${index}-name`}
           />
         </div>
       </div>
@@ -94,6 +96,7 @@ const Item = ({docs, formType, path, index, number}) => {
             )}
             label={t('itemDescription')}
             path={[...path, 'description']}
+            id={`item-${index}-description`}
             nullable
           />
         </div>
@@ -108,6 +111,7 @@ const Item = ({docs, formType, path, index, number}) => {
             )}
             label={t('itemQuantity')}
             path={[...path, 'quantity']}
+            id={`item-${index}-quantity`}
           />
         </div>
         <div className="govuk-grid-column-one-half">
@@ -119,6 +123,7 @@ const Item = ({docs, formType, path, index, number}) => {
             )}
             label={t('quantityUnit')}
             path={[...path, 'unit']}
+            id={`item-${index}-quantity-unit`}
           />
         </div>
       </div>
@@ -132,6 +137,7 @@ const Item = ({docs, formType, path, index, number}) => {
             )}
             label={t('itemNetPrice')}
             path={[...path, 'netPrice']}
+            id={`item-${index}-net-price`}
           />
         </div>
         <div className="govuk-grid-column-one-half">
@@ -143,13 +149,14 @@ const Item = ({docs, formType, path, index, number}) => {
             )}
             label={t('itemAmountWithoutVat')}
             path={[...path, 'amountWithoutVat']}
-            disabled
+            notEditable
             nullable
             value={(Number(itemQuantity) && Number(netPrice) ?
               Number(itemQuantity) * Number(netPrice)
               :
               0
             ).toFixed(2)}
+            id={`item-${index}-amount-without-vat`}
           />
         </div>
       </div>
@@ -163,6 +170,7 @@ const Item = ({docs, formType, path, index, number}) => {
             )}
             label={t('itemTaxCategory')}
             path={[...path, 'taxCategory']}
+            id={`item-${index}-tax-category`}
           />
         </div>
         <div className="govuk-grid-column-one-half">
@@ -175,6 +183,7 @@ const Item = ({docs, formType, path, index, number}) => {
             label={t('itemTaxPercentage')}
             path={[...path, 'taxPercentage']}
             value={taxPercentage}
+            id={`item-${index}-tax-percentage`}
           />
         </div>
       </div>
@@ -186,6 +195,7 @@ const Item = ({docs, formType, path, index, number}) => {
             )}
             label={t('itemTaxExemptionCode')}
             path={[...path, 'taxExemptionCode']}
+            id={`item-${index}-tax-exemption-code`}
             nullable
           />
         </div>
@@ -198,6 +208,7 @@ const Item = ({docs, formType, path, index, number}) => {
             )}
             label={t('itemAccountingCost')}
             path={[...path, 'accountingCost']}
+            id={`item-${index}-accounting-cost`}
             nullable
           />
         </div>
@@ -212,6 +223,7 @@ const Item = ({docs, formType, path, index, number}) => {
             )}
             label={t('itemNote')}
             path={[...path, 'note']}
+            id={`item-${index}-note`}
             nullable
           />
         </div>
@@ -243,6 +255,7 @@ export default ({docs, formType, path}) => {
       ))}
       <Button
         onClick={() => {dispatch(addItem(path, itemsCount + 1))}}
+        id="add-item"
       >
         {t('addItem')}
       </Button>
@@ -250,6 +263,7 @@ export default ({docs, formType, path}) => {
       <Button
         className="ml-3 govuk-button--warning"
         onClick={() => {dispatch(removeItem(path, itemsCount))}}
+        id="remove-item"
       >
         {t('removeItem')}
       </Button>}
