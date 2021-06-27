@@ -31,6 +31,7 @@ export default ({formType, path, docs}) => {
       style={{textAlign: 'center', color: '#007bff'}}
       className="govuk-heading-s govuk-grid-column-one-half"
       to={`/invoice-tools/form/${name}`}
+      id={`form-${name}`}
     >
       {section === name ? <u>{t(name)}</u> : t(name)}
     </Link>
@@ -149,12 +150,14 @@ export default ({formType, path, docs}) => {
         <Button
           className="govuk-button--secondary"
           onClick={() => history.push(`/invoice-tools/form/${sections[sectionIndex - 1]}`)}
+          id="previous-section"
         >
           {t('previousSection')}
         </Button>}
         { sectionIndex < sections.length - 1 &&
         <Button
           onClick={() => history.push(`/invoice-tools/form/${sections[sectionIndex + 1]}`)}
+          id="next-section"
         >
           {t('nextSection')}
         </Button>}

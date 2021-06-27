@@ -66,6 +66,7 @@ export default ({showSubmission, title}) => {
               buttonText={t('upload')}
               uploadFile={updateInvoiceData}
               deleteFile={clearInvoiceData}
+              id="invoice-submission-file"
             />
           </div>
         </div>
@@ -78,6 +79,7 @@ export default ({showSubmission, title}) => {
               checked: test,
               children: 'Test',
               onChange: toggleTest,
+              id: 'submission-test-checkbox',
             }]}
           />
         </div>}
@@ -87,6 +89,7 @@ export default ({showSubmission, title}) => {
           className="govuk-button--secondary"
           onClick={getRawInvoice}
           disabled={!invoice}
+          id="download-xml"
         >
           {t('download')} XML
         </Button>
@@ -94,6 +97,7 @@ export default ({showSubmission, title}) => {
           className="govuk-button--secondary"
           onClick={visualizeInvoice}
           disabled={!invoice}
+          id="download-visualization"
         >
           {t('downloadVisualization')}
         </Button>
@@ -102,6 +106,7 @@ export default ({showSubmission, title}) => {
           confirmationTitle={t('confirmationQuestions.submitInvoice.title')}
           confirmationText={t('confirmationQuestions.submitInvoice.text')}
           disabled={!invoice}
+          id="submit"
         >
           {t('submit')}
         </ConfirmationButton>}

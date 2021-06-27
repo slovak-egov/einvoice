@@ -19,6 +19,7 @@ const Category = ({docs, path, index}) => {
             )}
             label={t('taxCategory')}
             path={[...path, 'key', 'taxCategory']}
+            id={`tax-category-${index}-code`}
             notEditable
             nullable
           />
@@ -30,6 +31,7 @@ const Category = ({docs, path, index}) => {
             )}
             label={t('categoryTaxPercentage')}
             path={[...path, 'key', 'taxPercentage']}
+            id={`tax-category-${index}-percentage`}
             notEditable
             nullable
           />
@@ -43,6 +45,7 @@ const Category = ({docs, path, index}) => {
             )}
             label={t('categoryTaxBase')}
             path={[...path, 'amountWithoutVat']}
+            id={`tax-category-${index}-amount-without-vat`}
             notEditable
             nullable
           />
@@ -54,6 +57,7 @@ const Category = ({docs, path, index}) => {
             )}
             label={t('categoryVat')}
             path={[...path, 'vat']}
+            id={`tax-category-${index}-vat`}
             notEditable
             nullable
           />
@@ -89,6 +93,7 @@ export default ({path, docs, formType}) => {
                 ['cac:LegalMonetaryTotal', 'cbc:TaxExclusiveAmount'])}
               label={t('taxBase')}
               path={[...path, 'amountWithoutVat']}
+              id="total-amount-without-vat"
               notEditable
               nullable
             />
@@ -100,6 +105,7 @@ export default ({path, docs, formType}) => {
               )}
               label={t('vat')}
               path={[...path, 'vat']}
+              id="total-vat"
               notEditable
               nullable
             />
@@ -113,6 +119,7 @@ export default ({path, docs, formType}) => {
               )}
               label={t('amount')}
               path={[...path, 'amount']}
+              id="total-amount"
               notEditable
               nullable
             />
@@ -124,6 +131,7 @@ export default ({path, docs, formType}) => {
               )}
               label={t('totalToPay')}
               path={[...path, 'amount']}
+              id="total-payable-amount"
               notEditable
               nullable
             />

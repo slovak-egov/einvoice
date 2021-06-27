@@ -35,7 +35,7 @@ export default () => {
     <header className="idsk-header" data-module="idsk-header" ref={headerRef}>
       <div className="idsk-header__container govuk-header__container--with-user govuk-header__container--full-width">
         <div className="idsk-header__logo">
-          <Link to="/" className="idsk-header__link idsk-header__link--homepage">
+          <Link to="/" className="idsk-header__link idsk-header__link--homepage" id="homepage-link">
             <span className="idsk-header__logotype">
               {t('topBar.title')}
             </span>
@@ -59,17 +59,17 @@ export default () => {
           <nav>
             <ul id="navigation" className="govuk-header__navigation" aria-label="Top Level Navigation">
               <li className={classNames('idsk-header__navigation-item', pathname.startsWith('/invoices') && 'idsk-header__navigation-item--active')}>
-                <Link className="idsk-header__link" to={`/invoices?${defaultInvoiceQuery}`}>
+                <Link className="idsk-header__link" to={`/invoices?${defaultInvoiceQuery}`} id="public-invoices-nav-link">
                   {t('topBar.publicInvoices')}
                 </Link>
               </li>
               <li className={classNames('idsk-header__navigation-item', pathname.startsWith('/invoice-tools') && 'idsk-header__navigation-item--active')}>
-                <Link className="idsk-header__link" to="/invoice-tools">
+                <Link className="idsk-header__link" to="/invoice-tools" id="invoice-tools-nav-link">
                   {t('topBar.invoiceTools')}
                 </Link>
               </li>
               {isLogged && <li className={classNames('idsk-header__navigation-item', pathname.startsWith('/my-invoices') && 'idsk-header__navigation-item--active')}>
-                <Link className="idsk-header__link" to={`/my-invoices?${defaultInvoiceQuery}`}>
+                <Link className="idsk-header__link" to={`/my-invoices?${defaultInvoiceQuery}`} id="my-invoice-nav-link">
                   {t('topBar.myInvoices')}
                 </Link>
               </li>}
@@ -78,7 +78,7 @@ export default () => {
         </div>
 
         {isLogged ? <div className="idsk-header__user govuk-grid-column-one-quarter idsk-header__user--end">
-          <Link to="/account">
+          <Link to="/account" id="account-image-link">
             <svg className="idsk-header__user-icon" viewBox="0 0 28 28">
               <path
                 d="M5 21.9C5 19.8 6.8 18 9 18h10c2.2 0 4 1.8 4 3.9 1.9-2.1 3-4.9 3-7.9 0-6.6-5.4-12-12-12S2 7.4 2 14c0 3 1.1 5.8 3 7.9zm9 6.1C6.3 28 0 21.7 0 14S6.3 0 14 0s14 6.3 14 14-6.3 14-14 14zm0-12c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5z"
@@ -88,14 +88,14 @@ export default () => {
             </svg>
           </Link>
           <div className="idsk--header__user-name">
-            <Link to="/account" className="idsk-header__link">{loggedUser.name}</Link>
+            <Link to="/account" className="idsk-header__link" id="account-link">{loggedUser.name}</Link>
             <div onClick={startLoading}>
-              <a href={getLogoutUrl()} className="idsk--header__user-logout">{t('topBar.logout')}</a>
+              <a href={getLogoutUrl()} className="idsk--header__user-logout" id="logout">{t('topBar.logout')}</a>
             </div>
           </div>
         </div> :
         <div className="idsk-header__user--end">
-          <a href={CONFIG.upvsLoginUrl}>
+          <a href={CONFIG.upvsLoginUrl} id="login">
             <Button style={{marginBottom: 0}} onClick={startLoading}>
               {t('topBar.login')}
             </Button>

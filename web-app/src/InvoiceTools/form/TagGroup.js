@@ -5,6 +5,7 @@ import {Accordion, Badge, Button, Card} from 'react-bootstrap'
 import {ComplexField} from './Field'
 import AddField from './AddField'
 import {removeFieldInstance} from './actions'
+import {pathToId} from './ids'
 
 const Tag = ({canDelete, path, formData, docs, setErrorCount}) => {
   const {i18n, t} = useTranslation('common')
@@ -72,6 +73,7 @@ const Tag = ({canDelete, path, formData, docs, setErrorCount}) => {
           className="bg-primary text-white d-flex align-items-center"
           style={{cursor: 'pointer'}}
           eventKey="0"
+          id={`tag-group-${pathToId(path)}`}
         >
           <span>{docs.name[i18n.language]}</span>
           {errorCount !== 0 && <Badge variant="danger" className="d-flex ml-1">
@@ -80,7 +82,7 @@ const Tag = ({canDelete, path, formData, docs, setErrorCount}) => {
           </Badge>}
           <div className="ml-auto">
             {canDelete &&
-              <Button className="mr-sm-3" variant="danger" size="sm" onClick={dropField}>
+              <Button className="mr-sm-3" variant="danger" size="sm" onClick={dropField} id={`remove-${pathToId(path)}`}>
                 {t('delete')}
               </Button>
             }

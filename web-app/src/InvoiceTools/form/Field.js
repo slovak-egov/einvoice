@@ -12,6 +12,7 @@ import {codeListsSelector} from '../../cache/documentation/state'
 import {allowedAttachmentMimeTypes, dataTypes} from '../../utils/constants'
 import {fileToBase64, formatDate, parseDate} from '../../utils/helpers'
 import {Link} from 'react-router-dom'
+import {pathToId} from './ids'
 
 const fileToState = (file, name, mime) => ({
   text: file,
@@ -56,6 +57,7 @@ export const ComplexField = ({canDelete, dropField, docs, path, setErrorCount}) 
             className="govuk-button--warning"
             style={{marginBottom: 0, marginLeft: '5px'}}
             onClick={dropField}
+            id={`remove-${pathToId(path)}`}
           >
             {t('delete')}
           </Button>
@@ -67,12 +69,13 @@ export const ComplexField = ({canDelete, dropField, docs, path, setErrorCount}) 
         updateField={updateField}
         value={value}
         error={contentError}
+        id={pathToId(path)}
       />
     </>
   )
 }
 
-export const Field = ({docs, label, path, value, nullable, notEditable}) => {
+export const Field = ({docs, label, path, value, nullable, notEditable, id}) => {
   const {t} = useTranslation('common')
   const dispatch = useDispatch()
   const currentValue = useSelector(formFieldSelector(path)) || ''
@@ -115,12 +118,13 @@ export const Field = ({docs, label, path, value, nullable, notEditable}) => {
         value={currentValue}
         error={contentError}
         notEditable={notEditable}
+        id={id}
       />
     </>
   )
 }
 
-const FieldInput = ({codeListIds, dataType, error, updateField, value, notEditable}) => {
+const FieldInput = ({codeListIds, dataType, error, updateField, value, notEditable, id}) => {
   const {t, i18n} = useTranslation('common')
   const getValue = useCallback(
     async (e) => {
@@ -186,6 +190,7 @@ const FieldInput = ({codeListIds, dataType, error, updateField, value, notEditab
           selected={parseDate(value)}
           onChange={onChange}
           dateFormat="yyyy-MM-dd"
+          id={id}
         />
       )
     case dataTypes.BINARY_OBJECT:
@@ -196,6 +201,7 @@ const FieldInput = ({codeListIds, dataType, error, updateField, value, notEditab
           uploadFile={onChange}
           deleteFile={() => updateField(fileToState('', '', ''))}
           fileName={value.attributes.filename[0].text}
+          id={id}
         />
       )
     case dataTypes.PERCENTAGE:
@@ -209,6 +215,7 @@ const FieldInput = ({codeListIds, dataType, error, updateField, value, notEditab
           value={value}
           onChange={onChange}
           onFocus={(e) => notEditable && e.target.blur()}
+          id={id}
         />
       )
     case dataTypes.CODE:
@@ -228,6 +235,7 @@ const FieldInput = ({codeListIds, dataType, error, updateField, value, notEditab
           errorMessage={error && {children: error}}
           onFocus={(e) => notEditable && e.target.blur()}
           style={{width: '100%'}}
+          id={id}
         />
       )
     default:
@@ -237,6 +245,7 @@ const FieldInput = ({codeListIds, dataType, error, updateField, value, notEditab
           onChange={onChange}
           errorMessage={error && {children: error}}
           onFocus={(e) => notEditable && e.target.blur()}
+          id={id}
         />
       )
   }

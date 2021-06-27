@@ -14,6 +14,7 @@ export default ({docs, path}) => {
             docs={getDoc(docs, ['cbc:Note'])}
             label={t('note')}
             path={[...path, 'note']}
+            id="note"
             nullable
           />
         </div>

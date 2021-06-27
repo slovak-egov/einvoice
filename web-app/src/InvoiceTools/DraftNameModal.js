@@ -20,12 +20,13 @@ export default ({title, cancel, confirm, initName}) => {
           value={name}
           onChange={(e) => setName(e.target.value)}
           type="text"
+          id="draft-name-input"
         />
       </Modal.Body>
 
       <Modal.Footer>
-        <Button className="govuk-button--warning" onClick={cancel}>{t('cancel')}</Button>
-        <Button onClick={confirm(name)} disabled={isNameInvalid}>{t('confirm')}</Button>
+        <Button className="govuk-button--warning" onClick={cancel} id="draft-name-cancel">{t('cancel')}</Button>
+        <Button onClick={confirm(name)} disabled={isNameInvalid} id="draft-name-confirm">{t('confirm')}</Button>
       </Modal.Footer>
     </Modal>
   )

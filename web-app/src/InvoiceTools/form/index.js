@@ -25,6 +25,7 @@ import {
 import {createDraft, updateDraft} from '../../cache/drafts/actions'
 import {isUserLogged} from '../../cache/users/state'
 import {invoiceComplexities, invoiceTypes} from '../../utils/constants'
+import {camelCaseToId} from './ids'
 
 
 const invoiceTypeData = {
@@ -148,9 +149,18 @@ export default () => {
             value={formComplexity}
             onChange={(e) => changeFormComplexity(e)}
             items={[
-              {value: invoiceComplexities.SIMPLE, children: t('invoice.simple')},
-              {value: invoiceComplexities.COMPLEX, children: t('invoice.complex')},
+              {
+                value: invoiceComplexities.SIMPLE,
+                children: t('invoice.simple'),
+                id: 'simple',
+              },
+              {
+                value: invoiceComplexities.COMPLEX,
+                children: t('invoice.complex'),
+                id: 'complex',
+              },
             ]}
+            id="form-complexity"
           />
         </div>
         <ConfirmationButton
@@ -158,6 +168,7 @@ export default () => {
           confirmationTitle={t('confirmationQuestions.resetForm.title')}
           confirmationText={t('confirmationQuestions.resetForm.text')}
           onClick={resetForm}
+          id="form-reset"
         >
           {t('reset')}
         </ConfirmationButton>
@@ -170,6 +181,7 @@ export default () => {
         items={Object.values(invoiceTypes).map((type) => ({
           children: t(`invoiceTypes.${type}`),
           value: type,
+          id: camelCaseToId(type),
         }))}
       />
       {/*Render once data are loaded*/}
@@ -191,7 +203,11 @@ export default () => {
         }
         <div className="govuk-button-group">
           {isLogged &&
-            <Button className="govuk-button--secondary" onClick={() => setShowCreateDraftModal(true)}>
+            <Button
+              className="govuk-button--secondary"
+              onClick={() => setShowCreateDraftModal(true)}
+              id="save-new-draft"
+            >
               {t('saveAsNewDraft')}
             </Button>
           }
@@ -201,6 +217,7 @@ export default () => {
               onClick={confirmUpdateDraft}
               confirmationTitle={t('confirmationQuestions.updateDraft.title')}
               confirmationText={t('confirmationQuestions.updateDraft.text', {name: formDraft.name})}
+              id="save-updated-draft"
             >
               {t('updateDraft')}
             </ConfirmationButton>
@@ -210,8 +227,9 @@ export default () => {
               title={t('createDraft')}
               cancel={() => setShowCreateDraftModal(false)}
               confirm={confirmDraft}
+              id="create-draft"
             />}
-          <Button onClick={submit} disabled={errorCount !== 0}>
+          <Button onClick={submit} disabled={errorCount !== 0} id="generate-invoice">
             {t('generateInvoice')}
           </Button>
         </div>

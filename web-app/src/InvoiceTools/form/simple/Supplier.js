@@ -30,6 +30,7 @@ export default ({docs, path}) => {
             docs={getDoc(docs, ['cac:AccountingSupplierParty', 'cac:Party', 'cac:PartyLegalEntity', 'cbc:RegistrationName'])}
             label={t('supplierName')}
             path={[...path, 'name']}
+            id="supplier-name"
           />
         </div>
       </div>
@@ -39,6 +40,7 @@ export default ({docs, path}) => {
             docs={getDoc(docs, ['cac:AccountingSupplierParty', 'cac:Party', 'cac:PostalAddress', 'cbc:StreetName'])}
             label={t('supplierAddressLine1')}
             path={[...path, 'address', 'line1']}
+            id="supplier-address-line-1"
           />
         </div>
         <div className="govuk-grid-column-one-half">
@@ -46,6 +48,7 @@ export default ({docs, path}) => {
             docs={getDoc(docs, ['cac:AccountingSupplierParty', 'cac:Party', 'cac:PostalAddress', 'cbc:PostalZone'])}
             label={t('supplierPostalZone')}
             path={[...path, 'address', 'postalZone']}
+            id="supplier-postal-zone"
           />
         </div>
       </div>
@@ -55,6 +58,7 @@ export default ({docs, path}) => {
             docs={getDoc(docs, ['cac:AccountingSupplierParty', 'cac:Party', 'cac:PostalAddress', 'cbc:CityName'])}
             label={t('supplierCity')}
             path={[...path, 'address', 'city']}
+            id="supplier-city"
           />
         </div>
         <div className="govuk-grid-column-one-half">
@@ -62,6 +66,7 @@ export default ({docs, path}) => {
             docs={getDoc(docs, ['cac:AccountingSupplierParty', 'cac:Party', 'cac:PostalAddress', 'cac:Country', 'cbc:IdentificationCode'])}
             label={t('supplierCountry')}
             path={[...path, 'address', 'country']}
+            id="supplier-country"
           />
         </div>
       </div>
@@ -71,6 +76,7 @@ export default ({docs, path}) => {
             docs={getDoc(docs, ['cac:AccountingSupplierParty', 'cac:Party', 'cac:PartyLegalEntity', 'cbc:CompanyLegalForm'])}
             label={t('supplierLegalForm')}
             path={[...path, 'legalForm']}
+            id="supplier-legal-form"
             nullable
           />
         </div>
@@ -81,6 +87,7 @@ export default ({docs, path}) => {
             docs={getDoc(docs, ['cac:AccountingSupplierParty', 'cac:Party', 'cac:PartyLegalEntity', 'cbc:CompanyID'])}
             label={t('supplierIco')}
             path={[...path, 'ico']}
+            id="supplier-ico"
             nullable
           />
         </div>
@@ -89,6 +96,7 @@ export default ({docs, path}) => {
             docs={getDoc(docs, ['cac:AccountingSupplierParty', 'cac:Party', 'cac:PartyTaxScheme', 'cbc:CompanyID'])}
             label={t('supplierVatId')}
             path={[...path, 'vatId']}
+            id="supplier-vat-id"
             nullable
           />
         </div>
@@ -100,6 +108,7 @@ export default ({docs, path}) => {
             docs={getDoc(docs, ['cac:PaymentMeans', 'cbc:PaymentMeansCode'])}
             label={t('paymentMeansCode')}
             path={[...path, 'paymentMeansCode']}
+            id="payment-means-code"
           />
         </div>
       </div>
@@ -109,6 +118,7 @@ export default ({docs, path}) => {
             docs={getDoc(docs, ['cac:PaymentMeans', 'cbc:PaymentID'])}
             label={t('paymentId')}
             path={[...path, 'paymentId']}
+            id="payment-id"
             nullable
           />
         </div>
@@ -117,6 +127,7 @@ export default ({docs, path}) => {
             docs={getDoc(docs, ['cac:PaymentMeans', 'cac:PayeeFinancialAccount', 'cbc:ID'])}
             label={t('paymentAccountId')}
             path={[...path, 'paymentAccountId']}
+            id="payment-account-id"
           />
         </div>
       </div>
@@ -128,6 +139,7 @@ export default ({docs, path}) => {
             docs={getDoc(docs, ['cac:AccountingSupplierParty', 'cac:Party', 'cac:Contact', 'cbc:Name'])}
             label={t('contactName')}
             path={[...path, 'contactName']}
+            id="supplier-contact-name"
             nullable
           />
         </div>
@@ -136,6 +148,7 @@ export default ({docs, path}) => {
             docs={getDoc(docs, ['cac:AccountingSupplierParty', 'cac:Party', 'cac:Contact', 'cbc:Telephone'])}
             label={t('contactPhone')}
             path={[...path, 'contactPhone']}
+            id="supplier-contact-phone"
             nullable
           />
         </div>
@@ -146,6 +159,7 @@ export default ({docs, path}) => {
             docs={getDoc(docs, ['cac:AccountingSupplierParty', 'cac:Party', 'cac:Contact', 'cbc:ElectronicMail'])}
             label={t('contactEmail')}
             path={[...path, 'contactEmail']}
+            id="supplier-contact-email"
             nullable
           />
         </div>
