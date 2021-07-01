@@ -2,10 +2,10 @@ import {useCallback, useEffect, useState} from 'react'
 import {useDispatch} from 'react-redux'
 import {useTranslation} from 'react-i18next'
 import {Accordion, Badge, Button, Card} from 'react-bootstrap'
-import {ComplexField} from './Field'
+import {ComplexField} from '../Field'
 import AddField from './AddField'
-import {removeFieldInstance} from './actions'
-import {pathToId} from './ids'
+import {removeFieldInstance} from '../actions'
+import {pathToId} from '../ids'
 
 const Tag = ({canDelete, path, formData, docs, setErrorCount}) => {
   const {i18n, t} = useTranslation('common')

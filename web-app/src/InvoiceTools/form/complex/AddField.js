@@ -2,9 +2,9 @@ import {useCallback} from 'react'
 import {useDispatch} from 'react-redux'
 import {useTranslation} from 'react-i18next'
 import {Button, Card} from 'react-bootstrap'
-import {getFormInitialState} from './state'
-import {addFieldInstance} from './actions'
-import {pathToId} from './ids'
+import {getFormInitialState} from '../state'
+import {addFieldInstance} from '../actions'
+import {pathToId} from '../ids'
 
 export default ({docs, path}) => {
   const {i18n, t} = useTranslation('common')

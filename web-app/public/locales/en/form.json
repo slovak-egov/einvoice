@@ -42,7 +42,7 @@
   "deliveryCity": "City",
   "deliveryCountry": "Country",
   "items": "Items",
-  "item": "Item",
+  "item": "Item {{index}}",
   "itemId": "Item number",
   "itemName": "Name",
   "itemDescription": "Description",
