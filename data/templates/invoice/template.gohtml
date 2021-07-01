@@ -16,6 +16,7 @@
             <span class="header1">{{ if .IsInvoice }} FAKTÚRA {{- else }} DOBROPIS {{- end }}</span>
             <span class="header2">/ {{ if .IsInvoice }} INVOICE {{- else }} CREDIT NOTE {{- end }}</span>
           </div>
+          {{ if .TokenQR }} <img class="token" src="data:image/png;base64,{{ .TokenQR }}}" /> {{ end }}
           <div style="width: 350px">
             {{ template "valueRowRight" args "Kód meny faktúry" "Invoice currency code" $inv.DocumentCurrencyCode}}
             {{ template "valueRowRight" args "Číslo objednávky" "Purchase order reference" $inv.OrderReference.ID }}

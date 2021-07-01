@@ -11,7 +11,7 @@ func (a *App) createVisualization(res http.ResponseWriter, req *http.Request) er
 		return err
 	}
 
-	data, err := a.visualizer.GenerateZip(invoice)
+	data, err := a.visualizer.GenerateZip(invoice, "")
 	if err != nil {
 		return err
 	}
