@@ -16,7 +16,7 @@ import (
 	"github.com/slovak-egov/einvoice/internal/visualization/simple"
 )
 
-func (v *Visualizer) GenerateZip(invoiceBytes []byte) (io.Reader, error) {
+func (v *Visualizer) GenerateZip(invoiceBytes []byte, id string) (io.Reader, error) {
 	xml, err := libxml2.Parse(invoiceBytes)
 	if err != nil {
 		return nil, err
@@ -34,7 +34,7 @@ func (v *Visualizer) GenerateZip(invoiceBytes []byte) (io.Reader, error) {
 
 	var pdf io.Reader
 	if format == entity.UblFormat && v.validator.IsSimple(xml, invoiceType) {
-		pdf, err = simple.GeneratePdf(invoiceType, v.template, invoiceBytes)
+		pdf, err = simple.GeneratePdf(invoiceType, v.template, invoiceBytes, id)
 	} else {
 		pdf, err = raw.GeneratePdf(v.fontsDir, xml)
 	}

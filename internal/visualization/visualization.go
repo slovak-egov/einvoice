@@ -50,7 +50,7 @@ func (v *Visualizer) GetOrCreateVisualization(ctx goContext.Context, invoice *en
 		return nil, err
 	}
 
-	zipReader, err := v.GenerateZip(invoiceFile)
+	zipReader, err := v.GenerateZip(invoiceFile, invoice.Id)
 	if err != nil {
 		return nil, err
 	}

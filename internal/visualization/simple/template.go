@@ -8,6 +8,7 @@ import (
 
 type TemplateMeta struct {
 	IsInvoice bool
+	TokenQR   string
 	Xml       *metadataExtractor.UblInvoiceFull
 }
 
