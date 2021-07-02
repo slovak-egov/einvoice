@@ -1,5 +1,5 @@
 import {useTranslation} from 'react-i18next'
-import {businessTermLink, getDoc} from './helpers'
+import {businessTermLink, countErrors, getDoc} from './helpers'
 import {Field} from '../Field'
 import {useDispatch, useSelector} from 'react-redux'
 import {formFieldSelector} from '../state'
@@ -11,6 +11,7 @@ export default ({docs, path}) => {
   const {t, i18n} = useTranslation('form')
   const dispatch = useDispatch()
   const codeLists = useSelector(codeListsSelector)
+  const errorCounter = countErrors(path, dispatch)
 
   const paymentMeansCode = useSelector(formFieldSelector([...path, 'paymentMeansCode']))
 
@@ -31,6 +32,7 @@ export default ({docs, path}) => {
             label={t('supplierName')}
             path={[...path, 'name']}
             id="supplier-name"
+            errorCounter={errorCounter}
           />
         </div>
       </div>
@@ -41,6 +43,7 @@ export default ({docs, path}) => {
             label={t('supplierAddressLine1')}
             path={[...path, 'address', 'line1']}
             id="supplier-address-line-1"
+            errorCounter={errorCounter}
           />
         </div>
         <div className="govuk-grid-column-one-half">
@@ -49,6 +52,7 @@ export default ({docs, path}) => {
             label={t('supplierPostalZone')}
             path={[...path, 'address', 'postalZone']}
             id="supplier-postal-zone"
+            errorCounter={errorCounter}
           />
         </div>
       </div>
@@ -59,6 +63,7 @@ export default ({docs, path}) => {
             label={t('supplierCity')}
             path={[...path, 'address', 'city']}
             id="supplier-city"
+            errorCounter={errorCounter}
           />
         </div>
         <div className="govuk-grid-column-one-half">
@@ -67,6 +72,7 @@ export default ({docs, path}) => {
             label={t('supplierCountry')}
             path={[...path, 'address', 'country']}
             id="supplier-country"
+            errorCounter={errorCounter}
           />
         </div>
       </div>
@@ -109,6 +115,7 @@ export default ({docs, path}) => {
             label={t('paymentMeansCode')}
             path={[...path, 'paymentMeansCode']}
             id="payment-means-code"
+            errorCounter={errorCounter}
           />
         </div>
       </div>
@@ -128,6 +135,7 @@ export default ({docs, path}) => {
             label={t('paymentAccountId')}
             path={[...path, 'paymentAccountId']}
             id="payment-account-id"
+            errorCounter={errorCounter}
           />
         </div>
       </div>

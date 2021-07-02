@@ -1,7 +1,7 @@
 import {useTranslation} from 'react-i18next'
 import {useDispatch, useSelector} from 'react-redux'
 import {useEffect} from 'react'
-import {businessTermLink, getDoc} from './helpers'
+import {countErrors, getDoc} from './helpers'
 import {formFieldSelector, formItemsSelector} from '../state'
 import {addItem, removeItem, setFormField} from '../actions'
 import {Field} from '../Field'
@@ -9,7 +9,7 @@ import {Accordion, Button} from '../../../helpers/idsk'
 import {invoiceComplexities} from '../../../utils/constants'
 import {codeListsSelector} from '../../../cache/documentation/state'
 
-const Item = ({docs, formType, path, index, number}) => {
+const Item = ({docs, formType, path, index, number, errorCounter}) => {
   const invoicePath = [formType, invoiceComplexities.SIMPLE]
   const {t, i18n} = useTranslation('form')
   const dispatch = useDispatch()
@@ -80,6 +80,7 @@ const Item = ({docs, formType, path, index, number}) => {
             label={t('itemName')}
             path={[...path, 'name']}
             id={`item-${index}-name`}
+            errorCounter={errorCounter}
           />
         </div>
       </div>
@@ -109,6 +110,7 @@ const Item = ({docs, formType, path, index, number}) => {
             label={t('itemQuantity')}
             path={[...path, 'quantity']}
             id={`item-${index}-quantity`}
+            errorCounter={errorCounter}
           />
         </div>
         <div className="govuk-grid-column-one-half">
@@ -121,6 +123,7 @@ const Item = ({docs, formType, path, index, number}) => {
             label={t('quantityUnit')}
             path={[...path, 'unit']}
             id={`item-${index}-quantity-unit`}
+            errorCounter={errorCounter}
           />
         </div>
       </div>
@@ -135,6 +138,7 @@ const Item = ({docs, formType, path, index, number}) => {
             label={t('itemNetPrice')}
             path={[...path, 'netPrice']}
             id={`item-${index}-net-price`}
+            errorCounter={errorCounter}
           />
         </div>
         <div className="govuk-grid-column-one-half">
@@ -168,6 +172,7 @@ const Item = ({docs, formType, path, index, number}) => {
             label={t('itemTaxCategory')}
             path={[...path, 'taxCategory']}
             id={`item-${index}-tax-category`}
+            errorCounter={errorCounter}
           />
         </div>
         <div className="govuk-grid-column-one-half">
@@ -181,6 +186,7 @@ const Item = ({docs, formType, path, index, number}) => {
             path={[...path, 'taxPercentage']}
             value={taxPercentage}
             id={`item-${index}-tax-percentage`}
+            errorCounter={errorCounter}
           />
         </div>
       </div>
@@ -232,7 +238,7 @@ const Item = ({docs, formType, path, index, number}) => {
 export default ({docs, formType, path}) => {
   const dispatch = useDispatch()
   const items = useSelector(formItemsSelector(formType))
-
+  const errorCounter = countErrors(path, dispatch)
   const {t, i18n} = useTranslation('form')
   const itemsCount = Object.keys(items).length
 
@@ -240,7 +246,7 @@ export default ({docs, formType, path}) => {
     <div>
       <div className="govuk-heading-l">{t('items')}</div>
       <Accordion
-        key={i18n.language+itemsCount}
+        key={i18n.language + itemsCount}
         items={Object.entries(items).map(([id, item], index) => ({
           heading: {children: t('item', {index: index + 1})},
           expanded: true,
@@ -248,12 +254,13 @@ export default ({docs, formType, path}) => {
             <Item
               formType={formType}
               docs={docs}
-              path={[...path, id]}
+              path={[...path, 'list', id]}
               item={item}
               index={id}
               number={index + 1}
-            />)
-          }
+              errorCounter={errorCounter}
+            />),
+          },
         }))}
         id="items-list"
       />
@@ -263,7 +270,7 @@ export default ({docs, formType, path}) => {
       >
         {t('addItem')}
       </Button>
-      { itemsCount > 0 &&
+      { itemsCount > 1 &&
       <Button
         className="ml-3 govuk-button--warning"
         onClick={() => {dispatch(removeItem(path, itemsCount))}}

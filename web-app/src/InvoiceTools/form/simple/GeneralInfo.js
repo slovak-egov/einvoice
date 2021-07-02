@@ -1,9 +1,13 @@
 import {useTranslation} from 'react-i18next'
-import {getDoc} from './helpers'
+import {countErrors, getDoc} from './helpers'
 import {Field} from '../Field'
+import {useDispatch} from 'react-redux'
 
 export default ({docs, path, formType}) => {
   const {t} = useTranslation('form')
+  const dispatch = useDispatch()
+  const errorCounter = countErrors(path, dispatch)
+
   return (
     <div>
       <div className="govuk-heading-l">{t('general')}</div>
@@ -14,6 +18,7 @@ export default ({docs, path, formType}) => {
             label={t('invoiceNumber')}
             path={[...path, 'invoiceNumber']}
             id="invoice-number"
+            errorCounter={errorCounter}
           />
         </div>
         <div className="govuk-grid-column-one-half">
@@ -22,6 +27,7 @@ export default ({docs, path, formType}) => {
             label={t('invoiceTypeCode')}
             path={[...path, 'invoiceTypeCode']}
             id="invoice-type-code"
+            errorCounter={errorCounter}
           />
         </div>
       </div>
@@ -32,6 +38,7 @@ export default ({docs, path, formType}) => {
             label={t('issueDate')}
             path={[...path, 'issueDate']}
             id="issue-date"
+            errorCounter={errorCounter}
           />
         </div>
         <div className="govuk-grid-column-one-half">
@@ -71,6 +78,7 @@ export default ({docs, path, formType}) => {
             label={t('currencyCode')}
             path={[...path, 'currencyCode']}
             id="currency-code"
+            errorCounter={errorCounter}
           />
         </div>
         <div className="govuk-grid-column-one-half">

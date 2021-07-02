@@ -75,7 +75,7 @@ export const ComplexField = ({canDelete, dropField, docs, path, setErrorCount}) 
   )
 }
 
-export const Field = ({docs, label, path, value, nullable, notEditable, id}) => {
+export const Field = ({docs, label, path, value, nullable, notEditable, id, errorCounter}) => {
   const {t} = useTranslation('common')
   const dispatch = useDispatch()
   const currentValue = useSelector(formFieldSelector(path)) || ''
@@ -87,6 +87,14 @@ export const Field = ({docs, label, path, value, nullable, notEditable, id}) => 
   }, [dispatch, value])
 
   const contentError = !nullable && currentValue === '' ? t('errorMessages.emptyField') : null
+
+  if (errorCounter) {
+    useEffect(
+      () => {
+        errorCounter(id, contentError ? 1 : 0, nullable ? 0 : 1)
+      }, [contentError],
+    )
+  }
 
   const updateField = useCallback(
     (value) => {

@@ -86,8 +86,8 @@ export default ({path, docs, formType}) => {
               docs={docs}
               formType={formType}
               index={parseInt(index, 10) + 1}
-            />)
-          }
+            />),
+          },
         })),
         {
           heading: {children: t('recapitulationFull')},
@@ -145,7 +145,7 @@ export default ({path, docs, formType}) => {
                   />
                 </div>
               </div>
-            </div>)}
+            </div>)},
         }]}
         id="recapitulation-list"
       />

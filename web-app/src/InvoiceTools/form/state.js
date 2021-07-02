@@ -6,7 +6,7 @@ export const FORM_TYPE_PATH = [...FORM_PATH, 'type']
 export const FORM_DRAFT_META_PATH = [...FORM_PATH, 'draftMeta']
 export const FORM_COMPLEXITY_PATH = [...FORM_PATH, 'complexity']
 
-export const formItemsPath = (invoiceType) => [...FORM_PATH, invoiceType, invoiceComplexities.SIMPLE, 'items']
+export const formItemsPath = (invoiceType) => [...FORM_PATH, invoiceType, invoiceComplexities.SIMPLE, 'items', 'list']
 
 export const formTypeSelector = (state) => get(state, FORM_TYPE_PATH)
 
