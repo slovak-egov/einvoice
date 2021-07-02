@@ -42,7 +42,7 @@
   "deliveryCity": "Mesto určenia dodávky",
   "deliveryCountry": "Kód krajiny určenia dodávky",
   "items": "Položky",
-  "item": "Položka",
+  "item": "Položka č. {{index}}",
   "itemId": "Identifikátor riadku faktúry",
   "itemName": "Názov položky",
   "itemDescription": "Popis položky",

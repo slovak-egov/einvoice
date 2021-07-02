@@ -187,7 +187,7 @@ const generateSimpleInvoice = (invoice) => `<?xml version="1.0" encoding="UTF-8"
         <cbc:TaxInclusiveAmount currencyID="${invoice.general.currencyCode}">${invoice.recapitulation.amount}</cbc:TaxInclusiveAmount>
         <cbc:PayableAmount currencyID="${invoice.general.currencyCode}">${invoice.recapitulation.amount}</cbc:PayableAmount>
     </cac:LegalMonetaryTotal>
-    ${Object.values(invoice.items).map((item) =>
+    ${Object.values(invoice.items.list).map((item) =>
     (generateItem(item, 'cac:InvoiceLine', 'cbc:InvoicedQuantity', invoice.general.currencyCode)))
     .join('\n')}
 </Invoice>`
@@ -233,7 +233,7 @@ const generateSimpleCreditNote = (invoice) => `<?xml version="1.0" encoding="UTF
   </cac:PaymentMeans>
 	<cac:TaxTotal>
       <cbc:TaxAmount currencyID="${invoice.general.currencyCode}">${invoice.recapitulation.vat}</cbc:TaxAmount>
-      ${Object.values(invoice.items).map((item) => (generateTaxSubtotal(item, invoice.general.currencyCode))).join('\n')}
+      ${Object.values(invoice.items.list).map((item) => (generateTaxSubtotal(item, invoice.general.currencyCode))).join('\n')}
   </cac:TaxTotal>
 	<cac:LegalMonetaryTotal>
       <cbc:LineExtensionAmount currencyID="${invoice.general.currencyCode}">${invoice.recapitulation.amountWithoutVat}</cbc:LineExtensionAmount>

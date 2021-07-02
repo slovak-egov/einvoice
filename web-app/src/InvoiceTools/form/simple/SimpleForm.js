@@ -11,7 +11,8 @@ import Link from '../../../helpers/idsk/Link'
 import {useEffect} from 'react'
 import {setFormField} from '../actions'
 import {useDispatch, useSelector} from 'react-redux'
-import {formFieldSelector, formItemsSelector} from '../state'
+import {formDataSelector, formFieldSelector, formItemsSelector} from '../state'
+import {get} from 'lodash'
 
 export default ({formType, path, docs}) => {
   const {t} = useTranslation('form')
@@ -23,19 +24,31 @@ export default ({formType, path, docs}) => {
   const sectionIndex = sections.findIndex((s) => s === section)
   const recapitulationChange = useSelector(formFieldSelector([...path, 'recapitulationChange']))
   const items = useSelector(formItemsSelector(formType))
+  const formData = useSelector(formDataSelector)
 
   const recapitulationPath = [...path, 'recapitulation']
 
-  const sectionLink = (name) => (
-    <Link
-      style={{textAlign: 'center', color: '#007bff'}}
-      className="govuk-heading-s govuk-grid-column-one-half"
-      to={`/invoice-tools/form/${name}`}
-      id={`form-${name}`}
-    >
-      {section === name ? <u>{t(name)}</u> : t(name)}
-    </Link>
-  )
+  const sectionLink = (name) => {
+    const sectionStats = Object.values(get(formData, [...path, name, 'errors']) || {})
+    const errors = sectionStats.map((x) => x.errorCount).reduce((a, b) => a + b, 0)
+    const required = sectionStats.map((x) => x.requiredCount).reduce((a, b) => a + b, 0)
+
+    return (
+      <div className="govuk-grid-column-one-half">
+        <Link
+          style={{textAlign: 'center', color: '#007bff'}}
+          className="govuk-heading-s"
+          to={`/invoice-tools/form/${name}`}
+          id={`form-${name}`}
+        >
+          {section === name ? <u>{t(name)}</u> : t(name)}
+        </Link>
+        <div style={{textAlign: 'center', color: errors === 0 ? '#000000' : '#D0190F'}}>
+          { required > 0 ? `${required - errors}/${required}` : 'N/A' }
+        </div>
+      </div>
+    )
+  }
 
   useEffect(() => {
     if (!recapitulationChange) return
@@ -111,40 +124,29 @@ export default ({formType, path, docs}) => {
       </div>
       <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
       <Switch>
-        <Route
-          exact
-          path="/invoice-tools/form/general"
-          render={(props) => <GeneralInfo {...props} formType={formType} path={[...path, 'general']} docs={docs} />}
-        />
-        <Route
-          path="/invoice-tools/form/supplier"
-          render={(props) => <Supplier {...props} path={[...path, 'supplier']} docs={docs} />}
-        />
-        <Route
-          path="/invoice-tools/form/customer"
-          render={(props) => <Customer {...props} path={[...path, 'customer']} docs={docs} />}
-        />
-        <Route
-          path="/invoice-tools/form/items"
-          render={(props) => <Items {...props} formType={formType} path={[...path, 'items']} docs={docs} />}
-        />
-        <Route
-          path="/invoice-tools/form/recapitulation"
-          render={(props) => (<Recapitulation
-            {...props}
-            formType={formType}
-            path={recapitulationPath}
-            docs={docs}
-          />)}
-        />
-        <Route
-          path="/invoice-tools/form/notes"
-          render={(props) => <Notes {...props} path={[...path, 'notes']} docs={docs} />}
-        />
         <Route path="/invoice-tools/form">
           <Redirect to="/invoice-tools/form/general" />
         </Route>
       </Switch>
+      {/* all sections need to be created in order to initialize all fields */}
+      <div style={{display: section !== 'general' && 'none'}}>
+        <GeneralInfo formType={formType} path={[...path, 'general']} docs={docs} />
+      </div>
+      <div style={{display: section !== 'supplier' && 'none'}}>
+        <Supplier path={[...path, 'supplier']} docs={docs} />
+      </div>
+      <div style={{display: section !== 'customer' && 'none'}}>
+        <Customer path={[...path, 'customer']} docs={docs} />
+      </div>
+      <div style={{display: section !== 'items' && 'none'}}>
+        <Items formType={formType} path={[...path, 'items']} docs={docs} />
+      </div>
+      <div style={{display: section !== 'recapitulation' && 'none'}}>
+        <Recapitulation formType={formType} path={recapitulationPath} docs={docs} />
+      </div>
+      <div style={{display: section !== 'notes' && 'none'}}>
+        <Notes path={[...path, 'notes']} docs={docs} />
+      </div>
       <div className="govuk-button-group">
         { sectionIndex > 0 &&
         <Button

@@ -1,9 +1,13 @@
 import {useTranslation} from 'react-i18next'
-import {businessTermLink, getDoc} from './helpers'
+import {businessTermLink, countErrors, getDoc} from './helpers'
 import {Field} from '../Field'
+import {useDispatch} from 'react-redux'
 
 export default ({docs, path}) => {
   const {t} = useTranslation('form')
+  const dispatch = useDispatch()
+  const errorCounter = countErrors(path, dispatch)
+
   return (
     <div>
       <div className="govuk-heading-l">{t('customer')} ({businessTermLink('BG-7')})</div>
@@ -14,6 +18,7 @@ export default ({docs, path}) => {
             label={t('customerName')}
             path={[...path, 'name']}
             id="customer-name"
+            errorCounter={errorCounter}
           />
         </div>
       </div>
@@ -24,6 +29,7 @@ export default ({docs, path}) => {
             label={t('customerAddressLine1')}
             path={[...path, 'address', 'line1']}
             id="customer-address-line-1"
+            errorCounter={errorCounter}
           />
         </div>
         <div className="govuk-grid-column-one-half">
@@ -32,6 +38,7 @@ export default ({docs, path}) => {
             label={t('customerPostalZone')}
             path={[...path, 'address', 'postalZone']}
             id="customer-postal-zone"
+            errorCounter={errorCounter}
           />
         </div>
       </div>
@@ -42,6 +49,7 @@ export default ({docs, path}) => {
             label={t('customerCity')}
             path={[...path, 'address', 'city']}
             id="customer-city"
+            errorCounter={errorCounter}
           />
         </div>
         <div className="govuk-grid-column-one-half">
@@ -50,6 +58,7 @@ export default ({docs, path}) => {
             label={t('customerCountry')}
             path={[...path, 'address', 'country']}
             id="customer-country"
+            errorCounter={errorCounter}
           />
         </div>
       </div>
@@ -111,6 +120,7 @@ export default ({docs, path}) => {
             label={t('deliveryCountry')}
             path={[...path, 'deliveryAddress', 'country']}
             id="delivery-address-country"
+            errorCounter={errorCounter}
           />
         </div>
       </div>

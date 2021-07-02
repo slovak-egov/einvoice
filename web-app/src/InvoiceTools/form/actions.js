@@ -33,7 +33,7 @@ export const initializeFormState = (invoiceType, invoiceComplexity, docs) => (
         general: {},
         supplier: {},
         customer: {},
-        items: {1: {}},
+        items: {list: {1: {}}},
         recapitulation: {},
         notes: {},
       }))
@@ -80,14 +80,14 @@ export const initializeDraftForm = (draftMeta) => loadingWrapper(
 
 export const addItem = (path, index) => ({
   type: 'ADD INVOICE ITEM',
-  path: [...FORM_PATH, ...path],
+  path: [...FORM_PATH, ...path, 'list'],
   payload: {},
   reducer: (state) => ({...state, [index]: {}}),
 })
 
 export const removeItem = (path, index) => ({
   type: 'REMOVE INVOICE ITEM',
-  path: [...FORM_PATH, ...path],
+  path: [...FORM_PATH, ...path, 'list'],
   payload: null,
   reducer: (state) => {
     const s = {...state}

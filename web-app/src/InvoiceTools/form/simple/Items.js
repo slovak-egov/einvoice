@@ -1,30 +1,29 @@
 import {useTranslation} from 'react-i18next'
 import {useDispatch, useSelector} from 'react-redux'
 import {useEffect} from 'react'
-import {businessTermLink, getDoc} from './helpers'
+import {countErrors, getDoc} from './helpers'
 import {formFieldSelector, formItemsSelector} from '../state'
 import {addItem, removeItem, setFormField} from '../actions'
 import {Field} from '../Field'
-import {Button} from '../../../helpers/idsk'
+import {Accordion, Button} from '../../../helpers/idsk'
 import {invoiceComplexities} from '../../../utils/constants'
 import {codeListsSelector} from '../../../cache/documentation/state'
 
-const Item = ({docs, formType, path, index, number}) => {
+const Item = ({docs, formType, path, index, number, errorCounter}) => {
   const invoicePath = [formType, invoiceComplexities.SIMPLE]
-  const itemPath = [...invoicePath, 'items', index]
   const {t, i18n} = useTranslation('form')
   const dispatch = useDispatch()
   const codeLists = useSelector(codeListsSelector)
-  const itemQuantity = useSelector(formFieldSelector([...itemPath, 'quantity']))
-  const netPrice = useSelector(formFieldSelector([...itemPath, 'netPrice']))
-  const taxPercentage = useSelector(formFieldSelector([...itemPath, 'taxPercentage']))
-  const amountWithoutVat = useSelector(formFieldSelector([...itemPath, 'amountWithoutVat']))
-  const amount = useSelector(formFieldSelector([...itemPath, 'amount']))
-  const vat = useSelector(formFieldSelector([...itemPath, 'vat']))
-  const taxCategory = useSelector(formFieldSelector([...itemPath, 'taxCategory']))
-  const taxExemptionCode = useSelector(formFieldSelector([...itemPath, 'taxExemptionCode']))
-  const taxExemptionReason = useSelector(formFieldSelector([...itemPath, 'taxExemptionReason']))
-  const recapitulationChange = useSelector(formFieldSelector([...invoicePath, 'recapitulationChange']))
+  const itemQuantity = useSelector(formFieldSelector([...path, 'quantity']))
+  const netPrice = useSelector(formFieldSelector([...path, 'netPrice']))
+  const taxPercentage = useSelector(formFieldSelector([...path, 'taxPercentage']))
+  const amountWithoutVat = useSelector(formFieldSelector([...path, 'amountWithoutVat']))
+  const amount = useSelector(formFieldSelector([...path, 'amount']))
+  const vat = useSelector(formFieldSelector([...path, 'vat']))
+  const taxCategory = useSelector(formFieldSelector([...path, 'taxCategory']))
+  const taxExemptionCode = useSelector(formFieldSelector([...path, 'taxExemptionCode']))
+  const taxExemptionReason = useSelector(formFieldSelector([...path, 'taxExemptionReason']))
+  const recapitulationChange = useSelector(formFieldSelector([...path, 'recapitulationChange']))
 
   useEffect(() => {
     const newVat = Number(taxPercentage) >= 0 && Number(itemQuantity) && Number(netPrice) ?
@@ -35,8 +34,8 @@ const Item = ({docs, formType, path, index, number}) => {
       ((1 + Number(taxPercentage) / 100) * Number(itemQuantity) * Number(netPrice)).toFixed(2)
       : undefined
 
-    if (newVat !== vat) dispatch(setFormField([...itemPath, 'vat'])(newVat))
-    if (newAmount !== amount) dispatch(setFormField([...itemPath, 'amount'])(newAmount))
+    if (newVat !== vat) dispatch(setFormField([...path, 'vat'])(newVat))
+    if (newAmount !== amount) dispatch(setFormField([...path, 'amount'])(newAmount))
   }, [taxPercentage, itemQuantity, netPrice])
 
   useEffect(() => {
@@ -44,7 +43,7 @@ const Item = ({docs, formType, path, index, number}) => {
       codeLists.vatex.codes[taxExemptionCode].name[i18n.language]
 
     if (newTaxExemptionReason !== taxExemptionReason) {
-      dispatch(setFormField([...itemPath, 'taxExemptionReason'])(newTaxExemptionReason))
+      dispatch(setFormField([...path, 'taxExemptionReason'])(newTaxExemptionReason))
     }
   }, [taxExemptionCode])
 
@@ -55,8 +54,6 @@ const Item = ({docs, formType, path, index, number}) => {
 
   return (
     <div>
-      {index > 1 && <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible" />}
-      <div className="govuk-heading-m">{`${t('item')} ${index}`} ({businessTermLink('BG-25')})</div>
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-one-half">
           <Field
@@ -83,6 +80,7 @@ const Item = ({docs, formType, path, index, number}) => {
             label={t('itemName')}
             path={[...path, 'name']}
             id={`item-${index}-name`}
+            errorCounter={errorCounter}
           />
         </div>
       </div>
@@ -112,6 +110,7 @@ const Item = ({docs, formType, path, index, number}) => {
             label={t('itemQuantity')}
             path={[...path, 'quantity']}
             id={`item-${index}-quantity`}
+            errorCounter={errorCounter}
           />
         </div>
         <div className="govuk-grid-column-one-half">
@@ -124,6 +123,7 @@ const Item = ({docs, formType, path, index, number}) => {
             label={t('quantityUnit')}
             path={[...path, 'unit']}
             id={`item-${index}-quantity-unit`}
+            errorCounter={errorCounter}
           />
         </div>
       </div>
@@ -138,6 +138,7 @@ const Item = ({docs, formType, path, index, number}) => {
             label={t('itemNetPrice')}
             path={[...path, 'netPrice']}
             id={`item-${index}-net-price`}
+            errorCounter={errorCounter}
           />
         </div>
         <div className="govuk-grid-column-one-half">
@@ -171,6 +172,7 @@ const Item = ({docs, formType, path, index, number}) => {
             label={t('itemTaxCategory')}
             path={[...path, 'taxCategory']}
             id={`item-${index}-tax-category`}
+            errorCounter={errorCounter}
           />
         </div>
         <div className="govuk-grid-column-one-half">
@@ -184,6 +186,7 @@ const Item = ({docs, formType, path, index, number}) => {
             path={[...path, 'taxPercentage']}
             value={taxPercentage}
             id={`item-${index}-tax-percentage`}
+            errorCounter={errorCounter}
           />
         </div>
       </div>
@@ -235,31 +238,39 @@ const Item = ({docs, formType, path, index, number}) => {
 export default ({docs, formType, path}) => {
   const dispatch = useDispatch()
   const items = useSelector(formItemsSelector(formType))
-
-  const {t} = useTranslation('form')
+  const errorCounter = countErrors(path, dispatch)
+  const {t, i18n} = useTranslation('form')
   const itemsCount = Object.keys(items).length
 
   return (
     <div>
       <div className="govuk-heading-l">{t('items')}</div>
-      { Object.entries(items).map(([id, item], index) => (
-        <Item
-          key={id}
-          formType={formType}
-          docs={docs}
-          path={[...path, id]}
-          item={item}
-          index={id}
-          number={index + 1}
-        />
-      ))}
+      <Accordion
+        key={i18n.language + itemsCount}
+        items={Object.entries(items).map(([id, item], index) => ({
+          heading: {children: t('item', {index: index + 1})},
+          expanded: true,
+          content: {children: (
+            <Item
+              formType={formType}
+              docs={docs}
+              path={[...path, 'list', id]}
+              item={item}
+              index={id}
+              number={index + 1}
+              errorCounter={errorCounter}
+            />),
+          },
+        }))}
+        id="items-list"
+      />
       <Button
         onClick={() => {dispatch(addItem(path, itemsCount + 1))}}
         id="add-item"
       >
         {t('addItem')}
       </Button>
-      { itemsCount > 0 &&
+      { itemsCount > 1 &&
       <Button
         className="ml-3 govuk-button--warning"
         onClick={() => {dispatch(removeItem(path, itemsCount))}}
