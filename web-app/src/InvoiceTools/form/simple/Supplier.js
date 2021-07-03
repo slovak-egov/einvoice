@@ -1,6 +1,7 @@
 import {useTranslation} from 'react-i18next'
 import {businessTermLink, countErrors, getDoc} from './helpers'
 import {Field} from '../Field'
+import {useDispatch} from 'react-redux'
 
 export default ({docs, path}) => {
   const {t} = useTranslation('form')

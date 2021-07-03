@@ -19,3 +19,7 @@ export const getDoc = (docs, path, creditNotePath, formType) => {
 export const countErrors = (path, dispatch) => (id, errorCount, requiredCount) => {
   dispatch(setFormField([...path, 'errors', id])({errorCount, requiredCount}))
 }
+
+export const clearErrors = (path, dispatch) => {
+  dispatch(setFormField([...path, 'errors'])({}))
+}
