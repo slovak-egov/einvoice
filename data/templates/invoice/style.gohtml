@@ -3,8 +3,8 @@
 body {
     font-family: Source Sans Pro;
     font-style: normal;
-    font-size: 14px;
-    line-height: 16px;
+    font-size: 13px;
+    line-height: 14px;
 }
 
 .general-info-row {
@@ -51,11 +51,11 @@ body {
 }
 
 .label-r {
-    width: 70%;
+    width: 65%;
 }
 
 .label-sk {
-    font-size: 16px;
+    font-size: 15px;
 }
 
 .label-en {
@@ -64,7 +64,7 @@ body {
 }
 
 .value-r {
-    width: 30%;
+    width: 35%;
     overflow-wrap: break-word;
     word-wrap: break-word;
     text-align: right;
@@ -89,7 +89,6 @@ body {
     flex-direction: row;
     justify-content: space-between;
     padding: 10px 10px 4px;
-    margin-bottom: 8px;
 }
 
 .party-label {
@@ -98,14 +97,14 @@ body {
 
 .party-label-sk {
     font-weight: 600;
-    font-size: 22px;
-    line-height: 22px;
+    font-size: 21px;
+    line-height: 21px;
 }
 
 .party-label-en {
     font-weight: 400;
-    font-size: 20px;
-    line-height: 22px;
+    font-size: 19px;
+    line-height: 21px;
     font-style: italic;
 }
 
@@ -131,7 +130,7 @@ body {
 .party-info {
     border-bottom-style: solid;
     border-bottom-color: #C4C4C4;
-    padding: 8px;
+    padding: 8px 8px 0;
 }
 
 .value-row-l {
@@ -193,6 +192,45 @@ tr {
     border-bottom-color: #C4C4C4;
 }
 
+.item-row>td {
+    padding: 6px 6px 0;
+}
+
+.item-row {
+    border:none;
+}
+
+.item-detail-data {
+    border-top-style: dashed;
+    border-top-color: #C4C4C4;
+    padding-top: 2px;
+}
+
+.row {
+    display: flex;
+    display: -webkit-box;
+    display: -webkit-flex;
+    flex-direction: row;
+}
+
+.item-detail-row>td {
+    padding: 1px 1px 1px 8px;
+}
+
+.label-sk-s {
+    font-size: 12px;
+}
+
+.label-en-s {
+    font-size: 11px;
+    font-style: italic;
+}
+
+.value-s {
+    font-size: 12px;
+    font-style: italic;
+}
+
 .recapitulation {
     width: 50%;
     margin-left: auto;
@@ -240,6 +278,13 @@ tr {
     font-weight: bold;
     overflow-wrap: break-word;
     word-wrap: break-word;
+}
+
+.notes {
+    border-top-style: solid;
+    border-top-color: #C4C4C4;
+    padding-top: 8px;
+    margin-top: 8px;
 }
 </style>
 {{ end }}

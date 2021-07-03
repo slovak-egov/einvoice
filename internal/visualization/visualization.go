@@ -23,7 +23,7 @@ type Visualizer struct {
 }
 
 func New(config Configuration, storage *storage.LocalStorage, db *db.Connector, validator *xsdValidator.XsdValidator) *Visualizer {
-	tmpl, err := simple.CreateTemplate(config.TemplatePath)
+	tmpl, err := simple.CreateTemplate(config.TemplatePath, config.CodeListPath)
 	if err != nil {
 		log.WithField("error", err.Error()).Fatal("visualization.createTemplate.failed")
 	}

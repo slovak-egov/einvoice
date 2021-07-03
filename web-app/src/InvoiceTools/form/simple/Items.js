@@ -1,19 +1,17 @@
 import {useTranslation} from 'react-i18next'
 import {useDispatch, useSelector} from 'react-redux'
 import {useEffect} from 'react'
-import {countErrors, getDoc} from './helpers'
+import {clearErrors, countErrors, getDoc} from './helpers'
 import {formFieldSelector, formItemsSelector} from '../state'
 import {addItem, removeItem, setFormField} from '../actions'
 import {Field} from '../Field'
 import {Accordion, Button} from '../../../helpers/idsk'
 import {invoiceComplexities} from '../../../utils/constants'
-import {codeListsSelector} from '../../../cache/documentation/state'
 
 const Item = ({docs, formType, path, index, number, errorCounter}) => {
   const invoicePath = [formType, invoiceComplexities.SIMPLE]
-  const {t, i18n} = useTranslation('form')
+  const {t} = useTranslation('form')
   const dispatch = useDispatch()
-  const codeLists = useSelector(codeListsSelector)
   const itemQuantity = useSelector(formFieldSelector([...path, 'quantity']))
   const netPrice = useSelector(formFieldSelector([...path, 'netPrice']))
   const taxPercentage = useSelector(formFieldSelector([...path, 'taxPercentage']))
@@ -22,7 +20,6 @@ const Item = ({docs, formType, path, index, number, errorCounter}) => {
   const vat = useSelector(formFieldSelector([...path, 'vat']))
   const taxCategory = useSelector(formFieldSelector([...path, 'taxCategory']))
   const taxExemptionCode = useSelector(formFieldSelector([...path, 'taxExemptionCode']))
-  const taxExemptionReason = useSelector(formFieldSelector([...path, 'taxExemptionReason']))
   const recapitulationChange = useSelector(formFieldSelector([...path, 'recapitulationChange']))
 
   useEffect(() => {
@@ -37,15 +34,6 @@ const Item = ({docs, formType, path, index, number, errorCounter}) => {
     if (newVat !== vat) dispatch(setFormField([...path, 'vat'])(newVat))
     if (newAmount !== amount) dispatch(setFormField([...path, 'amount'])(newAmount))
   }, [taxPercentage, itemQuantity, netPrice])
-
-  useEffect(() => {
-    const newTaxExemptionReason = taxExemptionCode && codeLists.vatex.codes[taxExemptionCode] &&
-      codeLists.vatex.codes[taxExemptionCode].name[i18n.language]
-
-    if (newTaxExemptionReason !== taxExemptionReason) {
-      dispatch(setFormField([...path, 'taxExemptionReason'])(newTaxExemptionReason))
-    }
-  }, [taxExemptionCode])
 
   useEffect(() => {
     if (!recapitulationChange) dispatch(setFormField([...invoicePath, 'recapitulationChange'])(true))
@@ -273,7 +261,10 @@ export default ({docs, formType, path}) => {
       { itemsCount > 1 &&
       <Button
         className="ml-3 govuk-button--warning"
-        onClick={() => {dispatch(removeItem(path, itemsCount))}}
+        onClick={() => {
+          dispatch(removeItem(path, itemsCount))
+          clearErrors(path, dispatch)
+        }}
         id="remove-item"
       >
         {t('removeItem')}
