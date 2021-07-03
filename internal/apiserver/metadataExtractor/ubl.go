@@ -20,6 +20,7 @@ type UblInvoiceFull struct {
 	IssueDate            string
 	DueDate              string
 	InvoiceTypeCode      string
+	Note                 string
 	CreditNoteTypeCode   string
 	TaxPointDate         string
 	DocumentCurrencyCode string
@@ -47,7 +48,7 @@ type UblInvoiceFull struct {
 		}
 	}
 	PaymentMeans struct {
-		PaymentMeansCode      PaymentMeansCode
+		PaymentMeansCode      string
 		PaymentID             string
 		PaymentDueDate        string
 		PayeeFinancialAccount struct {
@@ -73,10 +74,13 @@ type UblInvoiceFull struct {
 
 type InvoiceLine struct {
 	ID                  string
+	Note                string
 	InvoicedQuantity    Quantity
 	CreditedQuantity    Quantity
 	LineExtensionAmount float64
+	AccountingCost      string
 	Item                struct {
+		Description           string
 		Name                  string
 		ClassifiedTaxCategory TaxCategory
 	}
@@ -92,11 +96,6 @@ type TaxCategory struct {
 type Quantity struct {
 	Value string `xml:",chardata"`
 	Code  string `xml:"unitCode,attr"`
-}
-
-type PaymentMeansCode struct {
-	Value string `xml:",chardata"`
-	Name  string `xml:"name,attr"`
 }
 
 type Amount struct {

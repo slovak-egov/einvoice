@@ -39,15 +39,6 @@ const Item = ({docs, formType, path, index, number, errorCounter}) => {
   }, [taxPercentage, itemQuantity, netPrice])
 
   useEffect(() => {
-    const newTaxExemptionReason = taxExemptionCode && codeLists.vatex.codes[taxExemptionCode] &&
-      codeLists.vatex.codes[taxExemptionCode].name[i18n.language]
-
-    if (newTaxExemptionReason !== taxExemptionReason) {
-      dispatch(setFormField([...path, 'taxExemptionReason'])(newTaxExemptionReason))
-    }
-  }, [taxExemptionCode])
-
-  useEffect(() => {
     if (!recapitulationChange) dispatch(setFormField([...invoicePath, 'recapitulationChange'])(true))
   }, [amountWithoutVat, amount, vat, taxPercentage,
     taxCategory, taxExemptionCode])

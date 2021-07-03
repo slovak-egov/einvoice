@@ -54,3 +54,9 @@
         </div>
     </div>
 {{ end }}
+
+{{ define "valueRowItemDetail" }}
+    <div class="">
+        <span class="label-sk-s">{{.Label.SK}}</span><span class="label-en-s"> /{{.Label.EN}}:</span><span class="value-s"> {{ .Value }}</span>
+    </div>
+{{ end }}

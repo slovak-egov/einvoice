@@ -107,7 +107,6 @@ const generateTaxSubtotal = (item, currency) =>
             <cbc:ID>${item.taxCategory}</cbc:ID>
             <cbc:Percent>${item.taxPercentage}</cbc:Percent>
             ${item.taxExemptionCode ? `<cbc:TaxExemptionReasonCode>${item.taxExemptionCode}</cbc:TaxExemptionReasonCode>` : ''}
-            ${item.taxExemptionReason ? `<cbc:TaxExemptionReason>${item.taxExemptionReason}</cbc:TaxExemptionReason>` : ''}
             <cac:TaxScheme>
                 <cbc:ID>VAT</cbc:ID>
             </cac:TaxScheme>
@@ -171,7 +170,7 @@ const generateSimpleInvoice = (invoice) => `<?xml version="1.0" encoding="UTF-8"
     </cac:Delivery>`
     : ''}
     <cac:PaymentMeans>
-        <cbc:PaymentMeansCode name="${invoice.supplier.paymentMeans}">${invoice.supplier.paymentMeansCode}</cbc:PaymentMeansCode>
+        <cbc:PaymentMeansCode>${invoice.supplier.paymentMeansCode}</cbc:PaymentMeansCode>
         ${invoice.supplier.paymentId ? `<cbc:PaymentID>${invoice.supplier.paymentId}</cbc:PaymentID>` : ''}
         <cac:PayeeFinancialAccount>
             <cbc:ID>${invoice.supplier.paymentAccountId}</cbc:ID>
@@ -224,7 +223,7 @@ const generateSimpleCreditNote = (invoice) => `<?xml version="1.0" encoding="UTF
     </cac:Delivery>`
     : ''}
   <cac:PaymentMeans>
-      <cbc:PaymentMeansCode name="${invoice.supplier.paymentMeans}">${invoice.supplier.paymentMeansCode}</cbc:PaymentMeansCode>
+      <cbc:PaymentMeansCode>${invoice.supplier.paymentMeansCode}</cbc:PaymentMeansCode>
       ${invoice.general.dueDate ? `<cbc:PaymentDueDate>${invoice.general.dueDate}</cbc:PaymentDueDate>` : ''}
       ${invoice.supplier.paymentId ? `<cbc:PaymentID>${invoice.supplier.paymentId}</cbc:PaymentID>` : ''}
       <cac:PayeeFinancialAccount>

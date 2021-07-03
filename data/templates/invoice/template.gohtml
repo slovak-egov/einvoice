@@ -18,7 +18,11 @@
           </div>
           {{ if .TokenQR }} <img class="token" src="data:image/png;base64,{{ .TokenQR }}}" /> {{ end }}
           <div style="width: 350px">
-            {{ template "valueRowRight" args "Kód meny faktúry" "Invoice currency code" $inv.DocumentCurrencyCode}}
+            {{ with $currency := getCode "ISO4217" $inv.DocumentCurrencyCode}}
+              {{ template "valueRowRight" args "Kód meny faktúry" "Invoice currency code"
+                (printf "%s - %s/%s" $inv.DocumentCurrencyCode $currency.Name.Sk $currency.Name.En)
+              }}
+            {{ end }}
             {{ template "valueRowRight" args "Číslo objednávky" "Purchase order reference" $inv.OrderReference.ID }}
             {{ template "valueRowRight" args "Dátum dodania" "Actual delivery date" $inv.Delivery.ActualDeliveryDate }}
           </div>
@@ -28,7 +32,18 @@
             <span class="label-sk">Číslo</span> / <span class="label-en">Invoice number</span> :
           </div>
           <div class="invoice-number">{{ $inv.ID }}</div>
-          {{ template "valueRowRight" args "Typ faktúry" "Invoice type code" (or $inv.InvoiceTypeCode $inv.CreditNoteTypeCode) }}
+          {{ with $type := (or $inv.InvoiceTypeCode $inv.CreditNoteTypeCode) }}
+            {{ with $codeList := "UNCL1001-inv"}}
+              {{ if $inv.CreditNoteTypeCode }}
+                {{ $codeList := "UNCL1001-cn"}}
+              {{ end }}
+              {{ with $code := getCode $codeList $type}}
+                {{ template "valueRowRight" args "Typ faktúry" "Invoice type code"
+                (printf "%s - %s/%s" $type $code.Name.Sk $code.Name.En)
+                }}
+              {{ end }}
+            {{ end }}
+          {{ end }}
           {{ template "valueRowRight" args "Dátum vystavenia" "Invoice issue date" $inv.IssueDate }}
           {{ template "valueRowRight" args "Dátum zdan. plnenia" "Value added tax point date" $inv.TaxPointDate }}
           {{ template "valueRowRight" args "Dátum splatnosti" "Payment due date" (or $inv.DueDate $inv.PaymentMeans.PaymentDueDate ) }}
@@ -67,8 +82,10 @@
             </div>
             <div class="party-info">
               {{ template "labelSection" label "Platobné údaje" "Payment details"}}
-              {{ template "valueRowLeft" args "Spôsob úhrady" "Payment means type code"
-              (printf "%s - %s" $inv.PaymentMeans.PaymentMeansCode.Value $inv.PaymentMeans.PaymentMeansCode.Name) }}
+              {{ with $code := getCode "UNCL4461" $inv.PaymentMeans.PaymentMeansCode}}
+                {{ template "valueRowLeft" args "Spôsob úhrady" "Payment means type code"
+                  (printf "%s - %s/%s" $inv.PaymentMeans.PaymentMeansCode $code.Name.Sk $code.Name.En) }}
+              {{ end}}
               {{ template "valueRowLeft" args "Variabilný symbol" "Remittance  information" $inv.PaymentMeans.PaymentID}}
               {{ template "valueRowLeftSmall" args "IBAN/SWIFT" "Payment account  identifier" $inv.PaymentMeans.PayeeFinancialAccount.ID}}
             </div>
@@ -115,13 +132,13 @@
           {{ template "labelSection" label "Zoznam fakturovaných položiek" "List of invoiced items" }}
           <table>
             <tr class="table-head-sk">
-              <td style="width:5%" >P.č.</td>
-              <td style="width:20%" >Názov</td>
+              <td style="width:2%" >P.č.</td>
+              <td style="width:25%" >Názov</td>
               <td style="width:10%" >Množstvo</td>
-              <td style="width:10%" >MJ</td>
-              <td style="width:15%" >Jedn. cena<br>bez DPH (po zľave)</td>
-              <td style="width:12%" >Spolu bez DPH<br>(po zľave)</td>
-              <td style="width:10%" >Sadzba DPH</td>
+              <td style="width:13%" >MJ</td>
+              <td style="width:20%" >Jedn. cena<br>bez DPH (po zľave)</td>
+              <td style="width:15%" >Spolu bez DPH<br>(po zľave)</td>
+              <td style="width:15%" >Sadzba DPH</td>
             </tr>
             <tr class="table-head-en">
               <td>No.</td>
@@ -133,7 +150,7 @@
               <td>Invoiced item<br>VAT rate</td>
             </tr>
             {{ range (or $inv.InvoiceLine $inv.CreditNoteLine) }}
-              <tr>
+              <tr class="item-row">
                 <td>{{ .ID }}.</td>
                 <td>{{ .Item.Name }}</td>
                 <td>{{ or .InvoicedQuantity.Value .CreditedQuantity.Value }}</td>
@@ -141,6 +158,20 @@
                 <td>{{ printf "%.2f" .Price.PriceAmount }}</td>
                 <td>{{ printf "%.2f" .LineExtensionAmount }}</td>
                 <td>{{ .Item.ClassifiedTaxCategory.Percent }}%</td>
+              </tr>
+              <tr class="item-detail-row">
+                <td></td>
+                <td colspan="6">
+                  <div class="row item-detail-data" >
+                    <div style="width:50%">
+                      {{ template "valueRowItemDetail" args "Popis" "Item description" .Item.Description }}
+                      {{ template "valueRowItemDetail" args "Referencia pre zaúčtovanie" "Invoice line Buyer accounting reference" .AccountingCost }}
+                    </div>
+                    <div style="width:50%">
+                      {{ template "valueRowItemDetail" args "Poznámka k riadku faktúry" "Invoice line note" .Note }}
+                    </div>
+                  </div>
+                </td>
               </tr>
             {{ end }}
           </table>
@@ -189,6 +220,10 @@
               {{ $inv.DocumentCurrencyCode }}
             </div>
           </div>
+        </div>
+
+        <div class="notes">
+          {{ template "labelSection" label "Poznámka k faktúre" "Invoice note" }} {{$inv.Note}}
         </div>
       </div>
     </div>

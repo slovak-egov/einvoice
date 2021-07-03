@@ -1,26 +1,11 @@
 import {useTranslation} from 'react-i18next'
 import {businessTermLink, countErrors, getDoc} from './helpers'
 import {Field} from '../Field'
-import {useDispatch, useSelector} from 'react-redux'
-import {formFieldSelector} from '../state'
-import {useEffect} from 'react'
-import {setFormField} from '../actions'
-import {codeListsSelector} from '../../../cache/documentation/state'
 
 export default ({docs, path}) => {
-  const {t, i18n} = useTranslation('form')
+  const {t} = useTranslation('form')
   const dispatch = useDispatch()
-  const codeLists = useSelector(codeListsSelector)
   const errorCounter = countErrors(path, dispatch)
-
-  const paymentMeansCode = useSelector(formFieldSelector([...path, 'paymentMeansCode']))
-
-  useEffect(() => {
-    dispatch(setFormField([...path, 'paymentMeans'])(
-      paymentMeansCode && codeLists.UNCL4461.codes[paymentMeansCode] &&
-      codeLists.UNCL4461.codes[paymentMeansCode].name[i18n.language]
-    ))
-  }, [paymentMeansCode])
 
   return (
     <div>
