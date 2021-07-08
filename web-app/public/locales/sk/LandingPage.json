@@ -44,9 +44,5 @@
       "title": "Hľadáme programátorov",
       "body": ["Hľadáme programátorov, ktorý nám pomôžu s budovaním tohto systému. Viac informácii nájdete", "tu"]
     }
-  },
-  "phase": {
-    "dev": "Táto webstránka slúži výlučne na vývoj",
-    "fix": "Táto webstránka slúži výlučne na testovanie"
   }
 }

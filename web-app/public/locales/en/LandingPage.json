@@ -44,9 +44,5 @@
       "title": "We're hiring",
       "body": ["We are looking for programmers who help us build this system. See more information", "here"]
     }
-  },
-  "phase": {
-    "dev": "This website is used solely for development",
-    "fix": "This website is used solely for testing"
   }
 }
