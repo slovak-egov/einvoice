@@ -23,16 +23,18 @@ export default ({match}) => {
   )
 
   return (
-    <Tabs tabs={tabs}>
-      <Switch>
-        <AuthRoute path={`${match.url}/drafts`}>
-          <Drafts />
-        </AuthRoute>
-        <Route path={`${match.url}/form`} component={Form} />
-        <Route path={`${match.url}/submission`}>
-          <InvoiceSubmission showSubmission={isLogged} title={title} />
-        </Route>
-      </Switch>
-    </Tabs>
+    <div className="govuk-main-wrapper container">
+      <Tabs tabs={tabs}>
+        <Switch>
+          <AuthRoute path={`${match.url}/drafts`}>
+            <Drafts />
+          </AuthRoute>
+          <Route path={`${match.url}/form`} component={Form} />
+          <Route path={`${match.url}/submission`}>
+            <InvoiceSubmission showSubmission={isLogged} title={title} />
+          </Route>
+        </Switch>
+      </Tabs>
+    </div>
   )
 }

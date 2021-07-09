@@ -34,7 +34,7 @@ export default ({history, match: {params: {id}}}) => {
   } = invoice
 
   return (
-    <>
+    <div className="govuk-main-wrapper container">
       <div className="govuk-back-link" onClick={history.goBack} style={{cursor: 'pointer'}}>
         {t('back')}
       </div>
@@ -151,6 +151,6 @@ export default ({history, match: {params: {id}}}) => {
           {`${t('download')} ZIP`}
         </Button>
       </div>
-    </>
+    </div>
   )
 }

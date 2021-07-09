@@ -32,7 +32,7 @@ export default ({location, match}) => {
   )
 
   return (
-    <>
+    <div className="govuk-main-wrapper container">
       <Breadcrumb
         collapseOnMobile
         items={breadcrumbItems}
@@ -45,6 +45,6 @@ export default ({location, match}) => {
         <Route path={`${match.url}/ublRules`} component={Rules} />
         <Route component={Home} />
       </Switch>
-    </>
+    </div>
   )
 }

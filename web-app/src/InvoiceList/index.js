@@ -21,7 +21,7 @@ export default ({getInvoicesAction, path, title}) => {
   )
 
   return (
-    <>
+    <div className="govuk-main-wrapper container">
       <h1 className="govuk-heading-l">{title}</h1>
       <Filters getInvoices={getInvoices} />
       {invoiceIds && <>
@@ -52,6 +52,6 @@ export default ({getInvoicesAction, path, title}) => {
           {t('loadMore')}
         </Button>}
       </>}
-    </>
+    </div>
   )
 }

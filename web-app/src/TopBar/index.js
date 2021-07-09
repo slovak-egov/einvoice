@@ -39,6 +39,21 @@ export default () => {
 
   const phase = getPhase(window.location.hostname)
 
+  const languageSelector = (
+    <div style={{display: 'inline-block', marginRight: '1rem', marginTop: '-1rem'}}>
+      <Select
+        formGroup={{className: 'mb-0'}}
+        style={{backgroundColor: 'transparent', color: '#fff', border: 'none'}}
+        value={i18n.language}
+        onChange={(e) => i18n.changeLanguage(e.target.value)}
+        items={[
+          {value: 'sk', children: 'Slovenčina'},
+          {value: 'en', children: 'English'},
+        ]}
+      />
+    </div>
+  )
+
   return (
     <>
       <header className="idsk-header" data-module="idsk-header" ref={headerRef}>
@@ -49,17 +64,6 @@ export default () => {
                 {t('topBar.title')}
               </span>
             </Link>
-            <span className="idsk-header__product-name">
-              <Select
-                formGroup={{className: 'mb-0'}}
-                value={i18n.language}
-                onChange={(e) => i18n.changeLanguage(e.target.value)}
-                items={[
-                  {value: 'sk', children: 'SK'},
-                  {value: 'en', children: 'EN'},
-                ]}
-              />
-            </span>
           </div>
           <div className="idsk-header__content">
             <button type="button" className="idsk-header__menu-button govuk-js-header-toggle" aria-controls="navigation" aria-label="Show or hide Top Level Navigation">
@@ -87,6 +91,7 @@ export default () => {
           </div>
 
           {isLogged ? <div className="idsk-header__user govuk-grid-column-one-quarter idsk-header__user--end">
+            {languageSelector}
             <Link to="/account" id="account-image-link">
               <svg className="idsk-header__user-icon" viewBox="0 0 28 28">
                 <path
@@ -104,6 +109,7 @@ export default () => {
             </div>
           </div> :
           <div className="idsk-header__user--end">
+            {languageSelector}
             <a href={CONFIG.upvsLoginUrl} id="login">
               <Button style={{marginBottom: 0}} onClick={startLoading}>
                 {t('topBar.login')}
@@ -116,7 +122,6 @@ export default () => {
       <div style={{background: '#DEE0E2'}}>
         <PhaseBanner
           className="container"
-          style={{borderBottom: 'none'}}
           tag={{
             children: phase,
           }}

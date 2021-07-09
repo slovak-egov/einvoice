@@ -6,7 +6,7 @@ import {registerLocale} from 'react-datepicker'
 import sk from 'date-fns/locale/sk'
 import PublicInvoices from '../PublicInvoices'
 import MyInvoices from '../MyInvoices'
-import LandingPage from '../LandingPage'
+import LandingPage from '../LandingPage/LandingPage'
 import FAQ from '../LandingPage/FAQ'
 import TopBar from '../TopBar'
 import InvoiceTools from '../InvoiceTools'
@@ -21,6 +21,10 @@ import InvoiceDocumentation from '../InvoiceDocumentation'
 import {isLoadingSelector} from '../helpers/state'
 import {isLoggingSelector} from '../cache/users/state'
 import {getMyInfo} from '../cache/users/actions'
+import Goals from '../LandingPage/Goals'
+import Phases from '../LandingPage/Phases'
+import Public from '../LandingPage/Public'
+import Workflow from '../LandingPage/Workflow'
 
 // Load slovak translations for time
 registerLocale('sk', sk)
@@ -57,7 +61,7 @@ export default () => {
   return (
     <div style={{display: 'flex', flexDirection: 'column', minHeight: '100vh'}}>
       <TopBar />
-      <main className="govuk-main-wrapper container">
+      <main>
         <Switch>
           <Route exact path="/">
             <Suspense fallback={<LoadingModal />}>
@@ -69,6 +73,10 @@ export default () => {
               <FAQ />
             </Suspense>
           </Route>
+          <Route exact path="/goals" component={Goals} />
+          <Route exact path="/phases" component={Phases} />
+          <Route exact path="/public" component={Public} />
+          <Route exact path="/workflow" component={Workflow} />
           <AuthRoute exact path="/account">
             <AccountSettings />
           </AuthRoute>

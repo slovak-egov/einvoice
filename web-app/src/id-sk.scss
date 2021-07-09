@@ -218,3 +218,13 @@ $govuk-assets-path: "~@id-sk/frontend/govuk/assets/";
 .input-suffix-disabled {
   opacity: 0.5;
 }
+
+.govuk-phase-banner {
+  border-bottom: none;
+}
+
+#landing-page-img {
+  @include govuk-media-query($until: desktop) {
+    display: none;
+  }
+}
