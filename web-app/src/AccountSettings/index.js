@@ -79,7 +79,7 @@ export default () => {
   if (loggedUser.substituteIds == null || loggedUser.organizationIds == null) return null
 
   return (
-    <>
+    <div className="govuk-main-wrapper container">
       <h1 className="govuk-heading-l">{t('topBar.accountSettings')}</h1>
       <Input
         className="govuk-input--width-5"
@@ -137,6 +137,6 @@ export default () => {
           <strong>{t('organizationIds.empty')}</strong>
         }
       </div>
-    </>
+    </div>
   )
 }

@@ -192,5 +192,9 @@
     "Single Design manual of electronic services.",
     "The site is operated by the Ministry of Finance of the Slovak Republic."
   ],
-  "rename": "Rename"
+  "rename": "Rename",
+  "phase": {
+    "dev": "This website is used solely for development",
+    "fix": "This website is used solely for testing"
+  }
 }

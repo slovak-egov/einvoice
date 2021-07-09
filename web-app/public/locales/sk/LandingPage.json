@@ -1,5 +1,49 @@
 {
-  "title": "Vitajte v slovenskom elektronickom systéme na fakturáciu",
+  "title": "INFORMAČNÝ SYSTÉM\nELEKTRONICKEJ FAKTURÁCIE",
+  "showMore": "Zisti viac...",
+  "goals": {
+    "title": "Hlavné ciele",
+    "short": "Lorem Ipsum is simply\ndummy text of\nthe printing and\ntypesetting industry...",
+    "body": [
+      "Ministerstvo financií Slovenskej Republiky v úzkej spolupráci s Finančným riaditeľstvom Slovenskej republiky zavádza jednotný proces elektronizácie obehu faktúr a zasielania štruktúrovaných údajov z faktúr finančnej správe cez informačno-komunikačné riešenie: Informačný systém elektronickej fakturácie (ďalej len “IS EFA” alebo tiež “e-faktúra”).",
+      "Primárnym cieľom IS EFA je zabezpečenie povinnosti implementácie transponovanej smernice Európskeho parlamentu a  Rady 2014/55/EÚ zo 16. apríla 2014 o elektronickej fakturácii vo verejnom obstarávaní (Ú. v. EÚ L 133, 06. 05. 2014, ďalej len „európska smernica“).",
+      "Z hľadiska povinností, ktoré európska smernica ukladá a ktoré museli byť transponované, ide primárne o čl. 7, podľa ktorého členské štáty majú zabezpečiť, aby verejní obstarávatelia a obstarávatelia prijímali a spracovávali elektronické faktúry, ktoré sú v súlade s európskou normou pre elektronickú fakturáciu (ďalej len „európska norma“).",
+      "Nadväzne na to smernica reguluje náležitosti elektronickej faktúry a spôsob prijatia a publikácie európskej normy. Relevantnou európskou normou sú technické normy, prevzaté do národnej sústavy STN pod označením:",
+      "STN EN 16931-1 + A1: 2020 Elektronická fakturácia. Časť 1: Sémantický model základných elementov elektronickej faktúry (36 9640)\nSTN EN 16931-1+A1: 2020/AC: 2020 Elektronická fakturácia. Časť 1: Sémantický model základných elementov elektronickej faktúry. Oprava AC\nSTN P CEN/TS 16931-2: 2017 Elektronická fakturácia. Časť 2: Zoznam syntaxí vyhovujúcich EN 16931-1 (36 9640)",
+      "Uvedené technické dokumenty k elektronickej fakturácii vo verejnom obstarávaní sú sponzorované Európskou komisiu a sú k dispozícii k stiahnutiu na portály noriem Úradu pre normalizáciu, metrológiu a skúšobníctvo SR (normy.unms.sk).",
+      "Európska smernica bola transponovaná do národnej legislatívy SR prostredníctvom zákona č. 215/2019 Z.z. o zaručenej elektronickej fakturácii a centrálnom ekonomickom systéme a o doplnení niektorých zákonov (elektronická fakturácie pre dotknuté subjekty v oblastiach B2G, G2G a G2B).",
+      "Informačný systém elektronickej fakturácie je zároveň informačno-komunikačným prostriedkom, ktorý umožní aplikáciu pripravovaného zákona o zasielaní údajov finančnej správe z faktúr daňových subjektov (zasielanie údajov z faktúr pre dotknuté subjekty v oblastiach B2B a B2C). Predbežná informácia k zákonu je k dispozícii na: https://www.slov-lex.sk/legislativne-procesy/SK/PI/2021/6.",
+      "Zasielanie údajov finančnej správe z faktúr daňových subjektov je nevyhnutnou súčasťou súboru opatrení ministerstva financií a finančného riaditeľstva na účinný boj proti daňovým podvodom, zníženie medzery vo výbere daní a zvýšenie efektivity výberu daní."
+    ]
+  },
+  "phases": {
+    "title": "Fázy implementácie",
+    "short": "Lorem Ipsum is simply\ndummy text of\nthe printing and\ntypesetting industry...",
+    "body": [
+      "Systémové riešenie je rozdelené do niekoľkých fáz s postupným spúšťaním:",
+      "1. fáza - Verejná testovacia prevádzka prototypu IS EFA pre zaručenú elektronickú fakturáciu\nAugust 2021",
+      "2. fáza - Zaručená elektronická fakturácia (oblasti B2G, G2G a G2B) – ostrá prevádzka\nJanuár 2022",
+      "3. fáza - Verejná testovacia prevádzka zasielania údajov finančnej správe z faktúr daňových subjektov\nAugust 2022",
+      "4. fáza - Zasielanie údajov z faktúr finančnej správe (oblasti B2B a B2C ) a zaručená elektronická fakturácia pre oblasť\nG2C – ostrá prevádzka\nJanuár 2023",
+      "Implementácia zaručenej elektronickej fakturácie prispieva najmä k zníženiu administratívnej záťaže podnikateľov. IS EFA prináša možnosti vyhotovovania elektronických faktúr aj pre malých podnikateľov, ktorým je týmto spôsobom bezodplatne poskytnutá webová online aplikácia, ktorá je nápomocná pri vyhotovovaní a správe faktúr v predpísanom elektronickom formáte a zároveň poskytuje možnosti automatizovaných formálnych kontrol elektronických faktúr v reálnom čase v zmysle platných technických noriem.",
+      "Pre podnikateľov, ktorí využívajú pre tvorbu a správu faktúr vlastné softvérové nástroje, IS EFA ponúka otvorené programové rozhranie (open API), prostredníctvom ktorého môžu podnikatelia faktúry vytvárané vo svojich systémoch, resp. požadované údaje z faktúr finančnou správou preniesť do informačného systému elektronickej fakturácie automatizovane bez nutnosti ďalšieho zásahu používateľa.",
+      "Zavedením jednotnej elektronickej fakturácie v celej Európskej únii sa v neposlednom rade prispeje k podpore cezhraničného obchodu a zavedeniu interoperability v oblasti elektronizácie faktúr, pričom sa zvýši transparentnosť vystavených a prijatých faktúr orgánmi verejnej správy. Všetky elektronické faktúry ktorých príjemcom a odosielateľom je štátna inštitúcia, sú prostredníctvom IS EFA zverejnené a voľne k dispozícii k nahliadnutiu."
+    ]
+  },
+  "public": {
+    "title": "Účasť verejnosti",
+    "short": "Lorem Ipsum is simply\ndummy text of\nthe printing and\ntypesetting industry...",
+    "body": [
+      "Pre zabezpečenia vyššej kvality služieb a transparentnosti IS EFA sa Ministerstvo financií SR rozhodlo umožniť spoluprácu verejnosti pri tvorbe riešenia formou spustenia verejnej testovacej prevádzky.",
+      "Počas testovacieho obdobia bude umožnené ako odbornej verejnosti, tak aj podnikateľom, aby si vyskúšali prácu s online aplikáciou, alebo integráciu prostredníctvom nášho OpenAPI.",
+      "Týmto spôsobom sa môže celá verejnosť zapojiť do návrhu vylepšení e-fakturácie ešte pred jej spustením do ostrej prevádzky, ktorá je plánovaná na január 2022 pre segmenty B2G, G2G, G2G a január 2023 pre segmenty B2B a B2C a G2C.",
+      "Ak ste sa rozhodli prispieť k vyššej kvalite služieb poskytovaných štátom, zapojením sa do verejnej testovacej prevádzky, Vaše otázky, postrehy a námety na zlepšenie nám môžete zasielať prostredníctvom e-mailu na adresu: e-fakturacia@mfsr.sk."
+    ]
+  },
+  "workflow": {
+    "title": "Ako to funguje?",
+    "short": "Lorem Ipsum is simply\ndummy text of\nthe printing and\ntypesetting industry..."
+  },
   "introduction": "Tento systém bude podporovať 5 rôznych prípadov použitia",
   "version1": "Faktúry od slovenských podnikateľov (alebo od vlády) pre slovenských podnikateľov (vládu)",
   "version2": "Faktúry od slovenských podnikateľov (alebo od vlády) pre zahraničných podnikateľov",
@@ -44,9 +88,5 @@
       "title": "Hľadáme programátorov",
       "body": ["Hľadáme programátorov, ktorý nám pomôžu s budovaním tohto systému. Viac informácii nájdete", "tu"]
     }
-  },
-  "phase": {
-    "dev": "Táto webstránka slúži výlučne na vývoj",
-    "fix": "Táto webstránka slúži výlučne na testovanie"
   }
 }

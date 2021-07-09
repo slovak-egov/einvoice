@@ -1,5 +1,49 @@
 {
-  "title": "Welcome to Slovak E-invoicing system",
+  "title": "Slovak E-invoicing system",
+  "showMore": "Show more...",
+  "goals": {
+    "title": "Main goals",
+    "short": "Lorem Ipsum is simply\ndummy text of\nthe printing and\ntypesetting industry...",
+    "body": [
+      "TODO",
+      "TODO",
+      "TODO",
+      "TODO",
+      "TODO",
+      "TODO",
+      "TODO",
+      "TODO",
+      "TODO"
+    ]
+  },
+  "phases": {
+    "title": "Implementation phases",
+    "short": "Lorem Ipsum is simply\ndummy text of\nthe printing and\ntypesetting industry...",
+    "body": [
+      "TODO",
+      "TODO",
+      "TODO",
+      "TODO",
+      "TODO",
+      "TODO",
+      "TODO",
+      "TODO"
+    ]
+  },
+  "public": {
+    "title": "Public participation",
+    "short": "Lorem Ipsum is simply\ndummy text of\nthe printing and\ntypesetting industry...",
+    "body": [
+      "TODO",
+      "TODO",
+      "TODO",
+      "TODO"
+    ]
+  },
+  "workflow": {
+    "title": "How does it work?",
+    "short": "Lorem Ipsum is simply\ndummy text of\nthe printing and\ntypesetting industry..."
+  },
   "introduction": "This system will support 5 different use-cases",
   "version1": "Slovak business (or government) to slovak business (government) invoices",
   "version2": "Business (or government) to business (or government) invoices for foreign receivers",
@@ -44,9 +88,5 @@
       "title": "We're hiring",
       "body": ["We are looking for programmers who help us build this system. See more information", "here"]
     }
-  },
-  "phase": {
-    "dev": "This website is used solely for development",
-    "fix": "This website is used solely for testing"
   }
 }

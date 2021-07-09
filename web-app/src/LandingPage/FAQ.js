@@ -276,7 +276,7 @@ const Version5 = () => (
 export default () => {
   const {i18n, t} = useTranslation('LandingPage')
   return (
-    <>
+    <div className="govuk-main-wrapper container">
       <h1 className="govuk-heading-l">{t('faq')}</h1>
       <Accordion
         key={i18n.language}
@@ -323,6 +323,6 @@ export default () => {
           },
         ]}
       />
-    </>
+    </div>
   )
 }
