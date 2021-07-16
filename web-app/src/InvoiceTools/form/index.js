@@ -12,6 +12,7 @@ import {formTypeSelector, formDataSelector, isFormInitialized, formDraftSelector
 import {initializeFormState, setFormType, setFormDraftMeta, submitInvoiceForm, setFormComplexity} from './actions'
 import {
   areCodeListsLoadedSelector,
+  areFormValidationDocsLoadedSelector,
   isUblCreditNoteDocsLoadedSelector,
   isUblInvoiceDocsLoadedSelector,
   ublCreditNoteDocsSelector,
@@ -19,6 +20,7 @@ import {
 } from '../../cache/documentation/state'
 import {
   getCodeLists,
+  getFormValidationDocs,
   getUblCreditNoteDocs,
   getUblInvoiceDocs,
 } from '../../cache/documentation/actions'
@@ -60,6 +62,7 @@ export default () => {
   const formType = useSelector(formTypeSelector)
   const formComplexity = useSelector(formComplexitySelector)
   const isDocsLoaded = useSelector(invoiceTypeData[formType].isLoadedSelector)
+  const areFormValidationDocsLoaded = useSelector(areFormValidationDocsLoadedSelector)
   const areCodeListsLoaded = useSelector(areCodeListsLoadedSelector)
   const isFormLoaded = useSelector(isFormInitialized(formType, formComplexity))
   const docs = useSelector(invoiceTypeData[formType].docsSelector)
@@ -83,6 +86,12 @@ export default () => {
       dispatch(getCodeLists())
     }
   }, [areCodeListsLoaded, dispatch])
+
+  useEffect(() => {
+    if (!areFormValidationDocsLoaded) {
+      dispatch(getFormValidationDocs())
+    }
+  }, [areFormValidationDocsLoaded, dispatch])
 
   useEffect(() => {
     if (areCodeListsLoaded && isDocsLoaded && !isFormLoaded) {

@@ -4,17 +4,7 @@ import {Fragment} from 'react'
 import {useTranslation} from 'react-i18next'
 import NotFound from '../../../helpers/NotFound'
 import {ubl21RuleSelector} from '../../../cache/documentation/state'
-
-const addBusinessTermsLinks = (msg, businessTerms) => {
-  if (!businessTerms) return msg
-
-  const reg = new RegExp(`(${businessTerms.join('|')})`, 'g')
-  const parts = msg.split(reg)
-  for (let i = 1; i < parts.length; i += 2) {
-    parts[i] = <Link key={i} to={`/invoiceDocumentation/businessTerms/${parts[i]}`}>{parts[i]}</Link>
-  }
-  return parts
-}
+import {addBusinessTermsLinks} from '../../../helpers/businessTerms'
 
 export default ({match}) => {
   const {i18n, t} = useTranslation('common')

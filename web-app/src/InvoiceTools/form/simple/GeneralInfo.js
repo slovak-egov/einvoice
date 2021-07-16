@@ -47,7 +47,6 @@ export default ({docs, path, formType}) => {
             label={t('taxPointDate')}
             path={[...path, 'taxPointDate']}
             id="tax-point-date"
-            nullable
           />
         </div>
       </div>
@@ -58,7 +57,6 @@ export default ({docs, path, formType}) => {
             label={t('dueDate')}
             path={[...path, 'dueDate']}
             id="due-date"
-            nullable
           />
         </div>
         <div className="govuk-grid-column-one-half">
@@ -67,7 +65,6 @@ export default ({docs, path, formType}) => {
             label={t('contractId')}
             path={[...path, 'contractId']}
             id="contract-id"
-            nullable
           />
         </div>
       </div>
@@ -87,7 +84,6 @@ export default ({docs, path, formType}) => {
             label={t('orderReference')}
             path={[...path, 'orderReference']}
             id="order-reference"
-            nullable
           />
         </div>
       </div>
@@ -98,7 +94,6 @@ export default ({docs, path, formType}) => {
             label={t('deliveryDate')}
             path={[...path, 'deliveryDate']}
             id="delivery-date"
-            nullable
           />
         </div>
         <div className="govuk-grid-column-one-half">
@@ -107,7 +102,6 @@ export default ({docs, path, formType}) => {
             label={t('previousInvoiceNumber')}
             path={[...path, 'previousInvoiceNumber']}
             id="previous-invoice-number"
-            nullable
           />
         </div>
       </div>

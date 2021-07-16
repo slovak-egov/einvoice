@@ -99,14 +99,14 @@ const generateParty = (party) => `<cac:Party>
     : ''}
   </cac:Party>`
 
-const generateTaxSubtotal = (item, currency) =>
+const generateTaxSubtotal = (subtotal, currency) =>
   `<cac:TaxSubtotal>
-        <cbc:TaxableAmount currencyID="${currency}">${item.amountWithoutVat}</cbc:TaxableAmount>
-        <cbc:TaxAmount currencyID="${currency}">${item.vat}</cbc:TaxAmount>
+        <cbc:TaxableAmount currencyID="${currency}">${subtotal.amountWithoutVat}</cbc:TaxableAmount>
+        <cbc:TaxAmount currencyID="${currency}">${subtotal.vat}</cbc:TaxAmount>
         <cac:TaxCategory>
-            <cbc:ID>${item.taxCategory}</cbc:ID>
-            <cbc:Percent>${item.taxPercentage}</cbc:Percent>
-            ${item.taxExemptionCode ? `<cbc:TaxExemptionReasonCode>${item.taxExemptionCode}</cbc:TaxExemptionReasonCode>` : ''}
+            <cbc:ID>${subtotal.key.taxCategory}</cbc:ID>
+            <cbc:Percent>${subtotal.key.taxPercentage}</cbc:Percent>
+            ${subtotal.key.taxExemptionCode ? `<cbc:TaxExemptionReasonCode>${subtotal.key.taxExemptionCode}</cbc:TaxExemptionReasonCode>` : ''}
             <cac:TaxScheme>
                 <cbc:ID>VAT</cbc:ID>
             </cac:TaxScheme>
@@ -178,7 +178,7 @@ const generateSimpleInvoice = (invoice) => `<?xml version="1.0" encoding="UTF-8"
     </cac:PaymentMeans>
     <cac:TaxTotal>
         <cbc:TaxAmount currencyID="${invoice.general.currencyCode}">${invoice.recapitulation.vat}</cbc:TaxAmount>
-        ${Object.values(invoice.items).map((item) => (generateTaxSubtotal(item, invoice.general.currencyCode))).join('\n')}
+        ${Object.values(invoice.recapitulation.taxSubtotals).map((subtotal) => (generateTaxSubtotal(subtotal, invoice.general.currencyCode))).join('\n')}
     </cac:TaxTotal>
     <cac:LegalMonetaryTotal>
         <cbc:LineExtensionAmount currencyID="${invoice.general.currencyCode}">${invoice.recapitulation.amountWithoutVat}</cbc:LineExtensionAmount>
@@ -232,7 +232,7 @@ const generateSimpleCreditNote = (invoice) => `<?xml version="1.0" encoding="UTF
   </cac:PaymentMeans>
 	<cac:TaxTotal>
       <cbc:TaxAmount currencyID="${invoice.general.currencyCode}">${invoice.recapitulation.vat}</cbc:TaxAmount>
-      ${Object.values(invoice.items.list).map((item) => (generateTaxSubtotal(item, invoice.general.currencyCode))).join('\n')}
+      ${Object.values(invoice.recapitulation.taxSubtotals).map((subtotal) => (generateTaxSubtotal(subtotal, invoice.general.currencyCode))).join('\n')}
   </cac:TaxTotal>
 	<cac:LegalMonetaryTotal>
       <cbc:LineExtensionAmount currencyID="${invoice.general.currencyCode}">${invoice.recapitulation.amountWithoutVat}</cbc:LineExtensionAmount>

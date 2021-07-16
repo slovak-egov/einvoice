@@ -1,12 +1,15 @@
 import {useTranslation} from 'react-i18next'
-import {businessTermLink, countErrors, getDoc} from './helpers'
+import {countErrors, getDoc} from './helpers'
 import {Field} from '../Field'
-import {useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
+import {formFieldSelector} from '../state'
+import {businessTermLink} from '../../../helpers/businessTerms'
 
 export default ({docs, path}) => {
   const {t} = useTranslation('form')
   const dispatch = useDispatch()
   const errorCounter = countErrors(path, dispatch)
+  const paymentMeansCode = useSelector(formFieldSelector([...path, 'paymentMeansCode']))
 
   return (
     <div>
@@ -69,7 +72,6 @@ export default ({docs, path}) => {
             label={t('supplierLegalForm')}
             path={[...path, 'legalForm']}
             id="supplier-legal-form"
-            nullable
           />
         </div>
       </div>
@@ -80,7 +82,6 @@ export default ({docs, path}) => {
             label={t('supplierIco')}
             path={[...path, 'ico']}
             id="supplier-ico"
-            nullable
           />
         </div>
         <div className="govuk-grid-column-one-half">
@@ -89,7 +90,6 @@ export default ({docs, path}) => {
             label={t('supplierVatId')}
             path={[...path, 'vatId']}
             id="supplier-vat-id"
-            nullable
           />
         </div>
       </div>
@@ -112,7 +112,6 @@ export default ({docs, path}) => {
             label={t('paymentId')}
             path={[...path, 'paymentId']}
             id="payment-id"
-            nullable
           />
         </div>
         <div className="govuk-grid-column-one-half">
@@ -122,6 +121,7 @@ export default ({docs, path}) => {
             path={[...path, 'paymentAccountId']}
             id="payment-account-id"
             errorCounter={errorCounter}
+            validationCondition={paymentMeansCode}
           />
         </div>
       </div>
@@ -134,7 +134,6 @@ export default ({docs, path}) => {
             label={t('contactName')}
             path={[...path, 'contactName']}
             id="supplier-contact-name"
-            nullable
           />
         </div>
         <div className="govuk-grid-column-one-half">
@@ -143,7 +142,7 @@ export default ({docs, path}) => {
             label={t('contactPhone')}
             path={[...path, 'contactPhone']}
             id="supplier-contact-phone"
-            nullable
+            errorCounter={errorCounter}
           />
         </div>
       </div>
@@ -154,7 +153,7 @@ export default ({docs, path}) => {
             label={t('contactEmail')}
             path={[...path, 'contactEmail']}
             id="supplier-contact-email"
-            nullable
+            errorCounter={errorCounter}
           />
         </div>
       </div>

@@ -84,8 +84,9 @@
     "defaultValue": "Predvolená hodnota",
     "exampleValue": "Ukážková hodnota",
     "businessTerms": "Obchodné termíny",
+    "formValidations": "Validácia formuláru",
     "context": "Kontext",
-    "Usage": "Použitie",
+    "usage": "Použitie",
     "attributes": "Atribúty",
     "dataType": "Dátový typ",
     "codeLists": "Zoznamy kódov",
@@ -105,6 +106,15 @@
         "fatal": "Nutná",
         "warning": "Varovanie"
       }
+    },
+    "validations": {
+      "title": "Validácia formuláru",
+      "identifier": "Identifikátor",
+      "businessTerm": "Obchodný termín",
+      "businessTermName": "Názov poľa",
+      "message": "Správa",
+      "description": "Popis",
+      "conditionalValues": "Hodnoty pri ktorých sa pravidlo aplikuje"
     }
   },
   "topBar": {
@@ -159,6 +169,7 @@
     "getUblInvoiceDocs": "Dokumentáciu UBL2.1 faktúry sa nepodarilo načítať",
     "getUblCreditNoteDocs": "Dokumentáciu UBL2.1 dobropisu sa nepodarilo načítať",
     "getUblRulesDocs": "Dokumentáciu UBL pravidiel sa nepodarilo načítať",
+    "getFormValidations": "Dokumentáciu validácie formuláru sa nepodarilo načítať",
     "getBusinessTerms": "Dokumentáciu obchodných pravidiel sa nepodarilo načítať",
     "getCodeLists": "Zoznamy kódov sa nepodarilo načítať",
     "getDrafts": "Koncepty faktúr sa nepodarilo načítať",

@@ -2,10 +2,13 @@ export const ublInvoiceDocsSelector = (state) => state.docs['ubl2.1'].invoice
 export const ublCreditNoteDocsSelector = (state) => state.docs['ubl2.1'].creditNote
 export const ubl21RulesDocsSelector = (state) => state.docs['ubl2.1'].rules
 export const ubl21RuleSelector = (id) => (state) => state.docs['ubl2.1'].rules[id]
+export const formValidationDocsSelector = (state) => state.docs.formValidations
 
 export const isUblInvoiceDocsLoadedSelector = (state) => ublInvoiceDocsSelector(state) != null
 export const isUblCreditNoteDocsLoadedSelector = (state) => ublCreditNoteDocsSelector(state) != null
 export const isUblRulesDocsLoadedSelector = (state) => ubl21RulesDocsSelector(state) != null
+export const areFormValidationDocsLoadedSelector = (state) =>
+  formValidationDocsSelector(state) != null
 
 export const businessTermsDocsSelector = (state) => state.docs.businessTerms
 export const businessTermSelector = (term) => (state) => businessTermsDocsSelector(state)[term]

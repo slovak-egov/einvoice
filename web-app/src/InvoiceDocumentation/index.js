@@ -4,6 +4,7 @@ import {useTranslation} from 'react-i18next'
 import {Breadcrumb} from '../helpers/idsk'
 import Syntax from './ubl2.1/syntax'
 import BusinessTerms from './businessTerms'
+import FormValidations from './formValidations'
 import Home from './Home'
 import CodeLists from './codeLists'
 import Rules from './ubl2.1/rules'
@@ -43,6 +44,7 @@ export default ({location, match}) => {
         <Route path={`${match.url}/businessTerms`} component={BusinessTerms} />
         <Route path={`${match.url}/codeLists`} component={CodeLists} />
         <Route path={`${match.url}/ublRules`} component={Rules} />
+        <Route path={`${match.url}/formValidations`} component={FormValidations} />
         <Route component={Home} />
       </Switch>
     </div>

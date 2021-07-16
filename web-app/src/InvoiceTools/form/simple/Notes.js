@@ -15,7 +15,6 @@ export default ({docs, path}) => {
             label={t('note')}
             path={[...path, 'note']}
             id="note"
-            nullable
           />
         </div>
       </div>

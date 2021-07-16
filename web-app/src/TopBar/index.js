@@ -47,8 +47,8 @@ export default () => {
         value={i18n.language}
         onChange={(e) => i18n.changeLanguage(e.target.value)}
         items={[
-          {value: 'sk', children: 'Slovenčina'},
-          {value: 'en', children: 'English'},
+          {value: 'sk', children: 'Slovenčina', style: {color: '#000'}},
+          {value: 'en', children: 'English', style: {color: '#000'}},
         ]}
       />
     </div>

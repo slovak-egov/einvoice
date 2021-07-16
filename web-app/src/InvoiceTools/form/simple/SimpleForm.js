@@ -21,7 +21,7 @@ export default ({formType, path, docs}) => {
   const history = useHistory()
   const section = location.pathname.split('/').pop()
   const sections = ['general', 'supplier', 'customer', 'items', 'recapitulation', 'notes']
-  const sectionIndex = sections.findIndex((s) => s === section)
+  const sectionIndex = sections.findIndex((s) => s === section) || 0
   const recapitulationChange = useSelector(formFieldSelector([...path, 'recapitulationChange']))
   const items = useSelector(formItemsSelector(formType))
   const formData = useSelector(formDataSelector)
@@ -43,7 +43,7 @@ export default ({formType, path, docs}) => {
         >
           {section === name ? <u>{t(name)}</u> : t(name)}
         </Link>
-        <div style={{textAlign: 'center', color: errors === 0 ? '#000000' : '#D0190F'}}>
+        <div style={{textAlign: 'center', color: required > 0 ? (errors === 0 ? '#20bb01' : '#D0190F') : '#000'}}>
           { required > 0 ? `${required - errors}/${required}` : 'N/A' }
         </div>
       </div>
@@ -124,7 +124,7 @@ export default ({formType, path, docs}) => {
       </div>
       <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
       <Switch>
-        <Route path="/invoice-tools/form">
+        <Route exact path="/invoice-tools/form">
           <Redirect to="/invoice-tools/form/general" />
         </Route>
       </Switch>

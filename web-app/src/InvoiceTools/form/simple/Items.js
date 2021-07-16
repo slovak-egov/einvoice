@@ -83,7 +83,6 @@ const Item = ({docs, formType, path, index, number, errorCounter}) => {
             label={t('itemDescription')}
             path={[...path, 'description']}
             id={`item-${index}-description`}
-            nullable
           />
         </div>
       </div>
@@ -139,12 +138,11 @@ const Item = ({docs, formType, path, index, number, errorCounter}) => {
             label={t('itemAmountWithoutVat')}
             path={[...path, 'amountWithoutVat']}
             notEditable
-            nullable
-            value={(Number(itemQuantity) && Number(netPrice) ?
-              Number(itemQuantity) * Number(netPrice)
-              :
-              0
-            ).toFixed(2)}
+            errorCounter={errorCounter}
+            value={Number(itemQuantity) && Number(netPrice) ?
+              (Number(itemQuantity) * Number(netPrice)).toFixed(2)
+              : null
+            }
             id={`item-${index}-amount-without-vat`}
           />
         </div>
@@ -175,6 +173,7 @@ const Item = ({docs, formType, path, index, number, errorCounter}) => {
             value={taxPercentage}
             id={`item-${index}-tax-percentage`}
             errorCounter={errorCounter}
+            validationCondition={taxCategory}
           />
         </div>
       </div>
@@ -187,7 +186,8 @@ const Item = ({docs, formType, path, index, number, errorCounter}) => {
             label={t('itemTaxExemptionCode')}
             path={[...path, 'taxExemptionCode']}
             id={`item-${index}-tax-exemption-code`}
-            nullable
+            errorCounter={errorCounter}
+            validationCondition={taxCategory}
           />
         </div>
         <div className="govuk-grid-column-one-half">
@@ -200,7 +200,6 @@ const Item = ({docs, formType, path, index, number, errorCounter}) => {
             label={t('itemAccountingCost')}
             path={[...path, 'accountingCost']}
             id={`item-${index}-accounting-cost`}
-            nullable
           />
         </div>
       </div>
@@ -215,7 +214,6 @@ const Item = ({docs, formType, path, index, number, errorCounter}) => {
             label={t('itemNote')}
             path={[...path, 'note']}
             id={`item-${index}-note`}
-            nullable
           />
         </div>
       </div>
