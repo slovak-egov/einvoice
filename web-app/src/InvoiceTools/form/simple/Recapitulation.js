@@ -21,7 +21,6 @@ const Category = ({docs, path, index}) => {
             path={[...path, 'key', 'taxCategory']}
             id={`tax-category-${index}-code`}
             notEditable
-            nullable
           />
         </div>
         <div className="govuk-grid-column-one-half">
@@ -33,7 +32,6 @@ const Category = ({docs, path, index}) => {
             path={[...path, 'key', 'taxPercentage']}
             id={`tax-category-${index}-percentage`}
             notEditable
-            nullable
           />
         </div>
       </div>
@@ -47,7 +45,6 @@ const Category = ({docs, path, index}) => {
             path={[...path, 'amountWithoutVat']}
             id={`tax-category-${index}-amount-without-vat`}
             notEditable
-            nullable
           />
         </div>
         <div className="govuk-grid-column-one-half">
@@ -59,7 +56,6 @@ const Category = ({docs, path, index}) => {
             path={[...path, 'vat']}
             id={`tax-category-${index}-vat`}
             notEditable
-            nullable
           />
         </div>
       </div>
@@ -103,7 +99,6 @@ export default ({path, docs, formType}) => {
                     path={[...path, 'amountWithoutVat']}
                     id="total-amount-without-vat"
                     notEditable
-                    nullable
                   />
                 </div>
                 <div className="govuk-grid-column-one-half">
@@ -115,7 +110,6 @@ export default ({path, docs, formType}) => {
                     path={[...path, 'vat']}
                     id="total-vat"
                     notEditable
-                    nullable
                   />
                 </div>
               </div>
@@ -129,7 +123,6 @@ export default ({path, docs, formType}) => {
                     path={[...path, 'amount']}
                     id="total-amount"
                     notEditable
-                    nullable
                   />
                 </div>
                 <div className="govuk-grid-column-one-half">
@@ -141,7 +134,6 @@ export default ({path, docs, formType}) => {
                     path={[...path, 'amount']}
                     id="total-payable-amount"
                     notEditable
-                    nullable
                   />
                 </div>
               </div>

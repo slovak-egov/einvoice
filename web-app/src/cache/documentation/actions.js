@@ -7,6 +7,7 @@ const setUblCreditNoteDocs = setData(['docs', 'ubl2.1', 'creditNote'])
 const setUblRulesDocs = setData(['docs', 'ubl2.1', 'rules'])
 const setBusinessTermsDocs = setData(['docs', 'businessTerms'])
 const setCodeLists = setData(['docs', 'codeLists'])
+const setFormValidation = setData(['docs', 'formValidations'])
 
 export const getUblInvoiceDocs = () => loadingWrapper(
   async (dispatch, getState, {api}) => {
@@ -76,6 +77,21 @@ export const getCodeLists = () => loadingWrapper(
     } catch (error) {
       await swal({
         title: i18n.t('errorMessages.getCodeLists'),
+        text: error.message,
+        icon: 'error',
+      })
+    }
+  }
+)
+
+export const getFormValidationDocs = () => loadingWrapper(
+  async (dispatch, getState, {api}) => {
+    try {
+      const docs = await api.documentation.getFormValidations()
+      dispatch(setFormValidation(docs))
+    } catch (error) {
+      await swal({
+        title: i18n.t('errorMessages.getFormValidations'),
         text: error.message,
         icon: 'error',
       })

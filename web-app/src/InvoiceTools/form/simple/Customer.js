@@ -1,7 +1,8 @@
 import {useTranslation} from 'react-i18next'
-import {businessTermLink, countErrors, getDoc} from './helpers'
+import {countErrors, getDoc} from './helpers'
 import {Field} from '../Field'
 import {useDispatch} from 'react-redux'
+import {businessTermLink} from '../../../helpers/businessTerms'
 
 export default ({docs, path}) => {
   const {t} = useTranslation('form')
@@ -69,7 +70,6 @@ export default ({docs, path}) => {
             label={t('customerIco')}
             path={[...path, 'ico']}
             id="customer-ico"
-            nullable
           />
         </div>
         <div className="govuk-grid-column-one-half">
@@ -78,7 +78,6 @@ export default ({docs, path}) => {
             label={t('customerVatId')}
             path={[...path, 'vatId']}
             id="customer-vat-id"
-            nullable
           />
         </div>
       </div>
@@ -91,7 +90,6 @@ export default ({docs, path}) => {
             label={t('deliveryAddressLine1')}
             path={[...path, 'deliveryAddress', 'line1']}
             id="delivery-address-line-1"
-            nullable
           />
         </div>
         <div className="govuk-grid-column-one-half">
@@ -100,7 +98,6 @@ export default ({docs, path}) => {
             label={t('deliveryPostalZone')}
             path={[...path, 'deliveryAddress', 'postalZone']}
             id="delivery-address-postal-zone"
-            nullable
           />
         </div>
       </div>
@@ -111,7 +108,6 @@ export default ({docs, path}) => {
             label={t('deliveryCity')}
             path={[...path, 'deliveryAddress', 'city']}
             id="delivery-address-city"
-            nullable
           />
         </div>
         <div className="govuk-grid-column-one-half">
@@ -133,7 +129,6 @@ export default ({docs, path}) => {
             label={t('contactName')}
             path={[...path, 'contactName']}
             id="customer-contact-name"
-            nullable
           />
         </div>
         <div className="govuk-grid-column-one-half">
@@ -142,7 +137,7 @@ export default ({docs, path}) => {
             label={t('contactPhone')}
             path={[...path, 'contactPhone']}
             id="customer-contact-phone"
-            nullable
+            errorCounter={errorCounter}
           />
         </div>
       </div>
@@ -153,7 +148,7 @@ export default ({docs, path}) => {
             label={t('contactEmail')}
             path={[...path, 'contactEmail']}
             id="customer-contact-email"
-            nullable
+            errorCounter={errorCounter}
           />
         </div>
       </div>

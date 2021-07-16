@@ -8,11 +8,12 @@ import DatePicker from '../../helpers/DatePicker'
 import FileUploader from '../../helpers/FileUploader'
 import {formFieldSelector} from './state'
 import {setFormField} from './actions'
-import {codeListsSelector} from '../../cache/documentation/state'
+import {codeListsSelector, formValidationDocsSelector} from '../../cache/documentation/state'
 import {allowedAttachmentMimeTypes, dataTypes} from '../../utils/constants'
 import {fileToBase64, formatDate, parseDate} from '../../utils/helpers'
 import {Link} from 'react-router-dom'
 import {pathToId} from './ids'
+import {getValidationFunction} from '../../helpers/validations'
 
 const fileToState = (file, name, mime) => ({
   text: file,
@@ -75,10 +76,21 @@ export const ComplexField = ({canDelete, dropField, docs, path, setErrorCount}) 
   )
 }
 
-export const Field = ({docs, label, path, value, nullable, notEditable, id, errorCounter}) => {
-  const {t} = useTranslation('common')
+export const Field = ({docs, label, path, value, notEditable, id, errorCounter,
+  validationCondition}) => {
+
+  const {i18n} = useTranslation('common')
   const dispatch = useDispatch()
   const currentValue = useSelector(formFieldSelector(path)) || ''
+  const validationDocs = useSelector(formValidationDocsSelector)
+  const validations = docs.formValidations || []
+  const validationRules = validations.map((id) => {
+    const doc = validationDocs[id]
+    return {
+      doc,
+      rule: getValidationFunction(doc),
+    }
+  })
 
   useEffect(() => {
     if (value !== undefined && currentValue !== value) {
@@ -86,13 +98,17 @@ export const Field = ({docs, label, path, value, nullable, notEditable, id, erro
     }
   }, [dispatch, value])
 
-  const contentError = !nullable && currentValue === '' ? t('errorMessages.emptyField') : null
+  const violation = validationRules.find((x) => {
+    return x.rule.applicable(validationCondition, currentValue) && x.rule.isViolation(currentValue)
+  })
+  const contentError = violation ? violation.doc.message[i18n.language] : null
 
   if (errorCounter) {
     useEffect(
       () => {
-        errorCounter(id, contentError ? 1 : 0, nullable ? 0 : 1)
-      }, [contentError],
+        errorCounter(id, contentError ? 1 : 0,
+          validationRules.some((v) => v.rule.applicable(validationCondition, currentValue)) ? 1 : 0)
+      }, [contentError, validations.join(','), validationCondition, currentValue],
     )
   }
 
@@ -124,7 +140,7 @@ export const Field = ({docs, label, path, value, nullable, notEditable, id, erro
         dataType={docs && docs.dataType}
         updateField={updateField}
         value={currentValue}
-        error={contentError}
+        violation={violation}
         notEditable={notEditable}
         id={id}
       />
@@ -132,7 +148,7 @@ export const Field = ({docs, label, path, value, nullable, notEditable, id, erro
   )
 }
 
-const FieldInput = ({codeListIds, dataType, error, updateField, value, notEditable, id}) => {
+const FieldInput = ({codeListIds, dataType, violation, updateField, value, notEditable, id}) => {
   const {t, i18n} = useTranslation('common')
   const getValue = useCallback(
     async (e) => {
@@ -190,6 +206,16 @@ const FieldInput = ({codeListIds, dataType, error, updateField, value, notEditab
   )
   const codeLists = useSelector(codeListsSelector)
 
+  const error = violation && {
+    children: (<>
+      <div>{violation.doc.message[i18n.language]}</div>
+      {violation.doc.description && (
+        <div>{violation.doc.description[i18n.language]}</div>
+      ) }
+    </>),
+    visuallyHiddenText: violation.doc.description && violation.doc.description[i18n.language],
+  }
+
   switch (dataType) {
     case dataTypes.DATE:
       return (
@@ -222,6 +248,7 @@ const FieldInput = ({codeListIds, dataType, error, updateField, value, notEditab
           }}
           value={value}
           onChange={onChange}
+          errorMessage={error}
           onFocus={(e) => notEditable && e.target.blur()}
           id={id}
         />
@@ -240,7 +267,7 @@ const FieldInput = ({codeListIds, dataType, error, updateField, value, notEditab
           }))}
           value={value}
           onChange={onChange}
-          errorMessage={error && {children: error}}
+          errorMessage={error}
           onFocus={(e) => notEditable && e.target.blur()}
           style={{width: '100%'}}
           id={id}
@@ -251,7 +278,7 @@ const FieldInput = ({codeListIds, dataType, error, updateField, value, notEditab
         <Input
           value={value}
           onChange={onChange}
-          errorMessage={error && {children: error}}
+          errorMessage={error}
           onFocus={(e) => notEditable && e.target.blur()}
           id={id}
         />

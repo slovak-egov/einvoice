@@ -28,6 +28,10 @@ export default ({match}) => {
             title: t('invoiceDocs.businessTerms'),
             to: `${match.url}/businessTerms`,
           },
+          {
+            title: t('invoiceDocs.formValidations'),
+            to: `${match.url}/formValidations`,
+          },
         ]}
       />
     </>

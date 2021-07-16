@@ -43,7 +43,7 @@ export default ({formType, path, docs}) => {
         >
           {section === name ? <u>{t(name)}</u> : t(name)}
         </Link>
-        <div style={{textAlign: 'center', color: errors === 0 ? '#000000' : '#D0190F'}}>
+        <div style={{textAlign: 'center', color: required > 0 ? (errors === 0 ? '#20bb01' : '#D0190F') : '#000'}}>
           { required > 0 ? `${required - errors}/${required}` : 'N/A' }
         </div>
       </div>

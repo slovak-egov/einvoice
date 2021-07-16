@@ -9,11 +9,14 @@ export default (api) => {
 
   const getCodeLists = () => prepareRequest({route: '/codeLists.json'})
 
+  const getFormValidations = () => prepareRequest({route: '/formValidations.json'})
+
   return {
     getBusinessTerms,
     getCodeLists,
     getUblCreditNote,
     getUblInvoice,
     getUblRules,
+    getFormValidations,
   }
 }

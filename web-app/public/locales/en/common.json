@@ -84,6 +84,7 @@
     "defaultValue": "Default value",
     "exampleValue": "Example value",
     "businessTerms": "Business terms",
+    "formValidations": "Form validations",
     "context": "Context",
     "usage": "Usage",
     "attributes": "Attributes",
@@ -105,6 +106,15 @@
         "fatal": "Fatal",
         "warning": "Warning"
       }
+    },
+    "validations": {
+      "title": "Form validations",
+      "identifier": "Identifier",
+      "businessTerm": "Business term",
+      "businessTermName": "Field name",
+      "message": "Message",
+      "description": "Description",
+      "conditionalValues": "Values which the rule applies for"
     }
   },
   "topBar": {
@@ -159,6 +169,7 @@
     "getUblInvoiceDocs": "UBL2.1 invoice docs could not be fetched",
     "getUblCreditNoteDocs": "UBL2.1 credit note docs could not be fetched",
     "getUblRulesDocs": "UBL2.1 rules could not be fetched",
+    "getFormValidations": "Form validation docs could not be fetched",
     "getBusinessTerms": "Business terms docs could not be fetched",
     "getCodeLists": "Code lists could not be fetched",
     "getDrafts": "Invoice drafts could not be fetched",
