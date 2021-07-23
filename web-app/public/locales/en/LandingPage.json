@@ -1,9 +1,10 @@
 {
   "title": "Slovak E-invoicing system",
+  "subtitle": "",
   "showMore": "Show more...",
   "goals": {
     "title": "Main goals",
-    "short": "Lorem Ipsum is simply\ndummy text of\nthe printing and\ntypesetting industry...",
+    "short": "TODO...",
     "body": [
       "TODO",
       "TODO",
@@ -40,7 +41,7 @@
   },
   "phases": {
     "title": "Implementation phases",
-    "short": "Lorem Ipsum is simply\ndummy text of\nthe printing and\ntypesetting industry...",
+    "short": "TODO...",
     "body": [
       "TODO",
       {
@@ -55,7 +56,7 @@
   },
   "public": {
     "title": "Public test operation",
-    "short": "Lorem Ipsum is simply\ndummy text of\nthe printing and\ntypesetting industry...",
+    "short": "TODO...",
     "body": [
       "TODO",
       "TODO",
@@ -69,7 +70,7 @@
   },
   "workflow": {
     "title": "How does it work?",
-    "short": "Lorem Ipsum is simply\ndummy text of\nthe printing and\ntypesetting industry..."
+    "short": "TODO..."
   },
   "introduction": "This system will support 5 different use-cases",
   "version1": "Slovak business (or government) to slovak business (government) invoices",

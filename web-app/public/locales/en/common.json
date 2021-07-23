@@ -198,11 +198,19 @@
   "saveAsNewDraft": "Save as new draft",
   "updateDraft": "Save updated draft",
   "createDraft": "Create draft",
-  "footer": [
-    "Created inline with the",
-    "Single Design manual of electronic services.",
-    "The site is operated by the Ministry of Finance of the Slovak Republic."
-  ],
+  "footer": {
+    "description": [
+      "The site is operated by the Ministry of Finance of the Slovak Republic.",
+      "Created inline with the",
+      "Single Design manual of electronic services."
+    ],
+    "documentation": "Documentation",
+    "manual": "Manual",
+    "invoiceExamples": "Invoice Examples",
+    "legislation": "Legislation",
+    "gdpr": "GDPR",
+    "help": "Help"
+  },
   "rename": "Rename",
   "phase": {
     "dev": "This website is used solely for development",

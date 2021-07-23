@@ -1,9 +1,10 @@
 {
   "title": "INFORMAČNÝ SYSTÉM\nELEKTRONICKEJ FAKTURÁCIE",
+  "subtitle": "Zaručená elektronická fakturácia\na zasielanie údajov z faktúr finančnej správe",
   "showMore": "Zisti viac...",
   "goals": {
     "title": "Hlavné ciele",
-    "short": "Lorem Ipsum is simply\ndummy text of\nthe printing and\ntypesetting industry...",
+    "short": "Ministerstvo financií Slovenskej Republiky v úzkej spolupráci s finančnou správou zavádza jednotný proces elektronizácie...",
     "body": [
       "Ministerstvo financií Slovenskej Republiky v úzkej spolupráci s finančnou správou zavádza jednotný proces elektronizácie obehu faktúr a zasielania štruktúrovaných údajov z faktúr finančnej správe cez informačno-komunikačné riešenie - informačný systém elektronickej fakturácie (IS EFA).",
       "Zasielanie údajov finančnej správe z faktúr daňových subjektov je nevyhnutnou súčasťou opatrení, ktorými chcú ministerstvo financií a finančná správa bojovať proti daňovým podvodom, znižovať daňovú medzeru, zefektívňovať výber daní a tak celý systém.",
@@ -40,7 +41,7 @@
   },
   "phases": {
     "title": "Fázy implementácie",
-    "short": "Lorem Ipsum is simply\ndummy text of\nthe printing and\ntypesetting industry...",
+    "short": "Riešenie je rozdelené do niekoľkých fáz a bude sa spúšťať postupne...",
     "body": [
       "Riešenie je rozdelené do niekoľkých fáz a bude sa spúšťať postupne:",
       {
@@ -55,7 +56,7 @@
   },
   "public": {
     "title": "Verejná testovacia prevádzka",
-    "short": "Lorem Ipsum is simply\ndummy text of\nthe printing and\ntypesetting industry...",
+    "short": "Pre zabezpečenia vyššej kvality služieb a transparentnosti IS EFA sa Ministerstvo financií SR rozhodlo umožniť spoluprácu verejnosti...",
     "body": [
       "Pre zabezpečenia vyššej kvality služieb a transparentnosti IS EFA sa Ministerstvo financií SR rozhodlo umožniť spoluprácu verejnosti pri tvorbe riešenia formou spustenia verejnej testovacej prevádzky.",
       "Počas testovacieho obdobia bude umožnené ako odbornej verejnosti, tak aj podnikateľom, aby si vyskúšali prácu s online aplikáciou, alebo integráciu prostredníctvom nášho OpenAPI.",
@@ -69,7 +70,7 @@
   },
   "workflow": {
     "title": "Ako to funguje?",
-    "short": "Lorem Ipsum is simply\ndummy text of\nthe printing and\ntypesetting industry..."
+    "short": ""
   },
   "introduction": "Tento systém bude podporovať 5 rôznych prípadov použitia",
   "version1": "Faktúry od slovenských podnikateľov (alebo od vlády) pre slovenských podnikateľov (vládu)",

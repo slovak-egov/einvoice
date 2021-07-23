@@ -14,6 +14,7 @@ import InvoiceDetail from '../InvoiceDetail'
 import AccountSettings from '../AccountSettings'
 import {Footer} from '../helpers/idsk'
 import mfsrLogo from '../helpers/mfsrLogo'
+import fsLogo from '../helpers/fsLogo'
 import {AuthRoute} from '../helpers/Auth'
 import LoadingModal from '../helpers/LoadingModal'
 import NotFound from '../helpers/NotFound'
@@ -30,7 +31,7 @@ import Workflow from '../LandingPage/Workflow'
 registerLocale('sk', sk)
 
 export default () => {
-  const {i18n, t} = useTranslation('common')
+  const {i18n} = useTranslation('common')
   const isLoading = useSelector(isLoadingSelector)
   const isLogging = useSelector(isLoggingSelector)
   const dispatch = useDispatch()
@@ -41,15 +42,13 @@ export default () => {
 
   const footerProps = useMemo(
     () => ({
-      navigation: [
-        {title: 'FAQ', to: '/faq'},
-        {title: t('invoiceDocumentation'), to: '/invoiceDocumentation'},
-        {title: 'Github', href: 'https://github.com/slovak-egov/einvoice', target: '_blank'},
-      ],
-      logo: {
+      logos: [{
         href: 'https://mfsr.sk',
         src: mfsrLogo[i18n.language],
-      },
+      }, {
+        href: 'https://www.financnasprava.sk',
+        src: fsLogo[i18n.language],
+      }],
     }),
     [i18n.language],
   )
