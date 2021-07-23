@@ -32,6 +32,9 @@ export default () => {
   return (
     <>
       <HeaderBanner />
+      <div style={{height: 0}} id="landing-page-img">
+        <img src={image} style={{position: 'relative', left: '50%', top: '-10vw', width: '50%'}} />
+      </div>
       <div className="govuk-main-wrapper container">
         <div className="govuk-grid-row">
           <div className="govuk-grid-column-one-third">
@@ -39,9 +42,6 @@ export default () => {
           </div>
           <div className="govuk-grid-column-one-third">
             <Card name="phases" />
-          </div>
-          <div className="govuk-grid-column-one-third" style={{height: 0}} id="landing-page-img">
-            <img src={image} style={{position: 'relative', left: '-15vw', top: '-10vw', width: '50vw'}} />
           </div>
         </div>
         <div className="govuk-grid-row">

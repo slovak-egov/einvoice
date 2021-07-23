@@ -9,9 +9,14 @@ export default () => {
       <HeaderBanner withMenu />
       <div className="govuk-main-wrapper container">
         <div className="govuk-heading-l">{t('public.title')}</div>
-        {[...Array(4).keys()].map((index) => (
-          <p key={index} style={{whiteSpace: 'pre-line'}}>{t(`public.body.${index}`)}</p>
-        ))}
+        <p>{t('public.body.0')}</p>
+        <p>{t('public.body.1')}</p>
+        <p>{t('public.body.2')}</p>
+        <p>
+          {t('public.body.3.0')}
+          <a href="mailto: e-fakturacia@mfsr.sk">{t('public.body.3.1')}</a>
+          {t('public.body.3.2')}
+        </p>
       </div>
     </>
   )
