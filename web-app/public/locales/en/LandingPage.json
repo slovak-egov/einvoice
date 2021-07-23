@@ -11,9 +11,31 @@
       "TODO",
       "TODO",
       "TODO",
+      [
+        "TODO",
+        "TODO",
+        "TODO"
+      ],
       "TODO",
       "TODO",
-      "TODO"
+      "TODO",
+      "TODO",
+      "TODO",
+      [
+        "TODO",
+        "TODO",
+        "TODO"
+      ],
+      [
+        "TODO",
+        "TODO",
+        "TODO"
+      ],
+      [
+        "TODO",
+        "TODO",
+        "TODO"
+      ]
     ]
   },
   "phases": {
@@ -21,23 +43,28 @@
     "short": "Lorem Ipsum is simply\ndummy text of\nthe printing and\ntypesetting industry...",
     "body": [
       "TODO",
-      "TODO",
-      "TODO",
-      "TODO",
-      "TODO",
-      "TODO",
-      "TODO",
-      "TODO"
+      {
+        "title": "TODO",
+        "phases": [
+          "TODO",
+          "TODO",
+          "TODO"
+        ]
+      }
     ]
   },
   "public": {
-    "title": "Public participation",
+    "title": "Public test operation",
     "short": "Lorem Ipsum is simply\ndummy text of\nthe printing and\ntypesetting industry...",
     "body": [
       "TODO",
       "TODO",
       "TODO",
-      "TODO"
+      [
+        "TODO",
+        "TODO",
+        "TODO"
+      ]
     ]
   },
   "workflow": {
