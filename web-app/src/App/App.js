@@ -31,7 +31,7 @@ import Workflow from '../LandingPage/Workflow'
 registerLocale('sk', sk)
 
 export default () => {
-  const {i18n, t} = useTranslation('common')
+  const {i18n} = useTranslation('common')
   const isLoading = useSelector(isLoadingSelector)
   const isLogging = useSelector(isLoggingSelector)
   const dispatch = useDispatch()
@@ -45,7 +45,7 @@ export default () => {
       logos: [{
         href: 'https://mfsr.sk',
         src: mfsrLogo[i18n.language],
-      },{
+      }, {
         href: 'https://www.financnasprava.sk',
         src: fsLogo[i18n.language],
       }],
