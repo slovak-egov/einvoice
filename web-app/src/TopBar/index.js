@@ -40,7 +40,7 @@ export default () => {
   const phase = getPhase(window.location.hostname)
 
   const languageSelector = (
-    <div style={{display: 'inline-block', marginRight: '1rem', marginTop: '-1rem'}}>
+    <div style={{display: 'inline-block', marginRight: '1rem'}}>
       <Select
         formGroup={{className: 'mb-0'}}
         style={{backgroundColor: 'transparent', color: '#fff', border: 'none'}}

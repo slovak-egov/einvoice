@@ -198,11 +198,19 @@
   "saveAsNewDraft": "Uložiť ako nový koncept",
   "updateDraft": "Uložiť upravený koncept",
   "createDraft": "Vytvoriť koncept",
-  "footer": [
-    "Vytvorené v súlade s",
-    "Jednotným dizajn manuálom elektronických služieb",
-    "Prevádzkovateľom služby je Ministerstvo financií Slovenskej republiky."
-  ],
+  "footer": {
+    "description": [
+      "Prevádzkovateľom služby je Ministerstvo financií Slovenskej republiky.",
+      "Vytvorené v súlade s",
+      "Jednotným dizajn manuálom elektronických služieb"
+    ],
+    "documentation": "Dokumentácia",
+    "manual": "Príručka",
+    "invoiceExamples": "Ukážkové faktúry",
+    "legislation": "Legislatíva",
+    "gdpr": "Ochrana osobných údajov",
+    "help": "Potrebujete pomoc?"
+  },
   "rename": "Premenovať",
   "phase": {
     "dev": "Táto webstránka slúži výlučne na vývoj",

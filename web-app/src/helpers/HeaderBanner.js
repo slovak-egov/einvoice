@@ -13,6 +13,9 @@ export default ({withMenu}) => {
               <div className="govuk-heading-l" style={{margin: '3%', whiteSpace: 'pre-line'}}>
                 {t('title')}
               </div>
+              <div style={{margin: '3%', whiteSpace: 'pre-line', color: '#fff'}}>
+                {t('subtitle')}
+              </div>
             </div>
             {withMenu &&
               <div style={{width: '30%', display: 'flex', flexDirection: 'column', padding: '2%', background: '#000000'}}>

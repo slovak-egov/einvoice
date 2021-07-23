@@ -1,7 +1,7 @@
 import {useTranslation} from 'react-i18next'
 import HeaderBanner from '../helpers/HeaderBanner'
 import {Link} from '../helpers/idsk'
-import image from './landingPage.png'
+import image from './landingPage.svg'
 import {exampleInvoiceUrl, invoiceFormats, swaggerUrl} from '../utils/constants'
 
 const Announcement = ({children, title}) => (
@@ -16,7 +16,7 @@ const Card = ({name}) => {
   const {t} = useTranslation('LandingPage')
 
   return (
-    <div style={{padding: '2vw'}}>
+    <div style={{padding: '10%', position: 'relative', zIndex: 1}}>
       <div className="govuk-heading-s">{t(`${name}.title`)}</div>
       <p>{t(`${name}.short`)}</p>
       <Link to={`/${name}`} className="idsk-link">
@@ -33,7 +33,7 @@ export default () => {
     <>
       <HeaderBanner />
       <div style={{height: 0}} id="landing-page-img">
-        <img src={image} style={{position: 'relative', left: '50%', top: '-10vw', width: '50%'}} />
+        <img src={image} style={{position: 'relative', left: '42%', top: '-10vw', width: '58%'}} />
       </div>
       <div className="govuk-main-wrapper container">
         <div className="govuk-grid-row">
