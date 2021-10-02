@@ -149,6 +149,41 @@ export default () => {
 
   const allLoaded = areCodeListsLoaded && isDocsLoaded && isFormLoaded
 
+  const saveButtons = (
+    <div className="govuk-button-group">
+      {isLogged &&
+      <Button
+        className="govuk-button--secondary"
+        onClick={() => setShowCreateDraftModal(true)}
+        id="save-new-draft"
+      >
+        {t('saveAsNewDraft')}
+      </Button>
+      }
+      {isLogged && formDraft &&
+      <ConfirmationButton
+        className="govuk-button--secondary"
+        onClick={confirmUpdateDraft}
+        confirmationTitle={t('confirmationQuestions.updateDraft.title')}
+        confirmationText={t('confirmationQuestions.updateDraft.text', {name: formDraft.name})}
+        id="save-updated-draft"
+      >
+        {t('updateDraft')}
+      </ConfirmationButton>
+      }
+      {showCreateDraftModal &&
+      <DraftNameModal
+        title={t('createDraft')}
+        cancel={() => setShowCreateDraftModal(false)}
+        confirm={confirmDraft}
+        id="create-draft"
+      />}
+      <Button onClick={submit} disabled={errorCount !== 0} id="generate-invoice">
+        {t('generateInvoice')}
+      </Button>
+    </div>
+  )
+
   return (
     <>
       <div className="govuk-button-group">
@@ -201,47 +236,19 @@ export default () => {
               formType={formType}
               path={[formType, formComplexity]}
               docs={docs[invoiceTypeData[formType][invoiceComplexities.COMPLEX].rootPath[2]]}
+              saveButtons={saveButtons}
             />
             :
-            <TagGroup
-              path={invoiceTypeData[formType][formComplexity].rootPath}
-              formData={get(formData, invoiceTypeData[formType][formComplexity].rootPath)}
-              docs={docs[invoiceTypeData[formType][formComplexity].rootPath[2]]}
-              setErrorCount={setErrorCount}
-            />
+            <>
+              <TagGroup
+                path={invoiceTypeData[formType][formComplexity].rootPath}
+                formData={get(formData, invoiceTypeData[formType][formComplexity].rootPath)}
+                docs={docs[invoiceTypeData[formType][formComplexity].rootPath[2]]}
+                setErrorCount={setErrorCount}
+              />
+              {saveButtons}
+            </>
         }
-        <div className="govuk-button-group">
-          {isLogged &&
-            <Button
-              className="govuk-button--secondary"
-              onClick={() => setShowCreateDraftModal(true)}
-              id="save-new-draft"
-            >
-              {t('saveAsNewDraft')}
-            </Button>
-          }
-          {isLogged && formDraft &&
-            <ConfirmationButton
-              className="govuk-button--secondary"
-              onClick={confirmUpdateDraft}
-              confirmationTitle={t('confirmationQuestions.updateDraft.title')}
-              confirmationText={t('confirmationQuestions.updateDraft.text', {name: formDraft.name})}
-              id="save-updated-draft"
-            >
-              {t('updateDraft')}
-            </ConfirmationButton>
-          }
-          {showCreateDraftModal &&
-            <DraftNameModal
-              title={t('createDraft')}
-              cancel={() => setShowCreateDraftModal(false)}
-              confirm={confirmDraft}
-              id="create-draft"
-            />}
-          <Button onClick={submit} disabled={errorCount !== 0} id="generate-invoice">
-            {t('generateInvoice')}
-          </Button>
-        </div>
       </>}
     </>
   )
