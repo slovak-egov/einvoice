@@ -14,7 +14,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import {formDataSelector, formFieldSelector, formItemsSelector} from '../state'
 import {get} from 'lodash'
 
-export default ({formType, path, docs}) => {
+export default ({formType, path, docs, saveButtons}) => {
   const {t} = useTranslation('form')
   const location = useLocation()
   const dispatch = useDispatch()
@@ -160,10 +160,12 @@ export default ({formType, path, docs}) => {
         <Button
           onClick={() => history.push(`/invoice-tools/form/${sections[sectionIndex + 1]}`)}
           id="next-section"
+          style={{marginLeft: 'auto'}}
         >
           {t('nextSection')}
         </Button>}
       </div>
+      {sectionIndex === sections.length - 1 && saveButtons}
     </div>
   )
 }
